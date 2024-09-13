@@ -6,7 +6,7 @@ DAPM/DAPM.Orchestrator/Services/Configuration/IdentityConfiguration.json
 /DAPM/DAPM.OperatorMS.Api/registry
 
 # Created by https://www.toptal.com/developers/gitignore/api/rider,visualstudio,visualstudiocode,csharp,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=rider,visualstudio,visualstudiocode,csharp,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=rider,visualstudio,visualstudiocode,csharp
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and
