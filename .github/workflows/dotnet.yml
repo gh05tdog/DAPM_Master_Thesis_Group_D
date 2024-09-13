@@ -26,3 +26,19 @@ jobs:
       run: dotnet build ./DAPM/DAPM.sln --no-restore
     - name: Test
       run: dotnet test ./DAPM/DAPM.sln --no-build
+  
+  docker:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Start containers
+      run: docker compose -f "./DAPM/docker-compose.yml" up -d --build
+
+    - name: Stop containers
+      if: always()
+      run: docker compose -f "./DAPM/docker-compose.yml" down
+    
