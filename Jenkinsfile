@@ -12,7 +12,7 @@ pipeline {
             steps {
                 dir('DAPM') {
                     script {
-                        sh 'docker-compose down || true'
+                        sh 'docker compose down || true'
                     }
                 }
             }
@@ -22,7 +22,7 @@ pipeline {
             steps {
                 dir('DAPM') {
                     script {
-                        sh 'docker-compose up --build -d'
+                        sh 'docker compose up --build -d'
                     }
                 }
             }
