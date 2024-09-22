@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://your-repository-url.git'
+                git branch: 'main', url: 'github.com/gh05tdog/DAPM_Master_Thesis_Group_D.git'
             }
         }
 
