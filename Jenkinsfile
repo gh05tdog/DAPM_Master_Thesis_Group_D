@@ -8,18 +8,22 @@ pipeline {
             }
         }
 
-        stage('Stop Existing Containers') {
+        stage('Navigate to DAPM Directory and Stop Existing Containers') {
             steps {
-                script {
-                    sh 'docker-compose down || true'
+                dir('DAPM') {
+                    script {
+                        sh 'docker-compose down || true'
+                    }
                 }
             }
         }
 
         stage('Build and Run with Docker Compose') {
             steps {
-                script {
-                    sh 'docker-compose up --build -d'
+                dir('DAPM') {
+                    script {
+                        sh 'docker-compose up --build -d'
+                    }
                 }
             }
         }
