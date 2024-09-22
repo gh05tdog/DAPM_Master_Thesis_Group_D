@@ -4,22 +4,26 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/gh05tdog/DAPM_Master_Thesis_Group_D.git'
+                git branch: 'main', url: 'https://your-repository-url.git'
             }
         }
 
-        stage('Stop Existing Containers') {
+        stage('Navigate to DAPM Directory and Stop Existing Containers') {
             steps {
-                script {
-                    sh 'docker-compose down || true'
+                dir('DAPM') {
+                    script {
+                        sh 'docker-compose down || true'
+                    }
                 }
             }
         }
 
         stage('Build and Run with Docker Compose') {
             steps {
-                script {
-                    sh 'docker-compose up --build -d'
+                dir('DAPM') {
+                    script {
+                        sh 'docker-compose up --build -d'
+                    }
                 }
             }
         }
