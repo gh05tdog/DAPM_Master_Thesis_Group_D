@@ -13,6 +13,17 @@ services:
         - "5000:8080"
     networks:
     - DAPM
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - DB_VENDOR=h2
+    ports:
+      - "8080:8080"
+    command: ["start-dev"]
+  
 
 
   dapm.peerapi:
