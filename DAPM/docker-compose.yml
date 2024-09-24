@@ -13,17 +13,45 @@ services:
         - "5000:8080"
     networks:
     - DAPM
+  
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
-      - DB_VENDOR=h2
+      - DB_VENDOR=postgres
+      - DB_ADDR=keycloak-postgres
+      - DB_DATABASE=keycloakdb  # Database created for Keycloak
+      - DB_USER=postgres    # User created for Keycloak
+      - DB_PASSWORD=postgres  # Password for the Keycloak user
     ports:
-      - "8080:8080"
-    command: ["start-dev"]
-  
+      - "8888:8888"
+    command: ["start-dev", "--http-port=8888"]
+    depends_on:
+      - keycloak-postgres
+    networks:
+      - DAPM
+
+  keycloak-postgres:
+    image: postgres:latest
+    restart: always
+    user: postgres
+    environment:
+      POSTGRES_DB: keycloakdb           # Database created for Keycloak
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - DAPM
 
 
   dapm.peerapi:
