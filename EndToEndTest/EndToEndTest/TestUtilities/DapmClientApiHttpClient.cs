@@ -12,7 +12,7 @@ public class DapmClientApiHttpClient(Uri? baseAddress = null)
     {
         var uri = "organizations";
         var ticketResponse = await GetAsync(uri);
-        var ticketResult = await GetTicketResultAsync<OrganizationsTicketResult>(ticketResponse);
+        var ticketResult = await GetTicketResultAsync<GetOrganizationsTicketResult>(ticketResponse);
         return ticketResult.Result.Organizations;
     }
     
@@ -20,8 +20,24 @@ public class DapmClientApiHttpClient(Uri? baseAddress = null)
     {
         var uri = $"organizations/{id}";
         var ticketResponse = await GetAsync(uri);
-        var ticketResult = await GetTicketResultAsync<OrganizationsTicketResult>(ticketResponse);
+        var ticketResult = await GetTicketResultAsync<GetOrganizationTicketResult>(ticketResponse);
         return ticketResult.Result.Organizations.First();
+    }
+    
+    public async Task<ICollection<Repository>> GetRepositoriesAsync(Guid organizationId)
+    {
+        var uri = $"organizations/{organizationId}/repositories";
+        var ticketResponse = await GetAsync(uri);
+        var ticketResult = await GetTicketResultAsync<GetRepositoriesResult>(ticketResponse);
+        return ticketResult.Result.Repositories;
+    }
+
+    public async Task<PostRepositoryResult> PostRepositoryAsync(Guid organizationId, string repositoryName)
+    {
+        var uri = $"organizations/{organizationId}/repositories";
+        var ticketResponse = await PostAsync(uri, new PostRepositoryRequest(repositoryName));
+        var ticketResult = await GetTicketResultAsync<PostRepositoryResult>(ticketResponse);
+        return ticketResult.Result;
     }
 
     private async Task<Ticket<T>> GetTicketResultAsync<T>(TicketResponse ticketResponse)
@@ -57,7 +73,7 @@ public class DapmClientApiHttpClient(Uri? baseAddress = null)
                throw new ArgumentNullException(nameof(TicketResponse));
     }
 
-    private async Task<TicketResponse> PostAsync(Uri uri, object obj)
+    private async Task<TicketResponse> PostAsync(string uri, object obj)
     {
         using var client = new HttpClient();
         client.BaseAddress = baseAddress;

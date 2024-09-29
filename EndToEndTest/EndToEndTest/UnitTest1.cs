@@ -21,4 +21,24 @@ public class UnitTest1
         var organization = await client.GetOrganizationByIdAsync(id);
         Assert.NotNull(organization);
     }
+    
+    [Fact]
+    public async Task CreateRepositoryReturnsNewRepositoryId()
+    {
+        var client = new DapmClientApiHttpClient();
+        var organizationId = (await client.GetOrganizationsAsync()).First().Id;
+        var repositoryResult = await client.PostRepositoryAsync(organizationId, "Test");
+        Assert.NotNull(repositoryResult.ItemIds);
+    }
+    
+    [Fact]
+    public async Task GetRepositoryReturnsNewRepositoryId()
+    {
+        var client = new DapmClientApiHttpClient();
+        var organizationId = (await client.GetOrganizationsAsync()).First().Id;
+        var repositoryName = Guid.NewGuid().ToString();
+        var postRepositoryResult = await client.PostRepositoryAsync(organizationId, repositoryName);
+        var repositories = await client.GetRepositoriesAsync(organizationId);
+        Assert.NotNull(repositories.Where(r => r.Id == postRepositoryResult.ItemIds.RepositoryId));
+    }
 }
