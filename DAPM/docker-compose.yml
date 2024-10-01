@@ -1,6 +1,38 @@
 version: '3.4'
 
 services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - oauth2-proxy
+    networks:
+      - DAPM
+    command: ["nginx"]
+
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.2.1
+    environment:
+      OAUTH2_PROXY_PROVIDER: "keycloak"
+      OAUTH2_PROXY_CLIENT_ID: "myrealm"
+      OAUTH2_PROXY_CLIENT_SECRET: "VBo30FOW4XpIYtOAFtJy7IH054tP6bzc"
+      OAUTH2_PROXY_COOKIE_SECRET: "abcdefghijklmnopqrstuvwxyz123456"
+      OAUTH2_PROXY_COOKIE_SECURE: "false"
+      OAUTH2_PROXY_OIDC_ISSUER_URL: "http://0.0.0.0:8888/realms/myrealm"  # Change localhost to 0.0.0.0
+      OAUTH2_PROXY_EMAIL_DOMAINS: "*"
+      OAUTH2_PROXY_SET_XAUTHREQUEST: "true"
+      OAUTH2_PROXY_HTTP_ADDRESS: "0.0.0.0:4180"  # Bind to 0.0.0.0
+      OAUTH2_PROXY_REDIRECT_URL: "http://localhost/oauth2/callback"
+    ports:
+      - "4180:4180"
+    depends_on:
+      - keycloak
+    networks:
+      - DAPM
+
   dapm.clientapi:
     image: ${DOCKER_REGISTRY-}dapmclientapi
     build:
@@ -9,50 +41,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    ports:
-        - "5000:8080"
-    networks:
-    - DAPM
-  
-  keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    container_name: keycloak
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-      - DB_VENDOR=postgres
-      - DB_ADDR=keycloak-postgres
-      - DB_DATABASE=keycloakdb  # Database created for Keycloak
-      - DB_USER=postgres    # User created for Keycloak
-      - DB_PASSWORD=postgres  # Password for the Keycloak user
-    ports:
-      - "8888:8888"
-    command: ["start-dev", "--http-port=8888"]
-    depends_on:
-      - keycloak-postgres
     networks:
       - DAPM
-
-  keycloak-postgres:
-    image: postgres:latest
-    restart: always
-    user: postgres
-    environment:
-      POSTGRES_DB: keycloakdb           # Database created for Keycloak
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - keycloak-db:/var/lib/postgresql/data
-    ports:
-      - "5435:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - DAPM
-
 
   dapm.peerapi:
     image: ${DOCKER_REGISTRY-}dapmpeerapi
@@ -62,10 +52,66 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    ports:
-        - "5001:8080"
     networks:
-    - DAPM
+      - DAPM
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=keycloak-postgres
+      - DB_DATABASE=keycloakdb
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - "8888:8888"  # No changes here, this is the external port
+    command: [ "start-dev", "--http-port=8888", "--hostname=0.0.0.0" ]  # Bind to 0.0.0.0
+    depends_on:
+      - keycloak-postgres
+    networks:
+      - DAPM
+
+
+  keycloak-postgres:
+    image: postgres:latest
+    restart: always
+    user: postgres
+    environment:
+      POSTGRES_DB: keycloakdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - DAPM
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: "rabbitmq"
+    labels:
+      NAME: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "8083:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 30s
+      retries: 3
+    networks:
+      - DAPM
+
+
 
 
 
@@ -147,21 +193,6 @@ services:
     networks:
     - DAPM
 
-  rabbitmq: # login guest:guest
-    image: rabbitmq:3-management
-    hostname: "rabbitmq"
-    labels:
-      NAME: "rabbitmq"
-    ports:
-    - "5672:5672"
-    - "8083:15672"
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 30s
-      retries: 3
-    networks:
-    - DAPM
 
   mongo:
     image: mongo
@@ -271,6 +302,8 @@ networks:
 volumes:
   operator-data:
     name: operator-data
+  keycloak-db:
+    name: keycloak-db
    
 
 
