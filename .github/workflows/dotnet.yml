@@ -19,7 +19,6 @@ jobs:
   build-front-end-in-docker:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    needs: build-back-end-in-docker  # Ensure frontend builds after backend
 
     steps:
     - name: Checkout
