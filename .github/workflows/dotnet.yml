@@ -16,6 +16,13 @@ jobs:
     - name: Start backend containers
       run: docker compose -f "./DAPM/docker-compose.yml" up -d --build
 
+    - name: Run tests in Docker container
+      run: |
+        docker compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
+
+    - name: Stop backend containers
+      run: docker compose -f "./DAPM/docker-compose.yml" down
+
   build-front-end-in-docker:
     timeout-minutes: 10
     runs-on: ubuntu-latest
@@ -26,25 +33,7 @@ jobs:
 
     - name: Start frontend containers
       run: docker compose -f "./DAPM-Frontend/docker-compose.yml" up -d --build
-
-  e2e-test:
-    runs-on: ubuntu-latest
-    needs: [build-back-end-in-docker, build-front-end-in-docker]
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Run tests in Docker container
-      run: |
-        docker compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
-
-  stop-containers:
-    runs-on: ubuntu-latest
-    needs: e2e-test
-
-    steps:
-    - name: Stop backend containers
-      run: docker compose -f "./DAPM/docker-compose.yml" down
+    
     - name: Stop frontend containers
       run: docker compose -f "./DAPM-Frontend/docker-compose.yml" down
+    
