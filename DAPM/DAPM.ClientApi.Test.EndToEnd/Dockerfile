@@ -9,4 +9,4 @@ COPY . .
 WORKDIR "/src/DAPM.ClientApi.Test.EndToEnd"
 RUN dotnet build "DAPM.ClientApi.Test.EndToEnd.csproj" -c Release -o /app/build
 
-CMD ["dotnet", "test", "DAPM.ClientApi.Test.EndToEnd.csproj", "--logger:trx"]
+CMD ["dotnet", "test", "DAPM.ClientApi.Test.EndToEnd.csproj"]

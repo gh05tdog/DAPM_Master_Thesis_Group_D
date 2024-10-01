@@ -4,13 +4,11 @@ services:
   dapm.clientapiendtoendtest:
     image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
     build:
-      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile # Update to the actual path where your test project Dockerfile is located
+      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile
     depends_on:
       - dapm.clientapi    
     networks:
       - DAPM
-    volumes:
-      - ./TestResults:/app/TestResults
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       
@@ -246,8 +244,3 @@ networks:
 volumes:
   operator-data:
     name: operator-data
-   
-
-
-
-
