@@ -2,17 +2,15 @@ using DAPM.Test.EndToEnd.TestUtilities;
 
 namespace DAPM.Test.EndToEnd;
 
+[Collection("ApiHttpCollection")]
 public class OrganizationTest
 {
-    private readonly DapmClientApiHttpClient client = new(environment);
+    private readonly DapmClientApiHttpClient client;
 
-    private static Dictionary<string, Uri> environments= new()
+    public OrganizationTest(ApiHttpFixture apiHttpFixture)
     {
-        {"local", new Uri("http://localhost:5000")},
-        {"online", new Uri("http://se2-d.compute.dtu.dk:5000")}
-    };
-    
-    private static Uri environment= environments["local"];
+        this.client = apiHttpFixture.Client;
+    }
     
     [Fact]
     public async Task GetOrganizationsReturnSingleOrganization()

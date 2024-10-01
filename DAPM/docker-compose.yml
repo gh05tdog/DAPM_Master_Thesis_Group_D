@@ -1,6 +1,20 @@
 version: '3.4'
 
 services:
+  dapm.clientapiendtoendtest:
+    image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
+    build:
+      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile # Update to the actual path where your test project Dockerfile is located
+    depends_on:
+      - dapm.clientapi    
+    networks:
+      - DAPM
+    volumes:
+      - ./TestResults:/app/TestResults
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      
+      
   dapm.clientapi:
     image: ${DOCKER_REGISTRY-}dapmclientapi
     build:

@@ -1,13 +1,11 @@
 using System.Net.Http.Json;
 using DAPM.Test.EndToEnd.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace DAPM.Test.EndToEnd.TestUtilities;
 
-public class DapmClientApiHttpClient(Uri? baseAddress = null)
+public class DapmClientApiHttpClient(Uri baseAddress)
 {
-    private static readonly Uri LocalHostBaseAddress = new("http://localhost:5000");
-    private readonly Uri baseAddress = baseAddress ?? LocalHostBaseAddress;
-
     public async Task<ICollection<Organization>> GetOrganizationsAsync()
     {
         var uri = "organizations";

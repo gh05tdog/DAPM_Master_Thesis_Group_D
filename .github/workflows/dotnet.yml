@@ -1,11 +1,11 @@
-name: .NET
+name: build-and-test
 
 on:
   pull_request:
     branches: [ "main", "dev" ]
 
 jobs:
-  build-back-end-in-docker:
+  build-and-test-back-end-in-docker:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -15,6 +15,15 @@ jobs:
 
     - name: Start containers
       run: docker compose -f "./DAPM/docker-compose.yml" up -d --build
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: ./DAPM/TestResults/*.trx
+    
+    - name: Stop containers
+      run: docker compose -f "./DAPM/docker-compose.yml" down
 
   build-front-end-in-docker:
     timeout-minutes: 10
@@ -26,28 +35,6 @@ jobs:
 
     - name: Start containers
       run: docker compose -f "./DAPM-Frontend/docker-compose.yml" up -d --build
-  
-  e2e-test:
-    runs-on: ubuntu-latest
-    needs: [build-back-end-in-docker, build-front-end-in-docker]
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore ./EndToEndTest/EndToEndTest.sln
-    - name: Build
-      run: dotnet build ./EndToEndTest/EndToEndTest.sln --no-restore
-    - name: Test
-      run: dotnet test ./EndToEndTest/EndToEndTest.sln --no-build
-
-  stop-containers:
-    runs-on: ubuntu-latest
-    needs: e2e-test
-    steps:
-    - name: Stop containers
-      run: docker compose -f "./DAPM/docker-compose.yml" down
+    
     - name: Stop containers
       run: docker compose -f "./DAPM-Frontend/docker-compose.yml" down
