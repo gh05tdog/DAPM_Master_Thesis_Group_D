@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
-using EndToEndTest.Models;
+using DAPM.Test.EndToEnd.Models;
 
-namespace EndToEndTest.TestUtilities;
+namespace DAPM.Test.EndToEnd.TestUtilities;
 
 public class DapmClientApiHttpClient(Uri? baseAddress = null)
 {

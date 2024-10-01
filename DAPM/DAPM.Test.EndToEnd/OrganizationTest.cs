@@ -1,6 +1,6 @@
-using EndToEndTest.TestUtilities;
+using DAPM.Test.EndToEnd.TestUtilities;
 
-namespace EndToEndTest;
+namespace DAPM.Test.EndToEnd;
 
 public class OrganizationTest
 {

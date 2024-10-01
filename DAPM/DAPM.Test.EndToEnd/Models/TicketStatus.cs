@@ -1,4 +1,4 @@
-namespace EndToEndTest.Models;
+namespace DAPM.Test.EndToEnd.Models;
 
 public enum TicketStatus
 {
