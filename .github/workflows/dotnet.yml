@@ -44,7 +44,7 @@ jobs:
       run: docker compose -f "./DAPM-Frontend/docker-compose.yml" up -d --build
   
   e2e-test:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
