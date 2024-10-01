@@ -35,24 +35,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
-    - name: Restore dependencies
-      run: dotnet restore ./EndToEndTest/EndToEndTest.sln
-
-    - name: Build
-      run: dotnet build ./EndToEndTest/EndToEndTest.sln --no-restore
-
     - name: Run tests in Docker container
       run: |
         docker-compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
 
   stop-containers:
     runs-on: ubuntu-latest
-    needs: e2e-test  # Stop containers after tests have run
+    needs: e2e-test
 
     steps:
     - name: Stop backend containers
