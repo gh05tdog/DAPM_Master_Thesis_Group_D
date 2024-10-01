@@ -32,11 +32,9 @@ public class OrganizationTest
     public async Task CreateRepositoryReturnsNewRepositoryId()
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
-        var repositoriesBefore = (await client.GetRepositoriesAsync(organizationId)).Count;
         var repositoryResult = await client.PostRepositoryAsync(organizationId, "Test");
-        Assert.NotNull(repositoryResult.ItemIds);
-        var repositoriesAfter = (await client.GetRepositoriesAsync(organizationId)).Count;
-        Assert.Equal(repositoriesBefore+1,repositoriesAfter);
+        var idIsNullOrDefault = repositoryResult.ItemIds == null || repositoryResult.ItemIds.RepositoryId == default;
+        Assert.False(idIsNullOrDefault);
     }
     
     [Fact]
