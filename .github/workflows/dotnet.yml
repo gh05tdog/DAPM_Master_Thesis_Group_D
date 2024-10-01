@@ -1,4 +1,4 @@
-name: .NET
+name: build-and-test
 
 on:
   pull_request:
@@ -37,7 +37,7 @@ jobs:
 
     - name: Run tests in Docker container
       run: |
-        docker-compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
+        docker compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
 
   stop-containers:
     runs-on: ubuntu-latest
