@@ -1,44 +1,38 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: build-and-test
 
 on:
   pull_request:
     branches: [ "main", "dev" ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore workload
-      run: dotnet workload restore ./DAPM/DAPM.AppHost/DAPM.AppHost.csproj
-    - name: Restore dependencies
-      run: dotnet restore ./DAPM/DAPM.sln
-    - name: Build
-      run: dotnet build ./DAPM/DAPM.sln --no-restore
-    - name: Test
-      run: dotnet test ./DAPM/DAPM.sln --no-build
-  
-  docker:
+  build-and-test-back-end-in-docker:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v4
 
-    - name: Start containers
-      run: docker compose -f "./DAPM/docker-compose.yml" up -d --build
+    - name: Start backend containers
+      run: docker compose -f ./DAPM/docker-compose.yml up -d --build
 
-    - name: Stop containers
-      if: always()
-      run: docker compose -f "./DAPM/docker-compose.yml" down
+    - name: Run tests in Docker container
+      run: docker compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
+
+    - name: Stop backend containers
+      run: docker compose -f ./DAPM/docker-compose.yml down
+
+  build-front-end-in-docker:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Start frontend containers
+      run: docker compose -f ./DAPM-Frontend/docker-compose.yml up -d --build
+    
+    - name: Stop frontend containers
+      run: docker compose -f ./DAPM-Frontend/docker-compose.yml down
     

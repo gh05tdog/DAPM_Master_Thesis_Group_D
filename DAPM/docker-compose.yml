@@ -1,6 +1,18 @@
 version: '3.4'
 
 services:
+  dapm.clientapiendtoendtest:
+    image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
+    build:
+      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile
+    depends_on:
+      - dapm.clientapi    
+    networks:
+      - DAPM
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      
+      
   dapm.clientapi:
     image: ${DOCKER_REGISTRY-}dapmclientapi
     build:
@@ -232,8 +244,3 @@ networks:
 volumes:
   operator-data:
     name: operator-data
-   
-
-
-
-
