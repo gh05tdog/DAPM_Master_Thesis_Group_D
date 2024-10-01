@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -27,7 +24,7 @@ jobs:
     - name: Test
       run: dotnet test ./DAPM/DAPM.sln --no-build
   
-  docker:
+  build-back-end-in-docker:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -38,7 +35,33 @@ jobs:
     - name: Start containers
       run: docker compose -f "./DAPM/docker-compose.yml" up -d --build
 
+  build-front-end-in-docker:
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Start containers
+      run: docker compose -f "./DAPM-Frontend/docker-compose.yml" up -d --build
+  
+  e2e-test:
+  runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./EndToEndTest/EndToEndTest.sln
+    - name: Build
+      run: dotnet build ./EndToEndTest/EndToEndTest.sln --no-restore
+    - name: Test
+      run: dotnet test ./EndToEndTest/EndToEndTest.sln --no-build
+
+  stop-containers:
+    runs-on: ubuntu-latest
+    steps:
     - name: Stop containers
-      if: always()
       run: docker compose -f "./DAPM/docker-compose.yml" down
-    
+    - name: Stop containers
+      run: docker compose -f "./DAPM-Frontend/docker-compose.yml" down
