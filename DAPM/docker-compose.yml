@@ -3,28 +3,27 @@ version: '3.4'
 services:
   nginx:
     image: nginx:latest
+    network_mode: "host"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "80:80"
     depends_on:
-      - oauth2-proxy
-    networks:
-      - DAPM
-    command: ["nginx"]
+      - dapm.clientapi
+
 
   oauth2-proxy:
-    image: quay.io/oauth2-proxy/oauth2-proxy:v7.2.1
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
     environment:
       OAUTH2_PROXY_PROVIDER: "keycloak"
       OAUTH2_PROXY_CLIENT_ID: "myrealm"
-      OAUTH2_PROXY_CLIENT_SECRET: "VBo30FOW4XpIYtOAFtJy7IH054tP6bzc"
+      OAUTH2_PROXY_CLIENT_SECRET: "ruupr5h5RysbiYet8wBk5b7i1ttaq7ho"
       OAUTH2_PROXY_COOKIE_SECRET: "abcdefghijklmnopqrstuvwxyz123456"
       OAUTH2_PROXY_COOKIE_SECURE: "false"
-      OAUTH2_PROXY_OIDC_ISSUER_URL: "http://0.0.0.0:8888/realms/myrealm"  # Change localhost to 0.0.0.0
+      OAUTH2_PROXY_OIDC_ISSUER_URL: "http://localhost:8888/realms/myrealm" 
       OAUTH2_PROXY_EMAIL_DOMAINS: "*"
       OAUTH2_PROXY_SET_XAUTHREQUEST: "true"
-      OAUTH2_PROXY_HTTP_ADDRESS: "0.0.0.0:4180"  # Bind to 0.0.0.0
+      OAUTH2_PROXY_HTTP_ADDRESS: "localhost:4180"  # Bind to 0.0.0.0
       OAUTH2_PROXY_REDIRECT_URL: "http://localhost/oauth2/callback"
     ports:
       - "4180:4180"
@@ -68,7 +67,7 @@ services:
       - DB_PASSWORD=postgres
     ports:
       - "8888:8888"  # No changes here, this is the external port
-    command: [ "start-dev", "--http-port=8888", "--hostname=0.0.0.0" ]  # Bind to 0.0.0.0
+    command: [ "start-dev", "--http-port=8888", "--hostname=localhost" ]  # Bind to 0.0.0.0
     depends_on:
       - keycloak-postgres
     networks:
