@@ -18,7 +18,7 @@
 	"forwardPorts": [5000, 5001],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "dotnet workload restore ./DAPM/DAPM.AppHost/DAPM.AppHost.csproj && dotnet restore ./DAPM/DAPM.sln",
+	"postCreateCommand": "dotnet workload restore ./DAPM/DAPM.AppHost/DAPM.AppHost.csproj && dotnet restore ./DAPM/DAPM.sln && chmod +x run.sh",
 
 	// Configure tool-specific properties.
 	"customizations": {
