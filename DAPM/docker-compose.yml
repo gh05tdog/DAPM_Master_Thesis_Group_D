@@ -1,6 +1,45 @@
 version: '3.4'
 
 services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=keycloak-postgres
+      - DB_DATABASE=keycloakdb
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - "8888:8888"  # No changes here, this is the external port
+    command: [ "start-dev", "--http-port=8888", "--hostname=localhost" ]  # Bind to 0.0.0.0
+    depends_on:
+      - keycloak-postgres
+    networks:
+      - DAPM
+      
+  keycloak-postgres:
+    image: postgres:latest
+    restart: always
+    user: postgres
+    environment:
+      POSTGRES_DB: keycloakdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - DAPM
+  
   dapm.clientapiendtoendtest:
     image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
     build:
@@ -244,3 +283,5 @@ networks:
 volumes:
   operator-data:
     name: operator-data
+  keycloak-db:
+    name: keycloak-db
