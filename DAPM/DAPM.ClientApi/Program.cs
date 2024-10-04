@@ -104,7 +104,7 @@ builder.Services.AddSwaggerGen();
 
 // Keycloak
 var configuration = builder.Configuration;
-builder.Services.AddKeycloakAuthentication(configuration);
+builder.Services.AddKeycloakWebApiAuthentication(configuration);
 
 var app = builder.Build();
 

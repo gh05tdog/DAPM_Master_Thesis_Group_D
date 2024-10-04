@@ -168,7 +168,7 @@ services:
     - "5672:5672"
     - "8083:15672"
     healthcheck:
-      test: rabbitmq-diagnostics -q ping
+      test: rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
       interval: 10s
       timeout: 30s
       retries: 3
@@ -279,6 +279,7 @@ networks:
   DAPM:
     name: DAPM
     driver: bridge
+    external: true
 
 volumes:
   operator-data:
