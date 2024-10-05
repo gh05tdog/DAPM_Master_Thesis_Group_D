@@ -1,24 +1,22 @@
+import { useKeycloak } from '@react-keycloak/web';
 import { ThemeProvider, createTheme } from "@mui/material";
-
-import "./index.css";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./redux/slices";
-
-import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
-import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
-import PipelineComposer from "./routes/PipeLineComposer";
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import PipelineComposer from './routes/PipeLineComposer'; // Ensure this path is correct
 import UserPage from "./routes/OverviewPage";
+import LoginPage from './routes/LoginPage'; // Import the LoginPage
 import { loadState, saveState } from "./redux/browser-storage";
 
-// Configure redux-persist
 const persistConfig = {
   key: 'root',
   storage,
 };
 
-const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const darkTheme = createTheme({
   palette: {
@@ -29,41 +27,46 @@ const darkTheme = createTheme({
 const store = configureStore({
   reducer: persistedReducer,
   preloadedState: loadState(),
-})
+});
 
-// here we subscribe to the store changes
-store.subscribe(
-  // we use debounce to save the state once each 800ms
-  // for better performances in case multiple changes occur in a short time
-  () => saveState(store.getState())
-);
+store.subscribe(() => saveState(store.getState()));
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-
-
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <UserPage/>,
-
+    element: <UserPage />,
   },
   {
     path: "/pipeline",
-    element: <PipelineComposer/>,
+    element: <PipelineComposer />,
   }
 ]);
 
-export default function App() {
+const App: React.FC = () => {
+  const { keycloak, initialized } = useKeycloak();
+
+  // Check if Keycloak is initialized and authenticated
+  if (!initialized) {
+    return <div>Loading...</div>; // Show a loading indicator while Keycloak is initializing
+  }
+
+  // If not authenticated, show the login page
+  if (!keycloak.authenticated) {
+    return <LoginPage />;
+  }
+
+  // If authenticated, render the main application
   return (
     <ThemeProvider theme={darkTheme}>
-      <div className="App">
-        <Provider store={store}>
-          <RouterProvider router={router} />
-        </Provider>
-      </div>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </ThemeProvider>
   );
-}
+};
+
+export default App;
