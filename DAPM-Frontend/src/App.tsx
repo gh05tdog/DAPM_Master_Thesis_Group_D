@@ -1,4 +1,3 @@
-import { useKeycloak } from '@react-keycloak/web';
 import { ThemeProvider, createTheme } from "@mui/material";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -8,8 +7,8 @@ import storage from 'redux-persist/lib/storage';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import PipelineComposer from './routes/PipeLineComposer'; // Ensure this path is correct
 import UserPage from "./routes/OverviewPage";
-import LoginPage from './routes/LoginPage'; // Import the LoginPage
 import { loadState, saveState } from "./redux/browser-storage";
+import LandingPage from './routes/LandingPage';
 
 const persistConfig = {
   key: 'root',
@@ -38,6 +37,10 @@ export type AppDispatch = typeof store.dispatch;
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "/user",
     element: <UserPage />,
   },
   {
@@ -47,17 +50,6 @@ const router = createBrowserRouter([
 ]);
 
 const App: React.FC = () => {
-  const { keycloak, initialized } = useKeycloak();
-
-  // Check if Keycloak is initialized and authenticated
-  if (!initialized) {
-    return <div>Loading...</div>; // Show a loading indicator while Keycloak is initializing
-  }
-
-  // If not authenticated, show the login page
-  if (!keycloak.authenticated) {
-    return <LoginPage />;
-  }
 
   // If authenticated, render the main application
   return (

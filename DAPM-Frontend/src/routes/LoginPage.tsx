@@ -1,28 +1,20 @@
 import React, { useEffect } from 'react';
-import { useKeycloak } from '@react-keycloak/web';
+import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Button, Typography } from '@mui/material';
 
 const LoginPage: React.FC = () => {
-  const { keycloak, initialized } = useKeycloak();
 
-  useEffect(() => {
-    // If already authenticated, navigate to the home page
-    if (initialized && keycloak.authenticated) {
-      window.location.href = "/";
-    }
-  }, [keycloak, initialized]);
+  // Declare the state for login status
+  const [loginStatus, setLoginStatus] = React.useState(false);
 
-  const handleLogin = () => {
-    if (!keycloak.authenticated) {
-      keycloak.login();
-    }
-  };
+  // Get the navigate function from the router
+  const navigate = useNavigate();
 
-  if (!initialized) {
-    // Show a loading spinner while Keycloak is initializing
-    return <CircularProgress />;
-  }
-
+  // Handle the login action
+  const handleLogin = () => 
+    setLoginStatus(true);
+    navigate('/'); // Redirect to the home page
+  
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20%' }}>
       <Typography variant="h4" gutterBottom>
