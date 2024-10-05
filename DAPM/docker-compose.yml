@@ -54,6 +54,7 @@ services:
       - DAPM  
     extra_hosts:
       - "host.docker.internal:host-gateway" 
+      - "localhost:host-gateway"
 
   dapm.clientapiendtoendtest:
     image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
