@@ -7,7 +7,7 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate(); // Hook for navigation
 
   const handleButtonClick = () => {
-    navigate('/user'); // Navigate to the overview page
+    navigate('/login'); // Navigate to the overview page
   };
 
   return (

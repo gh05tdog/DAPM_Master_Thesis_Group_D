@@ -9,6 +9,7 @@ import PipelineComposer from './routes/PipeLineComposer'; // Ensure this path is
 import UserPage from "./routes/OverviewPage";
 import { loadState, saveState } from "./redux/browser-storage";
 import LandingPage from './routes/LandingPage';
+import LoginPage from './routes/LoginPage';
 
 const persistConfig = {
   key: 'root',
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <LandingPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
   {
     path: "/user",

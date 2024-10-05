@@ -1,29 +1,50 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CircularProgress, Button, Typography } from '@mui/material';
+// src/routes/LoginPage.tsx
+import React from 'react';
+import { Button, Typography, Box } from '@mui/material';
 
 const LoginPage: React.FC = () => {
+  // Handle login
+  const handleLogin = async () => {
+    try {
+      const keycloakConfig = await import('../keycloak.mts');
+      keycloakConfig.default.login(); // Redirect to Keycloak login page
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
 
-  // Declare the state for login status
-  const [loginStatus, setLoginStatus] = React.useState(false);
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      const keycloakConfig = await import('../keycloak.mts');
+      keycloakConfig.default.logout(); // Redirect to Keycloak logout page
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
-  // Get the navigate function from the router
-  const navigate = useNavigate();
-
-  // Handle the login action
-  const handleLogin = () => 
-    setLoginStatus(true);
-    navigate('/'); // Redirect to the home page
-  
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20%' }}>
+    <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
       <Typography variant="h4" gutterBottom>
         Welcome to the Application
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleLogin}>
-        Login with Keycloak
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleLogin}
+        style={{ marginTop: '20px' }}
+      >
+        Login
       </Button>
-    </div>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleLogout}
+        style={{ marginTop: '20px' }}
+      >
+        Logout
+      </Button>
+    </Box>
   );
 };
 
