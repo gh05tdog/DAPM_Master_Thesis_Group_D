@@ -1,28 +1,9 @@
 // src/routes/LoginPage.tsx
 import React from 'react';
 import { Button, Typography, Box } from '@mui/material';
+import { login, logout } from '../keycloak.ts';
 
 const LoginPage: React.FC = () => {
-  // Handle login
-  const handleLogin = async () => {
-    try {
-      const keycloakConfig = await import('../keycloak.mts');
-      keycloakConfig.default.login(); // Redirect to Keycloak login page
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
-  };
-
-  // Handle logout
-  const handleLogout = async () => {
-    try {
-      const keycloakConfig = await import('../keycloak.mts');
-      keycloakConfig.default.logout(); // Redirect to Keycloak logout page
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
-
   return (
     <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
       <Typography variant="h4" gutterBottom>
@@ -31,7 +12,7 @@ const LoginPage: React.FC = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={handleLogin}
+        onClick={login}
         style={{ marginTop: '20px' }}
       >
         Login
@@ -39,7 +20,7 @@ const LoginPage: React.FC = () => {
       <Button
         variant="contained"
         color="secondary"
-        onClick={handleLogout}
+        onClick={logout}
         style={{ marginTop: '20px' }}
       >
         Logout

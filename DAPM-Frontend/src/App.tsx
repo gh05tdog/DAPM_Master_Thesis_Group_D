@@ -1,22 +1,14 @@
-import { ThemeProvider, createTheme } from "@mui/material";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./redux/slices";
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import PipelineComposer from './routes/PipeLineComposer'; // Ensure this path is correct
-import UserPage from "./routes/OverviewPage";
-import { loadState, saveState } from "./redux/browser-storage";
-import LandingPage from './routes/LandingPage';
-import LoginPage from './routes/LoginPage';
+// src/App.tsx
+import React, { useState, useEffect } from 'react';
+import { ThemeProvider, createTheme } from '@mui/material';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './stores.ts';
 
-const persistConfig = {
-  key: 'root',
-  storage,
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+import UserPage from './routes/OverviewPage.tsx';
+import PipelineComposer from './routes/PipeLineComposer.tsx';
+import LoginPage from './routes/LoginPage.tsx';
+import keycloakConfig, { initKeycloak } from './keycloak.ts';
 
 const darkTheme = createTheme({
   palette: {
@@ -24,43 +16,42 @@ const darkTheme = createTheme({
   },
 });
 
-const store = configureStore({
-  reducer: persistedReducer,
-  preloadedState: loadState(),
-});
-
-store.subscribe(() => saveState(store.getState()));
-
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <LandingPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/user",
-    element: <UserPage />,
-  },
-  {
-    path: "/pipeline",
-    element: <PipelineComposer />,
-  }
-]);
-
 const App: React.FC = () => {
+  const [initialized, setInitialized] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
 
-  // If authenticated, render the main application
+  useEffect(() => {
+    const initialize = async () => {
+      await initKeycloak();
+      setInitialized(true);
+      // Assuming initKeycloak sets the keycloakConfig.authenticated value
+      setAuthenticated(keycloakConfig.authenticated ?? false); // Update this based on your keycloak logic
+    };
+
+    initialize();
+  }, []);
+
+  if (!initialized) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <BrowserRouter>
+          <Routes>
+            {!authenticated ? (
+              <Route path="/" element={<LoginPage />} />
+            ) : (
+              <>
+                {/* Automatically redirect to /user when authenticated */}
+                <Route path="/" element={<Navigate to="/user" />} />
+                <Route path="/user" element={<UserPage />} />
+                <Route path="/pipeline" element={<PipelineComposer />} />
+              </>
+            )}
+          </Routes>
+        </BrowserRouter>
       </Provider>
     </ThemeProvider>
   );

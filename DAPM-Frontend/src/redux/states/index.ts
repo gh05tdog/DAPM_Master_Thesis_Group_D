@@ -1,5 +1,5 @@
-import { ApiState } from './apiState';
-import { PipelineState } from './pipelineState';
+import { ApiState } from './apiState.js';
+import { PipelineState } from './pipelineState.js';
 
 export interface RootState {
   pipelineState: PipelineState
