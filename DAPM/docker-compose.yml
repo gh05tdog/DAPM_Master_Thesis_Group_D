@@ -1,18 +1,48 @@
 version: '3.4'
 
 services:
-  dapm.clientapiendtoendtest:
-    image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
-    build:
-      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=keycloak-postgres
+      - DB_DATABASE=keycloakdb
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm.json -Dkeycloak.profile.feature.upload_scripts=enabled   
+    ports:
+      - "8888:8888"  # No changes here, this is the external port
+    command: [ "start-dev", "--http-port=8888", "--hostname=localhost", "--import-realm" ]  # Bind to 0.0.0.0
+    volumes:
+      - ./Keycloak/Realms:/opt/keycloak/data/import
     depends_on:
-      - dapm.clientapi    
+      - keycloak-postgres
     networks:
       - DAPM
+      
+  keycloak-postgres:
+    image: postgres:latest
+    restart: always
+    user: postgres
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      
-      
+      POSTGRES_DB: keycloakdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - DAPM
+  
   dapm.clientapi:
     image: ${DOCKER_REGISTRY-}dapmclientapi
     build:
@@ -22,9 +52,25 @@ services:
       rabbitmq:
         condition: service_healthy
     ports:
-        - "5000:8080"
+      - "5000:8080" 
     networks:
-    - DAPM
+      - DAPM  
+    extra_hosts:
+      - "host.docker.internal:host-gateway" 
+      - "localhost:host-gateway"
+
+  dapm.clientapiendtoendtest:
+    image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
+    build:
+      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile
+    depends_on:
+      - dapm.clientapi 
+    network_mode: host
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    extra_hosts:
+      - "dapmclientapi:host-gateway"
+      - "localhost:host-gateway"
 
 
   dapm.peerapi:
@@ -129,7 +175,7 @@ services:
     - "5672:5672"
     - "8083:15672"
     healthcheck:
-      test: rabbitmq-diagnostics -q ping
+      test: rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
       interval: 10s
       timeout: 30s
       retries: 3
@@ -244,3 +290,5 @@ networks:
 volumes:
   operator-data:
     name: operator-data
+  keycloak-db:
+    name: keycloak-db
