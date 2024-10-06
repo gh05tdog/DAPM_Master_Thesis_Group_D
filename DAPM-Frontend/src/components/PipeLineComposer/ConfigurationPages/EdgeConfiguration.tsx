@@ -1,10 +1,10 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List/List';
+import ListItem from '@mui/material/ListItem/ListItem';
 import { Edge } from "reactflow";
 import { Box, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateEdge } from '../../../redux/slices/pipelineSlice';
-import { getActiveFlowData, getNodes } from '../../../redux/selectors';
+import { updateEdge } from '../../../redux/slices/pipelineSlice.ts';
+import { getActiveFlowData, getNodes } from '../../../redux/selectors/index.ts';
 
 
 export interface AlgorithmConfugurationProps {
