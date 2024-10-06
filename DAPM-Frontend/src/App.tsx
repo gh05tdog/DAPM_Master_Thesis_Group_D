@@ -1,5 +1,5 @@
 // src/App.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -7,8 +7,8 @@ import store from './stores.ts';
 
 import UserPage from './routes/OverviewPage.tsx';
 import PipelineComposer from './routes/PipeLineComposer.tsx';
-// Import LoginPage if needed in the future
-// import LoginPage from './routes/LoginPage.tsx';
+import LoginPage from './routes/LoginPage.tsx';
+import keycloakConfig, { initKeycloak } from './keycloak.ts';
 
 const darkTheme = createTheme({
   palette: {
@@ -17,15 +17,39 @@ const darkTheme = createTheme({
 });
 
 const App: React.FC = () => {
-  // Directly render the routes without authentication logic
+  const [initialized, setInitialized] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const initialize = async () => {
+      await initKeycloak();
+      setInitialized(true);
+      // Assuming initKeycloak sets the keycloakConfig.authenticated value
+      setAuthenticated(keycloakConfig.authenticated ?? false); // Update this based on your keycloak logic
+    };
+
+    initialize();
+  }, []);
+
+  if (!initialized) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Provider store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Navigate to="/user" />} />
-            <Route path="/user" element={<UserPage />} />
-            <Route path="/pipeline" element={<PipelineComposer />} />
+            {!authenticated ? (
+              <Route path="/user" element={<LoginPage />} />
+            ) : (
+              <>
+                {/* Automatically redirect to /user when authenticated */}
+                <Route path="/" element={<Navigate to="/user" />} />
+                <Route path="/user" element={<UserPage />} />
+                <Route path="/pipeline" element={<PipelineComposer />} />
+              </>
+            )}
           </Routes>
         </BrowserRouter>
       </Provider>
