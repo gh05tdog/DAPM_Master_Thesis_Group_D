@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent } from 'react';
-import { putOperator, putResource } from '../../../services/backendAPI';
+import { putOperator, putResource } from '../../../services/backendAPI.tsx';
 
 export interface UploadButtonProps {
     orgId: string,

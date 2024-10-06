@@ -1,16 +1,16 @@
 import { styled } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer';
+import Drawer from '@mui/material/Drawer/Drawer';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider/Divider';
 import { Edge, Node } from "reactflow";
-import { NodeData } from '../../redux/states/pipelineState';
-import { getEdges, getNodes } from '../../redux/selectors';
+import { NodeData } from '../../redux/states/pipelineState.ts';
+import { getEdges, getNodes } from '../../redux/selectors/index.ts';
 import { useSelector } from 'react-redux';
-import AlgorithmConfiguration from './ConfigurationPages/AlgorithmConfiguration';
-import DataSourceConfiguration from './ConfigurationPages/DataSourceConfiguration';
-import DataSinkConfiguration from './ConfigurationPages/DataSinkConfiguration';
-import OrganizationConfiguration from './ConfigurationPages/OrganizationConfiguration';
-import EdgeConfiguration from './ConfigurationPages/EdgeConfiguration';
+import AlgorithmConfiguration from './ConfigurationPages/AlgorithmConfiguration.tsx';
+import DataSourceConfiguration from './ConfigurationPages/DataSourceConfiguration.tsx';
+import DataSinkConfiguration from './ConfigurationPages/DataSinkConfiguration.tsx';
+import OrganizationConfiguration from './ConfigurationPages/OrganizationConfiguration.tsx';
+import EdgeConfiguration from './ConfigurationPages/EdgeConfiguration.tsx';
 
 const drawerWidth = 240;
 

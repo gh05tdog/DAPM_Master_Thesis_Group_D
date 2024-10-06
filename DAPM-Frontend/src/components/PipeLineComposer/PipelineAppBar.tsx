@@ -50,7 +50,7 @@ export default function PipelineAppBar() {
     const dataSinks = flowData?.edges.map((edge) => {
       if (edge.data?.filename) {
         const newTarget = getHandleId()
-        const egeToModify = edges.find(e => e.sourceHandle == edge.sourceHandle && e.targetHandle == edge.targetHandle)
+        const egeToModify = edges.find(e => e.sourceHandle === edge.sourceHandle && e.targetHandle === edge.targetHandle)
         egeToModify!.targetHandle = newTarget
 
         const originalDataSink = flowData!.nodes.find(node => node.id === edge.target) as Node<DataSinkNodeData>

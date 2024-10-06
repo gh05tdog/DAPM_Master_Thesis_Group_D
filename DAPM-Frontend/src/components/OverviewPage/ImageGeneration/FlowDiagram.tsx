@@ -1,9 +1,10 @@
 import React from 'react';
-import ReactFlow, { Edge, Handle, Node } from 'reactflow';
-import DataSourceNode from '../../PipeLineComposer/Nodes/DataSourceNode';
-import DataSinkNode from '../../PipeLineComposer/Nodes/DataSinkNode';
-import CustomNode from '../../PipeLineComposer/Nodes/CustomNode';
-import OrganizationImageNode from './OrganizationImageNode';
+import { ReactFlow, Handle, Node } from 'reactflow';
+import { Edge } from 'reactflow';
+import DataSourceNode from '../../PipeLineComposer/Nodes/DataSourceNode.tsx';
+import DataSinkNode from '../../PipeLineComposer/Nodes/DataSinkNode.tsx';
+import CustomNode from '../../PipeLineComposer/Nodes/CustomNode.tsx';
+import OrganizationImageNode from './OrganizationImageNode.tsx';
 
 interface FlowDiagramProps {
     nodes: Node[];

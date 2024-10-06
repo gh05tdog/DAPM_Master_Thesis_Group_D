@@ -3,7 +3,8 @@ import Flow from "../components/PipeLineComposer/Flow.tsx";
 import Sidebar from "../components/PipeLineComposer/NodesSidebar.tsx";
 
 import PipelineAppBar from "../components/PipeLineComposer/PipelineAppBar.tsx";
-import { Controls, Position, ReactFlowProvider } from "reactflow";
+import { Controls, Position } from "reactflow";
+import { ReactFlowProvider } from "reactflow";
 
 
 export default function PipelineComposer(){
