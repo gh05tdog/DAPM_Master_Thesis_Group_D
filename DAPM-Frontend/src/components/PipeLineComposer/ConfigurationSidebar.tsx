@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer/Drawer';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/material/Typography/Typography';
 import Divider from '@mui/material/Divider/Divider';
 import { Edge, Node } from "reactflow";
 import { NodeData } from '../../redux/states/pipelineState.ts';

@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormLabel, Modal, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { putRepository } from '../../../services/backendAPI';
+import { putRepository } from '../../../services/backendAPI.tsx';
 
 
 export interface CreateRepositoryButtonProps {
