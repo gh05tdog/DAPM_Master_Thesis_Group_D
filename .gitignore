@@ -533,6 +533,10 @@ fabric.properties
 .history
 .ionide
 
+
+#Keycloak
+/keycloak-26.0.0/*
+
 ### VisualStudio ###
 
 # User-specific files
