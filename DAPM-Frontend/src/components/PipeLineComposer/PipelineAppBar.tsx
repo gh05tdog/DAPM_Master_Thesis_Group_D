@@ -2,15 +2,15 @@ import { AppBar, Box, Button, TextField, Toolbar, Typography } from "@mui/materi
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getActiveFlowData, getActivePipeline } from "../../redux/selectors";
+import { getActiveFlowData, getActivePipeline } from "../../redux/selectors/index.ts";
 import { useState } from "react";
-import { updatePipelineName } from "../../redux/slices/pipelineSlice";
+import { updatePipelineName } from "../../redux/slices/pipelineSlice.ts";
 import EditIcon from '@mui/icons-material/Edit';
 import { Node } from "reactflow";
-import { DataSinkNodeData, DataSourceNodeData, OperatorNodeData } from "../../redux/states/pipelineState";
-import { putCommandStart, putExecution, putPipeline } from "../../services/backendAPI";
-import { getOrganizations, getRepositories } from "../../redux/selectors/apiSelector";
-import { getHandleId, getNodeId } from "./Flow";
+import { DataSinkNodeData, DataSourceNodeData, OperatorNodeData } from "../../redux/states/pipelineState.ts";
+import { putCommandStart, putExecution, putPipeline } from "../../services/backendAPI.tsx";
+import { getOrganizations, getRepositories } from "../../redux/selectors/apiSelector.ts";
+import { getHandleId, getNodeId } from "./Flow.tsx";
 
 export default function PipelineAppBar() {
   const navigate = useNavigate();
@@ -29,13 +29,13 @@ export default function PipelineAppBar() {
   const organizations = useSelector(getOrganizations)
   const repositories = useSelector(getRepositories)
 
-  const pipelineName = useSelector(getActivePipeline)?.name
+  const pipelineName = useSelector((state: any) => getActivePipeline(state)?.name)
 
   const setPipelineName = (name: string) => {
     dispatch(updatePipelineName(name))
   }
 
-  const flowData = useSelector(getActiveFlowData)
+  const flowData = useSelector(getActiveFlowData) as { edges: any[], nodes: any[] } | undefined
 
   const generateJson = async () => {
 
@@ -50,7 +50,7 @@ export default function PipelineAppBar() {
     const dataSinks = flowData?.edges.map((edge) => {
       if (edge.data?.filename) {
         const newTarget = getHandleId()
-        const egeToModify = edges.find(e => e.sourceHandle == edge.sourceHandle && e.targetHandle == edge.targetHandle)
+        const egeToModify = edges.find(e => e.sourceHandle === edge.sourceHandle && e.targetHandle === edge.targetHandle)
         egeToModify!.targetHandle = newTarget
 
         const originalDataSink = flowData!.nodes.find(node => node.id === edge.target) as Node<DataSinkNodeData>

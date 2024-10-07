@@ -10,25 +10,25 @@ import ReactFlow, {
   getOutgoers
 } from "reactflow";
 
-import { onNodesChange, onEdgesChange, onConnect, addNode, removeNode, setNodes, removeEdge, undo, createSnapShot, redo } from "../../redux/slices/pipelineSlice";
+import { onNodesChange, onEdgesChange, onConnect, addNode, removeNode, setNodes, removeEdge, undo, createSnapShot, redo } from "../../redux/slices/pipelineSlice.ts";
 
-import CustomNode from "./Nodes/CustomNode";
+import CustomNode from "./Nodes/CustomNode.tsx";
 
 import "reactflow/dist/style.css";
-import styled from "styled-components";
-import DataSinkNode from "./Nodes/DataSinkNode";
-import ConfigurationSidebar from "./ConfigurationSidebar";
+import { styled } from "styled-components";
+import DataSinkNode from "./Nodes/DataSinkNode.tsx";
+import ConfigurationSidebar from "./ConfigurationSidebar.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import OrganizationNode from "./Nodes/OrganizationNode";
+import OrganizationNode from "./Nodes/OrganizationNode.tsx";
 
 import 'reactflow/dist/style.css';
 import '@reactflow/node-resizer/dist/style.css';
 
-import { getNodePositionInsideParent, sortNodes } from "./utils";
-import { BaseTemplateData, NodeData, OperatorNodeData, OperatorTemplateData } from "../../redux/states/pipelineState";
-import DataSourceNode from "./Nodes/DataSourceNode";
-import { getEdges, getNodes } from "../../redux/selectors";
-import { DefaultEdge } from "./Edges/DefaultEdge";
+import { getNodePositionInsideParent, sortNodes } from "./utils.ts";
+import { BaseTemplateData, NodeData, OperatorNodeData, OperatorTemplateData } from "../../redux/states/pipelineState.ts";
+import DataSourceNode from "./Nodes/DataSourceNode.tsx";
+import { getEdges, getNodes } from "../../redux/selectors/index.ts";
+import { DefaultEdge } from "./Edges/DefaultEdge.tsx";
 import { v4 as uuidv4 } from "uuid";
 
 const nodeTypes = {
@@ -42,7 +42,7 @@ const edgeTypes = {
   default: DefaultEdge
 };
 
-const ReactFlowStyled = styled(ReactFlow)`
+const ReactFlowStyled = styled(ReactFlow as any)`
   background-color: #333;
 `;
 
@@ -332,16 +332,16 @@ const BasicFlow = () => {
       style={{ flexGrow: 1 }}
       nodes={nodes}
       edges={edges}
-      onNodesChange={x => dispatch(onNodesChange(x))}
-      onEdgesChange={x => dispatch(onEdgesChange(x))}
-      onConnect={x => { dispatch(onConnect(x)) }}
+      onNodesChange={(x: ReactFlow.NodeChange[]) => dispatch(onNodesChange(x))}
+      onEdgesChange={(x: ReactFlow.EdgeChange[]) => dispatch(onEdgesChange(x))}
+      onConnect={(x: ReactFlow.Connection) => { dispatch(onConnect(x)) }}
       isValidConnection={isValidConnection}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
       onNodeDrag={onNodeDrag}
-      onNodeDragStart={x => dispatch(createSnapShot())}
-      onNodesDelete={x => dispatch(createSnapShot())}
-      onEdgesDelete={x => dispatch(createSnapShot())}
+      onNodeDragStart={() => dispatch(createSnapShot())}
+      onNodesDelete={() => dispatch(createSnapShot())}
+      onEdgesDelete={() => dispatch(createSnapShot())}
       onNodeDragStop={onNodeDragStop}
       onDrop={onDrop}
       onDragOver={onDragOver}

@@ -1,9 +1,10 @@
 import { AppBar, Box, ThemeProvider, createTheme } from "@mui/material";
-import Flow from "../components/PipeLineComposer/Flow";
-import Sidebar from "../components/PipeLineComposer/NodesSidebar";
+import Flow from "../components/PipeLineComposer/Flow.tsx";
+import Sidebar from "../components/PipeLineComposer/NodesSidebar.tsx";
 
-import PipelineAppBar from "../components/PipeLineComposer/PipelineAppBar";
-import { Controls, Position, ReactFlowProvider } from "reactflow";
+import PipelineAppBar from "../components/PipeLineComposer/PipelineAppBar.tsx";
+import { Controls, Position } from "reactflow";
+import { ReactFlowProvider } from "reactflow";
 
 
 export default function PipelineComposer(){

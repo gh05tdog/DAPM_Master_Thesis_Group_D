@@ -2,9 +2,9 @@ import {
     type EdgeProps,
   BezierEdge} from 'reactflow';
 
-import { EdgeData } from '../../../redux/states/pipelineState';
+import { EdgeData } from '../../../redux/states/pipelineState.ts';
 import { useSelector } from 'react-redux';
-import { getNodes } from '../../../redux/selectors';
+import { getNodes } from '../../../redux/selectors/index.ts';
 
 
 export function DefaultEdge({id, data, style, selected, source, target, sourceHandleId, targetHandleId, ...delegated}: EdgeProps<EdgeData>) {
@@ -17,7 +17,7 @@ export function DefaultEdge({id, data, style, selected, source, target, sourceHa
   const sourceHandle = sourceNode?.data.templateData.sourceHandles.find(handle => handle.id === sourceHandleId);
   const targetHandle = targetNode?.data.templateData.targetHandles.find(handle => handle.id === targetHandleId)
 
-  const strokeColor = ((targetNode?.type === 'dataSink' && (!data?.filename || data.filename == '')) || (targetNode?.type !== 'dataSink' && (sourceHandle?.type !== targetHandle?.type))) ? 'red' : 'white';
+  const strokeColor = ((targetNode?.type === 'dataSink' && (!data?.filename || data.filename === '')) || (targetNode?.type !== 'dataSink' && (sourceHandle?.type !== targetHandle?.type))) ? 'red' : 'white';
 
   return (
     <>
