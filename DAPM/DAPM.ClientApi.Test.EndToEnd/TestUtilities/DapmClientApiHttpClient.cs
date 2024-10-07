@@ -1,32 +1,11 @@
 using System.Net.Http.Json;
 using DAPM.Test.EndToEnd.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace DAPM.Test.EndToEnd.TestUtilities;
 
-public class DapmClientApiHttpClient(IApiHttpClientFactory httpClientFactory)
+public class DapmClientApiHttpClient(Uri baseAddress)
 {
-    public async Task<string> GetAnonymousAsync()
-    {
-        var uri = "test/authentication/anonymous";
-        using var client = httpClientFactory.CreateClient();
-        
-        var response = await client.GetAsync(uri);
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadAsStringAsync();
-    }
-    
-    public async Task<string> GetAuthorizeAsync()
-    {
-        var uri = "test/authentication/authorize";
-        using var client = httpClientFactory.CreateClient();
-        
-        var response = await client.GetAsync(uri);
-        response.EnsureSuccessStatusCode();
-        
-        return await response.Content.ReadAsStringAsync();
-    }
-    
     public async Task<ICollection<Organization>> GetOrganizationsAsync()
     {
         var uri = "organizations";
@@ -63,8 +42,9 @@ public class DapmClientApiHttpClient(IApiHttpClientFactory httpClientFactory)
     {
         var uri = $"status/{ticketResponse.TicketId}";
         var maxTries = 100;
-
-        using var client = httpClientFactory.CreateClient();
+        
+        using var client = new HttpClient();
+        client.BaseAddress = baseAddress;
         
         for (var i = 0; i < maxTries; i++)
         {
@@ -81,7 +61,8 @@ public class DapmClientApiHttpClient(IApiHttpClientFactory httpClientFactory)
 
     private async Task<TicketResponse> GetAsync(string uri)
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = new HttpClient();
+        client.BaseAddress = baseAddress;
 
         var response = await client.GetAsync(uri);
         response.EnsureSuccessStatusCode();
@@ -92,7 +73,8 @@ public class DapmClientApiHttpClient(IApiHttpClientFactory httpClientFactory)
 
     private async Task<TicketResponse> PostAsync(string uri, object obj)
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = new HttpClient();
+        client.BaseAddress = baseAddress;
         
         var response = await client.PostAsJsonAsync(uri, obj);
         response.EnsureSuccessStatusCode();

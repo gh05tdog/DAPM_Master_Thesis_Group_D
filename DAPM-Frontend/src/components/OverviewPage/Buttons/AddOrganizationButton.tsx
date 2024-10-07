@@ -1,6 +1,6 @@
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import React from "react";
-import { PostNewPeer } from "../../../services/backendAPI.tsx";
+import { PostNewPeer } from "../../../services/backendAPI";
 
 const style = {
     position: 'absolute' as 'absolute',

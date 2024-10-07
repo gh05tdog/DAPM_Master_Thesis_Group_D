@@ -1,4 +1,4 @@
-import { RootState } from "../states/index.ts";
+import { RootState } from "../states";
 
 export const getNodes = (state: RootState) => state.pipelineState.pipelines.find(pipeline => pipeline.id === state.pipelineState.activePipelineId)?.pipeline.nodes
 

@@ -1,12 +1,12 @@
-import List from '@mui/material/List/List';
-import ListItem from '@mui/material/ListItem/ListItem';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import { Node } from "reactflow";
 import { Box, InputLabel, MenuItem, Select } from '@mui/material';
-import { NodeData, OrganizationNodeData } from '../../../redux/states/pipelineState.ts';
+import { NodeData, OrganizationNodeData } from '../../../redux/states/pipelineState';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateNode } from '../../../redux/slices/pipelineSlice.ts';
-import { getOrganizations } from '../../../redux/selectors/apiSelector.ts';
-import { getNodes } from '../../../redux/selectors/index.ts';
+import { updateNode } from '../../../redux/slices/pipelineSlice';
+import { getOrganizations } from '../../../redux/selectors/apiSelector';
+import { getNodes } from '../../../redux/selectors';
 import { useEffect } from 'react';
 
 

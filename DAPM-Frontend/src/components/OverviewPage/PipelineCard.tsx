@@ -1,14 +1,14 @@
 import * as React from 'react';
-import Card from '@mui/material/Card/Card';
+import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent/CardContent';
-import CardMedia from '@mui/material/CardMedia/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography/Typography';
+import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setActivePipeline } from '../../redux/slices/pipelineSlice.ts';
+import { setActivePipeline } from '../../redux/slices/pipelineSlice';
 
 export interface PipelineCardProps {
   id: string;

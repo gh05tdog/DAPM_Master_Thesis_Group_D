@@ -1,4 +1,4 @@
-import { RootState } from "../states/index.ts";
+import { RootState } from "../states";
 
 export const getOrganizations = (state: RootState) => state.apiState.organizations
 export const getRepositories = (state: RootState) => state.apiState.repositories
