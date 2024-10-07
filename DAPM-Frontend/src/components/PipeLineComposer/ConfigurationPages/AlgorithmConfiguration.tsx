@@ -1,15 +1,15 @@
 import * as React from 'react';
-import List from '@mui/material/List/List';
-import ListItem from '@mui/material/ListItem/ListItem';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText/ListItemText';
+import ListItemText from '@mui/material/ListItemText';
 import { Node, useUpdateNodeInternals } from "reactflow";
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { Algorithm, NodeData, OperatorNodeData, OperatorTemplateData, OrganizationNodeData } from '../../../redux/states/pipelineState.ts';
-import { getNodes } from '../../../redux/selectors/index.ts';
-import { addHandle, updateNode, updateSourceHandle, updateTargetHandle } from '../../../redux/slices/pipelineSlice.ts';
-import { getResources } from '../../../redux/selectors/apiSelector.ts';
+import { Algorithm, NodeData, OperatorNodeData, OperatorTemplateData, OrganizationNodeData } from '../../../redux/states/pipelineState';
+import { getNodes } from '../../../redux/selectors';
+import { addHandle, updateNode, updateSourceHandle, updateTargetHandle } from '../../../redux/slices/pipelineSlice';
+import { getResources } from '../../../redux/selectors/apiSelector';
 
 
 export interface AlgorithmConfugurationProps {

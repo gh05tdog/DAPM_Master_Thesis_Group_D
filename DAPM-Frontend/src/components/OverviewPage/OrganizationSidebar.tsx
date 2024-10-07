@@ -1,24 +1,25 @@
 import { styled } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer/Drawer';
-import List from '@mui/material/List/List';
-import Typography from '@mui/material/Typography/Typography';
-import Divider from '@mui/material/Divider/Divider';
-import ListItem from '@mui/material/ListItem/ListItem';
-import ListItemButton from '@mui/material/ListItemButton/ListItemButton';
-import ListItemText from '@mui/material/ListItemText/ListItemText';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getOrganizations, getRepositories, getResources } from '../../redux/selectors/apiSelector.ts';
-import { organizationThunk, repositoryThunk, resourceThunk } from '../../redux/slices/apiSlice.ts';
-import { Organization, Repository, Resource } from '../../redux/states/apiState.ts';
-import { useAppDispatch, useAppSelector } from '../../hooks.ts';
+import { getOrganizations, getRepositories, getResources } from '../../redux/selectors/apiSelector';
+import { organizationThunk, repositoryThunk, resourceThunk } from '../../redux/slices/apiSlice';
+import { Organization, Repository, Resource } from '../../redux/states/apiState';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Box } from '@mui/material';
-import ResourceUploadButton from './Buttons/ResourceUploadButton.tsx';
-import { downloadResource, fetchOrganisation, fetchOrganisationRepositories, fetchOrganisations, fetchPipeline, fetchRepositoryPipelines, fetchRepositoryResources, fetchResource, putPipeline, putRepository } from '../../services/backendAPI.tsx';
-import CreateRepositoryButton from './Buttons/CreateRepositoryButton.tsx';
-import AddOrganizationButton from './Buttons/AddOrganizationButton.tsx';
-import { display } from 'html2canvas/dist/types/css/property-descriptors';
-import OperatorUploadButton from './Buttons/OperatorUploadButton.tsx';
+import ResourceUploadButton from './Buttons/ResourceUploadButton';
+import { downloadResource, fetchOrganisation, fetchOrganisationRepositories, fetchOrganisations, fetchPipeline, fetchRepositoryPipelines, fetchRepositoryResources, fetchResource, putPipeline, putRepository } from '../../services/backendAPI';
+import CreateRepositoryButton from './Buttons/CreateRepositoryButton';
+import AddOrganizationButton from './Buttons/AddOrganizationButton';
+import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
+import OperatorUploadButton from './Buttons/OperatorUploadButton';
+import { Padding } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -105,7 +106,7 @@ async function downloadReadableStream(url: string, fileName: string) {
                 {resources.map((resource) => (resource.repositoryId === repository.id && resource.type !== "operator" ?
                   <>
                     <ListItem key={resource.id} disablePadding>
-                      <ListItemButton sx={{ paddingBlock: 0 }} onClick={(_: any) => handleDownload(resource)}>
+                      <ListItemButton sx={{ paddingBlock: 0 }} onClick={_ => handleDownload(resource)}>
                         <ListItemText secondary={resource.name} secondaryTypographyProps={{ fontSize: "0.8rem" }} />
                       </ListItemButton>
                     </ListItem>

@@ -1,7 +1,7 @@
 import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, MarkerType, Node, NodeChange } from "reactflow";
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { EdgeData, NodeData, NodeState, PipelineData, PipelineState } from "../states/pipelineState.ts";
+import { EdgeData, NodeData, NodeState, PipelineData, PipelineState } from "../states/pipelineState";
 
 export const initialState: PipelineState = {
   pipelines: [],
@@ -9,7 +9,7 @@ export const initialState: PipelineState = {
 }
 
 const takeSnapshot = (state: PipelineState) => {
-  var activePipeline = state.pipelines.find((pipeline: { id: any; }) => pipeline.id === state.activePipelineId)
+  var activePipeline = state.pipelines.find(pipeline => pipeline.id === state.activePipelineId)
   if (!activePipeline) return
   activePipeline?.history?.past?.push({nodes: activePipeline.pipeline.nodes, edges: activePipeline.pipeline.edges})
 }
@@ -26,7 +26,7 @@ const pipelineSlice = createSlice({
       state.activePipelineId = payload
     },
     setImageData: (state, { payload }: PayloadAction<{ id: string, imgData: string }>) => {
-      var pipeline = state.pipelines.find((pipeline: { id: string; }) => pipeline.id === payload.id)
+      var pipeline = state.pipelines.find(pipeline => pipeline.id === payload.id)
       if (!pipeline) return
       pipeline.imgData = payload.imgData
     },
