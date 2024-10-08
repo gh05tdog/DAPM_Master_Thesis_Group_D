@@ -1,6 +1,6 @@
 namespace DAPM.Test.EndToEnd.Models;
 
-public record PostRepositoryResult(
+public record PostResourceResult(
     ItemIds ItemIds,
     string ItemType,
     bool Succeeded,

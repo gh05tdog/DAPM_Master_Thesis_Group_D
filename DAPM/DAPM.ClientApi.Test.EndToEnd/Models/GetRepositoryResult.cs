@@ -1,7 +1,6 @@
 namespace DAPM.Test.EndToEnd.Models;
 
-public record GetRepositoriesResult(
+public record GetRepositoryResult(
     Repository[] Repositories
 );
-
 
