@@ -1,8 +1,6 @@
 #!/bin/bash
-
 DIR1="DAPM"
 DIR2="DAPM-Frontend"
-
 BUILD=false
 
 while [[ "$#" -gt 0 ]]; do
@@ -12,7 +10,6 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
-
 
 cd "$DIR1"
 if [ "$BUILD" = true ]; then
