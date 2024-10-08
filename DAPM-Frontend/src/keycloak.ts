@@ -2,7 +2,7 @@
 import Keycloak from 'keycloak-js';
 
 const keycloakConfig = new Keycloak({
-  url: 'http://localhost:8080',
+  url: 'http://localhost:8888',
   realm: 'myrealm',
   clientId: 'myclient',
 });
