@@ -26,6 +26,17 @@ public class DapmClientApiHttpClient(IApiHttpClientFactory httpClientFactory)
         
         return await response.Content.ReadAsStringAsync();
     }
+
+    public async Task<string> GetUserAsync()
+    {
+        var uri = "test/authentication/user/test";
+        using var client = httpClientFactory.CreateClient();
+        
+        var response = await client.GetAsync(uri);
+        response.EnsureSuccessStatusCode();
+        
+        return await response.Content.ReadAsStringAsync();
+    }
     
     public async Task<ICollection<Organization>> GetOrganizationsAsync()
     {

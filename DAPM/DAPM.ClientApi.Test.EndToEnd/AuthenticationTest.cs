@@ -1,4 +1,6 @@
+using System.Text.Json;
 using DAPM.Test.EndToEnd.TestUtilities;
+using DAPM.Test.EndToEnd.Models;
 
 namespace DAPM.Test.EndToEnd;
 
@@ -28,5 +30,17 @@ public class AuthenticationTest(ApiHttpFixture apiHttpFixture)
     {
         var response = await authenticatedClient.GetAuthorizeAsync();
         Assert.Equal("Authorized", response);
+    }
+
+    [Fact]
+    public async Task Given_authenticated_client_user_returns_user_information()
+    {
+        var response = await authenticatedClient.GetUserAsync();
+        var user = JsonSerializer.Deserialize<User>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        Assert.NotNull(user);
+        Assert.Equal("e86d9920-a202-4e9d-bfa4-de4117a4c5e5", user.Id);
+        Assert.Equal("test", user.Username);
+        Assert.Equal("test", user.FirstName);
+        Assert.Equal("test", user.LastName);
     }
 }
