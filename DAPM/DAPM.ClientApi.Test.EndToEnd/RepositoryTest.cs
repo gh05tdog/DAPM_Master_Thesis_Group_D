@@ -26,8 +26,7 @@ public class RepositoryTest
     }
 
     //There is a bug in the implementation. calling API with unknown ID, creates a ticket which never gets completed
-    /*
-    [Fact]
+    [Fact (Skip = "There is a bug in the implementation. calling API with unknown ID, creates a ticket which never gets completed")]
     public async Task GetReposityByWrongIdReturnNoRepository() 
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
@@ -35,7 +34,7 @@ public class RepositoryTest
         var repositories = await client.GetRepositoryByIdAsync(organizationId,repositoryId);
         Assert.Empty(repositories);
     }
-    */
+    
     /*
     [Fact]
     public async Task CreateResourceReturnsNewResourceId()
