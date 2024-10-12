@@ -27,7 +27,15 @@ public class OrganizationTest
         var organization = await client.GetOrganizationByIdAsync(id);
         Assert.NotNull(organization);
     }
-    
+    //Error in project code. Cannot handle request for incorrect ID
+
+    [Fact (Skip = "Error in project code. Cannot handle request for incorrect ID")] 
+    public async Task GetOrganizationByWrongIdReturnNoOrganization()
+    {
+        var id = Guid.NewGuid();
+        var organization = await client.GetOrganizationByIdAsync(id);
+        Assert.Null(organization);
+    }
     [Fact]
     public async Task CreateRepositoryReturnsNewRepositoryId()
     {

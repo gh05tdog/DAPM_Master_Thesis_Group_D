@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using DAPM.Test.EndToEnd.Models;
 
 namespace DAPM.Test.EndToEnd.TestUtilities;
@@ -58,7 +59,34 @@ public class DapmClientApiHttpClient(IApiHttpClientFactory httpClientFactory)
         var ticketResult = await GetTicketResultAsync<PostRepositoryResult>(ticketResponse);
         return ticketResult.Result;
     }
-
+    public async Task<ICollection<Repository>> GetRepositoryByIdAsync(Guid organizationId,Guid repositoryId)
+    {
+        var uri = $"organizations/{organizationId}/repositories/{repositoryId}";
+        var ticketResponse = await GetAsync(uri);     
+        var ticketResult = await GetTicketResultAsync<GetRepositoryResult>(ticketResponse);
+        return ticketResult.Result.Repositories;
+    }
+    public async Task<ICollection<Resource>> GetResourcesAsync(Guid organizationId, Guid repositoryId)
+    {
+        var uri = $"organizations/{organizationId}/repositories/{repositoryId}/resources";
+        var ticketResponse = await GetAsync(uri);
+        var ticketResult = await GetTicketResultAsync<GetResourceResult>(ticketResponse);
+        return ticketResult.Result.Resources;
+    }
+    public async Task<PostResourceResult> PostResourceAsync(Guid organizationId, Guid repositoryId,string resourceName, string resourceType,StreamContent storedFilePath)
+    {
+        var uri = $"organizations/{organizationId}/repositories/{repositoryId}/resources";
+        var ticketResponse = await PostAsync(uri, new PostResourceRequest(resourceName,resourceType,storedFilePath));
+        var ticketResult = await GetTicketResultAsync<PostResourceResult>(ticketResponse);
+        return ticketResult.Result;
+    }
+    public async Task<ICollection<Pipeline>> GetPipelinesAsync(Guid organizationId, Guid repositoryId)
+    {
+        var uri = $"organizations/{organizationId}/repositories/{repositoryId}/pipelines";
+        var ticketResponse = await GetAsync(uri);
+        var ticketResult = await GetTicketResultAsync<GetPipelinesResult>(ticketResponse);
+        return ticketResult.Result.Pipelines;
+    }
     private async Task<Ticket<T>> GetTicketResultAsync<T>(TicketResponse ticketResponse)
     {
         var uri = $"status/{ticketResponse.TicketId}";
