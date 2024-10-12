@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './stores.ts';
 
-import UserPage from './routes/OverviewPage.tsx';
+import PipelineOverviewPage from './routes/PipelineOverviewPage.tsx';
 import PipelineComposer from './routes/PipeLineComposer.tsx';
 import LoginPage from './routes/LoginPage.tsx';
 import keycloakConfig, { initKeycloak } from './keycloak.ts';
@@ -46,7 +46,7 @@ const App: React.FC = () => {
               <>
                 {/* Automatically redirect to /user when authenticated */}
                 <Route path="/" element={<Navigate to="/user" />} />
-                <Route path="/user" element={<UserPage />} />
+                <Route path="/user" element={<PipelineOverviewPage />} />
                 <Route path="/pipeline" element={<PipelineComposer />} />
               </>
             )}

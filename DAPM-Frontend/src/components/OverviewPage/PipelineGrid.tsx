@@ -80,6 +80,7 @@ export default function AutoGrid() {
         sx={{ backgroundColor: "#bbb", "&:hover": { backgroundColor: "#eee" }, marginBlockStart: "10px" }}>
         Create New
       </Button>
+      
       <Grid container spacing={{ xs: 1, md: 1 }} sx={{ padding: "10px" }}>
         {pipelines.map(({ id, name, imgData }) => (
           <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
