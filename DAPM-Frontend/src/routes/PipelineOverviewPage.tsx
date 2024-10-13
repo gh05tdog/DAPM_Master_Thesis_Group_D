@@ -8,16 +8,22 @@ import PipelineAppBar from "../components/PipeLineComposer/PipelineAppBar.tsx";
 import PipelineGrid from "../components/OverviewPage/PipelineGrid.tsx";
 import Stack from '@mui/material/Stack';
 
-const PipelineOverviewPage: React.FC = () => { 
+const PipelineOverviewPage: React.FC = () => {
     return (
         <>
-             <Header />
-             <Box sx={{ display: 'flex', height: '100vh' }}>
-               <Sidebar />
-               <MainContent />
-             </Box>
+            <Header />
+            <Box
+                sx={{
+                    display: 'flex',
+                    height: '100vh',
+                    overflow: 'hidden' // Prevents scrolling
+                }}
+            >
+                <Sidebar />
+                <MainContent />
+            </Box>
         </>
-
-    )
+    );
 }
+
 export default PipelineOverviewPage;
