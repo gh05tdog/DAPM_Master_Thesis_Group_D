@@ -1,0 +1,25 @@
+{
+  "name": "SE2-Group-D-UI-test",
+  "version": "1.0.0",
+  "description": "Process mining software,SE2 Group D,  UI tests . Puppeteer project with Cucumber.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js -f json:cucumber_report.json",
+    "test:ci": "cucumber-js --tags @ci",
+    "test:focus": "cucumber-js --tags @focus",
+    "generate:report": "node report.js"
+  },
+  "engines": {
+    "npm": ">=10.0.0",
+    "node": ">=10.0.0"
+  },
+  "dependencies": {
+    "@supercharge/strings": "^2.0.0",
+    "chai": "^4.3.0",
+    "cucumber-html-reporter": "^6.0.0",
+    "puppeteer": "^22.3.0"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.6.0"
+  }
+}
