@@ -6,10 +6,8 @@ const Sidebar: React.FC = () => (
         sx={{
             width: 250,
             bgcolor: 'rgba(54,55,56,1)',
-            borderRight: '1px solid lightgray',
             height: '100vh',
-            position: 'fixed',
-            elevation: '0'
+            position: 'relative', // Changed from 'fixed' to 'relative'
         }}
     >
         <Typography variant="h6" sx={{ p: 2 }}>Sidebar</Typography>

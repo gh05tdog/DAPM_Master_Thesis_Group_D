@@ -13,13 +13,13 @@ const MainContent: React.FC = () => (
         component="main"
         sx={{
             flexGrow: 1,
-            bgcolor: 'background.default',
-            p: 3,
-            marginLeft: '250px', // Leave space for the sidebar
+            backgroundcolor: 'whitesmoke',
+            p: 0,
+            m: '0'
         }}
     >
         {
-            <div style={{display: 'flex', flexDirection: 'row', gap: '5px'}}>
+            <div style={{display: 'flex', flexDirection: 'row', gap: '3px', overflow: 'hidden'}}>
                 <Pipelines1/>
                 <Pipelines2/>
                 <Pipelines3/>

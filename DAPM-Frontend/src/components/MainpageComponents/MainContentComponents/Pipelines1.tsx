@@ -26,7 +26,6 @@ function Index(props) {
 const Container = styled.div`
     display: flex;
     background-color: rgba(184,188,192,1);
-    margin: 0px;
     margin-top: 6px;
     margin-bottom: 6px;
     margin-left: 6px;

@@ -10,19 +10,15 @@ import Stack from '@mui/material/Stack';
 
 const PipelineOverviewPage: React.FC = () => {
     return (
-        <>
+        <Box sx={{backgroundColor: 'whitesmoke', display: 'flex', flexDirection: 'column', height: '100vh'}}>
             <Header />
-            <Box
-                sx={{
-                    display: 'flex',
-                    height: '100vh',
-                    overflow: 'hidden' // Prevents scrolling
-                }}
-            >
+            <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden'}}>
                 <Sidebar />
-                <MainContent />
+                <Box sx={{flex: 1, overflowY: 'hidden'}}>
+                    <MainContent />
+                </Box>
             </Box>
-        </>
+        </Box>
     );
 }
 
