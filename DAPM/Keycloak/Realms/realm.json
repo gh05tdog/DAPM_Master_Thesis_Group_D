@@ -840,10 +840,10 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "gqoRuDK6Z9ntS9vBnSDm3QTrKJ9UO4fW",
       "redirectUris": [
-        "/*"
+        "*"
       ],
       "webOrigins": [
-        "/*"
+        "*"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -852,8 +852,8 @@
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
       "serviceAccountsEnabled": true,
-      "authorizationServicesEnabled": true,
-      "publicClient": false,
+      "authorizationServicesEnabled": false,
+      "publicClient": true,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
