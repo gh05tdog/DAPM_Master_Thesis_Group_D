@@ -1,8 +1,10 @@
 import React from 'react';
 import BackButton from '../buttons/BackButton.tsx'
 import { Box, Typography } from '@mui/material';
+import OrgList from '../lists/OrgList.tsx';
 
-const MainContent: React.FC = () => (
+const MainContent: React.FC = () => {
+    return (
     <Box
         component="main"
         sx={{
@@ -14,9 +16,14 @@ const MainContent: React.FC = () => (
     >
         <Typography variant="h4">Main Content Area</Typography>
         {/* Add your main content here */
-        <BackButton />
+        <>
+            <BackButton />
+            <OrgList />
+        </>
         }
     </Box>
-);
+    );
+};
+
 
 export default MainContent;
