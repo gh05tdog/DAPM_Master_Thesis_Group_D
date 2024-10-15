@@ -19,6 +19,7 @@ const darkTheme = createTheme({
 const App: React.FC = () => {
   const [initialized, setInitialized] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const initialize = async () => {
@@ -26,6 +27,7 @@ const App: React.FC = () => {
       setInitialized(true);
       // Assuming initKeycloak sets the keycloakConfig.authenticated value
       setAuthenticated(keycloakConfig.authenticated ?? false); // Update this based on your keycloak logic
+
     };
 
     initialize();

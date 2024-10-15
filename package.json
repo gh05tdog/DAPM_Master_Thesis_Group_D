@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@mui/material": "^6.1.4",
+    "mui": "^0.0.1"
+  }
+}
