@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewPipeline, setImageData } from '../../state_management/slices/pipelineSlice.ts';
 import { getPipelines } from '../../state_management/selectors/index.ts';
-import FlowDiagram from './ImageGeneration/FlowDiagram.tsx';
+import FlowDiagram from '../ImageGeneration/FlowDiagram.tsx';
 import ReactDOM from 'react-dom';
 import { toPng } from 'html-to-image';
 import { getNodesBounds, getViewportForBounds } from 'reactflow';

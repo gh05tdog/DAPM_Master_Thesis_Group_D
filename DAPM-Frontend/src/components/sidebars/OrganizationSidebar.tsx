@@ -13,12 +13,12 @@ import { organizationThunk, repositoryThunk, resourceThunk } from '../../state_m
 import { Organization, Repository, Resource } from '../../state_management/states/apiState.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks.ts';
 import { Box } from '@mui/material';
-import ResourceUploadButton from './Buttons/ResourceUploadButton.tsx';
+import ResourceUploadButton from '../buttons/ResourceUploadButton.tsx';
 import { downloadResource, fetchOrganisation, fetchOrganisationRepositories, fetchOrganisations, fetchPipeline, fetchRepositoryPipelines, fetchRepositoryResources, fetchResource, putPipeline, putRepository } from '../../services/backendAPI.tsx';
-import CreateRepositoryButton from './Buttons/CreateRepositoryButton.tsx';
-import AddOrganizationButton from './Buttons/AddOrganizationButton.tsx';
+import CreateRepositoryButton from '../buttons/CreateRepositoryButton.tsx';
+import AddOrganizationButton from '../buttons/AddOrganizationButton.tsx';
 import { display } from 'html2canvas/dist/types/css/property-descriptors';
-import OperatorUploadButton from './Buttons/OperatorUploadButton.tsx';
+import OperatorUploadButton from '../buttons/OperatorUploadButton.tsx';
 
 const drawerWidth = 240;
 

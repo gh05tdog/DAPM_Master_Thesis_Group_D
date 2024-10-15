@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
-import React, { ChangeEvent } from 'react';
-import { putOperator, putResource } from '../../../services/backendAPI.tsx';
+import React from 'react';
+import { putResource } from '../../services/backendAPI.tsx';
 
 export interface UploadButtonProps {
     orgId: string,
@@ -19,7 +19,9 @@ const style = {
     p: 4,
 };
 
-const OperatorUploadButton = ({ orgId, repId }: UploadButtonProps) => {
+const ResourceUploadButton = ({ orgId, repId }: UploadButtonProps) => {
+
+    const dataTypes = ["eventLog", "bpmnModel", "petriNet"]
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -29,14 +31,13 @@ const OperatorUploadButton = ({ orgId, repId }: UploadButtonProps) => {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        formData.append("ResourceType", "operator");
         const formEntries = Object.fromEntries(formData.entries());
 
         console.log('Form Data:', formEntries);
 
-        if (formData.get('SourceCodeFile')) {
+        if (formData.get('ResourceFile')) {
             try {
-                const result = await putOperator(orgId, repId, formData);
+                const result = await putResource(orgId, repId, formData);
                 console.log('Resource successfully uploaded:', result);
             } catch (error) {
                 console.error('Error uploading resource:', error);
@@ -60,18 +61,24 @@ const OperatorUploadButton = ({ orgId, repId }: UploadButtonProps) => {
                 <Box sx={style}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: 'white' }}>
-                            Upload Operator
+                            Upload Resource
                         </Typography>
                         <form onSubmit={handleSubmit}>
                             <FormControl fullWidth margin="normal">
-                                <FormLabel>Operator name</FormLabel>
+                                <FormLabel>Resource name</FormLabel>
                                 <TextField name="Name" />
 
-                                <FormLabel>Upload source code</FormLabel>
-                                <input type="file" name="SourceCodeFile" />
+                                <FormLabel>Resource type</FormLabel>
+                                <Select
+                                    name="ResourceType"
+                                    labelId="resourceType-select-lable"
+                                    id="resourceType-select"
+                                    sx={{ width: '100%' }}>
+                                    {dataTypes.map((resource) => <MenuItem value={resource}>{resource}</MenuItem>)}
+                                </Select>
 
-                                <FormLabel>Upload dockerfile</FormLabel>
-                                <input type="file" name="DockerfileFile" />
+                                <FormLabel>Upload File</FormLabel>
+                                <input type="file" name="ResourceFile" />
                             </FormControl>
 
                             <Button type="submit" sx={{ backgroundColor: "gray", padding: "1px", color: "black" }}>Submit</Button>
@@ -83,4 +90,4 @@ const OperatorUploadButton = ({ orgId, repId }: UploadButtonProps) => {
     );
 }
 
-export default OperatorUploadButton;
+export default ResourceUploadButton;

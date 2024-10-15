@@ -1,10 +1,10 @@
-import { Box, Button, FormControl, FormLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, FormLabel, Modal, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { putResource } from '../../../services/backendAPI.tsx';
+import { putRepository } from '../../services/backendAPI.tsx';
 
-export interface UploadButtonProps {
+
+export interface CreateRepositoryButtonProps {
     orgId: string,
-    repId: string,
 }
 
 const style = {
@@ -19,9 +19,7 @@ const style = {
     p: 4,
 };
 
-const ResourceUploadButton = ({ orgId, repId }: UploadButtonProps) => {
-
-    const dataTypes = ["eventLog", "bpmnModel", "petriNet"]
+const CreateRepositoryButton = ({ orgId }: CreateRepositoryButtonProps) => {
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -31,19 +29,17 @@ const ResourceUploadButton = ({ orgId, repId }: UploadButtonProps) => {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        const formEntries = Object.fromEntries(formData.entries());
+        const repositoryName = formData.get("Name") as string
 
-        console.log('Form Data:', formEntries);
-
-        if (formData.get('ResourceFile')) {
+        if (repositoryName) {
             try {
-                const result = await putResource(orgId, repId, formData);
-                console.log('Resource successfully uploaded:', result);
+                const result = await putRepository(orgId, repositoryName);
+                console.log('repository successfully created:', result);
             } catch (error) {
-                console.error('Error uploading resource:', error);
+                console.error('Error creating repository:', error);
             }
         } else {
-            console.error('No file selected.');
+            console.error('No repository name given.');
         }
 
         alert("Form Submitted");
@@ -51,7 +47,7 @@ const ResourceUploadButton = ({ orgId, repId }: UploadButtonProps) => {
 
     return (
         <div>
-            <Button sx={{ backgroundColor: "gray", padding: "1px", color: "black" }} onClick={handleOpen}>+</Button>
+            <Button onClick={handleOpen}>Add Repository</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -61,24 +57,12 @@ const ResourceUploadButton = ({ orgId, repId }: UploadButtonProps) => {
                 <Box sx={style}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: 'white' }}>
-                            Upload Resource
+                            Create repository
                         </Typography>
                         <form onSubmit={handleSubmit}>
                             <FormControl fullWidth margin="normal">
-                                <FormLabel>Resource name</FormLabel>
+                                <FormLabel>Repository name</FormLabel>
                                 <TextField name="Name" />
-
-                                <FormLabel>Resource type</FormLabel>
-                                <Select
-                                    name="ResourceType"
-                                    labelId="resourceType-select-lable"
-                                    id="resourceType-select"
-                                    sx={{ width: '100%' }}>
-                                    {dataTypes.map((resource) => <MenuItem value={resource}>{resource}</MenuItem>)}
-                                </Select>
-
-                                <FormLabel>Upload File</FormLabel>
-                                <input type="file" name="ResourceFile" />
                             </FormControl>
 
                             <Button type="submit" sx={{ backgroundColor: "gray", padding: "1px", color: "black" }}>Submit</Button>
@@ -90,4 +74,4 @@ const ResourceUploadButton = ({ orgId, repId }: UploadButtonProps) => {
     );
 }
 
-export default ResourceUploadButton;
+export default CreateRepositoryButton;

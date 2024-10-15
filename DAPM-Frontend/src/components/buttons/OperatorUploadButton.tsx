@@ -1,10 +1,10 @@
-import { Box, Button, FormControl, FormLabel, Modal, TextField, Typography } from '@mui/material';
-import React from 'react';
-import { putRepository } from '../../../services/backendAPI.tsx';
+import { Box, Button, FormControl, FormLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
+import React, { ChangeEvent } from 'react';
+import { putOperator, putResource } from '../../services/backendAPI.tsx';
 
-
-export interface CreateRepositoryButtonProps {
+export interface UploadButtonProps {
     orgId: string,
+    repId: string,
 }
 
 const style = {
@@ -19,7 +19,7 @@ const style = {
     p: 4,
 };
 
-const CreateRepositoryButton = ({ orgId }: CreateRepositoryButtonProps) => {
+const OperatorUploadButton = ({ orgId, repId }: UploadButtonProps) => {
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -29,17 +29,20 @@ const CreateRepositoryButton = ({ orgId }: CreateRepositoryButtonProps) => {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        const repositoryName = formData.get("Name") as string
+        formData.append("ResourceType", "operator");
+        const formEntries = Object.fromEntries(formData.entries());
 
-        if (repositoryName) {
+        console.log('Form Data:', formEntries);
+
+        if (formData.get('SourceCodeFile')) {
             try {
-                const result = await putRepository(orgId, repositoryName);
-                console.log('repository successfully created:', result);
+                const result = await putOperator(orgId, repId, formData);
+                console.log('Resource successfully uploaded:', result);
             } catch (error) {
-                console.error('Error creating repository:', error);
+                console.error('Error uploading resource:', error);
             }
         } else {
-            console.error('No repository name given.');
+            console.error('No file selected.');
         }
 
         alert("Form Submitted");
@@ -47,7 +50,7 @@ const CreateRepositoryButton = ({ orgId }: CreateRepositoryButtonProps) => {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Add Repository</Button>
+            <Button sx={{ backgroundColor: "gray", padding: "1px", color: "black" }} onClick={handleOpen}>+</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -57,12 +60,18 @@ const CreateRepositoryButton = ({ orgId }: CreateRepositoryButtonProps) => {
                 <Box sx={style}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: 'white' }}>
-                            Create repository
+                            Upload Operator
                         </Typography>
                         <form onSubmit={handleSubmit}>
                             <FormControl fullWidth margin="normal">
-                                <FormLabel>Repository name</FormLabel>
+                                <FormLabel>Operator name</FormLabel>
                                 <TextField name="Name" />
+
+                                <FormLabel>Upload source code</FormLabel>
+                                <input type="file" name="SourceCodeFile" />
+
+                                <FormLabel>Upload dockerfile</FormLabel>
+                                <input type="file" name="DockerfileFile" />
                             </FormControl>
 
                             <Button type="submit" sx={{ backgroundColor: "gray", padding: "1px", color: "black" }}>Submit</Button>
@@ -74,4 +83,4 @@ const CreateRepositoryButton = ({ orgId }: CreateRepositoryButtonProps) => {
     );
 }
 
-export default CreateRepositoryButton;
+export default OperatorUploadButton;

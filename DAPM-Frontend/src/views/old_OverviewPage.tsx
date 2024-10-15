@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import OrganizationSidebar from "../components/OverviewPage/OrganizationSidebar.tsx";
-import PipelineAppBar from "../components/PipeLineComposer/PipelineAppBar.tsx";
-import PipelineGrid from "../components/OverviewPage/PipelineGrid.tsx";
+import OrganizationSidebar from "../components/sidebars/OrganizationSidebar.tsx";
+import PipelineAppBar from "../components/pipelineComposers/PipelineAppBar.tsx";
+import PipelineGrid from "../components/overviews/old_PipelineOverview.tsx";
 import Stack from '@mui/material/Stack';
 
 export default function UserPage() {
