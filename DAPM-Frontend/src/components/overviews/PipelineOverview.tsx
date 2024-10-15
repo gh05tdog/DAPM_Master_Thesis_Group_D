@@ -1,5 +1,5 @@
 import React from 'react';
-import BackButton from '../OverviewPage/Buttons/BackButton'
+import BackButton from '../buttons/BackButton.tsx'
 import { Box, Typography } from '@mui/material';
 
 const MainContent: React.FC = () => (

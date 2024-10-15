@@ -6,11 +6,11 @@ import { Edge, Node } from "reactflow";
 import { NodeData } from '../../state_management/states/pipelineState.ts';
 import { getEdges, getNodes } from '../../state_management/selectors/index.ts';
 import { useSelector } from 'react-redux';
-import AlgorithmConfiguration from './ConfigurationPages/AlgorithmConfiguration.tsx';
-import DataSourceConfiguration from './ConfigurationPages/DataSourceConfiguration.tsx';
-import DataSinkConfiguration from './ConfigurationPages/DataSinkConfiguration.tsx';
-import OrganizationConfiguration from './ConfigurationPages/OrganizationConfiguration.tsx';
-import EdgeConfiguration from './ConfigurationPages/EdgeConfiguration.tsx';
+import AlgorithmConfiguration from './Configurations/AlgorithmConfiguration.tsx';
+import DataSourceConfiguration from './Configurations/DataSourceConfiguration.tsx';
+import DataSinkConfiguration from './Configurations/DataSinkConfiguration.tsx';
+import OrganizationConfiguration from './Configurations/OrganizationConfiguration.tsx';
+import EdgeConfiguration from './Configurations/EdgeConfiguration.tsx';
 
 const drawerWidth = 240;
 
