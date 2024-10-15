@@ -23,6 +23,6 @@
   },
   "include": [
     "src",
-    "src/types"
-  ]
+    "src/configs/types"
+, "test/App.tsx"  ]
 }

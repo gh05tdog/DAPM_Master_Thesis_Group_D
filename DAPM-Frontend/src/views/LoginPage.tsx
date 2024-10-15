@@ -1,7 +1,7 @@
 // src/routes/LoginPage.tsx
 import React from 'react';
 import { Button, Typography, Box } from '@mui/material';
-import { login, logout } from '../keycloak.ts';
+import { login, logout } from '../utils/keycloak.ts';
 
 const LoginPage: React.FC = () => {
   return (

@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import {
   NodeProps,
   NodeResizer} from 'reactflow';
-import { getNodes } from '../../../redux/selectors/index.ts';
+import { getNodes } from '../../../state_management/selectors/index.ts';
 import { getRelativeNodesBounds } from '../utils.ts';
-import { OrganizationNodeData } from '../../../redux/states/pipelineState.ts';
+import { OrganizationNodeData } from '../../../state_management/states/pipelineState.ts';
 
 
 function OrganizationNode({ data, id, selected }: NodeProps<OrganizationNodeData>) {

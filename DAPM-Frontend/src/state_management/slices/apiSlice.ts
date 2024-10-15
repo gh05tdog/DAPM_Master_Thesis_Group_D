@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ApiState, Organization, Repository, Resource } from "../states/apiState";
-import { fetchOrganisationRepositories, fetchOrganisations, fetchRepository, fetchRepositoryResources } from "../../services/backendAPI";
+import { ApiState, Organization, Repository, Resource } from "../states/apiState.ts";
+import { fetchOrganisationRepositories, fetchOrganisations, fetchRepository, fetchRepositoryResources } from "../../services/backendAPI.tsx";
 import { useAppSelector } from "../../hooks";
-import { getOrganizations } from "../selectors/apiSelector";
+import { getOrganizations } from "../selectors/apiSelector.ts";
 
 
 export const initialState: ApiState = {

@@ -2,9 +2,9 @@ import {
     type EdgeProps,
   BezierEdge} from 'reactflow';
 
-import { EdgeData } from '../../../redux/states/pipelineState.ts';
+import { EdgeData } from '../../../state_management/states/pipelineState.ts';
 import { useSelector } from 'react-redux';
-import { getNodes } from '../../../redux/selectors/index.ts';
+import { getNodes } from '../../../state_management/selectors/index.ts';
 
 
 export function DefaultEdge({id, data, style, selected, source, target, sourceHandleId, targetHandleId, ...delegated}: EdgeProps<EdgeData>) {

@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography/Typography';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setActivePipeline } from '../../redux/slices/pipelineSlice.ts';
+import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
 
 export interface PipelineCardProps {
   id: string;

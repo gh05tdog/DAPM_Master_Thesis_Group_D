@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './stores.ts';
+import store from './state_management/store/stores.ts';
 
-import PipelineOverviewPage from './routes/PipelineOverviewPage.tsx';
-import PipelineComposer from './routes/PipeLineComposer.tsx';
-import LoginPage from './routes/LoginPage.tsx';
-import keycloakConfig, { initKeycloak } from './keycloak.ts';
+import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
+import PipelineComposer from './views/old_PipeLineComposer.tsx';
+import LoginPage from './views/LoginPage.tsx';
+import keycloakConfig, { initKeycloak } from '../src/utils/keycloak.ts';
 
 const darkTheme = createTheme({
   palette: {

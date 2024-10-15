@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { memo } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
-import {OperatorNodeData } from "../../../redux/states/pipelineState.ts";
+import {OperatorNodeData } from "../../../state_management/states/pipelineState.ts";
 
 function CustomNode({data, selected}: NodeProps<OperatorNodeData>) {
 

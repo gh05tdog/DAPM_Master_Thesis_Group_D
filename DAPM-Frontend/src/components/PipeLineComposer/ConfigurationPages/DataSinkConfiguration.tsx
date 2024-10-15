@@ -2,11 +2,11 @@ import List from '@mui/material/List/List';
 import ListItem from '@mui/material/ListItem/ListItem';
 import { Node } from "reactflow";
 import { Box, InputLabel, ListItemText, MenuItem, Select } from '@mui/material';
-import { DataSinkNodeData, NodeData, OrganizationNodeData } from '../../../redux/states/pipelineState.ts';
+import { DataSinkNodeData, NodeData, OrganizationNodeData } from '../../../state_management/states/pipelineState.ts';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateNode } from '../../../redux/slices/pipelineSlice.ts';
-import { getNodes } from '../../../redux/selectors/index.ts';
-import { getRepositories } from '../../../redux/selectors/apiSelector.ts';
+import { updateNode } from '../../../state_management/slices/pipelineSlice.ts';
+import { getNodes } from '../../../state_management/selectors/index.ts';
+import { getRepositories } from '../../../state_management/selectors/apiSelector.ts';
 
 
 export interface AlgorithmConfugurationProps {

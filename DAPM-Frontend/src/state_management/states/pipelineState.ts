@@ -1,5 +1,5 @@
 import { Edge, Node } from 'reactflow';
-import { Organization, Repository, Resource } from './apiState.js';
+import { Organization, Repository, Resource } from './apiState.ts';
 
 export interface PipelineState {
   pipelines: PipelineData[]

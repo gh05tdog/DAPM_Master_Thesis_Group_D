@@ -2,14 +2,14 @@ import { AppBar, Box, Button, TextField, Toolbar, Typography } from "@mui/materi
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getActiveFlowData, getActivePipeline } from "../../redux/selectors/index.ts";
+import { getActiveFlowData, getActivePipeline } from "../../state_management/selectors/index.ts";
 import { useState } from "react";
-import { updatePipelineName } from "../../redux/slices/pipelineSlice.ts";
+import { updatePipelineName } from "../../state_management/slices/pipelineSlice.ts";
 import EditIcon from '@mui/icons-material/Edit';
 import { Node } from "reactflow";
-import { DataSinkNodeData, DataSourceNodeData, OperatorNodeData } from "../../redux/states/pipelineState.ts";
+import { DataSinkNodeData, DataSourceNodeData, OperatorNodeData } from "../../state_management/states/pipelineState.ts";
 import { putCommandStart, putExecution, putPipeline } from "../../services/backendAPI.tsx";
-import { getOrganizations, getRepositories } from "../../redux/selectors/apiSelector.ts";
+import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { getHandleId, getNodeId } from "./Flow.tsx";
 
 export default function PipelineAppBar() {

@@ -10,7 +10,7 @@ import ReactFlow, {
   getOutgoers
 } from "reactflow";
 
-import { onNodesChange, onEdgesChange, onConnect, addNode, removeNode, setNodes, removeEdge, undo, createSnapShot, redo } from "../../redux/slices/pipelineSlice.ts";
+import { onNodesChange, onEdgesChange, onConnect, addNode, removeNode, setNodes, removeEdge, undo, createSnapShot, redo } from "../../state_management/slices/pipelineSlice.ts";
 
 import CustomNode from "./Nodes/CustomNode.tsx";
 
@@ -25,9 +25,9 @@ import 'reactflow/dist/style.css';
 import '@reactflow/node-resizer/dist/style.css';
 
 import { getNodePositionInsideParent, sortNodes } from "./utils.ts";
-import { BaseTemplateData, NodeData, OperatorNodeData, OperatorTemplateData } from "../../redux/states/pipelineState.ts";
+import { BaseTemplateData, NodeData, OperatorNodeData, OperatorTemplateData } from "../../state_management/states/pipelineState.ts";
 import DataSourceNode from "./Nodes/DataSourceNode.tsx";
-import { getEdges, getNodes } from "../../redux/selectors/index.ts";
+import { getEdges, getNodes } from "../../state_management/selectors/index.ts";
 import { DefaultEdge } from "./Edges/DefaultEdge.tsx";
 import { v4 as uuidv4 } from "uuid";
 
