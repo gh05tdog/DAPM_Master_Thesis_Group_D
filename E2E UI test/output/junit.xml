@@ -1,6 +1,20 @@
 <?xml version="1.0"?>
-<testsuite failures="0" skipped="0" name="cucumber-js" time="15.709152085" tests="2">
-  <testcase classname="Login Feature" name="Log in with existing user" time="6.470870092999999">
+<testsuite failures="3" skipped="0" name="cucumber-js" time="100.403539449" tests="4">
+  <testcase classname="Overview of the pipelines" name="Is the organization list displayed?" time="14.282196228">
+    <failure/>
+    <system-out><![CDATA[Given I log in as a user with the username "test" and the password "te...pending
+Then I validate that the navigation bar contains message "Pipeline Pro...skipped
+And i validate that the list "Organization" is displayed.................skipped
+And i validate that the list "Organization" contains the name "DTU"......skipped]]></system-out>
+  </testcase>
+  <testcase classname="Overview of the pipelines" name="Is the repository list displayed?" time="5.632569458">
+    <failure/>
+    <system-out><![CDATA[Given I log in as a user with the username "test" and the password "te...pending
+Then I validate that the navigation bar contains message "Pipeline Pro...skipped
+And i validate that the list "Repositories" is displayed.................skipped
+And i validate that the list "Repositories" contains the name "Test".....skipped]]></system-out>
+  </testcase>
+  <testcase classname="Login Feature" name="Log in with existing user" time="18.922404673">
     <system-out><![CDATA[Given I open a main page..................................................passed
 Then I validate redirection to the KeycloakLoginPage......................passed
 When I type "test" value in the "username" field..........................passed
@@ -8,13 +22,17 @@ And I type "test" value in the "password" field...........................passed
 And I submit by clicking the login button.................................passed
 Then I validate that navigation bar contains message "Pipeline Processi...passed]]></system-out>
   </testcase>
-  <testcase classname="Login Feature" name="Log in with wrong credentials" time="9.238281992">
-    <system-out><![CDATA[Given I open a main page..................................................passed
-Then I validate redirection to the KeycloakLoginPage......................passed
-When I type "qwewqeqweqwertytrytrytr" value in the "username" field.......passed
-And I type "qwewqeqweqwertytrytrytr" value in the "password" field........passed
-And I submit by clicking the login button.................................passed
-And I print a message to the console......................................passed
-Then I validate that alert message "Invalid username or password." is s...passed]]></system-out>
+  <testcase classname="Login Feature" name="Log in with wrong credentials" time="61.566369089999995">
+    <failure type="Error" message="function timed out, ensure the promise resolves within 30000 milliseconds"><![CDATA[Error: function timed out, ensure the promise resolves within 30000 milliseconds
+    at Timeout.<anonymous> (/home/ravvnen/dutten/DAPM_Master_Thesis_Group_D/E2E UI test/node_modules/@cucumber/cucumber/lib/time.js:54:20)
+    at listOnTimeout (node:internal/timers:581:17)
+    at process.processTimers (node:internal/timers:519:7)]]></failure>
+    <system-out><![CDATA[Given I open a main page..................................................failed
+Then I validate redirection to the KeycloakLoginPage.....................skipped
+When I type "qwewqeqweqwertytrytrytr" value in the "username" field......skipped
+And I type "qwewqeqweqwertytrytrytr" value in the "password" field.......skipped
+And I submit by clicking the login button................................skipped
+And I print a message to the console.....................................skipped
+Then I validate that alert message "Invalid username or password." is ...skipped]]></system-out>
   </testcase>
 </testsuite>
