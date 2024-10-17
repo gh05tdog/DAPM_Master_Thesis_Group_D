@@ -8,8 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.1.35" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     </ItemGroup>
 
     <ItemGroup>
@@ -19,8 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Core\Domain\Exceptions\" />
-      <Folder Include="Infrastructure\Database\" />
       <Folder Include="Infrastructure\MessageQueue\" />
     </ItemGroup>
 
