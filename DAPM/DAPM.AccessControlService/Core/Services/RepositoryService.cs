@@ -14,13 +14,17 @@ public class RepositoryService : IRepositoryService
         this.repositoryRepository = repositoryRepository;
     }
 
-    public Task AddUserRepository(UserDto user, RepositoryDto repository)
+    public async Task AddUserRepository(UserDto user, RepositoryDto repository)
     {
-        throw new NotImplementedException();
+        var userId = user.ToUserId();
+        var repositoryId = repository.ToRepositoryId();
+        await repositoryRepository.AddUserRepository(userId, repositoryId);
     }
 
-    public Task<ICollection<RepositoryDto>> GetRepositoriesForUser(UserDto user)
+    public async Task<ICollection<RepositoryDto>> GetRepositoriesForUser(UserDto user)
     {
-        throw new NotImplementedException();
+        var userId = user.ToUserId();
+        var repositoryIds = await repositoryRepository.GetRepositoriesForUser(userId);
+        return repositoryIds.Select(r => new RepositoryDto(r)).ToList();
     }
 }

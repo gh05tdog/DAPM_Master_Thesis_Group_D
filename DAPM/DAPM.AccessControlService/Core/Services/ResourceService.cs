@@ -14,13 +14,17 @@ public class ResourceService : IResourceService
         this.resourceRepository = resourceRepository;
     }
 
-    public Task AddUserResource(UserDto user, ResourceDto resource)
+    public async Task AddUserResource(UserDto user, ResourceDto resource)
     {
-        throw new NotImplementedException();
+        var userId = user.ToUserId();
+        var resourceId = resource.ToResourceId();
+        await resourceRepository.AddUserResource(userId, resourceId);
     }
 
-    public Task<ICollection<ResourceDto>> GetResourcesForUser(UserDto user)
+    public async Task<ICollection<ResourceDto>> GetResourcesForUser(UserDto user)
     {
-        throw new NotImplementedException();
+        var userId = user.ToUserId();
+        var resourceIds = await resourceRepository.GetResourcesForUser(userId);
+        return resourceIds.Select(r => new ResourceDto(r)).ToList();
     }
 }

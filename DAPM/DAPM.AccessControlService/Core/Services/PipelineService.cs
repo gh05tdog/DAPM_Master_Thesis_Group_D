@@ -14,13 +14,17 @@ public class PipelineService : IPipelineService
         this.pipelineRepository = pipelineRepository;
     }
 
-    public Task AddUserPipeline(UserDto user, PipelineDto pipeline)
+    public async Task AddUserPipeline(UserDto user, PipelineDto pipeline)
     {
-        throw new NotImplementedException();
+        var userId = user.ToUserId();
+        var pipelineId = pipeline.ToPipelineId();
+        await pipelineRepository.AddUserPipeline(userId, pipelineId);
     }
 
-    public Task<ICollection<PipelineDto>> GetPipelinesForUser(UserDto user)
+    public async Task<ICollection<PipelineDto>> GetPipelinesForUser(UserDto user)
     {
-        throw new NotImplementedException();
+        var userId = user.ToUserId();
+        var pipelineIds = await pipelineRepository.GetPipelinesForUser(userId);
+        return pipelineIds.Select(p => new PipelineDto(p)).ToList();
     }
 }
