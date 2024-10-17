@@ -1,4 +1,5 @@
-﻿using DAPM.ClientApi.Models;
+﻿using DAPM.ClientApi.Extensions;
+using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
@@ -13,13 +14,13 @@ namespace DAPM.ClientApi.Controllers
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations")]
-    public class OrganizationController : ControllerBase
+    public class OrganizationController : BaseController
     {
 
         private readonly ILogger<OrganizationController> _logger;
         private readonly IOrganizationService _organizationService;
 
-        public OrganizationController(ILogger<OrganizationController> logger, IOrganizationService organizationService)
+        public OrganizationController(ILogger<OrganizationController> logger, IOrganizationService organizationService, IAccessControlService accessControlService) : base(accessControlService)
         {
             _logger = logger;
             _organizationService = organizationService;
@@ -47,7 +48,7 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets all the repositories of an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetRepositoriesOfOrganization(Guid organizationId)
         {
-            Guid id = _organizationService.GetRepositoriesOfOrganization(organizationId);
+            Guid id = _organizationService.GetRepositoriesOfOrganization(organizationId, this.UserId());
             return Ok(new ApiResponse {RequestName = "GetRepositoriesOfOrganization", TicketId = id });
         }
 
@@ -56,7 +57,7 @@ namespace DAPM.ClientApi.Controllers
             "only be able to create repositories for your own organization.")]
         public async Task<ActionResult<Guid>> PostRepositoryToOrganization(Guid organizationId, [FromBody] RepositoryApiDto repositoryDto)
         {
-            Guid id = _organizationService.PostRepositoryToOrganization(organizationId, repositoryDto.Name);
+            Guid id = _organizationService.PostRepositoryToOrganization(organizationId, repositoryDto.Name, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostRepositoryToOrganization", TicketId = id });
         }
 

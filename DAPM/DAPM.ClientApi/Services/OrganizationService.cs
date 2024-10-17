@@ -1,4 +1,7 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+﻿using System.Collections.Concurrent;
+using DAPM.AccessControlService.Core.Dtos;
+using DAPM.ClientApi.Services.Interfaces;
+using Newtonsoft.Json.Linq;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 using RabbitMQLibrary.Messages.ResourceRegistry;
@@ -12,6 +15,10 @@ namespace DAPM.ClientApi.Services
         private readonly IQueueProducer<GetOrganizationsRequest> _getOrganizationsRequestProducer;
         private readonly IQueueProducer<PostRepositoryRequest> _postRepositoryRequestProducer;
         private readonly ITicketService _ticketService;
+        private static readonly ConcurrentDictionary<Guid, Guid> TicketToUser = new();
+        
+        public UserDto GetUserFromTicket(Guid ticketId) 
+            =>  new UserDto { Id = TicketToUser[ticketId]};
 
         public OrganizationService(ILogger<OrganizationService> logger, 
             IQueueProducer<GetOrganizationsMessage> getOrgsProducer, 
@@ -66,7 +73,7 @@ namespace DAPM.ClientApi.Services
 
         }
 
-        public Guid GetRepositoriesOfOrganization(Guid organizationId)
+        public Guid GetRepositoriesOfOrganization(Guid organizationId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
@@ -81,11 +88,13 @@ namespace DAPM.ClientApi.Services
             _getRepositoriesRequestProducer.PublishMessage(message);
 
             _logger.LogDebug("GetRepositoriesRequest Enqueued");
-
+            
+            TicketToUser[ticketId] = userId;
+            
             return ticketId;
         }
 
-        public Guid PostRepositoryToOrganization(Guid organizationId, string name)
+        public Guid PostRepositoryToOrganization(Guid organizationId, string name, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
@@ -101,6 +110,8 @@ namespace DAPM.ClientApi.Services
 
             _logger.LogDebug("PostRepositoryRequest Enqueued");
 
+            TicketToUser[ticketId] = userId;
+            
             return ticketId;
         }
     }

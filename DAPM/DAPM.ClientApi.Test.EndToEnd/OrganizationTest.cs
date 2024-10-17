@@ -9,7 +9,7 @@ public class OrganizationTest
 
     public OrganizationTest(ApiHttpFixture apiHttpFixture)
     {
-        this.client = apiHttpFixture.Client;
+        this.client = apiHttpFixture.AuthenticatedClient;
     }
     
     [Fact]
