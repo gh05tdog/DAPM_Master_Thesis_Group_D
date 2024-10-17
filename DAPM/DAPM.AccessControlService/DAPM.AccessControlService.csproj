@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure\MessageQueue\" />
+      <ProjectReference Include="..\RabbitMQLibrary\RabbitMQLibrary.csproj" />
     </ItemGroup>
 
 </Project>
