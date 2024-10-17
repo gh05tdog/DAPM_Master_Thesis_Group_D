@@ -2,19 +2,9 @@ using DAPM.AccessControlService.Core.Domain.Entities;
 
 namespace DAPM.AccessControlService.Core.Dtos;
 
-public record PipelineDto
+public class PipelineDto
 {
-    public readonly Guid Id;
-    
-    public PipelineDto(Guid id)
-    {
-        this.Id = id;
-    }
-
-    public PipelineDto(PipelineId pipelineId)
-    {
-        Id = pipelineId.Id;
-    }
+    public Guid Id { get; set; }
     
     public PipelineId ToPipelineId() => new(Id);
 }

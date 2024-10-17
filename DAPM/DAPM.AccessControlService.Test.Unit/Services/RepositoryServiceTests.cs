@@ -13,7 +13,7 @@ public class RepositoryServiceTests
         connection.Open();
         
         var repository = new RepositoryRepository(connection);
-        await repository.InitializeScheme();
+        await repository.InitializeScheme(TestHelper.RepositoryInitSql);
 
         return new RepositoryService(repository);
     }
@@ -23,8 +23,8 @@ public class RepositoryServiceTests
     {
         var service = await CreateService();
 
-        var user = new UserDto(Guid.NewGuid());
-        var repository = new RepositoryDto(Guid.NewGuid());
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var repository = new RepositoryDto{Id = Guid.NewGuid()};
 
         await service.AddUserRepository(user, repository);
 

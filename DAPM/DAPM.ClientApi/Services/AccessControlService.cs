@@ -16,12 +16,12 @@ public class AccessControlService : IAccessControlService
     private readonly IQueueProducer<GetPipelinesForUserRequestMessage> getPipelinesForUserRequestProducer;
     private readonly IQueueProducer<GetRepositoriesForUserRequestMessage> getRepositoriesForUserRequestProducer;
     private readonly IQueueProducer<GetResourcesForUserRequestMessage> getResourcesForUserRequestProducer;
-    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<GetPipelinesForUserResponseMessage>> getPipelinesTaskCompletionSources = new();
-    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<GetResourcesForUserResponseMessage>> getResourcesTaskCompletionSources = new();
-    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<GetRepositoriesForUserResponseMessage>> getRepositoriesTaskCompletionSources = new();
-    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<AddUserPipelineResponseMessage>> addUserPipelineTaskCompletionSources = new();
-    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<AddUserRepositoryResponseMessage>> addUserRepositoryTaskCompletionSources = new();
-    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<AddUserResourceReponseMessage>> addUserResourceTaskCompletionSources = new();
+    private static readonly ConcurrentDictionary<Guid, TaskCompletionSource<GetPipelinesForUserResponseMessage>> getPipelinesTaskCompletionSources = new();
+    private static readonly ConcurrentDictionary<Guid, TaskCompletionSource<GetResourcesForUserResponseMessage>> getResourcesTaskCompletionSources = new();
+    private static readonly ConcurrentDictionary<Guid, TaskCompletionSource<GetRepositoriesForUserResponseMessage>> getRepositoriesTaskCompletionSources = new();
+    private static readonly ConcurrentDictionary<Guid, TaskCompletionSource<AddUserPipelineResponseMessage>> addUserPipelineTaskCompletionSources = new();
+    private static readonly ConcurrentDictionary<Guid, TaskCompletionSource<AddUserRepositoryResponseMessage>> addUserRepositoryTaskCompletionSources = new();
+    private static readonly ConcurrentDictionary<Guid, TaskCompletionSource<AddUserResourceReponseMessage>> addUserResourceTaskCompletionSources = new();
     
     public AccessControlService(ITicketService ticketService, 
         IQueueProducer<AddUserPipelineRequestMessage> addUserPipelineRequestProducer, 
@@ -57,7 +57,6 @@ public class AccessControlService : IAccessControlService
         getPipelinesForUserRequestProducer.PublishMessage(message);
 
         var response = await tcs.Task;
-        getPipelinesTaskCompletionSources.TryRemove(ticketId, out _);
         
         return response.Pipelines.Contains(pipeline);
     }
@@ -79,7 +78,6 @@ public class AccessControlService : IAccessControlService
         getRepositoriesForUserRequestProducer.PublishMessage(message);
         
         var response = await tcs.Task;
-        getRepositoriesTaskCompletionSources.TryRemove(ticketId, out _);
         
         return response.Repositories.Contains(repository);
     }
@@ -101,7 +99,6 @@ public class AccessControlService : IAccessControlService
         getResourcesForUserRequestProducer.PublishMessage(message);
         
         var response = await tcs.Task;
-        getResourcesTaskCompletionSources.TryRemove(ticketId, out _);
         
         return response.Resources.Contains(resource);
     }
@@ -124,7 +121,6 @@ public class AccessControlService : IAccessControlService
         addUserPipelineRequestProducer.PublishMessage(message);
         
         await tcs.Task;
-        addUserPipelineTaskCompletionSources.TryRemove(ticketId, out _);
 
         return true;
     }
@@ -147,7 +143,6 @@ public class AccessControlService : IAccessControlService
         addUserResourceRequestProducer.PublishMessage(message);
         
         await tcs.Task;
-        addUserResourceTaskCompletionSources.TryRemove(ticketId, out _);
         
         return true;
     }
@@ -170,8 +165,55 @@ public class AccessControlService : IAccessControlService
         addUserRepositoryRequestProducer.PublishMessage(message);
         
         await tcs.Task;
-        addUserRepositoryTaskCompletionSources.TryRemove(ticketId, out _);
         
         return true;
+    }
+
+    public void HandleGetPipelinesForUserResponseMessage(GetPipelinesForUserResponseMessage message)
+    {
+        if (getPipelinesTaskCompletionSources.TryRemove(message.MessageId, out var tcs))
+        {
+            tcs.SetResult(message);
+        }
+    }
+
+    public void HandleGetRepositoriesForUserResponseMessage(GetRepositoriesForUserResponseMessage message)
+    {
+        if (getRepositoriesTaskCompletionSources.TryRemove(message.MessageId, out var tcs))
+        {
+            tcs.SetResult(message);
+        }
+    }
+
+    public void HandleGetResourcesForUserResponseMessage(GetResourcesForUserResponseMessage message)
+    {
+        if (getResourcesTaskCompletionSources.TryRemove(message.MessageId, out var tcs))
+        {
+            tcs.SetResult(message);
+        }
+    }
+
+    public void HandleAddUserPipelineResponseMessage(AddUserPipelineResponseMessage message)
+    {
+        if (addUserPipelineTaskCompletionSources.TryRemove(message.MessageId, out var tcs))
+        {
+            tcs.SetResult(message);
+        }
+    }
+
+    public void HandleAddUserRepositoryResponseMessage(AddUserRepositoryResponseMessage message)
+    {
+        if (addUserRepositoryTaskCompletionSources.TryRemove(message.MessageId, out var tcs))
+        {
+            tcs.SetResult(message);
+        }
+    }
+
+    public void HandleAddUserResourceResponseMessage(AddUserResourceReponseMessage message)
+    {
+        if (addUserResourceTaskCompletionSources.TryRemove(message.MessageId, out var tcs))
+        {
+            tcs.SetResult(message);
+        }    
     }
 }

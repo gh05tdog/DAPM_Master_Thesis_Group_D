@@ -13,7 +13,7 @@ public class ResourceServiceTests
         connection.Open();
         
         var repository = new ResourceRepository(connection);
-        await repository.InitializeScheme();
+        await repository.InitializeScheme(TestHelper.ResourceInitSql);
 
         return new ResourceService(repository);
     }
@@ -23,8 +23,8 @@ public class ResourceServiceTests
     {
         var service = await CreateService();
 
-        var user = new UserDto(Guid.NewGuid());
-        var resource = new ResourceDto(Guid.NewGuid());
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var resource = new ResourceDto{Id = Guid.NewGuid()};
 
         await service.AddUserResource(user, resource);
 

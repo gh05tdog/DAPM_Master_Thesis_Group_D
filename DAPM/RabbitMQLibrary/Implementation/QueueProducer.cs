@@ -33,7 +33,8 @@ namespace RabbitMQLibrary.Implementation
             if (message.TimeToLive.Ticks <= 0) throw new QueueingException($"{nameof(message.TimeToLive)} cannot be zero or negative");
 
             // Set message ID
-            message.MessageId = Guid.NewGuid();
+            if (message.MessageId == default) 
+                message.MessageId = Guid.NewGuid();
 
             try
             {

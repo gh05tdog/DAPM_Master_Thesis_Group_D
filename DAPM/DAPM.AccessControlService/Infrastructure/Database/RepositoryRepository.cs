@@ -8,28 +8,41 @@ namespace DAPM.AccessControlService.Infrastructure.Database;
 public class RepositoryRepository : IRepositoryRepository
 {
     private readonly IDbConnection dbConnection;
+    private bool initialized;
 
     public RepositoryRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
-        InitializeScheme().GetAwaiter().GetResult();
     }
 
     public async Task InitializeScheme()
     {   
         const string sql = @"
-                CREATE TABLE IF NOT EXISTS UserRepositories (
-                    UserId TEXT NOT NULL,
-                    RepositoryId TEXT NOT NULL,
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserRepositories' AND xtype='U')
+            BEGIN
+                CREATE TABLE UserRepositories (
+                    UserId NVARCHAR(50) NOT NULL,
+                    RepositoryId NVARCHAR(50) NOT NULL,
                     PRIMARY KEY (UserId, RepositoryId)
                 );
-            ";
+            END
+        ";
         
         await dbConnection.ExecuteAsync(sql);
+        initialized = true;
     }
+    
+    public async Task InitializeScheme(string sql)
+        {
+            await dbConnection.ExecuteAsync(sql);
+            initialized = true;
+        }
 
     public async Task AddUserRepository(UserId userId, RepositoryId repositoryId)
     {
+        if (!initialized)
+            await InitializeScheme();
+        
         const string sql = @"
                 INSERT INTO UserRepositories (UserId, RepositoryId)
                 VALUES (@UserId, @RepositoryId);
@@ -40,6 +53,9 @@ public class RepositoryRepository : IRepositoryRepository
 
     public async Task<ICollection<RepositoryId>> GetRepositoriesForUser(UserId userId)
     {
+        if (!initialized)
+            await InitializeScheme();
+        
         const string sql = @"
                 SELECT RepositoryId
                 FROM UserRepositories

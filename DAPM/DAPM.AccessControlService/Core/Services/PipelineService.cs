@@ -24,6 +24,6 @@ public class PipelineService : IPipelineService
     {
         var userId = user.ToUserId();
         var pipelineIds = await pipelineRepository.GetPipelinesForUser(userId);
-        return pipelineIds.Select(p => new PipelineDto(p)).ToList();
+        return pipelineIds.Select(p => new PipelineDto{Id = p.Id}).ToList();
     }
 }

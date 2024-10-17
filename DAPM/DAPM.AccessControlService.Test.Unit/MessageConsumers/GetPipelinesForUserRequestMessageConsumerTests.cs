@@ -17,8 +17,8 @@ public class GetPipelinesForUserRequestMessageConsumerTests
         var mockPipelineService = new Mock<IPipelineService>();
         var mockQueueProducer = new Mock<IQueueProducer<GetPipelinesForUserResponseMessage>>();
 
-        var userDto = new UserDto(Guid.NewGuid());
-        var pipelines = new List<PipelineDto> { new(Guid.NewGuid()) };
+        var userDto = new UserDto{Id = Guid.NewGuid()};
+        var pipelines = new List<PipelineDto> { new PipelineDto{Id = Guid.NewGuid()} };
 
         mockPipelineService.Setup(service => service.GetPipelinesForUser(userDto))
             .ReturnsAsync(pipelines);

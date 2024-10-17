@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http.Features;
@@ -6,6 +7,7 @@ using RabbitMQ.Client;
 using RabbitMQLibrary.Implementation;
 using RabbitMQLibrary.Extensions;
 using DAPM.ClientApi.Consumers;
+using DAPM.ClientApi.Consumers.AccessControl;
 using Keycloak.AuthServices.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
@@ -42,7 +44,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddQueueing(new QueueingConfigurationSettings
 {
     RabbitMqConsumerConcurrency = 5,
-    RabbitMqHostname = "rabbitmq",
+    RabbitMqHostname = "localhost",
     RabbitMqPort = 5672,
     RabbitMqPassword = "guest",
     RabbitMqUsername = "guest"
@@ -84,8 +86,12 @@ builder.Services.AddQueueMessageConsumer<GetResourceFilesProcessResultConsumer, 
 builder.Services.AddQueueMessageConsumer<CollabHandshakeProcessResultConsumer, CollabHandshakeProcessResult>();
 builder.Services.AddQueueMessageConsumer<PostPipelineCommandProcessResultConsumer, PostPipelineCommandProcessResult>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusProcessResultConsumer, GetPipelineExecutionStatusRequestResult>();
-
-
+builder.Services.AddQueueMessageConsumer<AddUserPipelineResponseMessageConsumer, AddUserPipelineResponseMessage>();
+builder.Services.AddQueueMessageConsumer<AddUserRepositoryResponseMessageConsumer, AddUserRepositoryResponseMessage>();
+builder.Services.AddQueueMessageConsumer<AddUserResourceResponseMessageConsumer, AddUserResourceReponseMessage>();
+builder.Services.AddQueueMessageConsumer<GetPipelinesForUserResponseMessageConsumer, GetPipelinesForUserResponseMessage>();
+builder.Services.AddQueueMessageConsumer<GetRepositoriesForUserResponseMessageConsumer, GetRepositoriesForUserResponseMessage>();
+builder.Services.AddQueueMessageConsumer<GetResourcesForUserResponseMessageConsumer, GetResourcesForUserResponseMessage>();
 
 // Add services to the container.
 
@@ -96,7 +102,7 @@ builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 builder.Services.AddScoped<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddScoped<ISystemService, SystemService>();
-builder.Services.AddSingleton<IAccessControlService, AccessControlService>();
+builder.Services.AddScoped<IAccessControlService, AccessControlService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

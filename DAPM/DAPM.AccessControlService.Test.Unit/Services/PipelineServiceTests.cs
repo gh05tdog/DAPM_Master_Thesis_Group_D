@@ -13,7 +13,7 @@ public class PipelineServiceTests
         connection.Open();
         
         var repository = new PipelineRepository(connection);
-        await repository.InitializeScheme();
+        await repository.InitializeScheme(TestHelper.PipelineInitSql);
 
         return new PipelineService(repository);
     }
@@ -23,8 +23,8 @@ public class PipelineServiceTests
     {
         var service = await CreateService();
 
-        var user = new UserDto(Guid.NewGuid());
-        var pipeline = new PipelineDto(Guid.NewGuid());
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var pipeline = new PipelineDto{Id = Guid.NewGuid()};
 
         await service.AddUserPipeline(user, pipeline);
 

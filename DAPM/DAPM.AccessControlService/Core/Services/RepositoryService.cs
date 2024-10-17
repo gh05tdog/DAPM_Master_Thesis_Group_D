@@ -24,6 +24,6 @@ public class RepositoryService : IRepositoryService
     {
         var userId = user.ToUserId();
         var repositoryIds = await repositoryRepository.GetRepositoriesForUser(userId);
-        return repositoryIds.Select(r => new RepositoryDto(r)).ToList();
+        return repositoryIds.Select(r => new RepositoryDto{Id = r.Id}).ToList();
     }
 }

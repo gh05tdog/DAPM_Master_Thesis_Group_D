@@ -11,6 +11,14 @@ using RabbitMQLibrary.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 // Configure database connection
 builder.Services.AddTransient<IDbConnection>(sp =>
 {

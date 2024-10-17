@@ -17,8 +17,8 @@ public class GetRepositoriesForUserRequestMessageConsumerTests
         var mockRepositoryService = new Mock<IRepositoryService>();
         var mockQueueProducer = new Mock<IQueueProducer<GetRepositoriesForUserResponseMessage>>();
 
-        var userDto = new UserDto(Guid.NewGuid());
-        var repositories = new List<RepositoryDto> { new(Guid.NewGuid()) };
+        var userDto = new UserDto{Id = Guid.NewGuid()};
+        var repositories = new List<RepositoryDto> { new RepositoryDto{Id = Guid.NewGuid()} };
 
         mockRepositoryService.Setup(service => service.GetRepositoriesForUser(userDto))
             .ReturnsAsync(repositories);

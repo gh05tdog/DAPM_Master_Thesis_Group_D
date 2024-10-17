@@ -40,7 +40,7 @@ public class AuthenticationTestController : ControllerBase
     [SwaggerOperation(Description = "Add a user to a pipeline")]
     public async Task<ActionResult<string>> AddAccessPipeline()
     {
-        var success = await accessControlService.AddUserToPipeline(new UserDto(Guid.NewGuid()), new PipelineDto(Guid.NewGuid()));
+        var success = await accessControlService.AddUserToPipeline(new UserDto{Id = Guid.NewGuid()}, new PipelineDto{Id = Guid.NewGuid()});
         if (success)
             return Ok("Success");
         

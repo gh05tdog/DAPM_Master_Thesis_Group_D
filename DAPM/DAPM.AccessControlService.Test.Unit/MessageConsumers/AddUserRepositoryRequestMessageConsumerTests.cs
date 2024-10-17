@@ -17,8 +17,8 @@ public class AddUserRepositoryRequestMessageConsumerTests
         var mockRepositoryService = new Mock<IRepositoryService>();
         var mockQueueProducer = new Mock<IQueueProducer<AddUserRepositoryResponseMessage>>();
 
-        var userDto = new UserDto(Guid.NewGuid());
-        var repository = new RepositoryDto(Guid.NewGuid());
+        var userDto = new UserDto{Id = Guid.NewGuid()};
+        var repository = new RepositoryDto{Id = Guid.NewGuid()};
 
         mockRepositoryService.Setup(service => service.AddUserRepository(userDto, repository))
             .Returns(Task.CompletedTask);

@@ -17,8 +17,8 @@ public class AddUserResourceRequestMessageConsumerTests
         var mockResourceService = new Mock<IResourceService>();
         var mockQueueProducer = new Mock<IQueueProducer<AddUserResourceReponseMessage>>();
 
-        var userDto = new UserDto(Guid.NewGuid());
-        var resource = new ResourceDto(Guid.NewGuid());
+        var userDto = new UserDto{Id = Guid.NewGuid()};
+        var resource = new ResourceDto{Id = Guid.NewGuid()};
 
         mockResourceService.Setup(service => service.AddUserResource(userDto, resource))
             .Returns(Task.CompletedTask);

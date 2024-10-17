@@ -24,6 +24,6 @@ public class ResourceService : IResourceService
     {
         var userId = user.ToUserId();
         var resourceIds = await resourceRepository.GetResourcesForUser(userId);
-        return resourceIds.Select(r => new ResourceDto(r)).ToList();
+        return resourceIds.Select(r => new ResourceDto{Id = r.Id}).ToList();
     }
 }

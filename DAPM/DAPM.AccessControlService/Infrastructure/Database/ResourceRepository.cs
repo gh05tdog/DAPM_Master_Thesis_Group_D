@@ -8,28 +8,41 @@ namespace DAPM.AccessControlService.Infrastructure.Database;
 public class ResourceRepository : IResourceRepository
 {
     private readonly IDbConnection dbConnection;
+    private bool initialized;
 
     public ResourceRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
-        InitializeScheme().GetAwaiter().GetResult();
     }
 
     public async Task InitializeScheme()
     {
         const string sql = @"
-                CREATE TABLE IF NOT EXISTS UserResources (
-                    UserId TEXT NOT NULL,
-                    ResourceId TEXT NOT NULL,
+            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserResources' AND xtype='U')
+            BEGIN
+                CREATE TABLE UserResources (
+                    UserId NVARCHAR(50) NOT NULL,
+                    ResourceId NVARCHAR(50) NOT NULL,
                     PRIMARY KEY (UserId, ResourceId)
                 );
-            ";
+            END
+        ";
         
         await dbConnection.ExecuteAsync(sql);
+        initialized = true;
+    }
+
+    public async Task InitializeScheme(string sql)
+    {
+        await dbConnection.ExecuteAsync(sql);
+        initialized = true;
     }
 
     public async Task AddUserResource(UserId userId, ResourceId resourceId)
     {
+        if (!initialized)
+            await InitializeScheme();
+        
         const string sql = @"
                 INSERT INTO UserResources (UserId, ResourceId)
                 VALUES (@UserId, @ResourceId);
@@ -40,6 +53,9 @@ public class ResourceRepository : IResourceRepository
 
     public async Task<ICollection<ResourceId>> GetResourcesForUser(UserId userId)
     {
+        if (!initialized)
+            await InitializeScheme();
+        
         const string sql = @"
                 SELECT ResourceId
                 FROM UserResources

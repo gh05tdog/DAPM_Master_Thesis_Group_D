@@ -21,7 +21,8 @@ public class RepositoryRepositoryTests
     {
         using var connection = CreateInMemoryDatabase();
         var repository = new RepositoryRepository(connection);
-
+        await repository.InitializeScheme(TestHelper.RepositoryInitSql);
+        
         var userId = new UserId(Guid.NewGuid());
         var repositoryId = new RepositoryId(Guid.NewGuid());
 

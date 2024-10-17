@@ -11,7 +11,7 @@ public class PipelineRepositoryTests
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
-
+        
         return connection;
     }
     
@@ -21,6 +21,7 @@ public class PipelineRepositoryTests
     {
         using var connection = CreateInMemoryDatabase();
         var repository = new PipelineRepository(connection);
+        await repository.InitializeScheme(TestHelper.PipelineInitSql);
 
         var userId = new UserId(Guid.NewGuid());
         var pipelineId = new PipelineId(Guid.NewGuid());

@@ -17,8 +17,8 @@ public class GetResourcesForUserRequestMessageConsumerTests
         var mockResourceService = new Mock<IResourceService>();
         var mockQueueProducer = new Mock<IQueueProducer<GetResourcesForUserResponseMessage>>();
 
-        var userDto = new UserDto(Guid.NewGuid());
-        var resources = new List<ResourceDto> { new(Guid.NewGuid()) };
+        var userDto = new UserDto{Id = Guid.NewGuid()};
+        var resources = new List<ResourceDto> { new ResourceDto{Id = Guid.NewGuid()} };
 
         mockResourceService.Setup(service => service.GetResourcesForUser(userDto))
             .ReturnsAsync(resources);
