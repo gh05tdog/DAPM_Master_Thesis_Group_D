@@ -4,17 +4,17 @@ namespace DAPM.AccessControlService.Core.DTOs;
 
 public record UserDto
 {
-    private readonly Guid id;
+    public readonly Guid Id;
     
     public UserDto(Guid id)
     {
-        this.id = id;
+        this.Id = id;
     }
     
     public UserDto(UserId userId)
     {
-        id = userId.Id;
+        Id = userId.Id;
     }
     
-    public UserId ToUserId() => new(id);
+    public UserId ToUserId() => new(Id);
 }

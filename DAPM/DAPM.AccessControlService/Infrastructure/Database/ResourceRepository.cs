@@ -12,6 +12,7 @@ public class ResourceRepository : IResourceRepository
     public ResourceRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
+        InitializeScheme().GetAwaiter().GetResult();
     }
 
     public async Task InitializeScheme()

@@ -12,6 +12,7 @@ public class RepositoryRepository : IRepositoryRepository
     public RepositoryRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
+        InitializeScheme().GetAwaiter().GetResult();
     }
 
     public async Task InitializeScheme()

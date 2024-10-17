@@ -21,7 +21,6 @@ public class PipelineRepositoryTests
     {
         using var connection = CreateInMemoryDatabase();
         var repository = new PipelineRepository(connection);
-        await repository.InitializeScheme();
 
         var userId = new UserId(Guid.NewGuid());
         var pipelineId = new PipelineId(Guid.NewGuid());

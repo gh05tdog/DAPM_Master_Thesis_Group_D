@@ -12,6 +12,7 @@ public class PipelineRepository : IPipelineRepository
     public PipelineRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
+        InitializeScheme().GetAwaiter().GetResult();
     }
 
     public async Task InitializeScheme()

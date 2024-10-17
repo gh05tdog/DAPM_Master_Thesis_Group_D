@@ -4,17 +4,17 @@ namespace DAPM.AccessControlService.Core.Dtos;
 
 public record PipelineDto
 {
-    private readonly Guid id;
+    public readonly Guid Id;
     
     public PipelineDto(Guid id)
     {
-        this.id = id;
+        this.Id = id;
     }
 
     public PipelineDto(PipelineId pipelineId)
     {
-        id = pipelineId.Id;
+        Id = pipelineId.Id;
     }
     
-    public PipelineId ToPipelineId() => new(id);
+    public PipelineId ToPipelineId() => new(Id);
 }

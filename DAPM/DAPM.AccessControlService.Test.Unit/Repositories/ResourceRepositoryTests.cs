@@ -21,7 +21,6 @@ public class ResourceRepositoryTests
     {
         using var connection = CreateInMemoryDatabase();
         var repository = new ResourceRepository(connection);
-        await repository.InitializeScheme();
 
         var userId = new UserId(Guid.NewGuid());
         var resourceId = new ResourceId(Guid.NewGuid());

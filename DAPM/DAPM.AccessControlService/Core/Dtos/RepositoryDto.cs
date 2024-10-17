@@ -4,17 +4,17 @@ namespace DAPM.AccessControlService.Core.Dtos;
 
 public record RepositoryDto
 {
-    private readonly Guid id;
+    public readonly Guid Id;
     
     public RepositoryDto(Guid id)
     {
-        this.id = id;
+        this.Id = id;
     }
     
     public RepositoryDto(RepositoryId repositoryId)
     {
-        id = repositoryId.Id;
+        Id = repositoryId.Id;
     }
     
-    public RepositoryId ToRepositoryId() => new(id);
+    public RepositoryId ToRepositoryId() => new(Id);
 }
