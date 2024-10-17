@@ -1,15 +1,15 @@
 using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using Dapper;
-using System.Data.Common;
+using System.Data;
 
 namespace DAPM.AccessControlService.Infrastructure.Database;
 
 public class RepositoryRepository : IRepositoryRepository
 {
-    private readonly DbConnection dbConnection;
+    private readonly IDbConnection dbConnection;
 
-    public RepositoryRepository(DbConnection dbConnection)
+    public RepositoryRepository(IDbConnection dbConnection)
     {
         this.dbConnection = dbConnection;
     }
@@ -18,8 +18,8 @@ public class RepositoryRepository : IRepositoryRepository
     {   
         const string sql = @"
                 CREATE TABLE IF NOT EXISTS UserRepositories (
-                    UserId UNIQUEIDENTIFIER NOT NULL,
-                    RepositoryId UNIQUEIDENTIFIER NOT NULL,
+                    UserId TEXT NOT NULL,
+                    RepositoryId TEXT NOT NULL,
                     PRIMARY KEY (UserId, RepositoryId)
                 );
             ";
@@ -45,7 +45,7 @@ public class RepositoryRepository : IRepositoryRepository
                 WHERE UserId = @UserId;
             ";
         
-        var repositoryIds = await dbConnection.QueryAsync<Guid>(sql, new { UserId = userId.Id });
-        return repositoryIds.Select(id => new RepositoryId(id)).ToList();
+        var repositoryIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
+        return repositoryIds.Select(id => new RepositoryId(Guid.Parse(id))).ToList();
     }
 }

@@ -18,8 +18,8 @@ public class ResourceRepository : IResourceRepository
     {
         const string sql = @"
                 CREATE TABLE IF NOT EXISTS UserResources (
-                    UserId UNIQUEIDENTIFIER NOT NULL,
-                    ResourceId UNIQUEIDENTIFIER NOT NULL,
+                    UserId TEXT NOT NULL,
+                    ResourceId TEXT NOT NULL,
                     PRIMARY KEY (UserId, ResourceId)
                 );
             ";
@@ -45,7 +45,7 @@ public class ResourceRepository : IResourceRepository
                 WHERE UserId = @UserId;
             ";
         
-        var resourceIds = await dbConnection.QueryAsync<Guid>(sql, new { UserId = userId.Id });
-        return resourceIds.Select(id => new ResourceId(id)).ToList();
+        var resourceIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
+        return resourceIds.Select(id => new ResourceId(Guid.Parse(id))).ToList();
     }
 }

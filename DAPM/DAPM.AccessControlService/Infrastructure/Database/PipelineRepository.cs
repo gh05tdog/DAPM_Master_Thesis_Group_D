@@ -18,8 +18,8 @@ public class PipelineRepository : IPipelineRepository
     {
         const string sql = @"
                 CREATE TABLE IF NOT EXISTS UserPipelines (
-                    UserId UNIQUEIDENTIFIER NOT NULL,
-                    PipelineId UNIQUEIDENTIFIER NOT NULL,
+                    UserId TEXT NOT NULL,
+                    PipelineId TEXT NOT NULL,
                     PRIMARY KEY (UserId, PipelineId)
                 );
             ";
@@ -45,7 +45,7 @@ public class PipelineRepository : IPipelineRepository
                 WHERE UserId = @UserId;
             ";
         
-        var pipelineIds = await dbConnection.QueryAsync<Guid>(sql, new { UserId = userId.Id });
-        return pipelineIds.Select(id => new PipelineId(id)).ToList();
+        var pipelineIds = await dbConnection.QueryAsync<String>(sql, new { UserId = userId.Id });
+        return pipelineIds.Select(id => new PipelineId(Guid.Parse(id))).ToList();
     }
 }
