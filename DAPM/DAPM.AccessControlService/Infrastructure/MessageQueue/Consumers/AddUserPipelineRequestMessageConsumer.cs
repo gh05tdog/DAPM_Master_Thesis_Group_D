@@ -18,7 +18,7 @@ public class AddUserPipelineRequestMessageConsumer : IQueueConsumer<AddUserPipel
 
     public async Task ConsumeAsync(AddUserPipelineRequestMessage message)
     {
-        await pipelineService.AddUserPipeline(message.UserDto, message.PipelineDto);
+        await pipelineService.AddUserPipeline(message.User, message.Pipeline);
         
         var response = new AddUserPipelineResponseMessage
         {

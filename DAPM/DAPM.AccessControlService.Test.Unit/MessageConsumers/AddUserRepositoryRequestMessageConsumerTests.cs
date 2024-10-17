@@ -29,8 +29,8 @@ public class AddUserRepositoryRequestMessageConsumerTests
         {
             MessageId = Guid.NewGuid(),
             TimeToLive = TimeSpan.FromMinutes(5),
-            UserDto = userDto,
-            RepositoryDto = repository
+            User = userDto,
+            Repository = repository
         };
 
         // Act

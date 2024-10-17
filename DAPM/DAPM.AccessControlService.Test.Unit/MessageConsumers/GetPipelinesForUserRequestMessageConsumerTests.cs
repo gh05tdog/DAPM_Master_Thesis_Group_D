@@ -29,7 +29,7 @@ public class GetPipelinesForUserRequestMessageConsumerTests
         {
             MessageId = Guid.NewGuid(),
             TimeToLive = TimeSpan.FromMinutes(5),
-            UserDto = userDto
+            User = userDto
         };
 
         // Act
@@ -39,7 +39,7 @@ public class GetPipelinesForUserRequestMessageConsumerTests
         mockQueueProducer.Verify(producer => producer.PublishMessage(It.Is<GetPipelinesForUserResponseMessage>(response =>
             response.MessageId == requestMessage.MessageId &&
             response.TimeToLive == requestMessage.TimeToLive &&
-            response.PipelineDtos == pipelines
+            response.Pipelines == pipelines
         )), Times.Once);
     }
 }

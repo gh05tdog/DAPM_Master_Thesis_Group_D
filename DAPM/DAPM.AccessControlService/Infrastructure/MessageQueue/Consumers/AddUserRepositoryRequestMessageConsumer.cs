@@ -18,7 +18,7 @@ public class AddUserRepositoryRequestMessageConsumer : IQueueConsumer<AddUserRep
 
     public async Task ConsumeAsync(AddUserRepositoryRequestMessage message)
     {
-        await repositoryService.AddUserRepository(message.UserDto, message.RepositoryDto);
+        await repositoryService.AddUserRepository(message.User, message.Repository);
         
         var response = new AddUserRepositoryResponseMessage
         {

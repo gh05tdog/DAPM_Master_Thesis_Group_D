@@ -18,13 +18,13 @@ public class GetPipelinesForUserRequestMessageConsumer : IQueueConsumer<GetPipel
 
     public async Task ConsumeAsync(GetPipelinesForUserRequestMessage message)
     {
-        var pipelines = await pipelineService.GetPipelinesForUser(message.UserDto);
+        var pipelines = await pipelineService.GetPipelinesForUser(message.User);
         
         var response = new GetPipelinesForUserResponseMessage
         {
             MessageId = message.MessageId,
             TimeToLive = message.TimeToLive,
-            PipelineDtos = pipelines
+            Pipelines = pipelines
         };
         
         queueProducer.PublishMessage(response);

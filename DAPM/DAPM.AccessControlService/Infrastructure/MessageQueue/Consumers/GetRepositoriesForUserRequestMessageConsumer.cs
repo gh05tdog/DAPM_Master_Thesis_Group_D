@@ -18,13 +18,13 @@ public class GetRepositoriesForUserRequestMessageConsumer : IQueueConsumer<GetRe
 
     public async Task ConsumeAsync(GetRepositoriesForUserRequestMessage message)
     {
-        var repositories = await repositoryService.GetRepositoriesForUser(message.UserDto);
+        var repositories = await repositoryService.GetRepositoriesForUser(message.User);
         
         var response = new GetRepositoriesForUserResponseMessage
         {
             MessageId = message.MessageId,
             TimeToLive = message.TimeToLive,
-            RepositoryDtos = repositories
+            Repositories = repositories
         };
         
         queueProducer.PublishMessage(response);

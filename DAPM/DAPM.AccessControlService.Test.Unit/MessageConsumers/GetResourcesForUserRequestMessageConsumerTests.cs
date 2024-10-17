@@ -29,7 +29,7 @@ public class GetResourcesForUserRequestMessageConsumerTests
         {
             MessageId = Guid.NewGuid(),
             TimeToLive = TimeSpan.FromMinutes(5),
-            UserDto = userDto
+            User = userDto
         };
 
         // Act
@@ -39,7 +39,7 @@ public class GetResourcesForUserRequestMessageConsumerTests
         mockQueueProducer.Verify(producer => producer.PublishMessage(It.Is<GetResourcesForUserResponseMessage>(response =>
             response.MessageId == requestMessage.MessageId &&
             response.TimeToLive == requestMessage.TimeToLive &&
-            response.ResourceDtos == resources
+            response.Resources == resources
         )), Times.Once);
     }
 }

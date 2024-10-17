@@ -29,8 +29,8 @@ public class AddUserPipelineRequestMessageConsumerTests
         {
             MessageId = Guid.NewGuid(),
             TimeToLive = TimeSpan.FromMinutes(5),
-            UserDto = userDto,
-            PipelineDto = pipeline
+            User = userDto,
+            Pipeline = pipeline
         };
 
         // Act

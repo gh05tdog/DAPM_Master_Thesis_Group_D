@@ -29,7 +29,7 @@ public class GetRepositoriesForUserRequestMessageConsumerTests
         {
             MessageId = Guid.NewGuid(),
             TimeToLive = TimeSpan.FromMinutes(5),
-            UserDto = userDto
+            User = userDto
         };
 
         // Act
@@ -39,7 +39,7 @@ public class GetRepositoriesForUserRequestMessageConsumerTests
         mockQueueProducer.Verify(producer => producer.PublishMessage(It.Is<GetRepositoriesForUserResponseMessage>(response =>
             response.MessageId == requestMessage.MessageId &&
             response.TimeToLive == requestMessage.TimeToLive &&
-            response.RepositoryDtos == repositories
+            response.Repositories == repositories
         )), Times.Once);
     }
 }

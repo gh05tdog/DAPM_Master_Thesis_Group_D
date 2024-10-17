@@ -29,8 +29,8 @@ public class AddUserResourceRequestMessageConsumerTests
         {
             MessageId = Guid.NewGuid(),
             TimeToLive = TimeSpan.FromMinutes(5),
-            UserDto = userDto,
-            ResourceDto = resource
+            User = userDto,
+            Resource = resource
         };
 
         // Act

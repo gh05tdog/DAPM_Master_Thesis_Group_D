@@ -18,13 +18,13 @@ public class GetResourcesForUserRequestMessageConsumer : IQueueConsumer<GetResou
 
     public async Task ConsumeAsync(GetResourcesForUserRequestMessage message)
     {
-        var resources = await resourceService.GetResourcesForUser(message.UserDto);
+        var resources = await resourceService.GetResourcesForUser(message.User);
         
         var response = new GetResourcesForUserResponseMessage
         {
             MessageId = message.MessageId,
             TimeToLive = message.TimeToLive,
-            ResourceDtos = resources
+            Resources = resources
         };
         
         queueProducer.PublishMessage(response);

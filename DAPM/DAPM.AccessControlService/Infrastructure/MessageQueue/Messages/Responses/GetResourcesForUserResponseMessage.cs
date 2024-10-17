@@ -7,5 +7,5 @@ public class GetResourcesForUserResponseMessage : IQueueMessage
 {
     public Guid MessageId { get; set; }
     public TimeSpan TimeToLive { get; set; }
-    public ICollection<ResourceDto> ResourceDtos { get; set; }
+    public ICollection<ResourceDto> Resources { get; set; }
 }

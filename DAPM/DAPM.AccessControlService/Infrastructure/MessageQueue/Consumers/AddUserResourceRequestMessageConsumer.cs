@@ -18,7 +18,7 @@ public class AddUserResourceRequestMessageConsumer : IQueueConsumer<AddUserResou
 
     public async Task ConsumeAsync(AddUserResourceRequestMessage message)
     {
-        await resourceService.AddUserResource(message.UserDto, message.ResourceDto);
+        await resourceService.AddUserResource(message.User, message.Resource);
         
         var response = new AddUserResourceReponseMessage
         {
