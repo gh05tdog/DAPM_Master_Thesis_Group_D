@@ -1,17 +1,17 @@
-using System.Data.SqlClient;
 using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using Dapper;
+using System.Data;
 
 namespace DAPM.AccessControlService.Infrastructure.Database;
 
 public class ResourceRepository : IResourceRepository
 {
-    private readonly string connectionString;
+    private readonly IDbConnection dbConnection;
 
-    public ResourceRepository(string connectionString)
+    public ResourceRepository(IDbConnection dbConnection)
     {
-        this.connectionString = connectionString;
+        this.dbConnection = dbConnection;
     }
 
     public async Task InitializeScheme()
@@ -24,8 +24,7 @@ public class ResourceRepository : IResourceRepository
                 );
             ";
         
-        await using var connection = new SqlConnection(connectionString);
-        await connection.ExecuteAsync(sql);
+        await dbConnection.ExecuteAsync(sql);
     }
 
     public async Task AddUserResource(UserId userId, ResourceId resourceId)
@@ -35,8 +34,7 @@ public class ResourceRepository : IResourceRepository
                 VALUES (@UserId, @ResourceId);
             ";
         
-        await using var connection = new SqlConnection(connectionString);
-        await connection.ExecuteAsync(sql, new { UserId = userId.Id, ResourceId = resourceId.Id });
+        await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, ResourceId = resourceId.Id });
     }
 
     public async Task<ICollection<ResourceId>> GetResourcesForUser(UserId userId)
@@ -47,8 +45,7 @@ public class ResourceRepository : IResourceRepository
                 WHERE UserId = @UserId;
             ";
         
-        await using var connection = new SqlConnection(connectionString);
-        var resourceIds = await connection.QueryAsync<Guid>(sql, new { UserId = userId.Id });
+        var resourceIds = await dbConnection.QueryAsync<Guid>(sql, new { UserId = userId.Id });
         return resourceIds.Select(id => new ResourceId(id)).ToList();
     }
 }

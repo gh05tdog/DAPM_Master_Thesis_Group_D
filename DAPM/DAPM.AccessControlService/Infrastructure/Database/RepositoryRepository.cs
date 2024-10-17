@@ -1,17 +1,17 @@
-using System.Data.SqlClient;
 using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using Dapper;
+using System.Data.Common;
 
 namespace DAPM.AccessControlService.Infrastructure.Database;
 
 public class RepositoryRepository : IRepositoryRepository
 {
-    private readonly string connectionString;
+    private readonly DbConnection dbConnection;
 
-    public RepositoryRepository(string connectionString)
+    public RepositoryRepository(DbConnection dbConnection)
     {
-        this.connectionString = connectionString;
+        this.dbConnection = dbConnection;
     }
 
     public async Task InitializeScheme()
@@ -24,8 +24,7 @@ public class RepositoryRepository : IRepositoryRepository
                 );
             ";
         
-        await using var connection = new SqlConnection(connectionString);
-        await connection.ExecuteAsync(sql);
+        await dbConnection.ExecuteAsync(sql);
     }
 
     public async Task AddUserRepository(UserId userId, RepositoryId repositoryId)
@@ -35,8 +34,7 @@ public class RepositoryRepository : IRepositoryRepository
                 VALUES (@UserId, @RepositoryId);
             ";
         
-        await using var connection = new SqlConnection(connectionString);
-        await connection.ExecuteAsync(sql, new { UserId = userId.Id, RepositoryId = repositoryId.Id });
+        await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, RepositoryId = repositoryId.Id });
     }
 
     public async Task<ICollection<RepositoryId>> GetRepositoriesForUser(UserId userId)
@@ -47,8 +45,7 @@ public class RepositoryRepository : IRepositoryRepository
                 WHERE UserId = @UserId;
             ";
         
-        await using var connection = new SqlConnection(connectionString);
-        var repositoryIds = await connection.QueryAsync<Guid>(sql, new { UserId = userId.Id });
+        var repositoryIds = await dbConnection.QueryAsync<Guid>(sql, new { UserId = userId.Id });
         return repositoryIds.Select(id => new RepositoryId(id)).ToList();
     }
 }
