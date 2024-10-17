@@ -1,5 +1,4 @@
 using DAPM.AccessControlService.Core.Dtos;
-using DAPM.AccessControlService.Core.DTOs;
 
 namespace DAPM.AccessControlService.Core.Services.Abstractions;
 

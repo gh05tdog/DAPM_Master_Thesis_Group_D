@@ -1,6 +1,5 @@
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Dtos;
-using DAPM.AccessControlService.Core.DTOs;
 using DAPM.AccessControlService.Core.Services.Abstractions;
 
 namespace DAPM.AccessControlService.Core.Services;

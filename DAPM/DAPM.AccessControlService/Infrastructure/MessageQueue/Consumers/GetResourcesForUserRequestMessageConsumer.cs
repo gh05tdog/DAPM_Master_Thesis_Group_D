@@ -5,12 +5,18 @@ using RabbitMQLibrary.Interfaces;
 
 namespace DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
 
-public class GetResourcesForUserRequestMessageConsumer : IQueueConsumer<GetPipelinesForUserRequestMessage>
+public class GetResourcesForUserRequestMessageConsumer : IQueueConsumer<GetResourcesForUserRequestMessage>
 {
     private readonly IResourceService resourceService;
     private readonly IQueueProducer<GetResourcesForUserResponseMessage> queueProducer;
-    
-    public async Task ConsumeAsync(GetPipelinesForUserRequestMessage message)
+
+    public GetResourcesForUserRequestMessageConsumer(IResourceService resourceService, IQueueProducer<GetResourcesForUserResponseMessage> queueProducer)
+    {
+        this.resourceService = resourceService;
+        this.queueProducer = queueProducer;
+    }
+
+    public async Task ConsumeAsync(GetResourcesForUserRequestMessage message)
     {
         var resources = await resourceService.GetResourcesForUser(message.UserDto);
         

@@ -9,7 +9,13 @@ public class AddUserRepositoryRequestMessageConsumer : IQueueConsumer<AddUserRep
 {
     private readonly IRepositoryService repositoryService;
     private readonly IQueueProducer<AddUserRepositoryResponseMessage> queueProducer;
-    
+
+    public AddUserRepositoryRequestMessageConsumer(IRepositoryService repositoryService, IQueueProducer<AddUserRepositoryResponseMessage> queueProducer)
+    {
+        this.repositoryService = repositoryService;
+        this.queueProducer = queueProducer;
+    }
+
     public async Task ConsumeAsync(AddUserRepositoryRequestMessage message)
     {
         await repositoryService.AddUserRepository(message.UserDto, message.RepositoryDto);

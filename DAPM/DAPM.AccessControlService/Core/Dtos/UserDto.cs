@@ -1,6 +1,6 @@
 using DAPM.AccessControlService.Core.Domain.Entities;
 
-namespace DAPM.AccessControlService.Core.DTOs;
+namespace DAPM.AccessControlService.Core.Dtos;
 
 public record UserDto
 {

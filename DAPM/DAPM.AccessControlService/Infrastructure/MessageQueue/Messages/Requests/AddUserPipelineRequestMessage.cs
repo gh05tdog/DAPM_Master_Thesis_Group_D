@@ -1,5 +1,4 @@
 using DAPM.AccessControlService.Core.Dtos;
-using DAPM.AccessControlService.Core.DTOs;
 using RabbitMQLibrary.Interfaces;
 
 namespace DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Requests;
