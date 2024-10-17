@@ -11,7 +11,7 @@ public abstract class BaseController : ControllerBase
 
     protected BaseController(IAccessControlService accessControlService)
     {
-        accessControlService = accessControlService;
+        this.accessControlService = accessControlService;
     }
     
     protected async Task<bool> HasRepositoryAccess(Guid repositoryId)
