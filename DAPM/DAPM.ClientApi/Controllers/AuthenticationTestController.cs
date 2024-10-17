@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using DAPM.AccessControlService.Core.Dtos;
+using DAPM.ClientApi.Extensions;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -41,6 +43,18 @@ public class AuthenticationTestController : ControllerBase
     public async Task<ActionResult<string>> AddAccessPipeline()
     {
         var success = await accessControlService.AddUserToPipeline(new UserDto{Id = Guid.NewGuid()}, new PipelineDto{Id = Guid.NewGuid()});
+        if (success)
+            return Ok("Success");
+        
+        return BadRequest("Failed");
+    }
+    
+    [Authorize]
+    [HttpGet("addUserAccessToPipelineAuthorized")]
+    [SwaggerOperation(Description = "Add a user to a pipeline but requires authorization")]
+    public async Task<ActionResult<string>> AddAccessPipelineAuthorized()
+    {
+        var success = await accessControlService.AddUserToPipeline(new UserDto{Id = this.GetUserId()}, new PipelineDto{Id = Guid.NewGuid()});
         if (success)
             return Ok("Success");
         
