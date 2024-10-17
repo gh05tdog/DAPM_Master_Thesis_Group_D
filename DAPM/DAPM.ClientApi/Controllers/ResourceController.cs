@@ -1,26 +1,24 @@
 ﻿using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace DAPM.ClientApi.Controllers
 {
-   
+    [Authorize]
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations/")]
-    public class ResourceController : ControllerBase
+    public class ResourceController : BaseController
     {
+        private readonly IResourceService resourceService;
 
-        private readonly ILogger<ResourceController> _logger;
-        private readonly IResourceService _resourceService;
-
-        public ResourceController(ILogger<ResourceController> logger, IResourceService resourceService)
+        public ResourceController(IResourceService resourceService, IAccessControlService accessControlService) : base(accessControlService)
         {
-            _logger = logger;
-            _resourceService = resourceService;
+            this.resourceService = resourceService;
         }
 
         [HttpGet("{organizationId}/repositories/{repositoryId}/resources/{resourceId}")]
@@ -28,7 +26,13 @@ namespace DAPM.ClientApi.Controllers
             "a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetResourceById(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
-            Guid id = _resourceService.GetResourceById(organizationId, repositoryId, resourceId);
+            if (!await HasRepositoryAccess(repositoryId))
+                return UnauthorizedResponse("repository", repositoryId);
+
+            if (!await HasResourceAccess(resourceId))
+                return UnauthorizedResponse("resource", resourceId);
+            
+            Guid id = resourceService.GetResourceById(organizationId, repositoryId, resourceId);
             return Ok(new ApiResponse { RequestName = "GetResourceById", TicketId = id });
         }
 
@@ -37,7 +41,13 @@ namespace DAPM.ClientApi.Controllers
             "a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetResourceFileById(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
-            Guid id = _resourceService.GetResourceFileById(organizationId, repositoryId, resourceId);
+            if (!await HasRepositoryAccess(repositoryId))
+                return UnauthorizedResponse("repository", repositoryId);
+
+            if (!await HasResourceAccess(resourceId))
+                return UnauthorizedResponse("resource", resourceId);
+            
+            Guid id = resourceService.GetResourceFileById(organizationId, repositoryId, resourceId);
             return Ok(new ApiResponse { RequestName = "GetResourceFileById", TicketId = id });
         }
     }

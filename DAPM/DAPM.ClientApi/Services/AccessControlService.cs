@@ -169,6 +169,24 @@ public class AccessControlService : IAccessControlService
         return true;
     }
 
+    public async Task<bool> UserHasAccessToPipeline(UserDto user, PipelineDto pipeline)
+    {
+        var pipelines = await GetUserPipelines(user);
+        return pipelines.Any(p => p.Id == pipeline.Id);
+    }
+
+    public async Task<bool> UserHasAccessToResource(UserDto user, ResourceDto resource)
+    {
+        var resources = await GetUserResources(user);
+        return resources.Any(r => r.Id == resource.Id);        
+    }
+
+    public async Task<bool> UserHasAccessToRepository(UserDto user, RepositoryDto repository)
+    {
+        var repositories = await GetUserRepositories(user);
+        return repositories.Any(r => r.Id == repository.Id);
+    }
+
     public void HandleGetPipelinesForUserResponseMessage(GetPipelinesForUserResponseMessage message)
     {
         if (getPipelinesTaskCompletionSources.TryRemove(message.MessageId, out var tcs))
