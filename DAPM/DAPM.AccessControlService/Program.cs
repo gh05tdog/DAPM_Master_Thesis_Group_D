@@ -19,13 +19,19 @@ builder.Services.AddTransient<IDbConnection>(sp =>
 });
 
 // RabbitMQ
+var config = builder.Configuration;
+var host = config["RabbitMQ:Host"];
+var port = int.Parse(config["RabbitMQ:Port"]);
+var username = config["RabbitMQ:Username"];
+var password = config["RabbitMQ:Password"];
+
 builder.Services.AddQueueing(new QueueingConfigurationSettings
 {
     RabbitMqConsumerConcurrency = 5,
-    RabbitMqHostname = "rabbitmq",
-    RabbitMqPort = 5672,
-    RabbitMqPassword = "guest",
-    RabbitMqUsername = "guest"
+    RabbitMqHostname = host,
+    RabbitMqPort = port,
+    RabbitMqPassword = password,
+    RabbitMqUsername = username
 });
 
 // Add repositories
