@@ -40,7 +40,7 @@ public class AccessControlService : IAccessControlService
         this.getResourcesForUserRequestProducer = getResourcesForUserRequestProducer;
     }
 
-    public async Task<bool> UserHasAccessToPipeline(UserDto user, PipelineDto pipeline)
+    public async Task<ICollection<PipelineDto>> GetUserPipelines(UserDto user)
     {
         var ticketId = ticketService.CreateNewTicket(TicketResolutionType.Json);
 
@@ -58,10 +58,10 @@ public class AccessControlService : IAccessControlService
 
         var response = await tcs.Task;
         
-        return response.Pipelines.Contains(pipeline);
+        return response.Pipelines;
     }
 
-    public async Task<bool> UserHasAccessToRepository(UserDto user, RepositoryDto repository)
+    public async Task<ICollection<RepositoryDto>> GetUserRepositories(UserDto user)
     {
         var ticketId = ticketService.CreateNewTicket(TicketResolutionType.Json);
         
@@ -79,10 +79,10 @@ public class AccessControlService : IAccessControlService
         
         var response = await tcs.Task;
         
-        return response.Repositories.Contains(repository);
+        return response.Repositories;
     }
 
-    public async Task<bool> UserHasAccessToResource(UserDto user, ResourceDto resource)
+    public async Task<ICollection<ResourceDto>> GetUserResources(UserDto user)
     {
         var ticketId = ticketService.CreateNewTicket(TicketResolutionType.Json);
         
@@ -100,7 +100,7 @@ public class AccessControlService : IAccessControlService
         
         var response = await tcs.Task;
         
-        return response.Resources.Contains(resource);
+        return response.Resources;
     }
 
     public async Task<bool> AddUserToPipeline(UserDto user, PipelineDto pipeline)

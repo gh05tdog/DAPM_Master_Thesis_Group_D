@@ -5,9 +5,9 @@ namespace DAPM.ClientApi.Services.Interfaces;
 
 public interface IAccessControlService
 {
-    Task<bool> UserHasAccessToPipeline(UserDto user, PipelineDto pipeline);
-    Task<bool> UserHasAccessToRepository(UserDto user, RepositoryDto repository);
-    Task<bool> UserHasAccessToResource(UserDto user, ResourceDto resource);
+    Task<ICollection<PipelineDto>> GetUserPipelines(UserDto user);
+    Task<ICollection<RepositoryDto>> GetUserRepositories(UserDto user);
+    Task<ICollection<ResourceDto>> GetUserResources(UserDto user);
     Task<bool> AddUserToPipeline(UserDto user, PipelineDto pipeline);
     Task<bool> AddUserToResource(UserDto user, ResourceDto resource);
     Task<bool> AddUserToRepository(UserDto user, RepositoryDto repository);
