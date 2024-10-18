@@ -29,15 +29,19 @@ namespace DAPM.ClientApi.Consumers
             _logger.LogInformation("CreateNewItemResultMessage received");
 
             var user = _ticketService.GetUserFromTicket(message.TicketId);
+            _logger.LogInformation($"User '{user.Id}' with item type '{message.ItemType}'");
             switch (message.ItemType)
             {
                 case "Repository":
+                    _logger.LogInformation($"Adding user '{user.Id}' to repository '{message.ItemIds.RepositoryId}'");
                     await _accessControlService.AddUserToRepository(user, new RepositoryDto{ Id = message.ItemIds.RepositoryId });
                     break;
                 case "Pipeline":
+                    _logger.LogInformation($"Adding user '{user.Id}' to pipeline '{message.ItemIds.PipelineId}'");
                     await _accessControlService.AddUserToPipeline(user, new PipelineDto(){ Id = message.ItemIds.PipelineId.Value });
                     break;
                 case "Resource":
+                    _logger.LogInformation($"Adding user '{user.Id}' to resource '{message.ItemIds.ResourceId}'");
                     await _accessControlService.AddUserToResource(user, new ResourceDto(){ Id = message.ItemIds.ResourceId.Value });
                     break;
             }
