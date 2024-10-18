@@ -24,9 +24,12 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Run e2e tests
-      run: dotnet test ./DAPM.Backend.Test.EndToEnd/DAPM.AccessControlService.Test.EndToEnd/DAPM.AccessControlService.Test.EndToEnd.csproj
+    - name: Run AccessControlService unit tests
+      run: dotnet test ./DAPM/DAPM.AccessControlService.Test.Unit/DAPM.AccessControlService.Test.Unit.csproj
 
+    - name: Run e2e tests
+      run: dotnet test ./DAPM.Backend.Test.EndToEnd
+      
     - name: Stop backend containers
       run: docker compose -f ./DAPM/docker-compose.yml down
 
