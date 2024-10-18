@@ -1,9 +1,6 @@
-using RabbitMQLibrary.Interfaces;
+namespace RabbitMQLibrary.Messages.AccessControl.Responses;
 
-namespace DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
-
-public class AddUserRepositoryResponseMessage : IQueueMessage
+public class AddUserRepositoryResponseMessage
 {
-    public Guid MessageId { get; set; }
-    public TimeSpan TimeToLive { get; set; }
+    public bool Success { get; set; }
 }

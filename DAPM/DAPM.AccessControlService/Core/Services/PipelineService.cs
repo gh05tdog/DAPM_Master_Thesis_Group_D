@@ -14,11 +14,12 @@ public class PipelineService : IPipelineService
         this.pipelineRepository = pipelineRepository;
     }
 
-    public async Task AddUserPipeline(UserDto user, PipelineDto pipeline)
+    public async Task<bool> AddUserPipeline(UserDto user, PipelineDto pipeline)
     {
         var userId = user.ToUserId();
         var pipelineId = pipeline.ToPipelineId();
         await pipelineRepository.AddUserPipeline(userId, pipelineId);
+        return true;
     }
 
     public async Task<ICollection<PipelineDto>> GetPipelinesForUser(UserDto user)

@@ -14,11 +14,12 @@ public class RepositoryService : IRepositoryService
         this.repositoryRepository = repositoryRepository;
     }
 
-    public async Task AddUserRepository(UserDto user, RepositoryDto repository)
+    public async Task<bool> AddUserRepository(UserDto user, RepositoryDto repository)
     {
         var userId = user.ToUserId();
         var repositoryId = repository.ToRepositoryId();
         await repositoryRepository.AddUserRepository(userId, repositoryId);
+        return true;
     }
 
     public async Task<ICollection<RepositoryDto>> GetRepositoriesForUser(UserDto user)

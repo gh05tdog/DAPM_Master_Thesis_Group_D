@@ -3,11 +3,8 @@ using System.Data.SqlClient;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Services;
 using DAPM.AccessControlService.Core.Services.Abstractions;
+using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Database;
-using DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
-using RabbitMQLibrary.Extensions;
-using RabbitMQLibrary.Implementation;
-using RabbitMQLibrary.Messages.AccessControl.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,22 +27,6 @@ builder.Services.AddTransient<IDbConnection>(sp =>
     return new SqlConnection(connectionString);
 });
 
-// RabbitMQ
-var config = builder.Configuration;
-var host = config["RabbitMQ:Host"];
-var port = int.Parse(config["RabbitMQ:Port"]);
-var username = config["RabbitMQ:Username"];
-var password = config["RabbitMQ:Password"];
-
-builder.Services.AddQueueing(new QueueingConfigurationSettings
-{
-    RabbitMqConsumerConcurrency = 5,
-    RabbitMqHostname = host,
-    RabbitMqPort = port,
-    RabbitMqPassword = password,
-    RabbitMqUsername = username
-});
-
 // Add repositories
 builder.Services.AddSingleton<IPipelineRepository, PipelineRepository>();
 builder.Services.AddSingleton<IRepositoryRepository, RepositoryRepository>();
@@ -56,13 +37,8 @@ builder.Services.AddSingleton<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<IRepositoryService, RepositoryService>();
 builder.Services.AddSingleton<IResourceService, ResourceService>();
 
-// Add message queue consumers
-builder.Services.AddQueueMessageConsumer<AddUserPipelineRequestMessageConsumer, AddUserPipelineRequestMessage>();
-builder.Services.AddQueueMessageConsumer<AddUserRepositoryRequestMessageConsumer, AddUserRepositoryRequestMessage>();
-builder.Services.AddQueueMessageConsumer<AddUserResourceRequestMessageConsumer, AddUserResourceRequestMessage>();
-builder.Services.AddQueueMessageConsumer<GetPipelinesForUserRequestMessageConsumer, GetPipelinesForUserRequestMessage>();
-builder.Services.AddQueueMessageConsumer<GetRepositoriesForUserRequestMessageConsumer, GetRepositoriesForUserRequestMessage>();
-builder.Services.AddQueueMessageConsumer<GetResourcesForUserRequestMessageConsumer, GetResourcesForUserRequestMessage>();
+// Add facade
+builder.Services.AddSingleton<IAccessControlFacade, AccessControlFacade>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -14,11 +14,12 @@ public class ResourceService : IResourceService
         this.resourceRepository = resourceRepository;
     }
 
-    public async Task AddUserResource(UserDto user, ResourceDto resource)
+    public async Task<bool> AddUserResource(UserDto user, ResourceDto resource)
     {
         var userId = user.ToUserId();
         var resourceId = resource.ToResourceId();
         await resourceRepository.AddUserResource(userId, resourceId);
+        return true;
     }
 
     public async Task<ICollection<ResourceDto>> GetResourcesForUser(UserDto user)

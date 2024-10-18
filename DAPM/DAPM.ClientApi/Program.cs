@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
+using DAPM.ClientApi.AccessControl;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http.Features;
@@ -7,7 +7,6 @@ using RabbitMQ.Client;
 using RabbitMQLibrary.Implementation;
 using RabbitMQLibrary.Extensions;
 using DAPM.ClientApi.Consumers;
-using DAPM.ClientApi.Consumers.AccessControl;
 using Keycloak.AuthServices.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
@@ -18,6 +17,7 @@ using RabbitMQLibrary.Messages.AccessControl.Responses;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.AddServiceDefaults();
 
@@ -77,6 +77,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Access control services
+builder.Services.Configure<ApiHttpClientFactorySettings>(configuration.GetSection("ApiHttpClientFactorySettings"));
+builder.Services.AddSingleton<IApiHttpClientFactory, ApiHttpClientFactory>();
+builder.Services.AddSingleton<IApiHttpClient, ApiHttpClient>();
+builder.Services.AddSingleton<IAccessControlService, AccessControlService>();
 
 builder.Services.AddQueueMessageConsumer<GetOrganizationsProcessResultConsumer, GetOrganizationsProcessResult>();
 builder.Services.AddQueueMessageConsumer<PostItemResultConsumer, PostItemProcessResult>();
@@ -87,13 +92,6 @@ builder.Services.AddQueueMessageConsumer<GetResourceFilesProcessResultConsumer, 
 builder.Services.AddQueueMessageConsumer<CollabHandshakeProcessResultConsumer, CollabHandshakeProcessResult>();
 builder.Services.AddQueueMessageConsumer<PostPipelineCommandProcessResultConsumer, PostPipelineCommandProcessResult>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusProcessResultConsumer, GetPipelineExecutionStatusRequestResult>();
-builder.Services.AddQueueMessageConsumer<AddUserPipelineResponseMessageConsumer, AddUserPipelineResponseMessage>();
-builder.Services.AddQueueMessageConsumer<AddUserRepositoryResponseMessageConsumer, AddUserRepositoryResponseMessage>();
-builder.Services.AddQueueMessageConsumer<AddUserResourceResponseMessageConsumer, AddUserResourceReponseMessage>();
-builder.Services.AddQueueMessageConsumer<GetPipelinesForUserResponseMessageConsumer, GetPipelinesForUserResponseMessage>();
-builder.Services.AddQueueMessageConsumer<GetRepositoriesForUserResponseMessageConsumer, GetRepositoriesForUserResponseMessage>();
-builder.Services.AddQueueMessageConsumer<GetResourcesForUserResponseMessageConsumer, GetResourcesForUserResponseMessage>();
-
 // Add services to the container.
 
 
@@ -103,7 +101,6 @@ builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 builder.Services.AddScoped<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddScoped<ISystemService, SystemService>();
-builder.Services.AddScoped<IAccessControlService, AccessControlService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -111,7 +108,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Keycloak
-var configuration = builder.Configuration;
 builder.Services.AddKeycloakWebApiAuthentication(configuration);
 
 var app = builder.Build();
