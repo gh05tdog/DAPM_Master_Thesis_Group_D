@@ -77,6 +77,7 @@ namespace DAPM.ClientApi.Services
         public Guid GetRepositoriesOfOrganization(Guid organizationId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+            TicketToUser.TryAdd(ticketId, userId);
 
             var message = new GetRepositoriesRequest
             {
@@ -90,7 +91,6 @@ namespace DAPM.ClientApi.Services
 
             _logger.LogDebug("GetRepositoriesRequest Enqueued");
             
-            TicketToUser[ticketId] = userId;
             
             return ticketId;
         }
@@ -98,7 +98,8 @@ namespace DAPM.ClientApi.Services
         public Guid PostRepositoryToOrganization(Guid organizationId, string name, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            TicketToUser.TryAdd(ticketId, userId);
+            
             var message = new PostRepositoryRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -110,8 +111,6 @@ namespace DAPM.ClientApi.Services
             _postRepositoryRequestProducer.PublishMessage(message);
 
             _logger.LogDebug("PostRepositoryRequest Enqueued");
-
-            TicketToUser[ticketId] = userId;
             
             return ticketId;
         }
