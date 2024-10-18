@@ -27,7 +27,8 @@ Given('I log in as a user with the username {string} and the password {string}',
 });
 
 Then('i validate that the list {string} is displayed',async function (string) {
-// Write code here that turns the phrase above into concrete actions
+	let message = await utils.getText(this.page, loginWindow.errormessage);
+	expect(message).to.contain(expectedMessage)
 return 'pending';
 });
 
