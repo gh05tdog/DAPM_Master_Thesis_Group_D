@@ -53,7 +53,7 @@ public class RepositoryTest
         Assert.False(idIsNullOrDefault);
     }
     */
-    [Fact]
+    [Fact(Skip = "Need other user to create the repository")]
     public async Task GetResourcesReturns0Resources()
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
@@ -62,7 +62,7 @@ public class RepositoryTest
         Assert.Empty(resources);
     }
     
-    [Fact]
+    [Fact(Skip = "Need other user to create the pipelines")]
     public async Task GetPipelinesReturns0Pipelines()
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
