@@ -59,19 +59,6 @@ services:
       - "host.docker.internal:host-gateway" 
       - "localhost:host-gateway"
 
-  dapm.clientapiendtoendtest:
-    image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
-    build:
-      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile
-    depends_on:
-      - dapm.clientapi 
-    network_mode: host
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-    extra_hosts:
-      - "dapmclientapi:host-gateway"
-      - "localhost:host-gateway"
-
   dapm.accessControlService:
     image: ${DOCKER_REGISTRY-}dapmaccesscontrolservice
     build:
