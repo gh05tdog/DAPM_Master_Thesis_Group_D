@@ -1,5 +1,7 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+﻿using System.Collections.Concurrent;
+using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json.Linq;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Services
 {
@@ -24,7 +26,14 @@ namespace DAPM.ClientApi.Services
         private Dictionary<Guid, JToken> _ticketResolutions;
         private Dictionary<Guid, TicketStatus> _ticketStatus;
         private Dictionary<Guid, TicketResolutionType> _ticketResolutionType;
-
+        private static readonly ConcurrentDictionary<Guid, Guid> TicketToUser = new();
+        
+        public UserDto GetUserFromTicket(Guid ticketId) 
+            =>  new UserDto { Id = TicketToUser[ticketId]};
+        
+        public void AddUserToTicket(Guid ticketId, Guid userId) 
+            => TicketToUser[ticketId] = userId;
+        
         public TicketService(ILogger<ITicketService> logger) 
         {
             _logger = logger;

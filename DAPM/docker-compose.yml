@@ -59,19 +59,31 @@ services:
       - "host.docker.internal:host-gateway" 
       - "localhost:host-gateway"
 
-  dapm.clientapiendtoendtest:
-    image: ${DOCKER_REGISTRY-}dapmclientapiendtoendtest
+  dapm.accessControlService:
+    image: ${DOCKER_REGISTRY-}dapmaccesscontrolservice
     build:
-      dockerfile: DAPM.ClientApi.Test.EndToEnd/Dockerfile
+      context: .
+      dockerfile: DAPM.AccessControlService/Dockerfile
     depends_on:
-      - dapm.clientapi 
-    network_mode: host
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5002:8080"
+    networks:
+      - DAPM
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-    extra_hosts:
-      - "dapmclientapi:host-gateway"
-      - "localhost:host-gateway"
 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    container_name: sql_server_container
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+    ports:
+      - "1433:1433"
+    networks:
+      - DAPM
 
   dapm.peerapi:
     image: ${DOCKER_REGISTRY-}dapmpeerapi
@@ -85,8 +97,6 @@ services:
         - "5001:8080"
     networks:
     - DAPM
-
-
 
   dapm.repositoryms.api:
     image: ${DOCKER_REGISTRY-}dapmrepositorymsapi
@@ -104,7 +114,6 @@ services:
       - "6000:8080"
     networks:
     - DAPM
-
 
   dapm.resourceregistryms.api:
     image: ${DOCKER_REGISTRY-}dapmresourceregistrymsapi
@@ -178,7 +187,7 @@ services:
       test: rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
       interval: 10s
       timeout: 30s
-      retries: 3
+      retries: 5
     networks:
     - DAPM
 

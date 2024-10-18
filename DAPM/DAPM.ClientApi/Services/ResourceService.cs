@@ -25,10 +25,11 @@ namespace DAPM.ClientApi.Services
             _getResourcesRequestProducer = getResourcesProducer;
         }
 
-        public Guid GetResourceById(Guid organizationId, Guid repositoryId, Guid resourceId)
+        public Guid GetResourceById(Guid organizationId, Guid repositoryId, Guid resourceId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new GetResourcesRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -45,10 +46,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetResourceFileById(Guid organizationId, Guid repositoryId, Guid resourceId)
+        public Guid GetResourceFileById(Guid organizationId, Guid repositoryId, Guid resourceId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.File);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new GetResourceFilesRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),

@@ -1,4 +1,5 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -12,19 +13,24 @@ namespace DAPM.ClientApi.Consumers
     {
         private ILogger<GetPipelinesProcessResultConsumer> _logger;
         private readonly ITicketService _ticketService;
-        public GetPipelinesProcessResultConsumer(ILogger<GetPipelinesProcessResultConsumer> logger, ITicketService ticketService)
+        private readonly IAccessControlService _accessControlService;
+        
+        public GetPipelinesProcessResultConsumer(ILogger<GetPipelinesProcessResultConsumer> logger, ITicketService ticketService, IAccessControlService accessControlService)
         {
             _logger = logger;
             _ticketService = ticketService;
+            _accessControlService = accessControlService;
         }
 
-        public Task ConsumeAsync(GetPipelinesProcessResult message)
+        public async Task ConsumeAsync(GetPipelinesProcessResult message)
         {
             _logger.LogInformation("GetPipelinesProcessResult received");
 
-
             IEnumerable<PipelineDTO> pipelinesDTOs = message.Pipelines;
-
+            var userId = _ticketService.GetUserFromTicket(message.TicketId);
+            var pipelines = (await _accessControlService.GetUserPipelines(userId)).Select(r => r.Id).ToHashSet();
+            pipelinesDTOs = pipelinesDTOs.Where(p => pipelines.Contains(p.Id));
+                
             // Objects used for serialization
             JToken result = new JObject();
             JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
@@ -38,7 +44,7 @@ namespace DAPM.ClientApi.Consumers
             // Update resolution
             _ticketService.UpdateTicketResolution(message.TicketId, result);
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

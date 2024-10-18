@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DAPM.AccessControlService\DAPM.AccessControlService.csproj" />
     <ProjectReference Include="..\DAPM.ClientApi\DAPM.ClientApi.csproj" />
     <ProjectReference Include="..\DAPM.Orchestrator\DAPM.Orchestrator.csproj" />
     <ProjectReference Include="..\DAPM.PeerApi\DAPM.PeerApi.csproj" />

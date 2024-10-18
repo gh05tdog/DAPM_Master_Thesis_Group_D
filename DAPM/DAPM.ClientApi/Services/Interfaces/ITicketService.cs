@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Services.Interfaces
 {
@@ -9,5 +10,7 @@ namespace DAPM.ClientApi.Services.Interfaces
         public TicketResolutionType GetTicketResolutionType(Guid ticketId);
         public Guid CreateNewTicket(TicketResolutionType resolutionType);
         public void UpdateTicketResolution(Guid ticketId, JToken resolution);
+        UserDto GetUserFromTicket(Guid ticketId);
+        void AddUserToTicket(Guid ticketId, Guid userId);
     }
 }

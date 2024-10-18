@@ -33,7 +33,8 @@ namespace RabbitMQLibrary.Implementation
             if (message.TimeToLive.Ticks <= 0) throw new QueueingException($"{nameof(message.TimeToLive)} cannot be zero or negative");
 
             // Set message ID
-            message.MessageId = Guid.NewGuid();
+            if (message.MessageId == default) 
+                message.MessageId = Guid.NewGuid();
 
             try
             {
@@ -48,7 +49,7 @@ namespace RabbitMQLibrary.Implementation
 
                 _channel.BasicPublish(_queueName, _queueName, properties, serializedMessage);
 
-                _logger.LogDebug(
+                _logger.LogInformation(
                     $"Succesfully published message");
             }
             catch (Exception ex)

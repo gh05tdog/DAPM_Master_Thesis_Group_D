@@ -30,10 +30,11 @@ namespace DAPM.ClientApi.Services
             _getPipelineExecutionStatusProducer = getPipelineExecutionStatusProducer;
         }
 
-        public Guid CreatePipelineExecution(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        public Guid CreatePipelineExecution(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new CreatePipelineExecutionRequest()
             {
                 TicketId = ticketId,
@@ -50,10 +51,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetExecutionStatus(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId)
+        public Guid GetExecutionStatus(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new GetPipelineExecutionStatusRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -68,10 +70,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetPipelineById(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        public Guid GetPipelineById(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new GetPipelinesRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -88,10 +91,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid PostStartCommand(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId)
+        public Guid PostStartCommand(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new PipelineStartCommandRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),

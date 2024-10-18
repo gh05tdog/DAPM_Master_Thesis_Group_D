@@ -41,10 +41,11 @@ namespace DAPM.ClientApi.Services
             _postOperatorRequestProducer = postOperatorRequestProducer;
         }
 
-        public Guid GetRepositoryById(Guid organizationId, Guid repositoryId)
+        public Guid GetRepositoryById(Guid organizationId, Guid repositoryId, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new GetRepositoriesRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -60,10 +61,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetResourcesOfRepository(Guid organizationId, Guid repositoryId)
+        public Guid GetResourcesOfRepository(Guid organizationId, Guid repositoryId, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new GetResourcesRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -79,10 +81,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetPipelinesOfRepository(Guid organizationId, Guid repositoryId)
+        public Guid GetPipelinesOfRepository(Guid organizationId, Guid repositoryId, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new GetPipelinesRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -99,10 +102,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid PostPipelineToRepository(Guid organizationId, Guid repositoryId, PipelineApiDto pipeline)
+        public Guid PostPipelineToRepository(Guid organizationId, Guid repositoryId, PipelineApiDto pipeline, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new PostPipelineRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -122,10 +126,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid PostResourceToRepository(Guid organizationId, Guid repositoryId, string name, IFormFile resourceFile, string resourceType)
+        public Guid PostResourceToRepository(Guid organizationId, Guid repositoryId, string name, IFormFile resourceFile, string resourceType, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             MemoryStream stream = new MemoryStream();
             resourceFile.CopyTo(stream);
 
@@ -155,10 +160,11 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid PostOperatorToRepository(Guid organizationId, Guid repositoryId, string name, IFormFile sourceCodeFile, IFormFile dockerfileFile, string resourceType)
+        public Guid PostOperatorToRepository(Guid organizationId, Guid repositoryId, string name, IFormFile sourceCodeFile, IFormFile dockerfileFile, string resourceType, Guid userId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             MemoryStream sourceCodeStream = new MemoryStream();
             MemoryStream dockerFileStream = new MemoryStream();
             sourceCodeFile.CopyTo(sourceCodeStream);

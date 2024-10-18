@@ -1,4 +1,5 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -13,19 +14,25 @@ namespace DAPM.ClientApi.Consumers
     {
         private ILogger<GetResourcesProcessResultConsumer> _logger;
         private readonly ITicketService _ticketService;
-        public GetResourcesProcessResultConsumer(ILogger<GetResourcesProcessResultConsumer> logger, ITicketService ticketService)
+        private readonly IAccessControlService _accessControlService;
+        
+        public GetResourcesProcessResultConsumer(ILogger<GetResourcesProcessResultConsumer> logger, ITicketService ticketService, IAccessControlService accessControlService)
         {
             _logger = logger;
             _ticketService = ticketService;
+            _accessControlService = accessControlService;
         }
 
-        public Task ConsumeAsync(GetResourcesProcessResult message)
+        public async Task ConsumeAsync(GetResourcesProcessResult message)
         {
             _logger.LogInformation("GetResourcesProcessResult received");
 
 
             IEnumerable<ResourceDTO> resourcesDTOs = message.Resources;
-
+            var userId = _ticketService.GetUserFromTicket(message.TicketId);
+            var resources = (await _accessControlService.GetUserResources(userId)).Select(r => r.Id).ToHashSet();
+            resourcesDTOs = resourcesDTOs.Where(r => resources.Contains(r.Id));
+            
             // Objects used for serialization
             JToken result = new JObject();
             JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
@@ -39,7 +46,7 @@ namespace DAPM.ClientApi.Consumers
             // Update resolution
             _ticketService.UpdateTicketResolution(message.TicketId, result);
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }
