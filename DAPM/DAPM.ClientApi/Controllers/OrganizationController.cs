@@ -32,7 +32,7 @@ namespace DAPM.ClientApi.Controllers
             "and a handshake before you can see other organizations using this endpoint.")]
         public async Task<ActionResult<Guid>> Get()
         {
-            Guid id = _organizationService.GetOrganizations();
+            Guid id = _organizationService.GetOrganizations(this.UserId());
             return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id});
         }
 
@@ -41,7 +41,7 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetById(Guid organizationId)
         {
-            Guid id = _organizationService.GetOrganizationById(organizationId);
+            Guid id = _organizationService.GetOrganizationById(organizationId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetOrganizationById", TicketId = id });
         }
 

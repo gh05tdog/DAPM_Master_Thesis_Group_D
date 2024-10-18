@@ -1,4 +1,5 @@
 ﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Extensions;
 using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services.Interfaces;
@@ -33,7 +34,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasResourceAccess(resourceId))
                 return UnauthorizedResponse("resource", resourceId);
             
-            Guid id = resourceService.GetResourceById(organizationId, repositoryId, resourceId);
+            Guid id = resourceService.GetResourceById(organizationId, repositoryId, resourceId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetResourceById", TicketId = id });
         }
 
@@ -48,7 +49,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasResourceAccess(resourceId))
                 return UnauthorizedResponse("resource", resourceId);
             
-            Guid id = resourceService.GetResourceFileById(organizationId, repositoryId, resourceId);
+            Guid id = resourceService.GetResourceFileById(organizationId, repositoryId, resourceId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetResourceFileById", TicketId = id });
         }
     }

@@ -12,22 +12,24 @@ public class RepositoryTest
     
     public RepositoryTest(ApiHttpFixture apiHttpFixture)
     {
-        this.client = apiHttpFixture.Client;
+        this.client = apiHttpFixture.AuthenticatedClient;
         
     }
     
     [Fact]
-    public async Task GetReposityByIdReturnSingleRepository()
+    public async Task GetRepositoryByIdReturnSingleRepository()
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
-        var repositoryId = (await client.GetRepositoriesAsync(organizationId)).First().Id;
-        var repositories = await client.GetRepositoryByIdAsync(organizationId,repositoryId);
+        var repositoryName = Guid.NewGuid().ToString();
+        var postRepositoryResult = await client.PostRepositoryAsync(organizationId, repositoryName);
+        var repositoryId = postRepositoryResult.ItemIds.RepositoryId;
+        var repositories = await client.GetRepositoryByIdAsync(organizationId, repositoryId);
         Assert.Single(repositories);
     }
 
     //There is a bug in the implementation. calling API with unknown ID, creates a ticket which never gets completed
     [Fact (Skip = "There is a bug in the implementation. calling API with unknown ID, creates a ticket which never gets completed")]
-    public async Task GetReposityByWrongIdReturnNoRepository() 
+    public async Task GetRepositoryByWrongIdReturnNoRepository() 
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
         var repositoryId = Guid.NewGuid();
@@ -52,19 +54,38 @@ public class RepositoryTest
     }
     */
     [Fact]
+    public async Task GetResourcesReturns0Resources()
+    {
+        var organizationId = (await client.GetOrganizationsAsync()).First().Id;
+        var repositoryId = (await client.GetRepositoriesAsync(organizationId)).First().Id;
+        var resources = await client.GetResourcesAsync(organizationId,repositoryId);
+        Assert.Empty(resources);
+    }
+    
+    [Fact]
+    public async Task GetPipelinesReturns0Pipelines()
+    {
+        var organizationId = (await client.GetOrganizationsAsync()).First().Id;
+        var repositoryId = (await client.GetRepositoriesAsync(organizationId)).First().Id;
+        var resources = await client.GetPipelinesAsync(organizationId,repositoryId);
+        Assert.Empty(resources);
+    }
+    
+    [Fact(Skip = "With the new access control the user has need to create the item to access it")]
     public async Task GetResourcesReturnsResources()
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
         var repositoryId = (await client.GetRepositoriesAsync(organizationId)).First().Id;
         var resources = await client.GetResourcesAsync(organizationId,repositoryId);
-        Assert.NotNull(resources);
+        Assert.NotEmpty(resources);
     }
-    [Fact]
+    
+    [Fact(Skip = "With the new access control the user has need to create the item to access it")]
     public async Task GetPipelinesReturnsPipelines()
     {
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
         var repositoryId = (await client.GetRepositoriesAsync(organizationId)).First().Id;
         var resources = await client.GetPipelinesAsync(organizationId,repositoryId);
-        Assert.NotNull(resources);
+        Assert.NotEmpty(resources);
     }
 }

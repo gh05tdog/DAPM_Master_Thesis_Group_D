@@ -16,11 +16,6 @@ namespace DAPM.ClientApi.Services
         private readonly IQueueProducer<GetOrganizationsRequest> _getOrganizationsRequestProducer;
         private readonly IQueueProducer<PostRepositoryRequest> _postRepositoryRequestProducer;
         private readonly ITicketService _ticketService;
-        private static readonly ConcurrentDictionary<Guid, Guid> TicketToUser = new();
-        
-        public UserDto GetUserFromTicket(Guid ticketId) 
-            =>  new UserDto { Id = TicketToUser[ticketId]};
-
         public OrganizationService(ILogger<OrganizationService> logger, 
             IQueueProducer<GetOrganizationsMessage> getOrgsProducer, 
             IQueueProducer<GetOrganizationsMessage> getOrgByIdProducer,
@@ -36,9 +31,11 @@ namespace DAPM.ClientApi.Services
             _postRepositoryRequestProducer = postRepositoryRequestProducer;
         }
 
-        public Guid GetOrganizationById(Guid organizationId)
+        public Guid GetOrganizationById(Guid organizationId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+            
+            _ticketService.AddUserToTicket(ticketId, userId);
 
             var message = new GetOrganizationsRequest
             {
@@ -54,10 +51,10 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetOrganizations()
+        public Guid GetOrganizations(Guid userId)
         {
-       
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+            _ticketService.AddUserToTicket(ticketId, userId);
 
             var message = new GetOrganizationsRequest
             {
@@ -77,7 +74,7 @@ namespace DAPM.ClientApi.Services
         public Guid GetRepositoriesOfOrganization(Guid organizationId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-            TicketToUser.TryAdd(ticketId, userId);
+            _ticketService.AddUserToTicket(ticketId, userId);
 
             var message = new GetRepositoriesRequest
             {
@@ -98,7 +95,7 @@ namespace DAPM.ClientApi.Services
         public Guid PostRepositoryToOrganization(Guid organizationId, string name, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-            TicketToUser.TryAdd(ticketId, userId);
+            _ticketService.AddUserToTicket(ticketId, userId);
             
             var message = new PostRepositoryRequest
             {

@@ -15,26 +15,30 @@ namespace DAPM.ClientApi.Consumers
     {
         private ILogger<PostItemResultConsumer> _logger;
         private readonly ITicketService _ticketService;
-        private readonly IOrganizationService _organizationService;
         private readonly IAccessControlService _accessControlService;
         
-        public PostItemResultConsumer(ILogger<PostItemResultConsumer> logger, ITicketService ticketService, IAccessControlService accessControlService, IOrganizationService organizationService)
+        public PostItemResultConsumer(ILogger<PostItemResultConsumer> logger, ITicketService ticketService, IAccessControlService accessControlService)
         {
             _logger = logger;
             _ticketService = ticketService;
             _accessControlService = accessControlService;
-            _organizationService = organizationService;
         }
 
         public async Task ConsumeAsync(PostItemProcessResult message)
         {
             _logger.LogInformation("CreateNewItemResultMessage received");
 
+            var user = _ticketService.GetUserFromTicket(message.TicketId);
             switch (message.ItemType)
             {
                 case "Repository":
-                    var user = _organizationService.GetUserFromTicket(message.TicketId);
                     await _accessControlService.AddUserToRepository(user, new RepositoryDto{ Id = message.ItemIds.RepositoryId });
+                    break;
+                case "Pipeline":
+                    await _accessControlService.AddUserToPipeline(user, new PipelineDto(){ Id = message.ItemIds.PipelineId.Value });
+                    break;
+                case "Resource":
+                    await _accessControlService.AddUserToResource(user, new ResourceDto(){ Id = message.ItemIds.ResourceId.Value });
                     break;
             }
 

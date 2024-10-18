@@ -36,7 +36,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasPipelineAccess(pipelineId))
                 return UnauthorizedResponse("pipeline", pipelineId);
             
-            Guid id = pipelineService.GetPipelineById(organizationId, repositoryId, pipelineId);
+            Guid id = pipelineService.GetPipelineById(organizationId, repositoryId, pipelineId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetPipelineById", TicketId = id });
         }
 
@@ -50,7 +50,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasPipelineAccess(pipelineId))
                 return UnauthorizedResponse("pipeline", pipelineId);
             
-            Guid id = pipelineService.CreatePipelineExecution(organizationId, repositoryId, pipelineId);
+            Guid id = pipelineService.CreatePipelineExecution(organizationId, repositoryId, pipelineId, this.UserId());
             return Ok(new ApiResponse { RequestName = "CreatePipelineExecutionInstance", TicketId = id });
         }
 
@@ -64,7 +64,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasPipelineAccess(pipelineId))
                 return UnauthorizedResponse("pipeline", pipelineId);
             
-            Guid id = pipelineService.PostStartCommand(organizationId, repositoryId, pipelineId, executionId);
+            Guid id = pipelineService.PostStartCommand(organizationId, repositoryId, pipelineId, executionId, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostStartCommand", TicketId = id });
         }
 
@@ -78,7 +78,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasPipelineAccess(pipelineId))
                 return UnauthorizedResponse("pipeline", pipelineId);
             
-            Guid id = pipelineService.GetExecutionStatus(organizationId, repositoryId, pipelineId, executionId);
+            Guid id = pipelineService.GetExecutionStatus(organizationId, repositoryId, pipelineId, executionId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
         }
     }

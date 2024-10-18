@@ -1,4 +1,5 @@
-﻿using DAPM.ClientApi.Models;
+﻿using DAPM.ClientApi.Extensions;
+using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
@@ -30,7 +31,7 @@ namespace DAPM.ClientApi.Controllers
             "existing peer.")]
         public async Task<ActionResult<Guid>> StartCollabHandshake([FromBody] CollabHandshakeDto collabHandshakeDto)
         {
-            Guid id = _systemService.StartCollabHandshake(collabHandshakeDto.TargetPeerDomain);
+            Guid id = _systemService.StartCollabHandshake(collabHandshakeDto.TargetPeerDomain, this.UserId());
             return Ok(new ApiResponse { RequestName = "CollabHandshake", TicketId = id });
         }
     }

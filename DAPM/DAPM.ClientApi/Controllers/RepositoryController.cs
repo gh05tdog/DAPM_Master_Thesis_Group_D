@@ -1,4 +1,5 @@
 ﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Extensions;
 using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services;
@@ -31,7 +32,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasRepositoryAccess(repositoryId))
                 return UnauthorizedResponse("repository", repositoryId);
             
-            Guid id = repositoryService.GetRepositoryById(organizationId, repositoryId);
+            Guid id = repositoryService.GetRepositoryById(organizationId, repositoryId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetRepositoryById", TicketId = id});
         }
 
@@ -43,7 +44,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasRepositoryAccess(repositoryId))
                 return UnauthorizedResponse("repository", repositoryId);
             
-            Guid id = repositoryService.GetResourcesOfRepository(organizationId, repositoryId);
+            Guid id = repositoryService.GetResourcesOfRepository(organizationId, repositoryId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetResourcesOfRepository", TicketId = id});
         }
 
@@ -55,7 +56,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasRepositoryAccess(repositoryId))
                 return UnauthorizedResponse("repository", repositoryId);
             
-            Guid id = repositoryService.GetPipelinesOfRepository(organizationId, repositoryId);
+            Guid id = repositoryService.GetPipelinesOfRepository(organizationId, repositoryId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetPipelinesOfRepository", TicketId = id });
         }
 
@@ -69,7 +70,7 @@ namespace DAPM.ClientApi.Controllers
             if (resourceForm.Name == null || resourceForm.ResourceFile == null)
                 return BadRequest();
 
-            Guid id = repositoryService.PostResourceToRepository(organizationId, repositoryId, resourceForm.Name, resourceForm.ResourceFile, resourceForm.ResourceType);
+            Guid id = repositoryService.PostResourceToRepository(organizationId, repositoryId, resourceForm.Name, resourceForm.ResourceFile, resourceForm.ResourceType, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostResourceToRepository", TicketId = id });
         }
 
@@ -85,7 +86,7 @@ namespace DAPM.ClientApi.Controllers
                 return BadRequest();
 
             Guid id = repositoryService.PostOperatorToRepository(organizationId, repositoryId, resourceForm.Name, 
-                resourceForm.SourceCodeFile, resourceForm.DockerfileFile, resourceForm.ResourceType);
+                resourceForm.SourceCodeFile, resourceForm.DockerfileFile, resourceForm.ResourceType, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostOperatorToRepository", TicketId = id });
         }
 
@@ -97,7 +98,7 @@ namespace DAPM.ClientApi.Controllers
             if (!await HasRepositoryAccess(repositoryId))
                 return UnauthorizedResponse("repository", repositoryId);
             
-            Guid id = repositoryService.PostPipelineToRepository(organizationId, repositoryId, pipelineApiDto);
+            Guid id = repositoryService.PostPipelineToRepository(organizationId, repositoryId, pipelineApiDto, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostPipelineToRepository", TicketId = id });
         }
 

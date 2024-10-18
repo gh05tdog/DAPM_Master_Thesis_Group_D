@@ -14,13 +14,11 @@ namespace DAPM.ClientApi.Consumers
     {
         private ILogger<GetRepositoriesProcessResultConsumer> _logger;
         private readonly ITicketService _ticketService;
-        private readonly IOrganizationService _organizationService;
         private readonly IAccessControlService _accessControlService;
-        public GetRepositoriesProcessResultConsumer(ILogger<GetRepositoriesProcessResultConsumer> logger, ITicketService ticketService, IOrganizationService organizationService, IAccessControlService accessControlService)
+        public GetRepositoriesProcessResultConsumer(ILogger<GetRepositoriesProcessResultConsumer> logger, ITicketService ticketService, IAccessControlService accessControlService)
         {
             _logger = logger;
             _ticketService = ticketService;
-            _organizationService = organizationService;
             _accessControlService = accessControlService;
         }
 
@@ -29,7 +27,7 @@ namespace DAPM.ClientApi.Consumers
             _logger.LogInformation("GetRepositoriesProcessResult received");
 
             IEnumerable<RepositoryDTO> repositoriesDTOs = message.Repositories;
-            var userId = _organizationService.GetUserFromTicket(message.TicketId);
+            var userId = _ticketService.GetUserFromTicket(message.TicketId);
             var repositories = (await _accessControlService.GetUserRepositories(userId)).Select(r => r.Id).ToHashSet();
             repositoriesDTOs = repositoriesDTOs.Where(r => repositories.Contains(r.Id));
             
