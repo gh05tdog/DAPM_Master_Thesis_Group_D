@@ -2,6 +2,7 @@ import React from 'react';
 import BackButton from '../buttons/BackButton.tsx'
 import { Box, Typography } from '@mui/material';
 import OrgList from '../lists/OrgList.tsx';
+import RepoList from '../lists/RepoList.tsx';
 
 const MainContent: React.FC = () => {
     return (
@@ -19,6 +20,7 @@ const MainContent: React.FC = () => {
         <>
             <BackButton />
             <OrgList />
+            <RepoList />
         </>
         }
     </Box>
