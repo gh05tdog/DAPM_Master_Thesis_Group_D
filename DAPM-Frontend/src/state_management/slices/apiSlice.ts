@@ -6,22 +6,28 @@ import { getOrganizations } from "../selectors/apiSelector.ts";
 
 
 export const initialState: ApiState = {
-    organizations: [],
+    organizations: [
+      {
+        id: "11111111-828f-46c8-aa44-ded7729eaa83",
+        name: "HARALD&RAVN UNI",
+        apiUrl: "https://api.organization1.com"
+      }
+    ],
     repositories: [{
-      organizationId: "",
+      organizationId: "11111111-828f-46c8-aa44-ded7729eaa83",
       name: "Repository 1",
-      id: ""
+      id: "22222222-7898-4771-bb60-53ea6c03dce3"
   },
   {
-      organizationId: "",
+      organizationId: "11111111-828f-46c8-aa44-ded7729eaa83",
       name: "Repository 2",
-      id: ""
+      id: "22222222-7898-4771-bb60-53ea6c03dce4"
   },],
     resources: [{
-      id: "",
+      id: "33333333-7898-4771-bb60-53ea6c03dce7",
       name: "resource 1",
-      organizationId: "",
-      repositoryId: "",
+      organizationId: "11111111-828f-46c8-aa44-ded7729eaa83",
+      repositoryId: "22222222-7898-4771-bb60-53ea6c03dce4",
       type: "eventLog"
   },]
   }

@@ -16,6 +16,12 @@ const darkTheme = createTheme({
   },
 });
 
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+});
+
 const App: React.FC = () => {
   const [initialized, setInitialized] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
@@ -38,7 +44,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={lightTheme}>
       <Provider store={store}>
         <BrowserRouter>
           <Routes>
