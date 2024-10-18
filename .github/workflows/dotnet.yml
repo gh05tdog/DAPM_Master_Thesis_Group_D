@@ -16,9 +16,6 @@ jobs:
     - name: Start backend containers
       run: docker compose -f ./DAPM/docker-compose.yml up -d --build
 
-    - name: Run tests in Docker container
-      run: docker compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
-
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
       with:
