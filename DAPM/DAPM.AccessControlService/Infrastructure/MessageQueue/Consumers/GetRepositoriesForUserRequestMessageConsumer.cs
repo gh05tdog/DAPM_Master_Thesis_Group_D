@@ -9,15 +9,19 @@ public class GetRepositoriesForUserRequestMessageConsumer : IQueueConsumer<GetRe
 {
     private readonly IRepositoryService repositoryService;
     private readonly IQueueProducer<GetRepositoriesForUserResponseMessage> queueProducer;
-
-    public GetRepositoriesForUserRequestMessageConsumer(IRepositoryService repositoryService, IQueueProducer<GetRepositoriesForUserResponseMessage> queueProducer)
+    private readonly ILogger<GetRepositoriesForUserRequestMessageConsumer> logger;
+    
+    public GetRepositoriesForUserRequestMessageConsumer(IRepositoryService repositoryService, IQueueProducer<GetRepositoriesForUserResponseMessage> queueProducer, ILogger<GetRepositoriesForUserRequestMessageConsumer> logger)
     {
         this.repositoryService = repositoryService;
         this.queueProducer = queueProducer;
+        this.logger = logger;
     }
 
     public async Task ConsumeAsync(GetRepositoriesForUserRequestMessage message)
     {
+        logger.LogInformation($"Received {nameof(GetRepositoriesForUserRequestMessage)}");
+        
         var repositories = await repositoryService.GetRepositoriesForUser(message.User);
         
         var response = new GetRepositoriesForUserResponseMessage

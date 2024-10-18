@@ -1,6 +1,7 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
+using Microsoft.Extensions.Logging;
 using Moq;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.AccessControl.Requests;
@@ -16,6 +17,7 @@ public class AddUserPipelineRequestMessageConsumerTests
         // Arrange
         var mockPipelineService = new Mock<IPipelineService>();
         var mockQueueProducer = new Mock<IQueueProducer<AddUserPipelineResponseMessage>>();
+        var mockLogger = new Mock<ILogger<AddUserPipelineRequestMessageConsumer>>();
 
         var userDto = new UserDto{Id = Guid.NewGuid()};
         var pipeline = new PipelineDto{Id = Guid.NewGuid()};
@@ -23,7 +25,7 @@ public class AddUserPipelineRequestMessageConsumerTests
         mockPipelineService.Setup(service => service.AddUserPipeline(userDto, pipeline))
             .Returns(Task.CompletedTask);
 
-        var consumer = new AddUserPipelineRequestMessageConsumer(mockPipelineService.Object, mockQueueProducer.Object);
+        var consumer = new AddUserPipelineRequestMessageConsumer(mockPipelineService.Object, mockQueueProducer.Object, mockLogger.Object);
 
         var requestMessage = new AddUserPipelineRequestMessage
         {

@@ -45,7 +45,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddQueueing(new QueueingConfigurationSettings
 {
     RabbitMqConsumerConcurrency = 5,
-    RabbitMqHostname = "localhost",
+    RabbitMqHostname = "rabbitmq",
     RabbitMqPort = 5672,
     RabbitMqPassword = "guest",
     RabbitMqUsername = "guest"

@@ -9,15 +9,19 @@ public class GetResourcesForUserRequestMessageConsumer : IQueueConsumer<GetResou
 {
     private readonly IResourceService resourceService;
     private readonly IQueueProducer<GetResourcesForUserResponseMessage> queueProducer;
-
-    public GetResourcesForUserRequestMessageConsumer(IResourceService resourceService, IQueueProducer<GetResourcesForUserResponseMessage> queueProducer)
+    private readonly ILogger<GetResourcesForUserRequestMessageConsumer> logger;
+    
+    public GetResourcesForUserRequestMessageConsumer(IResourceService resourceService, IQueueProducer<GetResourcesForUserResponseMessage> queueProducer, ILogger<GetResourcesForUserRequestMessageConsumer> logger)
     {
         this.resourceService = resourceService;
         this.queueProducer = queueProducer;
+        this.logger = logger;
     }
 
     public async Task ConsumeAsync(GetResourcesForUserRequestMessage message)
     {
+        logger.LogInformation($"Received {nameof(GetResourcesForUserRequestMessage)}");
+        
         var resources = await resourceService.GetResourcesForUser(message.User);
         
         var response = new GetResourcesForUserResponseMessage

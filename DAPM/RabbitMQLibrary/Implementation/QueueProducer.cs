@@ -49,7 +49,7 @@ namespace RabbitMQLibrary.Implementation
 
                 _channel.BasicPublish(_queueName, _queueName, properties, serializedMessage);
 
-                _logger.LogDebug(
+                _logger.LogInformation(
                     $"Succesfully published message");
             }
             catch (Exception ex)

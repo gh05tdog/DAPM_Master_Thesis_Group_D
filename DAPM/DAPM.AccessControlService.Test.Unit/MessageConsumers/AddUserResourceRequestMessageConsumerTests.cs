@@ -1,6 +1,7 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
+using Microsoft.Extensions.Logging;
 using Moq;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.AccessControl.Requests;
@@ -16,6 +17,7 @@ public class AddUserResourceRequestMessageConsumerTests
         // Arrange
         var mockResourceService = new Mock<IResourceService>();
         var mockQueueProducer = new Mock<IQueueProducer<AddUserResourceReponseMessage>>();
+        var mockLogger = new Mock<ILogger<AddUserResourceRequestMessageConsumer>>();
 
         var userDto = new UserDto{Id = Guid.NewGuid()};
         var resource = new ResourceDto{Id = Guid.NewGuid()};
@@ -23,7 +25,7 @@ public class AddUserResourceRequestMessageConsumerTests
         mockResourceService.Setup(service => service.AddUserResource(userDto, resource))
             .Returns(Task.CompletedTask);
 
-        var consumer = new AddUserResourceRequestMessageConsumer(mockResourceService.Object, mockQueueProducer.Object);
+        var consumer = new AddUserResourceRequestMessageConsumer(mockResourceService.Object, mockQueueProducer.Object, mockLogger.Object);
 
         var requestMessage = new AddUserResourceRequestMessage
         {

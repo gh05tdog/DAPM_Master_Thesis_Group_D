@@ -5,11 +5,15 @@ using DAPM.AccessControlService.Core.Services;
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure.Database;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
-using RabbitMQLibrary.Implementation;
 using RabbitMQLibrary.Extensions;
+using RabbitMQLibrary.Implementation;
 using RabbitMQLibrary.Messages.AccessControl.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+
+builder.WebHost.UseKestrel(o => o.Limits.MaxRequestBodySize = null);
 
 builder.Services.AddCors(options =>
 {
@@ -60,6 +64,26 @@ builder.Services.AddQueueMessageConsumer<GetPipelinesForUserRequestMessageConsum
 builder.Services.AddQueueMessageConsumer<GetRepositoriesForUserRequestMessageConsumer, GetRepositoriesForUserRequestMessage>();
 builder.Services.AddQueueMessageConsumer<GetResourcesForUserRequestMessageConsumer, GetResourcesForUserRequestMessage>();
 
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
+app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

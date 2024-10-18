@@ -9,21 +9,25 @@ public class AddUserRepositoryRequestMessageConsumer : IQueueConsumer<AddUserRep
 {
     private readonly IRepositoryService repositoryService;
     private readonly IQueueProducer<AddUserRepositoryResponseMessage> queueProducer;
-
-    public AddUserRepositoryRequestMessageConsumer(IRepositoryService repositoryService, IQueueProducer<AddUserRepositoryResponseMessage> queueProducer)
+    private readonly ILogger<AddUserRepositoryRequestMessageConsumer> logger;
+    
+    public AddUserRepositoryRequestMessageConsumer(IRepositoryService repositoryService, IQueueProducer<AddUserRepositoryResponseMessage> queueProducer, ILogger<AddUserRepositoryRequestMessageConsumer> logger)
     {
         this.repositoryService = repositoryService;
         this.queueProducer = queueProducer;
+        this.logger = logger;
     }
 
-    public async Task ConsumeAsync(AddUserRepositoryRequestMessage message)
+    public async Task ConsumeAsync(AddUserRepositoryRequestMessage requestMessage)
     {
-        await repositoryService.AddUserRepository(message.User, message.Repository);
+        logger.LogInformation($"Received {nameof(AddUserRepositoryRequestMessage)}");
+        
+        await repositoryService.AddUserRepository(requestMessage.User, requestMessage.Repository);
         
         var response = new AddUserRepositoryResponseMessage
         {
-            MessageId = message.MessageId,
-            TimeToLive = message.TimeToLive
+            MessageId = requestMessage.MessageId,
+            TimeToLive = requestMessage.TimeToLive
         };
         
         queueProducer.PublishMessage(response);

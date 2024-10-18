@@ -9,15 +9,19 @@ public class GetPipelinesForUserRequestMessageConsumer : IQueueConsumer<GetPipel
 {
     private readonly IPipelineService pipelineService;
     private readonly IQueueProducer<GetPipelinesForUserResponseMessage> queueProducer;
+    private readonly ILogger<GetPipelinesForUserRequestMessageConsumer> logger;
 
-    public GetPipelinesForUserRequestMessageConsumer(IPipelineService pipelineService, IQueueProducer<GetPipelinesForUserResponseMessage> queueProducer)
+    public GetPipelinesForUserRequestMessageConsumer(IPipelineService pipelineService, IQueueProducer<GetPipelinesForUserResponseMessage> queueProducer, ILogger<GetPipelinesForUserRequestMessageConsumer> logger)
     {
         this.pipelineService = pipelineService;
         this.queueProducer = queueProducer;
+        this.logger = logger;
     }
 
     public async Task ConsumeAsync(GetPipelinesForUserRequestMessage message)
     {
+        logger.LogInformation($"Received {nameof(GetPipelinesForUserRequestMessage)}");
+        
         var pipelines = await pipelineService.GetPipelinesForUser(message.User);
         
         var response = new GetPipelinesForUserResponseMessage
