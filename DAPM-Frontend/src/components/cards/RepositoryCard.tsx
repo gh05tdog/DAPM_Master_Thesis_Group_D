@@ -7,7 +7,7 @@ interface RepositoryCardProps {
 
 const RepositoryCard: React.FC<RepositoryCardProps> = ({ repository }) => {
     return (
-        <li key={repository.id}>Repository: {repository.name}</li>
+        <li key={repository.id} data-qa="repository">Repository: {repository.name}</li>
     )
 }
 

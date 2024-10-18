@@ -17,7 +17,7 @@ const OrgList: React.FC = () => {
     return (
         <div>
             <h1>Organizations</h1>
-            <ul data-qa="organiztionList">
+            <ul data-qa="organizationList">
             {
                 organizations?.map((organization) => {
                     return (

@@ -33,7 +33,7 @@ const RepoList: React.FC = () => {
     return (
         <div>
             <h1>Repositories</h1>
-            <ul data-qa="Repositories:">
+            <ul data-qa="repositoryList">
                 {repositories?.map((repository) => (
                     <RepositoryCard key={repository.id} repository={repository} />
                 ))}

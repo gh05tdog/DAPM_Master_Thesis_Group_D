@@ -7,7 +7,7 @@ interface OrganizationCardProps {
 
 const OrganizationCard: React.FC<OrganizationCardProps> = ({ organization }) => {
     return (
-        <li key={organization.id}>Organization: {organization.name} - {organization.apiUrl}</li>
+        <li key={organization.id} data-qa="organization">Organization: {organization.name} - {organization.apiUrl}</li>
     )
 }
 
