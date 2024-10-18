@@ -5,9 +5,9 @@ using DAPM.AccessControlService.Core.Services;
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure.Database;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
-using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Requests;
 using RabbitMQLibrary.Implementation;
 using RabbitMQLibrary.Extensions;
+using RabbitMQLibrary.Messages.AccessControl.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 

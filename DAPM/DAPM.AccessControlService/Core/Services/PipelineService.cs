@@ -1,6 +1,7 @@
 using DAPM.AccessControlService.Core.Domain.Repositories;
-using DAPM.AccessControlService.Core.Dtos;
+using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Core.Services;
 

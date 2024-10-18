@@ -1,10 +1,10 @@
-using DAPM.AccessControlService.Core.Dtos;
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
-using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Requests;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
 using Moq;
 using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Messages.AccessControl.Requests;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Test.Unit.MessageConsumers;
 

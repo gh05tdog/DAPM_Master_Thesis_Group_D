@@ -1,4 +1,4 @@
-﻿using DAPM.AccessControlService.Core.Dtos;
+﻿using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Models;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Consumers
 {

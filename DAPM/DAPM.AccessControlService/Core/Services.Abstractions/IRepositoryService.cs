@@ -1,4 +1,4 @@
-using DAPM.AccessControlService.Core.Dtos;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Core.Services.Abstractions;
 

@@ -1,10 +1,11 @@
 using System.Security.Claims;
-using DAPM.AccessControlService.Core.Dtos;
 using DAPM.ClientApi.Extensions;
+using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQLibrary.Models.AccessControl;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace DAPM.ClientApi.Controllers;

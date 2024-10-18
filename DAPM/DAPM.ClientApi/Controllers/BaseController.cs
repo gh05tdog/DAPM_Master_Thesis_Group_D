@@ -1,7 +1,8 @@
-using DAPM.AccessControlService.Core.Dtos;
 using DAPM.ClientApi.Extensions;
+using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Controllers;
 

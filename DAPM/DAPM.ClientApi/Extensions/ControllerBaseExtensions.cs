@@ -1,6 +1,7 @@
 using System.Security.Claims;
-using DAPM.AccessControlService.Core.Dtos;
+using DAPM.ClientApi.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Extensions;
 

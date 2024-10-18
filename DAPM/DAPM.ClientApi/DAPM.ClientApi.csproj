@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAPM.AccessControlService\DAPM.AccessControlService.csproj" />
     <ProjectReference Include="..\DAPM.ServiceDefaults\DAPM.ServiceDefaults.csproj" />
     <ProjectReference Include="..\RabbitMQLibrary\RabbitMQLibrary.csproj" />
   </ItemGroup>

@@ -1,7 +1,7 @@
-using DAPM.AccessControlService.Core.Dtos;
 using DAPM.AccessControlService.Core.Services;
 using DAPM.AccessControlService.Infrastructure.Database;
 using Microsoft.Data.Sqlite;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Test.Unit.Services;
 

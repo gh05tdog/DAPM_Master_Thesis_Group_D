@@ -1,7 +1,7 @@
-using DAPM.AccessControlService.Core.Dtos;
 using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Models.AccessControl;
 
-namespace DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
+namespace RabbitMQLibrary.Messages.AccessControl.Responses;
 
 public class GetResourcesForUserResponseMessage : IQueueMessage
 {

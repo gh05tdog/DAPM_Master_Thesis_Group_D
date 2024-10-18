@@ -1,10 +1,11 @@
 ﻿using System.Collections.Concurrent;
-using DAPM.AccessControlService.Core.Dtos;
+using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 using RabbitMQLibrary.Messages.ResourceRegistry;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Services
 {

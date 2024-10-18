@@ -1,7 +1,7 @@
-using DAPM.AccessControlService.Core.Dtos;
 using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Models.AccessControl;
 
-namespace DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Requests;
+namespace RabbitMQLibrary.Messages.AccessControl.Requests;
 
 public class AddUserPipelineRequestMessage : IQueueMessage
 {

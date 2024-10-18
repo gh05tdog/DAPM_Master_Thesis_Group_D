@@ -1,7 +1,7 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
-using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Requests;
 using DAPM.AccessControlService.Infrastructure.MessageQueue.Messages.Responses;
 using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Messages.AccessControl.Requests;
 
 namespace DAPM.AccessControlService.Infrastructure.MessageQueue.Consumers;
 

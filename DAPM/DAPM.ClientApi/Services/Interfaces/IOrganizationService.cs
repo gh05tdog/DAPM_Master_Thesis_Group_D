@@ -1,6 +1,7 @@
 ﻿using DAPM.ClientApi.Models;
 using System.Xml.Linq;
-using DAPM.AccessControlService.Core.Dtos;
+using DAPM.ClientApi.Models.DTOs;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Services.Interfaces
 {

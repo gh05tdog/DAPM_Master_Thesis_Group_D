@@ -1,5 +1,4 @@
-﻿using DAPM.AccessControlService.Core.Dtos;
-using DAPM.ClientApi.Extensions;
+﻿using DAPM.ClientApi.Extensions;
 using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services.Interfaces;
