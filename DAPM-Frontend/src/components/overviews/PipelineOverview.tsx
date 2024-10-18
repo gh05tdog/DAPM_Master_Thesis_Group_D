@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import OrgList from '../lists/OrgList.tsx';
 import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';
+import PipelineGrid from '../overviews/old_PipelineOverview.tsx';
 
 const MainContent: React.FC = () => {
     return (
@@ -23,6 +24,7 @@ const MainContent: React.FC = () => {
             <OrgList />
             <RepoList />
             <ResourceList />
+            <PipelineGrid />
         </>
         }
     </Box>

@@ -679,3 +679,17 @@ export async function downloadResource(organizationId: string, repositoryId: str
         throw error; // Propagate error to the caller
     }
 }
+
+export async function fetchExecutionStatus(organizationId: string, repositoryId: string, pipelineId: string, executionId: string) {
+    try {
+        const response = await fetch(`http://` + path + `/organizations/${organizationId}/repositories/${repositoryId}/pipelines/${pipelineId}/executions/${executionId}/status`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const jsonData = await response.json();
+        return jsonData;
+    } catch (error) {
+        console.error('Error fetching status:', error);
+        return error;
+    }
+}
