@@ -1,9 +1,10 @@
 import React from 'react';
-import BackButton from '../buttons/BackButton.tsx'
+import BackButton from '../buttons/BackButton.tsx';
 import { Box, Typography } from '@mui/material';
 import OrgList from '../lists/OrgList.tsx';
 import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';
+import Spinner from '../cards/SpinnerCard.tsx';
 
 const MainContent: React.FC = () => {
     return (
