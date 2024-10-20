@@ -10,22 +10,21 @@ const MainContent: React.FC = () => {
         <Box
             component="main"
             sx={{
-                flexGrow: 1,  // Ensures this box takes up available space
+                flexGrow: 1,  
                 bgcolor: 'background.default',
                 p: 3,
-                marginLeft: '250px',  // Leaves space for the sidebar
+                marginLeft: '250px',  
                 display: 'flex',
-                flexDirection: 'column',  // Ensures content inside stretches vertically if needed
-                height: '100vh',  // Take full viewport height
+                flexDirection: 'column', 
+                height: '100vh',  
             }}
         >
-            <Typography variant="h4">Main Content Area</Typography>
             <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     gap: '5px',
-                    flexGrow: 1,  // Ensures the pipelines take up the remaining space
+                    flexGrow: 1,  
                 }}
             >
                 <Box sx={{ flexGrow: 1, flexBasis: 0 }}>

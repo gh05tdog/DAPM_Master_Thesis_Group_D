@@ -1,55 +1,50 @@
-import React, { Component } from "react";
-import styled, { css } from "styled-components";
-function Index(props) {
-    return (
-        <Container>
-            <Top3></Top3>
-            <ScrollArea3></ScrollArea3>
-            <InProgress>In progress</InProgress>
-        </Container>
-    );
-}
-const Container = styled.div`
-  display: flex;
-  background-color: rgba(184, 188, 192, 1);
-  margin: 0px;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  border-radius: 10px;
-  flex-direction: column;
-  /* This allows the pipeline component to stretch */
-  flex-grow: 1;
-  flex-shrink: 1;
-  width: 100%; /* Ensure full width in its container */
-  height: 100%; /* Ensure full height in its container */
-  position: relative;
-`;
+import React from "react";
+import { Box, Typography, Stack } from "@mui/material";
 
-const Top3 = styled.div`
-    flex: 0.09000000000000002 1 0%;
-    background-color: rgba(97,98,101,1);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    display: flex;
-    flex-direction: column;
-`;
-const ScrollArea3 = styled.div`
-    overflow-y: scroll;
-    flex: 0.9099999999999999 1 0%;
-    background-color: rgba(184,188,192,1);
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    display: flex;
-    flex-direction: column;
-`;
-const InProgress = styled.span`
-    font-family: Roboto;
-    top: 11px;
-    left: 50px;
-    position: absolute;
-    font-style: normal;
-    font-weight: 400;
-    color: rgba(218,220,223,1);
-    font-size: 34px;
-`;
+const Index: React.FC = () => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        backgroundColor: '#e0e0e0',
+        borderRadius: 2,
+        padding: 3,
+      }}
+    >
+      {/* TopBar Section */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#607d8b',
+          padding: 2,
+          borderRadius: '10px 10px 0 0',
+        }}
+      >
+        <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
+          In Progress
+        </Typography>
+      </Box>
+
+      {/* Bottom Container for Pipeline Grid */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          backgroundColor: '#f0f0f0',
+          padding: 2,
+          borderRadius: '0 0 10px 10px',
+          overflowY: 'auto',
+        }}
+      >
+        {/* Using Stack for pipeline columns */}
+        <Stack direction="column" spacing={2}>
+        </Stack>
+      </Box>
+    </Box>
+  );
+};
+
 export default Index;

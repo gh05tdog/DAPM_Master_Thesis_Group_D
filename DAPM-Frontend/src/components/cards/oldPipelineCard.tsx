@@ -34,7 +34,11 @@ export default function PipelineCard({ id, name, imgData }: PipelineCardProps) {
           {name || 'Unnamed Pipeline'} {/* Fallback if no name */}
         </Typography>
       </CardContent>
-
+      <CardContent> 
+      <Button variant="contained" color="success">
+        Success
+      </Button>
+      </CardContent>
       {/* CardActions with Edit button */}
       <CardActions>
         <Button variant="outlined" size="small" color="primary" onClick={navigateToPipeline}>
