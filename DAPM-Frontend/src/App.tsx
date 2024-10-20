@@ -8,7 +8,7 @@ import store from './state_management/store/stores.ts';
 import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
 import PipelineComposer from './views/old_PipeLineComposer.tsx';
 import LoginPage from './views/LoginPage.tsx';
-import keycloakConfig, { initKeycloak } from '../src/utils/keycloak.ts';
+import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 
 const darkTheme = createTheme({
   palette: {
@@ -32,7 +32,7 @@ const App: React.FC = () => {
       await initKeycloak();
       setInitialized(true);
       // Assuming initKeycloak sets the keycloakConfig.authenticated value
-      setAuthenticated(keycloakConfig.authenticated ?? false); // Update this based on your keycloak logic
+      setAuthenticated(keycloak.authenticated ?? false); // Update this based on your keycloak logic
 
     };
 
