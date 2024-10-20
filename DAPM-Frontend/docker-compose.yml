@@ -6,9 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        ENV_FILE: ${ENV_FILE}
+        ENV_FILE: ${ENV_FILE:-.env}
     ports:
       - "3000:80"  
     volumes:
-      - ./${ENV_FILE}:/app/.env 
+      - ./${ENV_FILE:-.env}:/app/.env 
     restart: unless-stopped
