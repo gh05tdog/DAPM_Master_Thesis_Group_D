@@ -1,7 +1,7 @@
 // src/keycloak.ts
 import Keycloak from 'keycloak-js';
 
-const keycloakConfig = new Keycloak({
+const keycloak = new Keycloak({
   url: 'http://localhost:8888',
   realm: 'test',
   clientId: 'test-client',
@@ -12,10 +12,10 @@ let keycloakInitialized = false; // Track initialization state
 // Initialize Keycloak
 const initKeycloak = async () => {
   try {
-    const authenticated = await keycloakConfig.init({ onLoad: 'login-required' });
+    const authenticated = await keycloak.init({ onLoad: 'login-required' });
     keycloakInitialized = true;
     if (!authenticated) {
-      keycloakConfig.login();
+      keycloak.login();
     }
   } catch (error) {
     console.error('Keycloak initialization failed:', error);
@@ -25,7 +25,7 @@ const initKeycloak = async () => {
 // Directly call Keycloak's login and logout functions
 const login = () => {
   if (keycloakInitialized) {
-    keycloakConfig.login();
+    keycloak.login();
   } else {
     console.error('Keycloak is not initialized');
   }
@@ -33,11 +33,23 @@ const login = () => {
 
 const logout = () => {
   if (keycloakInitialized) {
-    keycloakConfig.logout();
+    keycloak.logout();
   } else {
     console.error('Keycloak is not initialized');
   }
 };
 
-export { initKeycloak, login, logout };
-export default keycloakConfig;
+async function getToken(){
+  try {
+    if (keycloak.isTokenExpired()) {
+      await keycloak.updateToken(30);
+    }
+    return keycloak.token;    
+  } catch (error) {
+    console.error('Failed to refresh token:', error);
+  }
+}
+
+export { initKeycloak, login, logout, getToken };
+export default keycloak;
+
