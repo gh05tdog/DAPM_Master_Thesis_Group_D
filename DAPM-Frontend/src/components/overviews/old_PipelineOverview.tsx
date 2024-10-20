@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom';
 import { toPng } from 'html-to-image';
 import { getNodesBounds, getViewportForBounds } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
+import PipelineCard from '../cards/oldPipelineCard.tsx';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -32,6 +33,7 @@ export default function AutoGrid() {
     navigate("/pipeline");  // Navigate to pipeline editor after creation
   };
 
+ 
   pipelines.map(({ pipeline: flowData, id, name }) => {
     const nodes = flowData.nodes;
     const edges = flowData.edges;
@@ -70,28 +72,9 @@ export default function AutoGrid() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {/* Render the PipelineCard for each pipeline */}
       {pipelines.map(({ id, name, imgData }) => (
-        <Card key={id} sx={{ width: '100%', borderRadius: 2, boxShadow: 3 }}>
-          <CardMedia
-            sx={{ height: 180 }}
-            image={imgData || 'https://via.placeholder.com/150'}
-            title="Pipeline Preview"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {name || 'Unnamed Pipeline'}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Click this to modify the pipeline.
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button variant="outlined" size="small" color="primary">
-              Edit Pipeline
-              
-            </Button>
-          </CardActions>
-        </Card>
+        <PipelineCard key={id} id={id} name={name} imgData={imgData} />
       ))}
 
       {/* New Pipeline Button */}
@@ -101,7 +84,7 @@ export default function AutoGrid() {
           color="success"
           startIcon={<AddIcon />}
           sx={{ borderRadius: 50, backgroundColor: '#4caf50', "&:hover": { backgroundColor: '#388e3c' } }}
-          onClick={createNewPipeline}  // Correctly call the function
+          onClick={createNewPipeline}
         >
           Create New
         </Button>
