@@ -22,11 +22,6 @@ const lightTheme = createTheme({
   },
 });
 
-console.log('REACT_APP_KEYCLOAK_URL:', process.env.REACT_APP_KEYCLOAK_URL)
-console.log('REACT_APP_CLIENTAPI_URL:', process.env.REACT_APP_CLIENTAPI_URL)
-console.log('REACT_APP_PEERAPI_URL:', process.env.REACT_APP_PEERAPI_URL)
-console.log('REACT_APP_ACCESSCONTROL_URL:', process.env.REACT_APP_ACCESSCONTROL_URL)
-
 const App: React.FC = () => {
   const [initialized, setInitialized] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
