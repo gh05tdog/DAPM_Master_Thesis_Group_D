@@ -1,9 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box/Box';
 import Paper from '@mui/material/Paper/Paper';
-import Grid from '@mui/material/Grid/Grid';
-import PipelineCard from '../cards/oldPipelineCard.tsx';
-import { Button } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,20 +23,18 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function AutoGrid() {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
-  const pipelines = useSelector(getPipelines)
+  const pipelines = useSelector(getPipelines);
 
   const createNewPipeline = () => {
     dispatch(addNewPipeline({ id: `pipeline-${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
-    { navigate("/pipeline") }
-  }
+    navigate("/pipeline");  // Navigate to pipeline editor after creation
+  };
 
   pipelines.map(({ pipeline: flowData, id, name }) => {
     const nodes = flowData.nodes;
     const edges = flowData.edges;
-    //console.log(name, nodes, edges);
     const pipelineId = id;
     const container = document.createElement('div');
     container.style.position = 'absolute';
@@ -50,10 +46,8 @@ export default function AutoGrid() {
       <FlowDiagram nodes={nodes} edges={edges} />,
       container,
       () => {
-
-        const width = 800
-        const height = 600
-
+        const width = 800;
+        const height = 600;
         const nodesBounds = getNodesBounds(nodes!);
         const { x, y, zoom } = getViewportForBounds(nodesBounds, width, height, 0.5, 2, 1);
 
@@ -75,19 +69,43 @@ export default function AutoGrid() {
   });
 
   return (
-    <Box sx={{ flexGrow: 1, flexBasis: "100%" }} >
-      <Button variant="contained" startIcon={<AddIcon />} onClick={() => createNewPipeline()}
-        sx={{ backgroundColor: "#bbb", "&:hover": { backgroundColor: "#eee" }, marginBlockStart: "10px" }}>
-        Create New
-      </Button>
-      
-      <Grid container spacing={{ xs: 1, md: 1 }} sx={{ padding: "10px" }}>
-        {pipelines.map(({ id, name, imgData }) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-            <PipelineCard id={id} name={name} imgData={imgData}></PipelineCard>
-          </Grid>
-        ))}
-      </Grid>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {pipelines.map(({ id, name, imgData }) => (
+        <Card key={id} sx={{ width: '100%', borderRadius: 2, boxShadow: 3 }}>
+          <CardMedia
+            sx={{ height: 180 }}
+            image={imgData || 'https://via.placeholder.com/150'}
+            title="Pipeline Preview"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {name || 'Unnamed Pipeline'}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Click this to modify the pipeline.
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button variant="outlined" size="small" color="primary">
+              Edit Pipeline
+              
+            </Button>
+          </CardActions>
+        </Card>
+      ))}
+
+      {/* New Pipeline Button */}
+      <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<AddIcon />}
+          sx={{ borderRadius: 50, backgroundColor: '#4caf50', "&:hover": { backgroundColor: '#388e3c' } }}
+          onClick={createNewPipeline}  // Correctly call the function
+        >
+          Create New
+        </Button>
+      </Box>
     </Box>
   );
 }

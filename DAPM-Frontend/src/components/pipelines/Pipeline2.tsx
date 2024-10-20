@@ -1,0 +1,55 @@
+import React, { Component } from "react";
+import styled, { css } from "styled-components";
+function Index(props) {
+    return (
+        <Container>
+            <Top5></Top5>
+            <ScrollArea2></ScrollArea2>
+            <Ready>Ready</Ready>
+        </Container>
+    );
+}
+const Container = styled.div`
+  display: flex;
+  background-color: rgba(184, 188, 192, 1);
+  margin: 0px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  flex-direction: column;
+  /* This allows the pipeline component to stretch */
+  flex-grow: 1;
+  flex-shrink: 1;
+  width: 100%; /* Ensure full width in its container */
+  height: 100%; /* Ensure full height in its container */
+  position: relative;
+`;
+
+const Top5 = styled.div`
+    flex: 0.09000000000000002 1 0%;
+    background-color: rgba(97,98,101,1);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+`;
+const ScrollArea2 = styled.div`
+    overflow-y: scroll;
+    flex: 0.9099999999999999 1 0%;
+    background-color: rgba(184,188,192,1);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    flex-direction: column;
+`;
+const Ready = styled.span`
+  font-family: Roboto;
+  top: 11px;
+  left: 96px;
+  position: absolute;
+  font-style: normal;
+  font-weight: 400;
+  color: rgba(218,220,223,1);
+  font-size: 34px;
+`;
+export default Index;
