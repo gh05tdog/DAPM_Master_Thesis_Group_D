@@ -12,6 +12,4 @@ builder.AddProject<Projects.DAPM_Orchestrator>("dapm-orchestrator");
 
 builder.AddProject<Projects.DAPM_PeerApi>("dapm-peerapi");
 
-builder.AddProject<Projects.DAPM_AccessControlService>("dapm-accesscontrolservice");
-
 builder.Build().Run();

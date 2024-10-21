@@ -48,15 +48,12 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-
 app.UseSwagger();
 app.UseSwaggerUI();
-
 
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
-
 
 app.UseAuthorization();
 
