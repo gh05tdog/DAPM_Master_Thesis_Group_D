@@ -37,6 +37,10 @@ pipeline {
                 dir('DAPM') {
                     script {
                         sh 'docker compose up --build -d'
+                        sh 'docker compose exec keycloak bash'
+                        sh 'cd keycloak/bin'
+                        sh './kcadm.sh config credentials --server http://se2-d.compute.dtu.dk:8888/auth --realm master --user admin'
+                        sh './kcadm.sh update realms/master -s sslRequired=NONE'
                     }
                 }
             }
