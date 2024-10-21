@@ -31,14 +31,8 @@ RUN rm -rf ./*
 # Copy the built assets from the build stage to the appropriate nginx folder for static files
 COPY --from=builder /app/build .
 
-# Copy custom Nginx configuration to enable SSL
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy the SSL certificates (assuming you'll mount the certs directory)
-COPY ./certs /etc/nginx/certs
-
-# Expose both HTTP (80) and HTTPS (443) ports
-EXPOSE 80 443
+# Expose port 80 to the Docker host, so we can access it from the outside
+EXPOSE 80
 
 # Start Nginx and keep it running in the foreground
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
