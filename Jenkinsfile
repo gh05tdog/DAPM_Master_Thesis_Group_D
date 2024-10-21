@@ -39,15 +39,13 @@ pipeline {
                     def containerName = 'keycloak'
 
                     sh """
-                    #!/bin/bash
-                    # Ensure Keycloak is running
-                    docker-compose up --build -d
+                    docker compose up --build -d
 
                     # Wait for Keycloak to be ready (optional)
                     sleep 90  # Adjust this based on your environment
 
                     # Execute commands inside the container
-                    docker-compose exec ${containerName} bash -c '
+                    docker compose exec ${containerName} bash -c '
                     cd /opt/keycloak/bin &&
                     ./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin &&
                     ./kcadm.sh update realms/master -s sslRequired=NONE
