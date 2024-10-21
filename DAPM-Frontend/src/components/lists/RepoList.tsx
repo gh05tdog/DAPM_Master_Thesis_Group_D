@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRepositories, getOrganizations } from "../../state_management/selectors/apiSelector.ts";
+import { getRepositories, getOrganizations,selectLoadingRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { repositoryThunk, organizationThunk } from "../../state_management/slices/apiSlice.ts";
+import Spinner from '../cards/SpinnerCard.tsx';
+import RepositoryCard from "../cards/RepositoryCard.tsx";
 import { Accordion, AccordionSummary, AccordionDetails, Checkbox, FormControlLabel, Typography, Box } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 const RepoList: React.FC = () => {
-  const dispatch = useDispatch();
-  
-  const organizations = useSelector(getOrganizations);
-  const repositories = useSelector(getRepositories);
-
+   const dispatch = useDispatch();
+  // Get organizations and repositories from the store
+    const organizations = useSelector(getOrganizations);
+    const repositories = useSelector(getRepositories);
+    const loading = useSelector(selectLoadingRepositories); // Get loading state
   const [selectedRepos, setSelectedRepos] = useState<string[]>([]);
 
   useEffect(() => {
@@ -26,6 +27,8 @@ const RepoList: React.FC = () => {
       }
     }
   }, [dispatch, organizations]);
+  
+ 
 
   const handleToggleRepo = (repoId: string) => {
     setSelectedRepos((prevSelectedRepos) =>
@@ -34,7 +37,15 @@ const RepoList: React.FC = () => {
         : [...prevSelectedRepos, repoId] // Select
     );
   };
-
+  
+ if (loading) {
+        return(
+            <div>
+                <h1>Repositories</h1>
+                <Spinner />
+            </div>
+        )
+    }
   return (
     <Accordion defaultExpanded sx={{ boxShadow: 3, borderRadius: 2 }}>
       <AccordionSummary

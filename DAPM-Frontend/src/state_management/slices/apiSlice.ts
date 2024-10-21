@@ -13,6 +13,7 @@ export const initialState: ApiState = {
         apiUrl: "https://api.organization1.com"
       }
     ],
+    loadingOrganizations: true,
     repositories: [{
       organizationId: "11111111-828f-46c8-aa44-ded7729eaa83",
       name: "Repository 1",
@@ -23,6 +24,7 @@ export const initialState: ApiState = {
       name: "Repository 2",
       id: "22222222-7898-4771-bb60-53ea6c03dce4"
   },],
+  loadingRepositories: true,
     resources: [{
       id: "33333333-7898-4771-bb60-53ea6c03dce7",
       name: "resource 1",
@@ -39,8 +41,10 @@ const apiSlice = createSlice({
       extraReducers(builder) {
         builder
           .addCase(organizationThunk.pending, (state, action) => {
+            state.loadingOrganizations=true;
           })
           .addCase(organizationThunk.fulfilled, (state, action) => {
+            state.loadingOrganizations=false;
             // Add any fetched posts to the array
             state.organizations = action.payload.organizations
           })
@@ -48,8 +52,10 @@ const apiSlice = createSlice({
             console.log("org thunk failed")
           })
           .addCase(repositoryThunk.pending, (state, action) => {
+            state.loadingRepositories=true;
           })
           .addCase(repositoryThunk.fulfilled, (state, action) => {
+            state.loadingRepositories=false;
             // Add any fetched posts to the array
             state.repositories = action.payload
           })
@@ -91,6 +97,8 @@ export const organizationThunk = createAsyncThunk<
     return thunkAPI.rejectWithValue(error); // Handle error
   }
 });
+export const selectLoadingOrganisation = (state) => state.loadingOrganizations;
+
 
 export const repositoryThunk = createAsyncThunk<
   Repository[],
@@ -108,6 +116,8 @@ export const repositoryThunk = createAsyncThunk<
     return thunkAPI.rejectWithValue(error); // Handle error
   }
 });
+export const selectLoadingRepositories = (state) =>  state.loadingRepositories;
+
 
 export const resourceThunk = createAsyncThunk<
   Resource[],
