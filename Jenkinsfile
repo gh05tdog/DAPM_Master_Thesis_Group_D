@@ -47,7 +47,7 @@ pipeline {
             steps {
                 dir('DAPM-Frontend') {
                     script {
-                        sh 'docker compose --build -d'
+                        sh 'docker compose up --build -d'
                     }
                 }
             }
