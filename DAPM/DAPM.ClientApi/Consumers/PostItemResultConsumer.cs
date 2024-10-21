@@ -1,10 +1,13 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Models.DTOs;
+using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Models;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Consumers
 {
@@ -12,16 +15,36 @@ namespace DAPM.ClientApi.Consumers
     {
         private ILogger<PostItemResultConsumer> _logger;
         private readonly ITicketService _ticketService;
-        public PostItemResultConsumer(ILogger<PostItemResultConsumer> logger, ITicketService ticketService)
+        private readonly IAccessControlService _accessControlService;
+        
+        public PostItemResultConsumer(ILogger<PostItemResultConsumer> logger, ITicketService ticketService, IAccessControlService accessControlService)
         {
             _logger = logger;
             _ticketService = ticketService;
+            _accessControlService = accessControlService;
         }
 
-        public Task ConsumeAsync(PostItemProcessResult message)
+        public async Task ConsumeAsync(PostItemProcessResult message)
         {
             _logger.LogInformation("CreateNewItemResultMessage received");
 
+            var user = _ticketService.GetUserFromTicket(message.TicketId);
+            _logger.LogInformation($"User '{user.Id}' with item type '{message.ItemType}'");
+            switch (message.ItemType)
+            {
+                case "Repository":
+                    _logger.LogInformation($"Adding user '{user.Id}' to repository '{message.ItemIds.RepositoryId}'");
+                    await _accessControlService.AddUserToRepository(user, new RepositoryDto{ Id = message.ItemIds.RepositoryId });
+                    break;
+                case "Pipeline":
+                    _logger.LogInformation($"Adding user '{user.Id}' to pipeline '{message.ItemIds.PipelineId}'");
+                    await _accessControlService.AddUserToPipeline(user, new PipelineDto(){ Id = message.ItemIds.PipelineId.Value });
+                    break;
+                case "Resource":
+                    _logger.LogInformation($"Adding user '{user.Id}' to resource '{message.ItemIds.ResourceId}'");
+                    await _accessControlService.AddUserToResource(user, new ResourceDto(){ Id = message.ItemIds.ResourceId.Value });
+                    break;
+            }
 
             // Objects used for serialization
             JToken result = new JObject();
@@ -38,7 +61,7 @@ namespace DAPM.ClientApi.Consumers
             // Update resolution
             _ticketService.UpdateTicketResolution(message.TicketId, result);
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

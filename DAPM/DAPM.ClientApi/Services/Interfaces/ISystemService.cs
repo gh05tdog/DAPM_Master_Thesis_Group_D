@@ -2,6 +2,6 @@
 {
     public interface ISystemService
     {
-        public Guid StartCollabHandshake(string introductionPeerDomain);
+        public Guid StartCollabHandshake(string introductionPeerDomain, Guid userId);
     }
 }

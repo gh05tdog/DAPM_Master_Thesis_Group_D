@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         ASPNETCORE_ENVIRONMENT = 'Jenkins'
+        ENV_FILE = '.env.jenkins'
     }
 
     stages {
@@ -52,13 +53,15 @@ pipeline {
             }
         }
 
+        stage('Run unit tests') {
+            steps {
+                sh 'dotnet test ./DAPM/DAPM.AccessControlService.Test.Unit/DAPM.AccessControlService.Test.Unit.csproj'
+            }
+        }
+
         stage('Run end to end tests') {
             steps {
-                dir('DAPM') {
-                    script {
-                        sh 'docker compose run --rm dapm.clientapiendtoendtest'
-                    }
-                }
+                sh 'dotnet test ./DAPM.Backend.Test.EndToEnd'
             }
         }
     }

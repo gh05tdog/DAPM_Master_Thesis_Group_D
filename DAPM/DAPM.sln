@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAPM.Orchestrator", "DAPM.O
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAPM.PeerApi", "DAPM.PeerApi\DAPM.PeerApi.csproj", "{33DD6ED0-1FA6-48BF-87CB-84D9BBE7AEAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAPM.ClientApi.Test.EndToEnd", "DAPM.ClientApi.Test.EndToEnd\DAPM.ClientApi.Test.EndToEnd.csproj", "{2B05221F-BC55-4369-8DF4-E45395DB6B09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAPM.AccessControlService", "DAPM.AccessControlService\DAPM.AccessControlService.csproj", "{8CE872AB-AE6E-4797-AF3B-54395AE9405F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAPM.AccessControlService.Test.Unit", "DAPM.AccessControlService.Test.Unit\DAPM.AccessControlService.Test.Unit.csproj", "{8E45F029-0129-4DC3-915A-12AC0873C996}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +82,14 @@ Global
 		{2B05221F-BC55-4369-8DF4-E45395DB6B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B05221F-BC55-4369-8DF4-E45395DB6B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B05221F-BC55-4369-8DF4-E45395DB6B09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE872AB-AE6E-4797-AF3B-54395AE9405F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE872AB-AE6E-4797-AF3B-54395AE9405F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE872AB-AE6E-4797-AF3B-54395AE9405F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE872AB-AE6E-4797-AF3B-54395AE9405F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E45F029-0129-4DC3-915A-12AC0873C996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E45F029-0129-4DC3-915A-12AC0873C996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E45F029-0129-4DC3-915A-12AC0873C996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E45F029-0129-4DC3-915A-12AC0873C996}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
