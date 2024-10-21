@@ -2,10 +2,10 @@
 import Keycloak from 'keycloak-js';
 import { environment } from '../configs/environments.ts';
 
-const keycloakConfig = new Keycloak({
+const keycloak = new Keycloak({
   url: environment.keycloak_url,
   realm: 'test',
-  clientId: 'test-client',
+  clientId: 'test-client'
 });
 
 let keycloakInitialized = false; // Track initialization state

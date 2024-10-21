@@ -9,6 +9,7 @@ import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
 import PipelineComposer from './views/old_PipeLineComposer.tsx';
 import LoginPage from './views/LoginPage.tsx';
 import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
+import { environment } from './configs/environments.ts';
 
 const darkTheme = createTheme({
   palette: {
@@ -21,6 +22,11 @@ const lightTheme = createTheme({
     mode: 'light',
   },
 });
+
+console.log('Client api url:', environment.clientapi_url);
+console.log('Keycloak url:', environment.keycloak_url);
+console.log('Peer api url:', environment.peerapi_url);
+console.log('Access control url:', environment.accesscontrol_url);
 
 const App: React.FC = () => {
   const [initialized, setInitialized] = useState(false);
