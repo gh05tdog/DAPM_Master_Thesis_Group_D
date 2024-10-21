@@ -16,9 +16,17 @@ jobs:
     - name: Start backend containers
       run: docker compose -f ./DAPM/docker-compose.yml up -d --build
 
-    - name: Run tests in Docker container
-      run: docker compose -f ./DAPM/docker-compose.yml run --rm dapm.clientapiendtoendtest 
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
 
+    - name: Run AccessControlService unit tests
+      run: dotnet test ./DAPM/DAPM.AccessControlService.Test.Unit/DAPM.AccessControlService.Test.Unit.csproj
+
+    - name: Run e2e tests
+      run: dotnet test ./DAPM.Backend.Test.EndToEnd
+      
     - name: Stop backend containers
       run: docker compose -f ./DAPM/docker-compose.yml down
 

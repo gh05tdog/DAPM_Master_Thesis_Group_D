@@ -19,10 +19,11 @@ namespace DAPM.ClientApi.Services
             _logger = logger;
         }
 
-        public Guid StartCollabHandshake(string targetPeerDomain)
+        public Guid StartCollabHandshake(string targetPeerDomain, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new CollabHandshakeRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),

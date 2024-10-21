@@ -7,6 +7,8 @@ public class ApiHttpFixture : IDisposable
 {
     public readonly DapmClientApiHttpClient Client;
     public readonly DapmClientApiHttpClient AuthenticatedClient;
+    public readonly TokenFetcher TokenFetcher;
+    public readonly string BaseUrl;
 
     public ApiHttpFixture()
     {
@@ -15,8 +17,9 @@ public class ApiHttpFixture : IDisposable
             .AddJsonFile("appsettings.json", optional: false)
             .AddJsonFile($"appsettings.{environment}.json", optional: true)  
             .Build();
-        
-        var baseAddress = new Uri(config["ClientApiSettings:BaseUrl"]);
+
+        BaseUrl = config["ClientApiSettings:BaseUrl"];
+        var baseAddress = new Uri(BaseUrl);
         
         var keycloakBaseUrl = new Uri(config["Keycloak:BaseUrl"]);
         var keycloakRealm = config["Keycloak:realm"];
@@ -25,11 +28,11 @@ public class ApiHttpFixture : IDisposable
         var keycloakPassword = config["Keycloak:password"];
         var keycloakClientSecret = config["Keycloak:clientSecret"];
 
-        var tokenFetcher = new TokenFetcher(keycloakBaseUrl, keycloakRealm, keycloakClientId,
+        TokenFetcher = new TokenFetcher(keycloakBaseUrl, keycloakRealm, keycloakClientId,
             keycloakUsername, keycloakPassword, keycloakClientSecret);
 
         var apiHttpClientFactory = new ApiHttpClientFactory(baseAddress);
-        var authenticatedApiHttpClientFactory = new AuthenticatedApiHttpClientFactory(baseAddress, tokenFetcher);
+        var authenticatedApiHttpClientFactory = new AuthenticatedApiHttpClientFactory(baseAddress, TokenFetcher);
         
         Client = new DapmClientApiHttpClient(apiHttpClientFactory);
         AuthenticatedClient = new DapmClientApiHttpClient(authenticatedApiHttpClientFactory);
