@@ -39,9 +39,8 @@ const App: React.FC = () => {
       setInitialized(true);
       // Assuming initKeycloak sets the keycloakConfig.authenticated value
       setAuthenticated(keycloak.authenticated ?? false); // Update this based on your keycloak logic
-
+      setUser(keycloak.loadUserInfo());
     };
-
     initialize();
   }, []);
 
@@ -60,7 +59,7 @@ const App: React.FC = () => {
               <>
                 {/* Automatically redirect to /user when authenticated */}
                 <Route path="/" element={<Navigate to="/user" />} />
-                <Route path="/user" element={<PipelineOverviewPage />} />
+                <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
                 <Route path="/pipeline" element={<PipelineComposer />} />
               </>
             )}
