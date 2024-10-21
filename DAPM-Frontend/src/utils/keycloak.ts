@@ -1,8 +1,9 @@
 // src/keycloak.ts
 import Keycloak from 'keycloak-js';
+import { environment } from '../configs/environments.ts';
 
-const keycloak = new Keycloak({
-  url: 'http://localhost:8888',
+const keycloakConfig = new Keycloak({
+  url: environment.keycloak_url,
   realm: 'test',
   clientId: 'test-client',
 });

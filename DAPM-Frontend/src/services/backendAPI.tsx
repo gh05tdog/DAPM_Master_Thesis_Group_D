@@ -1,11 +1,9 @@
 import { Stream } from "stream";
 import { json } from "stream/consumers";
 import keycloak, { getToken } from "../utils/keycloak.ts"
+import { environment } from "../configs/environments.ts";
 
-const vmPath = `se2-d.compute.dtu.dk:5000`
-const localPath = `localhost:5000`
-
-const path = localPath
+const path = environment.clientapi_url;
 
 export async function fetchStatus(ticket: string) {
 
@@ -386,7 +384,7 @@ export async function putRepository(orgId: string, repositoryName: string) {
     
 
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories`, {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories`, {
             method: "POST",
             headers: headers,
             body: JSON.stringify({ name: repositoryName })
@@ -429,7 +427,7 @@ export async function putRepository(orgId: string, repositoryName: string) {
 
 export async function putResource(orgId: string, repId: string, formData: FormData) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/resources`, {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/resources`, {
             method: "POST",
             body: formData,
             headers: {
@@ -609,7 +607,7 @@ export async function putCommandStart(orgId: string, repId: string, pipeId: stri
 
 export async function putOperator(orgId: string, repId: string, formData: FormData) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/resources/operators`, {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/resources/operators`, {
             method: "POST",
             body: formData,
             headers: {
@@ -661,7 +659,7 @@ export async function PostNewPeer(domainName: string) {
         headers.append('Content-Type', 'application/json');
         headers.append("Authorization", `Bearer ${await getToken()}`)
 
-        const response = await fetch(`http://` + path +`/system/collab-handshake`, {
+        const response = await fetch(path +`/system/collab-handshake`, {
             method: "POST",
             body: JSON.stringify({targetPeerDomain: domainName}),
             headers: headers
