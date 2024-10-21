@@ -41,10 +41,10 @@ pipeline {
                     sh """
                     #!/bin/bash
                     # Ensure Keycloak is running
-                    docker-compose up -d
+                    docker-compose up --build -d
 
                     # Wait for Keycloak to be ready (optional)
-                    sleep 30  # Adjust this based on your environment
+                    sleep 90  # Adjust this based on your environment
 
                     # Execute commands inside the container
                     docker-compose exec ${containerName} bash -c '
