@@ -7,10 +7,7 @@ const keycloak = new Keycloak({
   url: environment.keycloak_url,
   realm: 'test',
   clientId: 'test-client',
-  },
-  init: {
-    checkLoginIframe: false
-  },
+  }
 });
 
 let keycloakInitialized = false; // Track initialization state
@@ -18,7 +15,6 @@ let keycloakInitialized = false; // Track initialization state
 // Initialize Keycloak
 const initKeycloak = async () => {
   try {
-    console.log('Initializing Keycloak on url:', environment.keycloak_url);
     const authenticated = await keycloak.init({ onLoad: 'login-required' });
     keycloakInitialized = true;
     if (!authenticated) {

@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         ASPNETCORE_ENVIRONMENT = 'Jenkins'
+        ENV_FILE = '.env.jenkins'
     }
 
     stages {
@@ -46,7 +47,7 @@ pipeline {
             steps {
                 dir('DAPM-Frontend') {
                     script {
-                        sh 'docker compose --env-file .env.jenkins up --build -d'
+                        sh 'docker compose --build -d'
                     }
                 }
             }
