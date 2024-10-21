@@ -18,12 +18,17 @@ namespace RabbitMQLibrary.Extensions
 
             services.AddSingleton<IAsyncConnectionFactory>(provider =>
             {
+                var username = settings.RabbitMqUsername;
+                var password = settings.RabbitMqPassword;
+                var hostname = settings.RabbitMqHostname;
+                var port = settings.RabbitMqPort.GetValueOrDefault();
+                
                 var factory = new ConnectionFactory
                 {
-                    UserName = settings.RabbitMqUsername,
-                    Password = settings.RabbitMqPassword,
-                    HostName = settings.RabbitMqHostname,
-                    Port = settings.RabbitMqPort.GetValueOrDefault(),
+                    UserName = username,
+                    Password = password,
+                    HostName = hostname,
+                    Port = port,
 
                     DispatchConsumersAsync = true,
                     AutomaticRecoveryEnabled = true,
@@ -32,7 +37,7 @@ namespace RabbitMQLibrary.Extensions
                     ConsumerDispatchConcurrency = settings.RabbitMqConsumerConcurrency.GetValueOrDefault(),
                 };
 
-                factory.Uri = new Uri("amqp://guest:guest@rabbitmq:5672");
+                factory.Uri = new Uri($"amqp://{username}:{password}@{hostname}:{port}");
 
                 return factory;
             });

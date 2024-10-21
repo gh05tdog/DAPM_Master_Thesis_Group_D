@@ -1,6 +1,8 @@
-﻿using DAPM.ClientApi.Models;
+﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -8,6 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DAPM.ClientApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("status")]
@@ -15,11 +18,13 @@ namespace DAPM.ClientApi.Controllers
     {
         private readonly ILogger<StatusController> _logger;
         private readonly ITicketService _ticketService;
+        private readonly IAccessControlService accessControlService;
 
-        public StatusController(ILogger<StatusController> logger, ITicketService ticketService)
+        public StatusController(ILogger<StatusController> logger, ITicketService ticketService, IAccessControlService accessControlService)
         {
             _logger = logger;
             _ticketService = ticketService;
+            this.accessControlService = accessControlService;
         }
 
         [HttpGet(("{ticketId}"))]

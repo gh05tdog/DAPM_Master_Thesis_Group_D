@@ -1,7 +1,11 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+﻿using System.Collections.Concurrent;
+using DAPM.ClientApi.Models.DTOs;
+using DAPM.ClientApi.Services.Interfaces;
+using Newtonsoft.Json.Linq;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 using RabbitMQLibrary.Messages.ResourceRegistry;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.Services
 {
@@ -12,7 +16,6 @@ namespace DAPM.ClientApi.Services
         private readonly IQueueProducer<GetOrganizationsRequest> _getOrganizationsRequestProducer;
         private readonly IQueueProducer<PostRepositoryRequest> _postRepositoryRequestProducer;
         private readonly ITicketService _ticketService;
-
         public OrganizationService(ILogger<OrganizationService> logger, 
             IQueueProducer<GetOrganizationsMessage> getOrgsProducer, 
             IQueueProducer<GetOrganizationsMessage> getOrgByIdProducer,
@@ -28,9 +31,11 @@ namespace DAPM.ClientApi.Services
             _postRepositoryRequestProducer = postRepositoryRequestProducer;
         }
 
-        public Guid GetOrganizationById(Guid organizationId)
+        public Guid GetOrganizationById(Guid organizationId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+            
+            _ticketService.AddUserToTicket(ticketId, userId);
 
             var message = new GetOrganizationsRequest
             {
@@ -46,10 +51,10 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetOrganizations()
+        public Guid GetOrganizations(Guid userId)
         {
-       
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+            _ticketService.AddUserToTicket(ticketId, userId);
 
             var message = new GetOrganizationsRequest
             {
@@ -66,9 +71,10 @@ namespace DAPM.ClientApi.Services
 
         }
 
-        public Guid GetRepositoriesOfOrganization(Guid organizationId)
+        public Guid GetRepositoriesOfOrganization(Guid organizationId, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+            _ticketService.AddUserToTicket(ticketId, userId);
 
             var message = new GetRepositoriesRequest
             {
@@ -81,14 +87,16 @@ namespace DAPM.ClientApi.Services
             _getRepositoriesRequestProducer.PublishMessage(message);
 
             _logger.LogDebug("GetRepositoriesRequest Enqueued");
-
+            
+            
             return ticketId;
         }
 
-        public Guid PostRepositoryToOrganization(Guid organizationId, string name)
+        public Guid PostRepositoryToOrganization(Guid organizationId, string name, Guid userId)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
+            _ticketService.AddUserToTicket(ticketId, userId);
+            
             var message = new PostRepositoryRequest
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
@@ -100,7 +108,7 @@ namespace DAPM.ClientApi.Services
             _postRepositoryRequestProducer.PublishMessage(message);
 
             _logger.LogDebug("PostRepositoryRequest Enqueued");
-
+            
             return ticketId;
         }
     }

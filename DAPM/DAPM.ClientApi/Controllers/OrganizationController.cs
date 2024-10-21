@@ -1,23 +1,27 @@
-﻿using DAPM.ClientApi.Models;
+﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Extensions;
+using DAPM.ClientApi.Models;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace DAPM.ClientApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations")]
-    public class OrganizationController : ControllerBase
+    public class OrganizationController : BaseController
     {
 
         private readonly ILogger<OrganizationController> _logger;
         private readonly IOrganizationService _organizationService;
 
-        public OrganizationController(ILogger<OrganizationController> logger, IOrganizationService organizationService)
+        public OrganizationController(ILogger<OrganizationController> logger, IOrganizationService organizationService, IAccessControlService accessControlService) : base(accessControlService)
         {
             _logger = logger;
             _organizationService = organizationService;
@@ -28,7 +32,7 @@ namespace DAPM.ClientApi.Controllers
             "and a handshake before you can see other organizations using this endpoint.")]
         public async Task<ActionResult<Guid>> Get()
         {
-            Guid id = _organizationService.GetOrganizations();
+            Guid id = _organizationService.GetOrganizations(this.UserId());
             return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id});
         }
 
@@ -37,7 +41,7 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetById(Guid organizationId)
         {
-            Guid id = _organizationService.GetOrganizationById(organizationId);
+            Guid id = _organizationService.GetOrganizationById(organizationId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetOrganizationById", TicketId = id });
         }
 
@@ -45,7 +49,7 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets all the repositories of an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetRepositoriesOfOrganization(Guid organizationId)
         {
-            Guid id = _organizationService.GetRepositoriesOfOrganization(organizationId);
+            Guid id = _organizationService.GetRepositoriesOfOrganization(organizationId, this.UserId());
             return Ok(new ApiResponse {RequestName = "GetRepositoriesOfOrganization", TicketId = id });
         }
 
@@ -54,7 +58,7 @@ namespace DAPM.ClientApi.Controllers
             "only be able to create repositories for your own organization.")]
         public async Task<ActionResult<Guid>> PostRepositoryToOrganization(Guid organizationId, [FromBody] RepositoryApiDto repositoryDto)
         {
-            Guid id = _organizationService.PostRepositoryToOrganization(organizationId, repositoryDto.Name);
+            Guid id = _organizationService.PostRepositoryToOrganization(organizationId, repositoryDto.Name, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostRepositoryToOrganization", TicketId = id });
         }
 
