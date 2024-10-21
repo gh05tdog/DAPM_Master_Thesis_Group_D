@@ -44,7 +44,7 @@ pipeline {
                     # Execute commands inside the container
                     docker compose exec ${containerName} bash -c '
                     cd /opt/keycloak/bin &&
-                    ./kcadm.sh config credentials --server http://localhost:8888/auth --realm master --user admin --password admin &&
+                    ./kcadm.sh config credentials --server http://se2-d.compute.dtu.dk:8888/auth --realm master --user admin --password admin &&
                     ./kcadm.sh update realms/master -s sslRequired=NONE
                     '
                     """
