@@ -36,12 +36,24 @@ pipeline {
             steps {
                 dir('DAPM') {
                     script {
-                        sh 'docker compose up --build -d'
-                        sh 'docker compose exec keycloak bash'
-                        sh 'cd keycloak/bin'
-                        sh './kcadm.sh config credentials --server http://se2-d.compute.dtu.dk:8888/auth --realm master --user admin'
-                        sh './kcadm.sh update realms/master -s sslRequired=NONE'
-                    }
+                    def containerName = 'keycloak'
+
+                    sh """
+                    #!/bin/bash
+                    # Ensure Keycloak is running
+                    docker-compose up -d
+
+                    # Wait for Keycloak to be ready (optional)
+                    sleep 30  # Adjust this based on your environment
+
+                    # Execute commands inside the container
+                    docker-compose exec ${containerName} bash -c '
+                    cd /opt/keycloak/bin &&
+                    ./kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin &&
+                    ./kcadm.sh update realms/master -s sslRequired=NONE
+                    '
+                    """
+                }
                 }
             }
         }
