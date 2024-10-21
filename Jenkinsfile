@@ -46,7 +46,7 @@ pipeline {
             steps {
                 dir('DAPM-Frontend') {
                     script {
-                        sh 'docker compose up --build -d'
+                        sh 'docker compose --env-file .env.jenkins up --build -d'
                     }
                 }
             }
