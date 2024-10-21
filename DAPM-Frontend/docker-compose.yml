@@ -5,6 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        ENV_FILE: ${ENV_FILE:-.env}
     ports:
-      - "80:80"  # Map TCP port 80 in the container to port 80 on the Docker host.
+      - "3000:80"  
+    volumes:
+      - ./${ENV_FILE:-.env}:/app/.env 
     restart: unless-stopped

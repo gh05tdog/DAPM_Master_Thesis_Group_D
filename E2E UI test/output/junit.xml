@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<testsuite failures="0" skipped="0" name="cucumber-js" time="15.709152085" tests="2">
+  <testcase classname="Login Feature" name="Log in with existing user" time="6.470870092999999">
+    <system-out><![CDATA[Given I open a main page..................................................passed
+Then I validate redirection to the KeycloakLoginPage......................passed
+When I type "test" value in the "username" field..........................passed
+And I type "test" value in the "password" field...........................passed
+And I submit by clicking the login button.................................passed
+Then I validate that navigation bar contains message "Pipeline Processi...passed]]></system-out>
+  </testcase>
+  <testcase classname="Login Feature" name="Log in with wrong credentials" time="9.238281992">
+    <system-out><![CDATA[Given I open a main page..................................................passed
+Then I validate redirection to the KeycloakLoginPage......................passed
+When I type "qwewqeqweqwertytrytrytr" value in the "username" field.......passed
+And I type "qwewqeqweqwertytrytrytr" value in the "password" field........passed
+And I submit by clicking the login button.................................passed
+And I print a message to the console......................................passed
+Then I validate that alert message "Invalid username or password." is s...passed]]></system-out>
+  </testcase>
+</testsuite>

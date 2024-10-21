@@ -1,9 +1,14 @@
-import { ThemeProvider, createTheme } from "@mui/material";
+// src/App.tsx
+import React, { useState, useEffect } from 'react';
+import { ThemeProvider, createTheme } from '@mui/material';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './state_management/store/stores.ts';
 
-import "./index.css";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./redux/slices";
+import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
+import PipelineComposer from './views/old_PipeLineComposer.tsx';
+import LoginPage from './views/LoginPage.tsx';
+import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
@@ -26,17 +31,25 @@ const darkTheme = createTheme({
   },
 });
 
-const store = configureStore({
-  reducer: persistedReducer,
-  preloadedState: loadState(),
-})
+const lightTheme = createTheme({ 
+  palette: {
+    mode: 'light',
+  },
+});
 
-// here we subscribe to the store changes
-store.subscribe(
-  // we use debounce to save the state once each 800ms
-  // for better performances in case multiple changes occur in a short time
-  () => saveState(store.getState())
-);
+const App: React.FC = () => {
+  const [initialized, setInitialized] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const initialize = async () => {
+      await initKeycloak();
+      setInitialized(true);
+      // Assuming initKeycloak sets the keycloakConfig.authenticated value
+      setAuthenticated(keycloak.authenticated ?? false); // Update this based on your keycloak logic
+
+    };
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
@@ -58,12 +71,23 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <div className="App">
-        <Provider store={store}>
-          <RouterProvider router={router} />
-        </Provider>
-      </div>
+    <ThemeProvider theme={lightTheme}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            {!authenticated ? (
+              <Route path="/user" element={<LoginPage />} />
+            ) : (
+              <>
+                {/* Automatically redirect to /user when authenticated */}
+                <Route path="/" element={<Navigate to="/user" />} />
+                <Route path="/user" element={<PipelineOverviewPage />} />
+                <Route path="/pipeline" element={<PipelineComposer />} />
+              </>
+            )}
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </ThemeProvider>
   );
 }

@@ -1,15 +1,18 @@
 import { Stream } from "stream";
 import { json } from "stream/consumers";
+import keycloak, { getToken } from "../utils/keycloak.ts"
+import { environment } from "../configs/environments.ts";
 
-const vmPath = `dapm1.compute.dtu.dk:5000`
-const localPath = `localhost:5000`
-
-const path = vmPath
+const path = environment.clientapi_url;
 
 export async function fetchStatus(ticket: string) {
 
     try {
-        const response = await fetch(`http://` + path + `/status/${ticket}`);
+        const response = await fetch(path + `/status/${ticket}`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -25,7 +28,11 @@ export async function fetchStatus(ticket: string) {
 export async function fetchFile(ticket: string) {
 
     try {
-        const response = await fetch(`http://` + path + `/status/${ticket}`);
+        const response = await fetch(path + `/status/${ticket}`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -40,7 +47,11 @@ export async function fetchFile(ticket: string) {
 
 export async function fetchOrganisations() {
     try {
-        const response = await fetch(`http://` + path + `/organizations`);
+        const response = await fetch(path + `/organizations`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Fetching orgs, Network response was not ok');
         }
@@ -79,7 +90,11 @@ export async function fetchOrganisations() {
 
 export async function fetchOrganisation(orgId: string) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}`);
+        const response = await fetch(path + `/Organizations/${orgId}`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Fetching org, Network response was not ok');
         }
@@ -116,7 +131,11 @@ export async function fetchOrganisation(orgId: string) {
 
 export async function fetchOrganisationRepositories(orgId: string) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories`);
+        const response = await fetch(path + `/Organizations/${orgId}/repositories`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Fecthing reps, Network response was not ok');
         }
@@ -153,7 +172,11 @@ export async function fetchOrganisationRepositories(orgId: string) {
 
 export async function fetchRepository(orgId: string, repId: string) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}`);
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Fecthing rep, Network response was not ok');
         }
@@ -189,7 +212,11 @@ export async function fetchRepository(orgId: string, repId: string) {
 
 export async function fetchRepositoryResources(orgId: string, repId: string) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/resources`);
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/resources`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Fetching resources, Network response was not ok');
         }
@@ -227,7 +254,11 @@ export async function fetchRepositoryResources(orgId: string, repId: string) {
 
 export async function fetchResource(orgId: string, repId: string, resId: string) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/resources/${resId}`);
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/resources/${resId}`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Fetching resource, Feching Network response was not ok');
         }
@@ -264,7 +295,11 @@ export async function fetchResource(orgId: string, repId: string, resId: string)
 
 export async function fetchRepositoryPipelines(orgId: string, repId: string) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/pipelines`);
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/pipelines`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('fetching pipelines, Network response was not ok');
         }
@@ -301,7 +336,11 @@ export async function fetchRepositoryPipelines(orgId: string, repId: string) {
 
 export async function fetchPipeline(orgId: string, repId: string, pipId: string) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/pipelines/${pipId}`);
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/pipelines/${pipId}`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('fetching pipeline, Network response was not ok');
         }
@@ -341,10 +380,11 @@ export async function putRepository(orgId: string, repositoryName: string) {
     const headers = new Headers()
     headers.append("accept", "application/json")
     headers.append("Content-Type", "application/json")
+    headers.append("Authorization", `Bearer ${await getToken()}`)
     
 
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories`, {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories`, {
             method: "POST",
             headers: headers,
             body: JSON.stringify({ name: repositoryName })
@@ -387,9 +427,12 @@ export async function putRepository(orgId: string, repositoryName: string) {
 
 export async function putResource(orgId: string, repId: string, formData: FormData) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/resources`, {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/resources`, {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
         });
 
         if (!response.ok) {
@@ -434,7 +477,8 @@ export async function putPipeline(orgId: string, repId: string, pipelineData:any
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/json",
+                'Authorization': `Bearer ${await getToken()}`
             },
             body: JSON.stringify(pipelineData)
         });
@@ -477,6 +521,9 @@ export async function putExecution(orgId: string, repId: string, pipeId: string)
     try {
         const response = await fetch(`http://${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions`, {
             method: "POST",
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
         });
 
         if (!response.ok) {
@@ -518,6 +565,9 @@ export async function putCommandStart(orgId: string, repId: string, pipeId: stri
     try {
         const response = await fetch(`http://${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions/${exeId}/commands/start`, {
             method: "POST",
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
         });
 
         if (!response.ok) {
@@ -557,9 +607,12 @@ export async function putCommandStart(orgId: string, repId: string, pipeId: stri
 
 export async function putOperator(orgId: string, repId: string, formData: FormData) {
     try {
-        const response = await fetch(`http://` + path + `/Organizations/${orgId}/repositories/${repId}/resources/operators`, {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/resources/operators`, {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
         });
 
         if (!response.ok) {
@@ -604,8 +657,9 @@ export async function PostNewPeer(domainName: string) {
 
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        headers.append("Authorization", `Bearer ${await getToken()}`)
 
-        const response = await fetch(`http://` + path +`/system/collab-handshake`, {
+        const response = await fetch(path +`/system/collab-handshake`, {
             method: "POST",
             body: JSON.stringify({targetPeerDomain: domainName}),
             headers: headers
@@ -643,7 +697,11 @@ export async function PostNewPeer(domainName: string) {
 
 export async function downloadResource(organizationId: string, repositoryId: string, resourceId: string) {
     try {
-        const response = await fetch(`http://` + path + `/organizations/${organizationId}/repositories/${repositoryId}/resources/${resourceId}/file`);
+        const response = await fetch(path + `/organizations/${organizationId}/repositories/${repositoryId}/resources/${resourceId}/file`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
         if (!response.ok) {
             throw new Error('Fetching orgs, Network response was not ok');
         }

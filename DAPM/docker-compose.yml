@@ -26,6 +26,31 @@ services:
     networks:
     - DAPM
 
+  dapm.accessControlService:
+    image: ${DOCKER_REGISTRY-}dapmaccesscontrolservice
+    build:
+      context: .
+      dockerfile: DAPM.AccessControlService/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5002:8080"
+    networks:
+      - DAPM
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    container_name: sql_server_container
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+    ports:
+      - "1433:1433"
+    networks:
+      - DAPM
 
   dapm.peerapi:
     image: ${DOCKER_REGISTRY-}dapmpeerapi
@@ -39,8 +64,6 @@ services:
         - "5001:8080"
     networks:
     - DAPM
-
-
 
   dapm.repositoryms.api:
     image: ${DOCKER_REGISTRY-}dapmrepositorymsapi
@@ -58,7 +81,6 @@ services:
       - "6000:8080"
     networks:
     - DAPM
-
 
   dapm.resourceregistryms.api:
     image: ${DOCKER_REGISTRY-}dapmresourceregistrymsapi
@@ -132,7 +154,7 @@ services:
       test: rabbitmq-diagnostics -q ping
       interval: 10s
       timeout: 30s
-      retries: 3
+      retries: 5
     networks:
     - DAPM
 

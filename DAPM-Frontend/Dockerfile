@@ -13,8 +13,11 @@
 # # Copy the rest of your app's source code from your host to your container workspace
 # COPY . .
 
-# # Build the application
-# RUN npm run build
+ARG ENV_FILE
+COPY ${ENV_FILE} .env
+
+# Build the application
+RUN npm run build
 
 # # Stage 2: Serve the app using nginx
 # FROM nginx:alpine

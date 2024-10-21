@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using DAPM.ClientApi.AccessControl;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http.Features;
@@ -8,9 +10,11 @@ using DAPM.ClientApi.Consumers;
 using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using Microsoft.OpenApi.Models;
+using RabbitMQLibrary.Messages.AccessControl.Responses;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.AddServiceDefaults();
 
@@ -50,6 +54,11 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "DAPM Client API", Version = "v1" });
 });
 
+// Access control services
+builder.Services.Configure<ApiHttpClientFactorySettings>(configuration.GetSection("ApiHttpClientFactorySettings"));
+builder.Services.AddSingleton<IApiHttpClientFactory, ApiHttpClientFactory>();
+builder.Services.AddSingleton<IApiHttpClient, ApiHttpClient>();
+builder.Services.AddSingleton<IAccessControlService, AccessControlService>();
 
 builder.Services.AddQueueMessageConsumer<GetOrganizationsProcessResultConsumer, GetOrganizationsProcessResult>();
 builder.Services.AddQueueMessageConsumer<PostItemResultConsumer, PostItemProcessResult>();
@@ -60,9 +69,6 @@ builder.Services.AddQueueMessageConsumer<GetResourceFilesProcessResultConsumer, 
 builder.Services.AddQueueMessageConsumer<CollabHandshakeProcessResultConsumer, CollabHandshakeProcessResult>();
 builder.Services.AddQueueMessageConsumer<PostPipelineCommandProcessResultConsumer, PostPipelineCommandProcessResult>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusProcessResultConsumer, GetPipelineExecutionStatusRequestResult>();
-
-
-
 // Add services to the container.
 
 
@@ -77,6 +83,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Keycloak
+builder.Services.AddKeycloakWebApiAuthentication(configuration);
 
 var app = builder.Build();
 

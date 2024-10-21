@@ -20,6 +20,10 @@
     <ProjectReference Include="..\DAPM.ServiceDefaults\DAPM.ServiceDefaults.csproj" />
     <ProjectReference Include="..\RabbitMQLibrary\RabbitMQLibrary.csproj" />
   </ItemGroup>
+  
+  <PropertyGroup>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="TemporaryFiles\" />
