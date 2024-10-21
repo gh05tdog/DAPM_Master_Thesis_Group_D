@@ -72,12 +72,10 @@ export default function AutoGrid() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Render the PipelineCard for each pipeline */}
       {pipelines.map(({ id, name, imgData }) => (
         <PipelineCard key={id} id={id} name={name} imgData={imgData} />
       ))}
 
-      {/* New Pipeline Button */}
       <Box sx={{ textAlign: 'center', marginTop: 2 }}>
         <Button
           variant="contained"

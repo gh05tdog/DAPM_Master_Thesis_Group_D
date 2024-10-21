@@ -21,17 +21,15 @@ export default function PipelineCard({ id, name, imgData }: PipelineCardProps) {
 
   return (
     <Card sx={{ width: '100%', borderRadius: 2, boxShadow: 3 }}>
-      {/* CardMedia for pipeline preview image */}
       <CardMedia
         sx={{ height: 180 }}
         image={imgData || 'https://via.placeholder.com/150'}  // Fallback image if imgData is missing
         title="Pipeline Preview"
       />
       
-      {/* Card content for pipeline name */}
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {name || 'Unnamed Pipeline'} {/* Fallback if no name */}
+          {name || 'Unnamed Pipeline'} 
         </Typography>
       </CardContent>
       <CardContent> 
@@ -39,7 +37,6 @@ export default function PipelineCard({ id, name, imgData }: PipelineCardProps) {
         Success
       </Button>
       </CardContent>
-      {/* CardActions with Edit button */}
       <CardActions>
         <Button variant="outlined" size="small" color="primary" onClick={navigateToPipeline}>
           Edit Pipeline
