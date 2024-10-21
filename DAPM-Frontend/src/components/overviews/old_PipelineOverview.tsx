@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box/Box';
 import Paper from '@mui/material/Paper/Paper';
 import Grid from '@mui/material/Grid/Grid';
-import PipelineCard from '../cards/PipelineCard.tsx';
+import PipelineCard from '../cards/oldPipelineCard.tsx';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
