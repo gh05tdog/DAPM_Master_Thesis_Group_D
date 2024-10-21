@@ -3,7 +3,7 @@ import Keycloak from 'keycloak-js';
 import { environment } from '../configs/environments.ts';
 
 const keycloak = new Keycloak({
-  url: environment.keycloak_url,
+  url: environment.keycloak_url + '/auth',
   realm: 'test',
   clientId: 'test-client'
 });
