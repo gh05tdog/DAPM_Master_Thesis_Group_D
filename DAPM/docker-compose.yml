@@ -15,7 +15,7 @@ services:
       - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm.json -Dkeycloak.profile.feature.upload_scripts=enabled   
     ports:
       - "8888:8888"  # No changes here, this is the external port
-    command: [ "start-dev", "--http-port=8888", "--hostname=localhost", "--import-realm" ]  # Bind to 0.0.0.0
+    command: [ "start-dev", "--http-port=8888", "--import-realm" ]  # Bind to 0.0.0.0
     volumes:
       - ./Keycloak/Realms:/opt/keycloak/data/import
     depends_on:
