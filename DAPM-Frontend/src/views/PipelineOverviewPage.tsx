@@ -2,16 +2,30 @@ import { Box } from "@mui/material";
 import Header from '../components/headers/Header.tsx';
 import Sidebar from '../components/sidebars/Sidebar.tsx'
 import MainContent from '../components/overviews/PipelineOverview.tsx'
-import BackButton from "../components/buttons/BackButton.tsx";
-import OrganizationSidebar from "../components/sidebars/OrganizationSidebar.tsx";
-import PipelineAppBar from "../components/pipelineComposers/PipelineAppBar.tsx";
-import PipelineGrid from "../components/overviews/old_PipelineOverview.tsx";
-import Stack from '@mui/material/Stack';
+import { useEffect, useState } from "react";
 
-const PipelineOverviewPage: React.FC = () => { 
+interface PipelineOverviewPageProps {
+  user: any;
+}
+
+const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => { 
+    const [info, setInfo] = useState<any>(null);
+    console.log(user);
+    useEffect(() => {
+      const getUserInfo = async () => {
+        const response = await user;
+        console.log(response);
+        setInfo(response);
+      };
+
+      getUserInfo();
+    }, [user]);
+
+    console.log(info);
+
     return (
         <>
-             <Header />
+             <Header userInfo={info}/>
              <Box sx={{ display: 'flex', height: '100vh' }}>
                <Sidebar />
                <MainContent />
