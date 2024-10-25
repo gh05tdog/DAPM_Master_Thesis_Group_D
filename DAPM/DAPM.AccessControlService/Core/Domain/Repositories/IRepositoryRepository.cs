@@ -7,4 +7,5 @@ public interface IRepositoryRepository
     Task CreateUserRepository(UserRepository userRepository);
     Task<ICollection<RepositoryId>> ReadRepositoriesForUser(UserId userId);
     Task DeleteUserRepository(UserRepository userRepository);
+    Task<ICollection<UserRepository>> ReadAllUserRepositories();
 }
