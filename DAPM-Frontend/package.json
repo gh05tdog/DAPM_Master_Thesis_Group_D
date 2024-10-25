@@ -6,10 +6,11 @@
   "main": "/",
   "type": "module",
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
-    "@mui/material": "^5.15.13",
+    "@mui/joy": "^5.0.0-beta.48",
+    "@mui/material": "^5.16.7",
     "@react-keycloak/web": "^3.4.0",
     "@reduxjs/toolkit": "^2.2.2",
     "@testing-library/jest-dom": "^5.17.0",
@@ -17,8 +18,8 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.89",
-    "@types/react": "^18.2.65",
-    "@types/react-dom": "^18.2.22",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "@types/uuid": "^9.0.8",
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
@@ -63,7 +64,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1",
-    "@types/node": "^16.18.89"
+    "@types/node": "^16.18.89",
+    "gh-pages": "^6.1.1"
   }
 }
