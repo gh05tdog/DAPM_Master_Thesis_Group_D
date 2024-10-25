@@ -42,4 +42,16 @@ public class PipelineRepositoryTests
         var pipelines = await repository.ReadPipelinesForUser(userId);
         Assert.DoesNotContain(pipelines, p => p.Id == pipelineId.Id);
     }
+    
+    [Fact]
+    public async Task ReadAllPipelines_ShouldReturnPipelines()
+    {
+        var userId = new UserId(Guid.NewGuid());
+        var pipelineId = new PipelineId(Guid.NewGuid());
+
+        await repository.CreateUserPipeline(new UserPipeline(userId, pipelineId));
+
+        var pipelines = await repository.ReadAllUserPipelines();
+        Assert.Contains(pipelines, p => p.PipelineId.Id == pipelineId.Id);
+    }
 }
