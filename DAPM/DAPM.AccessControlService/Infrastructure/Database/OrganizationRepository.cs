@@ -51,7 +51,9 @@ public class OrganizationRepository : IOrganizationRepository
                 SELECT UserId, OrganizationId
                 FROM UserOrganizations;
             ";
-        var userOrganizations = await dbConnection.QueryAsync<UserOrganization>(sql);
-        return userOrganizations.ToList();
+        var userOrganizations = await dbConnection.QueryAsync<(string, string)>(sql);
+        return userOrganizations
+            .Select(x => new UserOrganization(new UserId(Guid.Parse(x.Item1)), new OrganizationId(Guid.Parse(x.Item2))))
+            .ToList();
     }
 }

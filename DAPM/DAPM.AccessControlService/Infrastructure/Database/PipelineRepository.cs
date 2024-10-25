@@ -55,7 +55,10 @@ public class PipelineRepository : IPipelineRepository
                 FROM UserPipelines;
             ";
         
-        var userPipelines = await dbConnection.QueryAsync<UserPipeline>(sql);
-        return userPipelines.ToList();
+        var userPipelines = await dbConnection.QueryAsync<(string, string)>(sql);
+        return userPipelines
+            .Select(x => new UserPipeline(new UserId(Guid.Parse(x.Item1)), new PipelineId(Guid.Parse(x.Item2))))
+            .ToList();
+
     }
 }
