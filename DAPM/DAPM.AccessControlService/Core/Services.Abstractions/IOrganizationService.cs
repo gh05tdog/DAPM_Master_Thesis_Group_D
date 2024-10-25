@@ -7,5 +7,5 @@ public interface IOrganizationService
     Task<bool> AddUserOrganization(UserDto user, OrganizationDto organization);
     Task<ICollection<OrganizationDto>> GetOrganizationsForUser(UserDto user);
     Task<bool> RemoveUserOrganization(UserDto user, OrganizationDto organization);
-    Task<ICollection<OrganizationDto>> GetAllUserOrganizations();
+    Task<ICollection<UserOrganizationDto>> GetAllUserOrganizations();
 }

@@ -7,5 +7,5 @@ public interface IResourceService
     Task<bool> AddUserResource(UserDto user, ResourceDto resource);
     Task<ICollection<ResourceDto>> GetResourcesForUser(UserDto user);
     Task<bool> RemoveUserResource(UserDto user, ResourceDto resource);
-    Task<ICollection<ResourceDto>> GetAllUserResources();
+    Task<ICollection<UserResourceDto>> GetAllUserResources();
 }

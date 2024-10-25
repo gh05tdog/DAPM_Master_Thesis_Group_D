@@ -2,6 +2,6 @@ namespace RabbitMQLibrary.Models.AccessControl;
 
 public class UserPipelineDto
 {
-    Guid UserId { get; set; }
-    Guid PipelineId { get; set; }
+    public Guid UserId { get; set; }
+    public Guid PipelineId { get; set; }
 }
