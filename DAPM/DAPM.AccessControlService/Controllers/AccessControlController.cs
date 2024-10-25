@@ -115,4 +115,36 @@ public class AccessControlController : ControllerBase
         var response = await accessControlFacade.RemoveUserOrganization(message);
         return Ok(response);
     }
+    
+    [HttpGet]
+    [Route("get-all-user-organizations")]
+    public async Task<IActionResult> GetAllUserOrganizations()
+    {
+        var response = await accessControlFacade.GetAllUserOrganizations();
+        return Ok(response);
+    }
+    
+    [HttpGet]
+    [Route("get-all-user-pipelines")]
+    public async Task<IActionResult> GetAllUserPipelines()
+    {
+        var response = await accessControlFacade.GetAllUserPipelines();
+        return Ok(response);
+    }
+    
+    [HttpGet]
+    [Route("get-all-user-repositories")]
+    public async Task<IActionResult> GetAllUserRepositories()
+    {
+        var response = await accessControlFacade.GetAllUserRepositories();
+        return Ok(response);
+    }
+    
+    [HttpGet]
+    [Route("get-all-user-resources")]
+    public async Task<IActionResult> GetAllUserResources()
+    {
+        var response = await accessControlFacade.GetAllUserResources();
+        return Ok(response);
+    }
 }
