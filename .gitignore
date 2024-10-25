@@ -537,6 +537,9 @@ fabric.properties
 #Keycloak
 /keycloak-26.0.0/*
 
+# E2E UI test reports
+/E2E UI test/output/*
+
 ### VisualStudio ###
 
 # User-specific files
