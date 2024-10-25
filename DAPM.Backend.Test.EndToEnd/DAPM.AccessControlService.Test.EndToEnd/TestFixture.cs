@@ -9,9 +9,11 @@ public class TestFixture
      public const string AddUserPipelineRoute = "add-user-pipeline";
      public const string AddUserResourceRoute = "add-user-resource";
      public const string AddUserRepositoryRoute = "add-user-repository";
+     public const string AddUserOrganizationRoute = "add-user-organization";
      public const string GetUserPipelinesRoute = "get-pipelines-for-user";
      public const string GetUserResourcesRoute = "get-resources-for-user";
      public const string GetUserRepositoriesRoute = "get-repositories-for-user";
+     public const string GetUserOrganizationsRoute = "get-organizations-for-user";
      
      public TestFixture()
      {

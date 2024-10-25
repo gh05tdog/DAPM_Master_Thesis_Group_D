@@ -1,10 +1,12 @@
 using System.Data;
 using System.Data.SqlClient;
+using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Services;
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Database;
+using DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,15 +29,23 @@ builder.Services.AddTransient<IDbConnection>(sp =>
     return new SqlConnection(connectionString);
 });
 
+// Add table initializers
+builder.Services.AddSingleton<ITableInitializer<UserRepository>, RepositoryTableInitializer>();
+builder.Services.AddSingleton<ITableInitializer<UserResource>, ResourceTableInitializer>();
+builder.Services.AddSingleton<ITableInitializer<UserOrganization>, OrganizationTableInitializer>();
+builder.Services.AddSingleton<ITableInitializer<UserPipeline>, PipelineTableInitializer>();
+
 // Add repositories
 builder.Services.AddSingleton<IPipelineRepository, PipelineRepository>();
 builder.Services.AddSingleton<IRepositoryRepository, RepositoryRepository>();
 builder.Services.AddSingleton<IResourceRepository, ResourceRepository>();
+builder.Services.AddSingleton<IOrganizationRepository, OrganizationRepository>();
 
 // Add services
 builder.Services.AddSingleton<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<IRepositoryService, RepositoryService>();
 builder.Services.AddSingleton<IResourceService, ResourceService>();
+builder.Services.AddSingleton<IOrganizationService, OrganizationService>();
 
 // Add facade
 builder.Services.AddSingleton<IAccessControlFacade, AccessControlFacade>();
