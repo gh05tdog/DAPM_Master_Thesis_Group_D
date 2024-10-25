@@ -17,7 +17,7 @@ public class RepositoryRepository : IRepositoryRepository
         tableInitializer.InitializeTable().Wait();
     }
     
-    public async Task AddUserRepository(UserId userId, RepositoryId repositoryId)
+    public async Task CreateUserRepository(UserId userId, RepositoryId repositoryId)
     {
         const string sql = @"
                 INSERT INTO UserRepositories (UserId, RepositoryId)
@@ -27,7 +27,7 @@ public class RepositoryRepository : IRepositoryRepository
         await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, RepositoryId = repositoryId.Id });
     }
 
-    public async Task<ICollection<RepositoryId>> GetRepositoriesForUser(UserId userId)
+    public async Task<ICollection<RepositoryId>> ReadRepositoriesForUser(UserId userId)
     {
         const string sql = @"
                 SELECT RepositoryId

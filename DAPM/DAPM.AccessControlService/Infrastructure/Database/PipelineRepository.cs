@@ -16,7 +16,7 @@ public class PipelineRepository : IPipelineRepository
         tableInitializer.InitializeTable().Wait();
     }
     
-    public async Task AddUserPipeline(UserId userId, PipelineId pipelineId)
+    public async Task CreateUserPipeline(UserId userId, PipelineId pipelineId)
     {
         const string sql = @"
                 INSERT INTO UserPipelines (UserId, PipelineId)
@@ -26,7 +26,7 @@ public class PipelineRepository : IPipelineRepository
         await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, PipelineId = pipelineId.Id });
     }
 
-    public async Task<ICollection<PipelineId>> GetPipelinesForUser(UserId userId)
+    public async Task<ICollection<PipelineId>> ReadPipelinesForUser(UserId userId)
     {
         const string sql = @"
                 SELECT PipelineId

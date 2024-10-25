@@ -18,14 +18,14 @@ public class OrganizationService : IOrganizationService
     {
         var userId = user.ToUserId();
         var organizationId = organization.ToOrganizationId();
-        await organizationRepository.AddUserOrganization(userId, organizationId);
+        await organizationRepository.CreateUserOrganization(userId, organizationId);
         return true;
     }
 
     public async Task<ICollection<OrganizationDto>> GetOrganizationsForUser(UserDto user)
     {
         var userId = user.ToUserId();
-        var organizationIds = await organizationRepository.GetOrganizationsForUser(userId);
+        var organizationIds = await organizationRepository.ReadOrganizationsForUser(userId);
         return organizationIds.Select(o => new OrganizationDto{Id = o.Id}).ToList();
     }
 }

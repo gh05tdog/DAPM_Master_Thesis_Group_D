@@ -18,14 +18,14 @@ public class ResourceService : IResourceService
     {
         var userId = user.ToUserId();
         var resourceId = resource.ToResourceId();
-        await resourceRepository.AddUserResource(userId, resourceId);
+        await resourceRepository.CreateUserResource(userId, resourceId);
         return true;
     }
 
     public async Task<ICollection<ResourceDto>> GetResourcesForUser(UserDto user)
     {
         var userId = user.ToUserId();
-        var resourceIds = await resourceRepository.GetResourcesForUser(userId);
+        var resourceIds = await resourceRepository.ReadResourcesForUser(userId);
         return resourceIds.Select(r => new ResourceDto{Id = r.Id}).ToList();
     }
 }

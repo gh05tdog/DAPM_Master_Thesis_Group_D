@@ -18,14 +18,14 @@ public class PipelineService : IPipelineService
     {
         var userId = user.ToUserId();
         var pipelineId = pipeline.ToPipelineId();
-        await pipelineRepository.AddUserPipeline(userId, pipelineId);
+        await pipelineRepository.CreateUserPipeline(userId, pipelineId);
         return true;
     }
 
     public async Task<ICollection<PipelineDto>> GetPipelinesForUser(UserDto user)
     {
         var userId = user.ToUserId();
-        var pipelineIds = await pipelineRepository.GetPipelinesForUser(userId);
+        var pipelineIds = await pipelineRepository.ReadPipelinesForUser(userId);
         return pipelineIds.Select(p => new PipelineDto{Id = p.Id}).ToList();
     }
 }

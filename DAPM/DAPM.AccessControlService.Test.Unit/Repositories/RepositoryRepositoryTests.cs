@@ -25,9 +25,9 @@ public class RepositoryRepositoryTests
         var userId = new UserId(Guid.NewGuid());
         var repositoryId = new RepositoryId(Guid.NewGuid());
 
-        await repository.AddUserRepository(userId, repositoryId);
+        await repository.CreateUserRepository(userId, repositoryId);
 
-        var repositories = await repository.GetRepositoriesForUser(userId);
+        var repositories = await repository.ReadRepositoriesForUser(userId);
         Assert.Contains(repositories, p => p.Id == repositoryId.Id);
     }
 }

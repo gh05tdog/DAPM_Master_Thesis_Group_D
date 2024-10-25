@@ -4,7 +4,7 @@ namespace DAPM.AccessControlService.Core.Domain.Repositories;
 
 public interface IPipelineRepository
 {
-    Task AddUserPipeline(UserId userId, PipelineId pipelineId);
-    Task<ICollection<PipelineId>> GetPipelinesForUser(UserId userId);
+    Task CreateUserPipeline(UserId userId, PipelineId pipelineId);
+    Task<ICollection<PipelineId>> ReadPipelinesForUser(UserId userId);
     
 }

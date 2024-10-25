@@ -16,7 +16,7 @@ public class OrganizationRepository : IOrganizationRepository
         tableInitializer.InitializeTable().Wait();
     }
 
-    public async Task AddUserOrganization(UserId userId, OrganizationId organizationId)
+    public async Task CreateUserOrganization(UserId userId, OrganizationId organizationId)
     {
         const string sql = @"
                 INSERT INTO UserOrganizations (UserId, OrganizationId)
@@ -25,7 +25,7 @@ public class OrganizationRepository : IOrganizationRepository
         await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, OrganizationId = organizationId.Id });
     }
 
-    public async Task<ICollection<OrganizationId>> GetOrganizationsForUser(UserId userId)
+    public async Task<ICollection<OrganizationId>> ReadOrganizationsForUser(UserId userId)
     {
         const string sql = @"
                 SELECT OrganizationId

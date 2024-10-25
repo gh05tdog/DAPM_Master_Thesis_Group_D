@@ -24,9 +24,9 @@ public class PipelineRepositoryTests
         var userId = new UserId(Guid.NewGuid());
         var pipelineId = new PipelineId(Guid.NewGuid());
 
-        await repository.AddUserPipeline(userId, pipelineId);
+        await repository.CreateUserPipeline(userId, pipelineId);
 
-        var pipelines = await repository.GetPipelinesForUser(userId);
+        var pipelines = await repository.ReadPipelinesForUser(userId);
         Assert.Contains(pipelines, p => p.Id == pipelineId.Id);
     }
 }

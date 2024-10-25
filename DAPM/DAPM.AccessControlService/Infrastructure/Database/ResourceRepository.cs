@@ -17,7 +17,7 @@ public class ResourceRepository : IResourceRepository
         tableInitializer.InitializeTable().Wait();
     }
 
-    public async Task AddUserResource(UserId userId, ResourceId resourceId)
+    public async Task CreateUserResource(UserId userId, ResourceId resourceId)
     {
         const string sql = @"
                 INSERT INTO UserResources (UserId, ResourceId)
@@ -27,7 +27,7 @@ public class ResourceRepository : IResourceRepository
         await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, ResourceId = resourceId.Id });
     }
 
-    public async Task<ICollection<ResourceId>> GetResourcesForUser(UserId userId)
+    public async Task<ICollection<ResourceId>> ReadResourcesForUser(UserId userId)
     {
         const string sql = @"
                 SELECT ResourceId

@@ -4,6 +4,6 @@ namespace DAPM.AccessControlService.Core.Domain.Repositories;
 
 public interface IRepositoryRepository
 {
-    Task AddUserRepository(UserId userId, RepositoryId repositoryId);
-    Task<ICollection<RepositoryId>> GetRepositoriesForUser(UserId userId);
+    Task CreateUserRepository(UserId userId, RepositoryId repositoryId);
+    Task<ICollection<RepositoryId>> ReadRepositoriesForUser(UserId userId);
 }

@@ -23,9 +23,9 @@ public class ResourceRepositoryTests
         var userId = new UserId(Guid.NewGuid());
         var resourceId = new ResourceId(Guid.NewGuid());
 
-        await repository.AddUserResource(userId, resourceId);
+        await repository.CreateUserResource(userId, resourceId);
 
-        var resources = await repository.GetResourcesForUser(userId);
+        var resources = await repository.ReadResourcesForUser(userId);
         Assert.Contains(resources, p => p.Id == resourceId.Id);
     }
 }

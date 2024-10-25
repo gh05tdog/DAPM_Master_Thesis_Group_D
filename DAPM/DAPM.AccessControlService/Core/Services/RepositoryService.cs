@@ -18,14 +18,14 @@ public class RepositoryService : IRepositoryService
     {
         var userId = user.ToUserId();
         var repositoryId = repository.ToRepositoryId();
-        await repositoryRepository.AddUserRepository(userId, repositoryId);
+        await repositoryRepository.CreateUserRepository(userId, repositoryId);
         return true;
     }
 
     public async Task<ICollection<RepositoryDto>> GetRepositoriesForUser(UserDto user)
     {
         var userId = user.ToUserId();
-        var repositoryIds = await repositoryRepository.GetRepositoriesForUser(userId);
+        var repositoryIds = await repositoryRepository.ReadRepositoriesForUser(userId);
         return repositoryIds.Select(r => new RepositoryDto{Id = r.Id}).ToList();
     }
 }
