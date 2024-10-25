@@ -44,4 +44,14 @@ public class OrganizationRepository : IOrganizationRepository
             ";
         await dbConnection.ExecuteAsync(sql, new { UserId = userOrganization.UserId.Id, OrganizationId = userOrganization.OrganizationId.Id });
     }
+    
+    public async Task<ICollection<UserOrganization>> ReadAllUserOrganizations()
+    {
+        const string sql = @"
+                SELECT UserId, OrganizationId
+                FROM UserOrganizations;
+            ";
+        var userOrganizations = await dbConnection.QueryAsync<UserOrganization>(sql);
+        return userOrganizations.ToList();
+    }
 }

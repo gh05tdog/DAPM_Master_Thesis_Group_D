@@ -48,4 +48,15 @@ public class ResourceRepository : IResourceRepository
         
         await dbConnection.ExecuteAsync(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
     }
+    
+    public async Task<ICollection<UserResource>> ReadAllUserResources()
+    {
+        const string sql = @"
+                SELECT UserId, ResourceId
+                FROM UserResources;
+            ";
+        
+        var userResources = await dbConnection.QueryAsync<UserResource>(sql);
+        return userResources.ToList();
+    }
 }
