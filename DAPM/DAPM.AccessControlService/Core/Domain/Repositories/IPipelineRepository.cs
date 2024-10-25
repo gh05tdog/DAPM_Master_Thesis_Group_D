@@ -6,5 +6,6 @@ public interface IPipelineRepository
 {
     Task CreateUserPipeline(UserPipeline userPipeline);
     Task<ICollection<PipelineId>> ReadPipelinesForUser(UserId userId);
+    Task DeleteUserPipeline(UserPipeline userPipeline);
     
 }
