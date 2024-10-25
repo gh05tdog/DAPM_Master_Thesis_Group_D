@@ -1,34 +1,32 @@
 using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Infrastructure.Database;
+using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
 using Microsoft.Data.Sqlite;
 
 namespace DAPM.AccessControlService.Test.Unit.Repositories;
 
 public class PipelineRepositoryTests
 {
-    private IDbConnection CreateInMemoryDatabase()
+    private readonly IPipelineRepository repository;
+
+    public PipelineRepositoryTests()
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
-        
-        return connection;
+        repository = new PipelineRepository(connection, new PipelineTableInitializer(connection));
     }
-    
     
     [Fact]
     public async Task AddUserPipeline_ShouldAddPipeline()
     {
-        using var connection = CreateInMemoryDatabase();
-        var repository = new PipelineRepository(connection);
-        await repository.InitializeScheme(TestHelper.PipelineInitSql);
-
         var userId = new UserId(Guid.NewGuid());
         var pipelineId = new PipelineId(Guid.NewGuid());
 
-        await repository.AddUserPipeline(userId, pipelineId);
+        await repository.CreateUserPipeline(new UserPipeline(userId, pipelineId));
 
-        var pipelines = await repository.GetPipelinesForUser(userId);
+        var pipelines = await repository.ReadPipelinesForUser(userId);
         Assert.Contains(pipelines, p => p.Id == pipelineId.Id);
     }
 }

@@ -2,6 +2,7 @@ using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using Dapper;
 using System.Data;
+using DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
 
 namespace DAPM.AccessControlService.Infrastructure.Database;
 
@@ -10,52 +11,24 @@ public class ResourceRepository : IResourceRepository
     private readonly IDbConnection dbConnection;
     private bool initialized;
 
-    public ResourceRepository(IDbConnection dbConnection)
+    public ResourceRepository(IDbConnection dbConnection, ITableInitializer<UserResource> tableInitializer)
     {
         this.dbConnection = dbConnection;
+        tableInitializer.InitializeTable().Wait();
     }
 
-    public async Task InitializeScheme()
+    public async Task CreateUserResource(UserResource userResource)
     {
-        const string sql = @"
-            IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserResources' AND xtype='U')
-            BEGIN
-                CREATE TABLE UserResources (
-                    UserId NVARCHAR(50) NOT NULL,
-                    ResourceId NVARCHAR(50) NOT NULL,
-                    PRIMARY KEY (UserId, ResourceId)
-                );
-            END
-        ";
-        
-        await dbConnection.ExecuteAsync(sql);
-        initialized = true;
-    }
-
-    public async Task InitializeScheme(string sql)
-    {
-        await dbConnection.ExecuteAsync(sql);
-        initialized = true;
-    }
-
-    public async Task AddUserResource(UserId userId, ResourceId resourceId)
-    {
-        if (!initialized)
-            await InitializeScheme();
-        
         const string sql = @"
                 INSERT INTO UserResources (UserId, ResourceId)
                 VALUES (@UserId, @ResourceId);
             ";
         
-        await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, ResourceId = resourceId.Id });
+        await dbConnection.ExecuteAsync(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
     }
 
-    public async Task<ICollection<ResourceId>> GetResourcesForUser(UserId userId)
+    public async Task<ICollection<ResourceId>> ReadResourcesForUser(UserId userId)
     {
-        if (!initialized)
-            await InitializeScheme();
-        
         const string sql = @"
                 SELECT ResourceId
                 FROM UserResources

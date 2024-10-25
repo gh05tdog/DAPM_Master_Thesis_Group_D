@@ -1,3 +1,4 @@
+using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using RabbitMQLibrary.Messages.AccessControl.Requests;
 using RabbitMQLibrary.Messages.AccessControl.Responses;
@@ -9,12 +10,14 @@ public class AccessControlFacade : IAccessControlFacade
     private readonly IPipelineService pipelineService;
     private readonly IResourceService resourceService;
     private readonly IRepositoryService repositoryService;
+    private readonly IOrganizationService organizationService;
     
-    public AccessControlFacade(IPipelineService pipelineService, IResourceService resourceService, IRepositoryService repositoryService)
+    public AccessControlFacade(IPipelineService pipelineService, IResourceService resourceService, IRepositoryService repositoryService, IOrganizationService organizationService)
     {
         this.pipelineService = pipelineService;
         this.resourceService = resourceService;
         this.repositoryService = repositoryService;
+        this.organizationService = organizationService;
     }
 
     public async Task<AddUserPipelineResponseMessage> AddUserPipeline(AddUserPipelineRequestMessage message)
@@ -39,6 +42,15 @@ public class AccessControlFacade : IAccessControlFacade
     {
         await resourceService.AddUserResource(message.User, message.Resource);
         return new AddUserResourceResponseMessage()
+        {
+            Success = true
+        };
+    }
+    
+    public async Task<AddUserOrganizationResponseMessage> AddUserOrganization(AddUserOrganizationRequestMessage message)
+    {
+        await organizationService.AddUserOrganization(message.User, message.Organization);
+        return new AddUserOrganizationResponseMessage()
         {
             Success = true
         };
@@ -68,6 +80,15 @@ public class AccessControlFacade : IAccessControlFacade
         return new GetResourcesForUserResponseMessage()
         {
             Resources = resources
+        };
+    }
+    
+    public async Task<GetOrganizationsForUserResponseMessage> GetOrganizationsForUser(GetOrganizationsForUserRequestMessage message)
+    {
+        var organizations = await organizationService.GetOrganizationsForUser(message.User);
+        return new GetOrganizationsForUserResponseMessage()
+        {
+            Organizations = organizations
         };
     }
 }

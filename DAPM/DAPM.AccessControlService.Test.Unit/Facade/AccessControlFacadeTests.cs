@@ -11,12 +11,14 @@ public class AccessControlFacadeTests
     private readonly Mock<IPipelineService> pipelineServiceMock;
     private readonly Mock<IResourceService> resourceServiceMock;
     private readonly Mock<IRepositoryService> repositoryServiceMock;
+    private readonly Mock<IOrganizationService> organizationServiceMock;
 
     public AccessControlFacadeTests()
     {
         pipelineServiceMock = new Mock<IPipelineService>();
         resourceServiceMock = new Mock<IResourceService>();
         repositoryServiceMock = new Mock<IRepositoryService>();
+        organizationServiceMock = new Mock<IOrganizationService>();
     }
 
     [Fact]
@@ -29,7 +31,7 @@ public class AccessControlFacadeTests
         pipelineServiceMock.Setup(service => service.AddUserPipeline(user, pipeline)).ReturnsAsync(true);
         pipelineServiceMock.Setup(service => service.GetPipelinesForUser(user)).ReturnsAsync(new List<PipelineDto>{pipeline});;
         
-        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object);
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
         
         var addUserPipelineResponseMessage = await accessControlFacade.AddUserPipeline(addUserPipelineRequestMessage);
         Assert.True(addUserPipelineResponseMessage.Success);
@@ -53,7 +55,7 @@ public class AccessControlFacadeTests
         resourceServiceMock.Setup(service => service.AddUserResource(user, resource)).ReturnsAsync(true);
         resourceServiceMock.Setup(service => service.GetResourcesForUser(user)).ReturnsAsync(new List<ResourceDto>{resource});;
         
-        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object);
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
         
         var addUserResourceResponseMessage = await accessControlFacade.AddUserResource(addUserResourceRequestMessage);
         Assert.True(addUserResourceResponseMessage.Success);
@@ -77,7 +79,7 @@ public class AccessControlFacadeTests
         repositoryServiceMock.Setup(service => service.AddUserRepository(user, repository)).ReturnsAsync(true);
         repositoryServiceMock.Setup(service => service.GetRepositoriesForUser(user)).ReturnsAsync(new List<RepositoryDto>{repository});;
         
-        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object);
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
         
         var addUserRepositoryResponseMessage = await accessControlFacade.AddUserRepository(addUserRepositoryRequestMessage);
         Assert.True(addUserRepositoryResponseMessage.Success);
@@ -89,5 +91,29 @@ public class AccessControlFacadeTests
         
         repositoryServiceMock.Verify(service => service.AddUserRepository(user, repository), Times.Once);
         repositoryServiceMock.Verify(service => service.GetRepositoriesForUser(user), Times.Once);
+    }
+    
+    [Fact]
+    public async Task AddUserOrganization_ShouldResult_UserHasAccessToOrganization()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var organization = new OrganizationDto() { Id = Guid.NewGuid() };
+        var addUserOrganizationRequestMessage = new AddUserOrganizationRequestMessage() { User = user, Organization = organization };
+
+        organizationServiceMock.Setup(service => service.AddUserOrganization(user, organization)).ReturnsAsync(true);
+        organizationServiceMock.Setup(service => service.GetOrganizationsForUser(user)).ReturnsAsync(new List<OrganizationDto>{organization});;
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var addUserRepositoryResponseMessage = await accessControlFacade.AddUserOrganization(addUserOrganizationRequestMessage);
+        Assert.True(addUserRepositoryResponseMessage.Success);
+        
+        var getOrganizationsForUserRequestMessage = new GetOrganizationsForUserRequestMessage() { User = user };
+        var organizations = (await accessControlFacade.GetOrganizationsForUser(getOrganizationsForUserRequestMessage)).Organizations;
+
+        Assert.Contains(organizations, p => p.Id == organization.Id);
+        
+        organizationServiceMock.Verify(service => service.AddUserOrganization(user, organization), Times.Once);
+        organizationServiceMock.Verify(service => service.GetOrganizationsForUser(user), Times.Once);
     }
 }
