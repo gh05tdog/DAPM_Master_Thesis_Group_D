@@ -46,4 +46,18 @@ public class OrganizationServiceTests
         var organizations = await service.GetOrganizationsForUser(user);
         Assert.DoesNotContain(organizations, p => p.Id == organization.Id);
     }
+    
+    [Fact]
+    public async Task ReadAllOrganizations_ShouldReturnOrganizations()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var organization = new OrganizationDto{Id = Guid.NewGuid()};
+
+        await service.AddUserOrganization(user, organization);
+
+        var organizations = await service.GetAllUserOrganizations();
+        Assert.Contains(organizations, p => p.OrganizationId == organization.Id);
+    }
 }

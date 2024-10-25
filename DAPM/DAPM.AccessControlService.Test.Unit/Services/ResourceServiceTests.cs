@@ -46,4 +46,18 @@ public class ResourceServiceTests
         var resources = await service.GetResourcesForUser(user);
         Assert.DoesNotContain(resources, p => p.Id == resource.Id);
     }
+    
+    [Fact]
+    public async Task ReadAllResources_ShouldReturnResources()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var resource = new ResourceDto{Id = Guid.NewGuid()};
+
+        await service.AddUserResource(user, resource);
+
+        var resources = await service.GetAllUserResources();
+        Assert.Contains(resources, p => p.ResourceId == resource.Id);
+    }
 }
