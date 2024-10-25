@@ -40,6 +40,14 @@ public class AccessControlController : ControllerBase
         return Ok(response);
     }
     
+    [HttpPost]
+    [Route("add-user-organization")]
+    public async Task<IActionResult> AddUserOrganization([FromBody] AddUserOrganizationRequestMessage message)
+    {
+        var response = await accessControlFacade.AddUserOrganization(message);
+        return Ok(response);
+    }
+    
     [HttpGet]
     [Route("get-pipelines-for-user/{userId}")]
     public async Task<IActionResult> GetPipelinesForUser(Guid userId)
@@ -64,6 +72,15 @@ public class AccessControlController : ControllerBase
     {
         var message = new GetResourcesForUserRequestMessage{ User = new UserDto{ Id = userId} };
         var response = await accessControlFacade.GetResourcesForUser(message);
+        return Ok(response);
+    }
+    
+    [HttpGet]
+    [Route("get-organizations-for-user/{userId}")]
+    public async Task<IActionResult> GetOrganizationsForUser(Guid userId)
+    {
+        var message = new GetOrganizationsForUserRequestMessage{ User = new UserDto{ Id = userId} };
+        var response = await accessControlFacade.GetOrganizationsForUser(message);
         return Ok(response);
     }
 }

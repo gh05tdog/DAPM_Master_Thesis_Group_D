@@ -8,7 +8,9 @@ public interface IAccessControlFacade
     Task<AddUserPipelineResponseMessage> AddUserPipeline(AddUserPipelineRequestMessage message);
     Task<AddUserRepositoryResponseMessage> AddUserRepository(AddUserRepositoryRequestMessage message);
     Task<AddUserResourceResponseMessage> AddUserResource(AddUserResourceRequestMessage message);
+    Task<AddUserOrganizationResponseMessage> AddUserOrganization(AddUserOrganizationRequestMessage message);
     Task<GetPipelinesForUserResponseMessage> GetPipelinesForUser(GetPipelinesForUserRequestMessage message);
     Task<GetRepositoriesForUserResponseMessage> GetRepositoriesForUser(GetRepositoriesForUserRequestMessage message);
     Task<GetResourcesForUserResponseMessage> GetResourcesForUser(GetResourcesForUserRequestMessage message);
+    Task<GetOrganizationsForUserResponseMessage> GetOrganizationsForUser(GetOrganizationsForUserRequestMessage message);
 }
