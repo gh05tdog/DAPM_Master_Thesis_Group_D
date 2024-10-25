@@ -37,4 +37,14 @@ public class PipelineService : IPipelineService
         await pipelineRepository.DeleteUserPipeline(new UserPipeline(userId, pipelineId));
         return true;
     }
+    
+    public async Task<ICollection<UserPipelineDto>> GetAllUserPipelines()
+    {
+        var userPipelines = await pipelineRepository.ReadAllUserPipelines();
+        return userPipelines.Select(up => new UserPipelineDto
+        {
+            UserId = up.UserId.Id,
+            PipelineId = up.PipelineId.Id
+        }).ToList();
+    }
 }

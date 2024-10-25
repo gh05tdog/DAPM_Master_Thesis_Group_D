@@ -37,4 +37,14 @@ public class RepositoryService : IRepositoryService
         await repositoryRepository.DeleteUserRepository(new UserRepository(userId, repositoryId));
         return true;
     }
+    
+    public async Task<ICollection<UserRepositoryDto>> GetAllUserRepositories()
+    {
+        var userRepositories = await repositoryRepository.ReadAllUserRepositories();
+        return userRepositories.Select(ur => new UserRepositoryDto
+        {
+            UserId = ur.UserId.Id,
+            RepositoryId = ur.RepositoryId.Id
+        }).ToList();
+    }
 }
