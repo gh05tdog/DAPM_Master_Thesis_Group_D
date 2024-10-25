@@ -1,9 +1,10 @@
 using System.Data;
+using DAPM.AccessControlService.Core.Domain.Entities;
 using Dapper;
 
 namespace DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
 
-public class PipelineTableInitializer : ITableInitializer
+public class PipelineTableInitializer : ITableInitializer<UserPipeline>
 {
     private readonly IDbConnection dbConnection;
 

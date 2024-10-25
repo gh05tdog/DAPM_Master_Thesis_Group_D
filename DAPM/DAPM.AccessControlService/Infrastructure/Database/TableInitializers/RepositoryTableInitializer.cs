@@ -1,9 +1,10 @@
 using System.Data;
+using DAPM.AccessControlService.Core.Domain.Entities;
 using Dapper;
 
 namespace DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
 
-public class RepositoryTableInitializer : ITableInitializer
+public class RepositoryTableInitializer : ITableInitializer<UserRepository>
 {
     private readonly IDbConnection dbConnection;
 

@@ -1,9 +1,10 @@
 using System.Data;
+using DAPM.AccessControlService.Core.Domain.Entities;
 using Dapper;
 
 namespace DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
 
-public class OrganizationTableInitializer : ITableInitializer
+public class OrganizationTableInitializer : ITableInitializer<UserOrganization>
 {
     private readonly IDbConnection dbConnection;
 
