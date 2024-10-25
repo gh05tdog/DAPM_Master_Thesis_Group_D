@@ -83,4 +83,36 @@ public class AccessControlController : ControllerBase
         var response = await accessControlFacade.GetOrganizationsForUser(message);
         return Ok(response);
     }
+    
+    [HttpPost]
+    [Route("remove-user-resource")]
+    public async Task<IActionResult> RemoveUserResource([FromBody] RemoveUserResourceRequestMessage message)
+    {
+        var response = await accessControlFacade.RemoveUserResource(message);
+        return Ok(response);
+    }
+    
+    [HttpPost]
+    [Route("remove-user-repository")]
+    public async Task<IActionResult> RemoveUserRepository([FromBody] RemoveUserRepositoryRequestMessage message)
+    {
+        var response = await accessControlFacade.RemoveUserRepository(message);
+        return Ok(response);
+    }
+    
+    [HttpPost]
+    [Route("remove-user-pipeline")]
+    public async Task<IActionResult> RemoveUserPipeline([FromBody] RemoveUserPipelineRequestMessage message)
+    {
+        var response = await accessControlFacade.RemoveUserPipeline(message);
+        return Ok(response);
+    }
+    
+    [HttpPost]
+    [Route("remove-user-organization")]
+    public async Task<IActionResult> RemoveUserOrganization([FromBody] RemoveUserOrganizationRequestMessage message)
+    {
+        var response = await accessControlFacade.RemoveUserOrganization(message);
+        return Ok(response);
+    }
 }

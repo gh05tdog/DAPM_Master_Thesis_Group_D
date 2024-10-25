@@ -37,4 +37,14 @@ public class PipelineRepository : IPipelineRepository
         var pipelineIds = await dbConnection.QueryAsync<String>(sql, new { UserId = userId.Id });
         return pipelineIds.Select(id => new PipelineId(Guid.Parse(id))).ToList();
     }
+    
+    public async Task DeleteUserPipeline(UserPipeline userPipeline)
+    {
+        const string sql = @"
+                DELETE FROM UserPipelines
+                WHERE UserId = @UserId AND PipelineId = @PipelineId;
+            ";
+        
+        await dbConnection.ExecuteAsync(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
+    }
 }

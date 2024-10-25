@@ -29,4 +29,12 @@ public class OrganizationService : IOrganizationService
         var organizationIds = await organizationRepository.ReadOrganizationsForUser(userId);
         return organizationIds.Select(o => new OrganizationDto{Id = o.Id}).ToList();
     }
+    
+    public async Task<bool> RemoveUserOrganization(UserDto user, OrganizationDto organization)
+    {
+        var userId = user.ToUserId();
+        var organizationId = organization.ToOrganizationId();
+        await organizationRepository.DeleteUserOrganization(new UserOrganization(userId, organizationId));
+        return true;
+    }
 }

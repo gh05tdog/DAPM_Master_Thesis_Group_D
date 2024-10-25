@@ -116,4 +116,100 @@ public class AccessControlFacadeTests
         organizationServiceMock.Verify(service => service.AddUserOrganization(user, organization), Times.Once);
         organizationServiceMock.Verify(service => service.GetOrganizationsForUser(user), Times.Once);
     }
+    
+    [Fact]
+    public async Task RemoveUserPipeline_ShouldResult_UserDoesNotHaveAccessToPipeline()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var pipeline = new PipelineDto { Id = Guid.NewGuid() };
+        var removeUserPipelineRequestMessage = new RemoveUserPipelineRequestMessage { User = user, Pipeline = pipeline };
+
+        pipelineServiceMock.Setup(service => service.RemoveUserPipeline(user, pipeline)).ReturnsAsync(true);
+        pipelineServiceMock.Setup(service => service.GetPipelinesForUser(user)).ReturnsAsync(new List<PipelineDto>());
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var removeUserPipelineResponseMessage = await accessControlFacade.RemoveUserPipeline(removeUserPipelineRequestMessage);
+        Assert.True(removeUserPipelineResponseMessage.Success);
+        
+        var getPipelineForUserRequestMessage = new GetPipelinesForUserRequestMessage { User = user };
+        var pipelines = (await accessControlFacade.GetPipelinesForUser(getPipelineForUserRequestMessage)).Pipelines;
+
+        Assert.DoesNotContain(pipelines, p => p.Id == pipeline.Id);
+        
+        pipelineServiceMock.Verify(service => service.RemoveUserPipeline(user, pipeline), Times.Once);
+        pipelineServiceMock.Verify(service => service.GetPipelinesForUser(user), Times.Once);
+    }
+    
+    [Fact]
+    public async Task RemoveUserResource_ShouldResult_UserDoesNotHaveAccessToResource()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var resource = new ResourceDto() { Id = Guid.NewGuid() };
+        var removeUserResourceRequestMessage = new RemoveUserResourceRequestMessage() { User = user, Resource = resource };
+
+        resourceServiceMock.Setup(service => service.RemoveUserResource(user, resource)).ReturnsAsync(true);
+        resourceServiceMock.Setup(service => service.GetResourcesForUser(user)).ReturnsAsync(new List<ResourceDto>());
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var removeUserResourceResponseMessage = await accessControlFacade.RemoveUserResource(removeUserResourceRequestMessage);
+        Assert.True(removeUserResourceResponseMessage.Success);
+        
+        var getResourcesForUserRequestMessage = new GetResourcesForUserRequestMessage { User = user };
+        var resources = (await accessControlFacade.GetResourcesForUser(getResourcesForUserRequestMessage)).Resources;
+
+        Assert.DoesNotContain(resources, p => p.Id == resource.Id);
+        
+        resourceServiceMock.Verify(service => service.RemoveUserResource(user, resource), Times.Once);
+        resourceServiceMock.Verify(service => service.GetResourcesForUser(user), Times.Once);
+    }
+    
+    [Fact]
+    public async Task RemoveUserRepository_ShouldResult_UserDoesNotHaveAccessToRepository()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var repository = new RepositoryDto() { Id = Guid.NewGuid() };
+        var removeUserRepositoryRequestMessage = new RemoveUserRepositoryRequestMessage { User = user, Repository = repository };
+
+        repositoryServiceMock.Setup(service => service.RemoveUserRepository(user, repository)).ReturnsAsync(true);
+        repositoryServiceMock.Setup(service => service.GetRepositoriesForUser(user)).ReturnsAsync(new List<RepositoryDto>());
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var removeUserRepositoryResponseMessage = await accessControlFacade.RemoveUserRepository(removeUserRepositoryRequestMessage);
+        Assert.True(removeUserRepositoryResponseMessage.Success);
+        
+        var getRepositoriesForUserRequestMessage = new GetRepositoriesForUserRequestMessage { User = user };
+        var repositories = (await accessControlFacade.GetRepositoriesForUser(getRepositoriesForUserRequestMessage)).Repositories;
+
+        Assert.DoesNotContain(repositories, p => p.Id == repository.Id);
+        
+        repositoryServiceMock.Verify(service => service.RemoveUserRepository(user, repository), Times.Once);
+        repositoryServiceMock.Verify(service => service.GetRepositoriesForUser(user), Times.Once);
+    }
+    
+    [Fact]
+    public async Task RemoveUserOrganization_ShouldResult_UserDoesNotHaveAccessToOrganization()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var organization = new OrganizationDto() { Id = Guid.NewGuid() };
+        var removeUserOrganizationRequestMessage = new RemoveUserOrganizationRequestMessage() { User = user, Organization = organization };
+
+        organizationServiceMock.Setup(service => service.RemoveUserOrganization(user, organization)).ReturnsAsync(true);
+        organizationServiceMock.Setup(service => service.GetOrganizationsForUser(user)).ReturnsAsync(new List<OrganizationDto>());
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var removeUserOrganizationResponseMessage = await accessControlFacade.RemoveUserOrganization(removeUserOrganizationRequestMessage);
+        Assert.True(removeUserOrganizationResponseMessage.Success);
+        
+        var getOrganizationsForUserRequestMessage = new GetOrganizationsForUserRequestMessage() { User = user };
+        var organizations = (await accessControlFacade.GetOrganizationsForUser(getOrganizationsForUserRequestMessage)).Organizations;
+
+        Assert.DoesNotContain(organizations, p => p.Id == organization.Id);
+        
+        organizationServiceMock.Verify(service => service.RemoveUserOrganization(user, organization), Times.Once);
+        organizationServiceMock.Verify(service => service.GetOrganizationsForUser(user), Times.Once);
+    }
 }

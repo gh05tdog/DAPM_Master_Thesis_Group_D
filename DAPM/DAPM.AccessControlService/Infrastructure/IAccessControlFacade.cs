@@ -13,4 +13,8 @@ public interface IAccessControlFacade
     Task<GetRepositoriesForUserResponseMessage> GetRepositoriesForUser(GetRepositoriesForUserRequestMessage message);
     Task<GetResourcesForUserResponseMessage> GetResourcesForUser(GetResourcesForUserRequestMessage message);
     Task<GetOrganizationsForUserResponseMessage> GetOrganizationsForUser(GetOrganizationsForUserRequestMessage message);
+    Task<RemoveUserPipelineResponseMessage> RemoveUserPipeline(RemoveUserPipelineRequestMessage message);
+    Task<RemoveUserRepositoryResponseMessage> RemoveUserRepository(RemoveUserRepositoryRequestMessage message);
+    Task<RemoveUserResourceResponseMessage> RemoveUserResource(RemoveUserResourceRequestMessage message);
+    Task<RemoveUserOrganizationResponseMessage> RemoveUserOrganization(RemoveUserOrganizationRequestMessage message);
 }

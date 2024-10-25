@@ -98,4 +98,41 @@ public class PipelineTests(TestFixture fixture)
         
         Assert.Empty(result.Pipelines);
     }
+    
+    [Fact]
+    public async Task RemoveUserPipelineSucceeds()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserPipeline = new AddUserPipelineRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Pipeline = new PipelineDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserPipeline);
+        
+        var request = new RemoveUserPipelineRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = addUserPipeline.User.Id
+            },
+            Pipeline = new PipelineDto
+            {
+                Id = addUserPipeline.Pipeline.Id
+            }
+        };
+        
+        var response = await client.PostAsJsonAsync(TestFixture.RemoveUserPipelineRoute , request);
+        var result = await response.Content.ReadFromJsonAsync<RemoveUserPipelineResponseMessage>();
+        
+        Assert.True(result.Success);
+    }
 }

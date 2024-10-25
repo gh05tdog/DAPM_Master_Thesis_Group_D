@@ -31,4 +31,19 @@ public class RepositoryServiceTests
         var repositories = await service.GetRepositoriesForUser(user);
         Assert.Contains(repositories, p => p.Id == repository.Id);
     }
+    
+    [Fact]
+    public async Task RemoveUserRepository_ShouldRemoveRepository()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var repository = new RepositoryDto{Id = Guid.NewGuid()};
+
+        await service.AddUserRepository(user, repository);
+        await service.RemoveUserRepository(user, repository);
+
+        var repositories = await service.GetRepositoriesForUser(user);
+        Assert.DoesNotContain(repositories, p => p.Id == repository.Id);
+    }
 }

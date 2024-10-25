@@ -28,4 +28,17 @@ public class ResourceRepositoryTests
         var resources = await repository.ReadResourcesForUser(userId);
         Assert.Contains(resources, p => p.Id == resourceId.Id);
     }
+    
+    [Fact]
+    public async Task RemoveUserResource_ShouldRemoveResource()
+    {
+        var userId = new UserId(Guid.NewGuid());
+        var resourceId = new ResourceId(Guid.NewGuid());
+
+        await repository.CreateUserResource(new UserResource(userId, resourceId));
+        await repository.DeleteUserResource(new UserResource(userId, resourceId));
+
+        var resources = await repository.ReadResourcesForUser(userId);
+        Assert.DoesNotContain(resources, p => p.Id == resourceId.Id);
+    }
 }

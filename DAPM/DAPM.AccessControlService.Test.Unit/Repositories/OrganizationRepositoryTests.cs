@@ -28,4 +28,17 @@ public class OrganizationRepositoryTests
         var organizations = await repository.ReadOrganizationsForUser(userId);
         Assert.Contains(organizations, p => p.Id == organizationId.Id);
     }
+    
+    [Fact]
+    public async Task RemoveUserOrganization_ShouldRemoveOrganization()
+    {
+        var userId = new UserId(Guid.NewGuid());
+        var organizationId = new OrganizationId(Guid.NewGuid());
+
+        await repository.CreateUserOrganization(new UserOrganization(userId, organizationId));
+        await repository.DeleteUserOrganization(new UserOrganization(userId, organizationId));
+
+        var organizations = await repository.ReadOrganizationsForUser(userId);
+        Assert.DoesNotContain(organizations, p => p.Id == organizationId.Id);
+    }
 }

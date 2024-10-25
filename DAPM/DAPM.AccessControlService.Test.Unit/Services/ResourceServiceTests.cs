@@ -31,4 +31,19 @@ public class ResourceServiceTests
         var resources = await service.GetResourcesForUser(user);
         Assert.Contains(resources, p => p.Id == resource.Id);
     }
+    
+    [Fact]
+    public async Task RemoveUserResource_ShouldRemoveResource()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var resource = new ResourceDto{Id = Guid.NewGuid()};
+
+        await service.AddUserResource(user, resource);
+        await service.RemoveUserResource(user, resource);
+
+        var resources = await service.GetResourcesForUser(user);
+        Assert.DoesNotContain(resources, p => p.Id == resource.Id);
+    }
 }

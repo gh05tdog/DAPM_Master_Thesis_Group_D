@@ -6,4 +6,5 @@ public interface IResourceRepository
 {
     Task CreateUserResource(UserResource userResource);
     Task<ICollection<ResourceId>> ReadResourcesForUser(UserId userId);
+    Task DeleteUserResource(UserResource userResource);
 }

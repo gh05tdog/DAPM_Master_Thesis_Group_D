@@ -38,4 +38,14 @@ public class RepositoryRepository : IRepositoryRepository
         var repositoryIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
         return repositoryIds.Select(id => new RepositoryId(Guid.Parse(id))).ToList();
     }
+    
+    public async Task DeleteUserRepository(UserRepository userRepository)
+    {
+        const string sql = @"
+                DELETE FROM UserRepositories
+                WHERE UserId = @UserId AND RepositoryId = @RepositoryId;
+            ";
+        
+        await dbConnection.ExecuteAsync(sql, new { UserId = userRepository.UserId.Id, RepositoryId = userRepository.RepositoryId.Id });
+    }
 }

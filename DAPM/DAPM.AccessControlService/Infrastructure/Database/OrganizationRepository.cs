@@ -35,4 +35,13 @@ public class OrganizationRepository : IOrganizationRepository
         var organizationIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
         return organizationIds.Select(id => new OrganizationId(Guid.Parse(id))).ToList();
     }
+    
+    public async Task DeleteUserOrganization(UserOrganization userOrganization)
+    {
+        const string sql = @"
+                DELETE FROM UserOrganizations
+                WHERE UserId = @UserId AND OrganizationId = @OrganizationId;
+            ";
+        await dbConnection.ExecuteAsync(sql, new { UserId = userOrganization.UserId.Id, OrganizationId = userOrganization.OrganizationId.Id });
+    }
 }
