@@ -135,4 +135,29 @@ public class OrganizationTests(TestFixture fixture)
         
         Assert.True(result.Success);
     }
+    
+    [Fact]
+    public async Task GetAllUserOrganizationsReturnsOrganizations()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserOrganization = new AddUserOrganizationRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Organization = new OrganizationDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserOrganizationRoute , addUserOrganization);
+        
+        var response = await client.GetAsync(TestFixture.GetAllUserOrganizationsRoute);
+        var result = await response.Content.ReadFromJsonAsync<GetAllUserOrganizationsResponseMessage>();
+        
+        Assert.Contains(result.Organizations, o => o.OrganizationId == addUserOrganization.Organization.Id);
+    }
 }

@@ -137,4 +137,29 @@ public class RepositoryTests(TestFixture fixture)
         
         Assert.False(result.Repositories.Any(r => r.Id == addUserRepository.Repository.Id));
     }
+    
+    [Fact]
+    public async Task GetAllUserRepositoriesReturnsRepositories()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserRepository = new AddUserRepositoryRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Repository = new RepositoryDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute , addUserRepository);
+        
+        var response = await client.GetAsync(TestFixture.GetAllUserRepositoriesRoute);
+        var result = await response.Content.ReadFromJsonAsync<GetAllUserRepositoriesResponseMessage>();
+        
+        Assert.Contains(result.Repositories, p => p.RepositoryId == addUserRepository.Repository.Id);
+    }
 }

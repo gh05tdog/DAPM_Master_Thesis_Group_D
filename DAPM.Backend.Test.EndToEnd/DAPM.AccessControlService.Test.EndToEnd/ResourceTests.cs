@@ -135,4 +135,29 @@ public class ResourceTests(TestFixture fixture)
         
         Assert.True(result.Success);
     }
+    
+    [Fact]
+    public async Task GetAllUserResourcesReturnsResources()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserResource = new AddUserResourceRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Resource = new ResourceDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , addUserResource);
+        
+        var response = await client.GetAsync(TestFixture.GetAllUserResourcesRoute);
+        var result = await response.Content.ReadFromJsonAsync<GetAllUserResourcesResponseMessage>();
+        
+        Assert.Contains(result.Resources, p => p.ResourceId == addUserResource.Resource.Id);
+    }
 }

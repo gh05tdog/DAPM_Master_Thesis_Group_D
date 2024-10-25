@@ -18,6 +18,10 @@ public class TestFixture
      public const string RemoveUserResourceRoute = "remove-user-resource";
      public const string RemoveUserRepositoryRoute = "remove-user-repository";
      public const string RemoveUserOrganizationRoute = "remove-user-organization";
+     public const string GetAllUserPipelinesRoute = "get-all-user-pipelines";
+     public const string GetAllUserResourcesRoute = "get-all-user-resources";
+     public const string GetAllUserRepositoriesRoute = "get-all-user-repositories";
+     public const string GetAllUserOrganizationsRoute = "get-all-user-organizations";
      
      public TestFixture()
      {
