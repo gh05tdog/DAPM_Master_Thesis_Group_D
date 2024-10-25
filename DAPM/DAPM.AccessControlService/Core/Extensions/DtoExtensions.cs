@@ -24,4 +24,9 @@ public static class DtoExtensions
     {
         return new ResourceId(resource.Id);
     }
+    
+    public static OrganizationId ToOrganizationId(this OrganizationDto organization)
+    {
+        return new OrganizationId(organization.Id);
+    }
 }
