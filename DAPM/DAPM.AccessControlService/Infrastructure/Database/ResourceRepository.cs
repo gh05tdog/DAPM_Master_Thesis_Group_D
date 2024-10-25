@@ -38,4 +38,14 @@ public class ResourceRepository : IResourceRepository
         var resourceIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
         return resourceIds.Select(id => new ResourceId(Guid.Parse(id))).ToList();
     }
+    
+    public async Task DeleteUserResource(UserResource userResource)
+    {
+        const string sql = @"
+                DELETE FROM UserResources
+                WHERE UserId = @UserId AND ResourceId = @ResourceId;
+            ";
+        
+        await dbConnection.ExecuteAsync(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
+    }
 }
