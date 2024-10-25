@@ -98,4 +98,41 @@ public class ResourceTests(TestFixture fixture)
         
         Assert.Contains(addUserResource.Resource.Id, result.Resources.Select(r => r.Id));
     }
+    
+    [Fact]
+    public async Task RemoveUserResourceSucceeds()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserResource = new AddUserResourceRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Resource = new ResourceDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , addUserResource);
+        
+        var request = new RemoveUserResourceRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = addUserResource.User.Id
+            },
+            Resource = new ResourceDto
+            {
+                Id = addUserResource.Resource.Id
+            }
+        };
+        
+        var response = await client.PostAsJsonAsync(TestFixture.RemoveUserResourceRoute , request);
+        var result = await response.Content.ReadFromJsonAsync<RemoveUserResourceResponseMessage>();
+        
+        Assert.True(result.Success);
+    }
 }

@@ -98,4 +98,43 @@ public class RepositoryTests(TestFixture fixture)
         
         Assert.True(result.Repositories.Any(r => r.Id == addUserRepository.Repository.Id));
     }
+    
+    [Fact]
+    public async Task RemoveRepositoryForUserAndGetRepositoriesForUserReturnsNoRepository()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserRepository = new AddUserRepositoryRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Repository = new RepositoryDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute , addUserRepository);
+        
+        var request = new RemoveUserRepositoryRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = addUserRepository.User.Id
+            },
+            Repository = new RepositoryDto
+            {
+                Id = addUserRepository.Repository.Id
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.RemoveUserRepositoryRoute , request);
+        
+        var response = await client.GetAsync($"{TestFixture.GetUserRepositoriesRoute}/{request.User.Id}");
+        var result = await response.Content.ReadFromJsonAsync<GetRepositoriesForUserResponseMessage>();
+        
+        Assert.False(result.Repositories.Any(r => r.Id == addUserRepository.Repository.Id));
+    }
 }

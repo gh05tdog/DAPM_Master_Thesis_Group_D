@@ -98,4 +98,41 @@ public class OrganizationTests(TestFixture fixture)
         
         Assert.Empty(result.Organizations);
     }
+    
+    [Fact]
+    public async Task RemoveUserOrganizationSucceeds()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserOrganization = new AddUserOrganizationRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Organization = new OrganizationDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserOrganizationRoute , addUserOrganization);
+        
+        var request = new RemoveUserOrganizationRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = addUserOrganization.User.Id
+            },
+            Organization = new OrganizationDto
+            {
+                Id = addUserOrganization.Organization.Id
+            }
+        };
+        
+        var response = await client.PostAsJsonAsync(TestFixture.RemoveUserOrganizationRoute , request);
+        var result = await response.Content.ReadFromJsonAsync<RemoveUserOrganizationResponseMessage>();
+        
+        Assert.True(result.Success);
+    }
 }
