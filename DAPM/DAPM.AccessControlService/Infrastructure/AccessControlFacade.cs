@@ -91,4 +91,40 @@ public class AccessControlFacade : IAccessControlFacade
             Organizations = organizations
         };
     }
+    
+    public async Task<RemoveUserPipelineResponseMessage> RemoveUserPipeline(RemoveUserPipelineRequestMessage message)
+    {
+        await pipelineService.RemoveUserPipeline(message.User, message.Pipeline);
+        return new RemoveUserPipelineResponseMessage()
+        {
+            Success = true
+        };
+    }
+    
+    public async Task<RemoveUserRepositoryResponseMessage> RemoveUserRepository(RemoveUserRepositoryRequestMessage message)
+    {
+        await repositoryService.RemoveUserRepository(message.User, message.Repository);
+        return new RemoveUserRepositoryResponseMessage()
+        {
+            Success = true
+        };
+    }
+    
+    public async Task<RemoveUserResourceResponseMessage> RemoveUserResource(RemoveUserResourceRequestMessage message)
+    {
+        await resourceService.RemoveUserResource(message.User, message.Resource);
+        return new RemoveUserResourceResponseMessage()
+        {
+            Success = true
+        };
+    }
+    
+    public async Task<RemoveUserOrganizationResponseMessage> RemoveUserOrganization(RemoveUserOrganizationRequestMessage message)
+    {
+        await organizationService.RemoveUserOrganization(message.User, message.Organization);
+        return new RemoveUserOrganizationResponseMessage()
+        {
+            Success = true
+        };
+    }
 }
