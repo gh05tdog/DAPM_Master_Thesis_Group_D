@@ -26,4 +26,11 @@ public static class TestHelper
                 );
             ";
     
+    public const string OrganizationInitSql = @"
+                CREATE TABLE IF NOT EXISTS UserOrganizations (
+                    UserId TEXT NOT NULL,
+                    OrganizationId TEXT NOT NULL,
+                    PRIMARY KEY (UserId, OrganizationId)
+                );
+            ";
 }
