@@ -29,4 +29,12 @@ public class ResourceService : IResourceService
         var resourceIds = await resourceRepository.ReadResourcesForUser(userId);
         return resourceIds.Select(r => new ResourceDto{Id = r.Id}).ToList();
     }
+    
+    public async Task<bool> RemoveUserResource(UserDto user, ResourceDto resource)
+    {
+        var userId = user.ToUserId();
+        var resourceId = resource.ToResourceId();
+        await resourceRepository.DeleteUserResource(new UserResource(userId, resourceId));
+        return true;
+    }
 }

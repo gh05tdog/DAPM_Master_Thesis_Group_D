@@ -29,4 +29,12 @@ public class RepositoryService : IRepositoryService
         var repositoryIds = await repositoryRepository.ReadRepositoriesForUser(userId);
         return repositoryIds.Select(r => new RepositoryDto{Id = r.Id}).ToList();
     }
+    
+    public async Task<bool> RemoveUserRepository(UserDto user, RepositoryDto repository)
+    {
+        var userId = user.ToUserId();
+        var repositoryId = repository.ToRepositoryId();
+        await repositoryRepository.DeleteUserRepository(new UserRepository(userId, repositoryId));
+        return true;
+    }
 }

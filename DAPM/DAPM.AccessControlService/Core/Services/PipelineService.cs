@@ -29,4 +29,12 @@ public class PipelineService : IPipelineService
         var pipelineIds = await pipelineRepository.ReadPipelinesForUser(userId);
         return pipelineIds.Select(p => new PipelineDto{Id = p.Id}).ToList();
     }
+    
+    public async Task<bool> RemoveUserPipeline(UserDto user, PipelineDto pipeline)
+    {
+        var userId = user.ToUserId();
+        var pipelineId = pipeline.ToPipelineId();
+        await pipelineRepository.DeleteUserPipeline(new UserPipeline(userId, pipelineId));
+        return true;
+    }
 }
