@@ -127,4 +127,40 @@ public class AccessControlFacade : IAccessControlFacade
             Success = true
         };
     }
+    
+    public async Task<GetAllUserOrganizationsResponseMessage> GetAllUserOrganizations()
+    {
+        var organizations = await organizationService.GetAllUserOrganizations();
+        return new GetAllUserOrganizationsResponseMessage()
+        {
+            Organizations = organizations
+        };
+    }
+    
+    public async Task<GetAllUserPipelinesResponseMessage> GetAllUserPipelines()
+    {
+        var pipelines = await pipelineService.GetAllUserPipelines();
+        return new GetAllUserPipelinesResponseMessage()
+        {
+            Pipelines = pipelines
+        };
+    }
+    
+    public async Task<GetAllUserRepositoriesResponseMessage> GetAllUserRepositories()
+    {
+        var repositories = await repositoryService.GetAllUserRepositories();
+        return new GetAllUserRepositoriesResponseMessage()
+        {
+            Repositories = repositories
+        };
+    }
+    
+    public async Task<GetAllUserResourcesResponseMessage> GetAllUserResources()
+    {
+        var resources = await resourceService.GetAllUserResources();
+        return new GetAllUserResourcesResponseMessage()
+        {
+            Resources = resources
+        };
+    }
 }
