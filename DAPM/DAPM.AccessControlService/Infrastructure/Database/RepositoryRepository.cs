@@ -56,7 +56,9 @@ public class RepositoryRepository : IRepositoryRepository
                 FROM UserRepositories;
             ";
         
-        var userRepositories = await dbConnection.QueryAsync<UserRepository>(sql);
-        return userRepositories.ToList();
+        var userRepositories = await dbConnection.QueryAsync<(string, string)>(sql);
+        return userRepositories
+            .Select(x => new UserRepository(new UserId(Guid.Parse(x.Item1)), new RepositoryId(Guid.Parse(x.Item2))))
+            .ToList();
     }
 }

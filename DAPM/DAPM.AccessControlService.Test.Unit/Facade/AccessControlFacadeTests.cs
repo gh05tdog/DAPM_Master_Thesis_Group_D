@@ -227,7 +227,7 @@ public class AccessControlFacadeTests
 
         Assert.Contains(organizations, p => p.OrganizationId == organization.OrganizationId);
         
-        organizationServiceMock.Verify(service => service.GetOrganizationsForUser(user), Times.Once);
+        organizationServiceMock.Verify(service => service.GetAllUserOrganizations(), Times.Once);
     }
     
     [Fact]
@@ -244,7 +244,7 @@ public class AccessControlFacadeTests
 
         Assert.Contains(repositories, p => p.RepositoryId == repository.RepositoryId);
         
-        repositoryServiceMock.Verify(service => service.GetRepositoriesForUser(user), Times.Once);
+        repositoryServiceMock.Verify(service => service.GetAllUserRepositories(), Times.Once);
     }
     
     [Fact]
@@ -261,7 +261,7 @@ public class AccessControlFacadeTests
 
         Assert.Contains(pipelines, p => p.PipelineId == pipeline.PipelineId);
         
-        pipelineServiceMock.Verify(service => service.GetPipelinesForUser(user), Times.Once);
+        pipelineServiceMock.Verify(service => service.GetAllUserPipelines(), Times.Once);
     }
     
     [Fact]
@@ -278,6 +278,6 @@ public class AccessControlFacadeTests
 
         Assert.Contains(resources, p => p.ResourceId == resource.ResourceId);
         
-        resourceServiceMock.Verify(service => service.GetResourcesForUser(user), Times.Once);
+        resourceServiceMock.Verify(service => service.GetAllUserResources(), Times.Once);
     }
 }
