@@ -1,3 +1,4 @@
+using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -18,7 +19,7 @@ public class OrganizationService : IOrganizationService
     {
         var userId = user.ToUserId();
         var organizationId = organization.ToOrganizationId();
-        await organizationRepository.CreateUserOrganization(userId, organizationId);
+        await organizationRepository.CreateUserOrganization(new UserOrganization(userId, organizationId));
         return true;
     }
 

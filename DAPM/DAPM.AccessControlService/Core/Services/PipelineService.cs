@@ -1,3 +1,4 @@
+using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -18,7 +19,7 @@ public class PipelineService : IPipelineService
     {
         var userId = user.ToUserId();
         var pipelineId = pipeline.ToPipelineId();
-        await pipelineRepository.CreateUserPipeline(userId, pipelineId);
+        await pipelineRepository.CreateUserPipeline(new UserPipeline(userId, pipelineId));
         return true;
     }
 

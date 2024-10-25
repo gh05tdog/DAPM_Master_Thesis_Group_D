@@ -4,6 +4,6 @@ namespace DAPM.AccessControlService.Core.Domain.Repositories;
 
 public interface IOrganizationRepository
 {
-    Task CreateUserOrganization(UserId userId, OrganizationId organizationId);
+    Task CreateUserOrganization(UserOrganization userOrganization);
     Task<ICollection<OrganizationId>> ReadOrganizationsForUser(UserId userId);
 }

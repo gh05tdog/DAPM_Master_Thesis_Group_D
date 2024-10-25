@@ -16,13 +16,13 @@ public class OrganizationRepository : IOrganizationRepository
         tableInitializer.InitializeTable().Wait();
     }
 
-    public async Task CreateUserOrganization(UserId userId, OrganizationId organizationId)
+    public async Task CreateUserOrganization(UserOrganization userOrganization)
     {
         const string sql = @"
                 INSERT INTO UserOrganizations (UserId, OrganizationId)
                 VALUES (@UserId, @OrganizationId);
             ";
-        await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, OrganizationId = organizationId.Id });
+        await dbConnection.ExecuteAsync(sql, new { UserId = userOrganization.UserId.Id, OrganizationId = userOrganization.OrganizationId.Id });
     }
 
     public async Task<ICollection<OrganizationId>> ReadOrganizationsForUser(UserId userId)

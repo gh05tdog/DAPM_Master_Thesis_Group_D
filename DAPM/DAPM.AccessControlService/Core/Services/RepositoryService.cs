@@ -1,3 +1,4 @@
+using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -18,7 +19,7 @@ public class RepositoryService : IRepositoryService
     {
         var userId = user.ToUserId();
         var repositoryId = repository.ToRepositoryId();
-        await repositoryRepository.CreateUserRepository(userId, repositoryId);
+        await repositoryRepository.CreateUserRepository(new UserRepository(userId, repositoryId));
         return true;
     }
 

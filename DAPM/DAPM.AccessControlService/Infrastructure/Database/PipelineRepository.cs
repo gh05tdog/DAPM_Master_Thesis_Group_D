@@ -16,14 +16,14 @@ public class PipelineRepository : IPipelineRepository
         tableInitializer.InitializeTable().Wait();
     }
     
-    public async Task CreateUserPipeline(UserId userId, PipelineId pipelineId)
+    public async Task CreateUserPipeline(UserPipeline userPipeline)
     {
         const string sql = @"
                 INSERT INTO UserPipelines (UserId, PipelineId)
                 VALUES (@UserId, @PipelineId);
             ";
         
-        await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, PipelineId = pipelineId.Id });
+        await dbConnection.ExecuteAsync(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
     }
 
     public async Task<ICollection<PipelineId>> ReadPipelinesForUser(UserId userId)

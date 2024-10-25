@@ -17,14 +17,14 @@ public class ResourceRepository : IResourceRepository
         tableInitializer.InitializeTable().Wait();
     }
 
-    public async Task CreateUserResource(UserId userId, ResourceId resourceId)
+    public async Task CreateUserResource(UserResource userResource)
     {
         const string sql = @"
                 INSERT INTO UserResources (UserId, ResourceId)
                 VALUES (@UserId, @ResourceId);
             ";
         
-        await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, ResourceId = resourceId.Id });
+        await dbConnection.ExecuteAsync(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
     }
 
     public async Task<ICollection<ResourceId>> ReadResourcesForUser(UserId userId)

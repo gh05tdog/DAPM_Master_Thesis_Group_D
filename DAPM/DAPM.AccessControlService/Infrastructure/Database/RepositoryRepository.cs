@@ -17,14 +17,14 @@ public class RepositoryRepository : IRepositoryRepository
         tableInitializer.InitializeTable().Wait();
     }
     
-    public async Task CreateUserRepository(UserId userId, RepositoryId repositoryId)
+    public async Task CreateUserRepository(UserRepository userRepository)
     {
         const string sql = @"
                 INSERT INTO UserRepositories (UserId, RepositoryId)
                 VALUES (@UserId, @RepositoryId);
             ";
         
-        await dbConnection.ExecuteAsync(sql, new { UserId = userId.Id, RepositoryId = repositoryId.Id });
+        await dbConnection.ExecuteAsync(sql, new { UserId = userRepository.UserId.Id, RepositoryId = userRepository.RepositoryId.Id });
     }
 
     public async Task<ICollection<RepositoryId>> ReadRepositoriesForUser(UserId userId)

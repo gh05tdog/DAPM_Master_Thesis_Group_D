@@ -23,7 +23,7 @@ public class OrganizationRepositoryTests
         var userId = new UserId(Guid.NewGuid());
         var organizationId = new OrganizationId(Guid.NewGuid());
 
-        await repository.CreateUserOrganization(userId, organizationId);
+        await repository.CreateUserOrganization(new UserOrganization(userId, organizationId));
 
         var organizations = await repository.ReadOrganizationsForUser(userId);
         Assert.Contains(organizations, p => p.Id == organizationId.Id);
