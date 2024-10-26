@@ -15,11 +15,9 @@ public class ResourceService : IResourceService
         this.resourceRepository = resourceRepository;
     }
 
-    public async Task<bool> AddUserResource(UserDto user, ResourceDto resource)
+    public async Task<bool> AddUserResource(UserResourceDto userResource)
     {
-        var userId = user.ToUserId();
-        var resourceId = resource.ToResourceId();
-        await resourceRepository.CreateUserResource(new UserResource(userId, resourceId));
+        await resourceRepository.CreateUserResource(userResource.ToUserResource());
         return true;
     }
 
@@ -30,11 +28,9 @@ public class ResourceService : IResourceService
         return resourceIds.Select(r => new ResourceDto{Id = r.Id}).ToList();
     }
     
-    public async Task<bool> RemoveUserResource(UserDto user, ResourceDto resource)
+    public async Task<bool> RemoveUserResource(UserResourceDto userResource)
     {
-        var userId = user.ToUserId();
-        var resourceId = resource.ToResourceId();
-        await resourceRepository.DeleteUserResource(new UserResource(userId, resourceId));
+        await resourceRepository.DeleteUserResource(userResource.ToUserResource());
         return true;
     }
     

@@ -1,6 +1,5 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQLibrary.Messages.AccessControl.Requests;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Controllers;
@@ -11,9 +10,9 @@ public class OrganizationController(IOrganizationService organizationService) : 
 {
     [HttpPost]
     [Route("add-user-organization")]
-    public async Task<IActionResult> AddUserOrganization([FromBody] AddUserOrganizationRequestMessage message)
+    public async Task<IActionResult> AddUserOrganization([FromBody] UserOrganizationDto userOrganization)
     {
-        var response = await organizationService.AddUserOrganization(message.User, message.Organization);
+        var response = await organizationService.AddUserOrganization(userOrganization);
         return Ok(response);
     }
     
@@ -27,9 +26,9 @@ public class OrganizationController(IOrganizationService organizationService) : 
     
     [HttpPost]
     [Route("remove-user-organization")]
-    public async Task<IActionResult> RemoveUserOrganization([FromBody] RemoveUserOrganizationRequestMessage message)
+    public async Task<IActionResult> RemoveUserOrganization([FromBody] UserOrganizationDto userOrganization)
     {
-        var response = await organizationService.RemoveUserOrganization(message.User, message.Organization);
+        var response = await organizationService.RemoveUserOrganization(userOrganization);
         return Ok(response);
     }
     

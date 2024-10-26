@@ -1,6 +1,5 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQLibrary.Messages.AccessControl.Requests;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Controllers;
@@ -11,9 +10,9 @@ public class RepositoryController(IRepositoryService repositoryService) : Contro
 {
     [HttpPost]
     [Route("add-user-repository")]
-    public async Task<IActionResult> AddUserRepository([FromBody] AddUserRepositoryRequestMessage message)
+    public async Task<IActionResult> AddUserRepository([FromBody] UserRepositoryDto userRepository)
     {
-        var response = await repositoryService.AddUserRepository(message.User, message.Repository);
+        var response = await repositoryService.AddUserRepository(userRepository);
         return Ok(response);
     }
      
@@ -27,9 +26,9 @@ public class RepositoryController(IRepositoryService repositoryService) : Contro
     
     [HttpPost]
     [Route("remove-user-repository")]
-    public async Task<IActionResult> RemoveUserRepository([FromBody] RemoveUserRepositoryRequestMessage message)
+    public async Task<IActionResult> RemoveUserRepository([FromBody] UserRepositoryDto userRepository)
     {
-        var response = await repositoryService.RemoveUserRepository(message.User, message.Repository);
+        var response = await repositoryService.RemoveUserRepository(userRepository);
         return Ok(response);
     }
     

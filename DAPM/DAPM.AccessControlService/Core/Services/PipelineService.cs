@@ -15,11 +15,9 @@ public class PipelineService : IPipelineService
         this.pipelineRepository = pipelineRepository;
     }
 
-    public async Task<bool> AddUserPipeline(UserDto user, PipelineDto pipeline)
+    public async Task<bool> AddUserPipeline(UserPipelineDto userPipeline)
     {
-        var userId = user.ToUserId();
-        var pipelineId = pipeline.ToPipelineId();
-        await pipelineRepository.CreateUserPipeline(new UserPipeline(userId, pipelineId));
+        await pipelineRepository.CreateUserPipeline(userPipeline.ToUserPipeline());
         return true;
     }
 
@@ -30,11 +28,9 @@ public class PipelineService : IPipelineService
         return pipelineIds.Select(p => new PipelineDto{Id = p.Id}).ToList();
     }
     
-    public async Task<bool> RemoveUserPipeline(UserDto user, PipelineDto pipeline)
+    public async Task<bool> RemoveUserPipeline(UserPipelineDto userPipeline)
     {
-        var userId = user.ToUserId();
-        var pipelineId = pipeline.ToPipelineId();
-        await pipelineRepository.DeleteUserPipeline(new UserPipeline(userId, pipelineId));
+        await pipelineRepository.DeleteUserPipeline(userPipeline.ToUserPipeline());
         return true;
     }
     

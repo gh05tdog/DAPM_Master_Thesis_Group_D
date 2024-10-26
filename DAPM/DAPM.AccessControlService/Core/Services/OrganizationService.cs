@@ -15,11 +15,9 @@ public class OrganizationService : IOrganizationService
         this.organizationRepository = organizationRepository;
     }
 
-    public async Task<bool> AddUserOrganization(UserDto user, OrganizationDto organization)
+    public async Task<bool> AddUserOrganization(UserOrganizationDto userOrganization)
     {
-        var userId = user.ToUserId();
-        var organizationId = organization.ToOrganizationId();
-        await organizationRepository.CreateUserOrganization(new UserOrganization(userId, organizationId));
+        await organizationRepository.CreateUserOrganization(userOrganization.ToUserOrganization());
         return true;
     }
 
@@ -30,11 +28,9 @@ public class OrganizationService : IOrganizationService
         return organizationIds.Select(o => new OrganizationDto{Id = o.Id}).ToList();
     }
     
-    public async Task<bool> RemoveUserOrganization(UserDto user, OrganizationDto organization)
+    public async Task<bool> RemoveUserOrganization(UserOrganizationDto userOrganization)
     {
-        var userId = user.ToUserId();
-        var organizationId = organization.ToOrganizationId();
-        await organizationRepository.DeleteUserOrganization(new UserOrganization(userId, organizationId));
+        await organizationRepository.DeleteUserOrganization(userOrganization.ToUserOrganization());
         return true;
     }
     

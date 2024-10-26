@@ -1,6 +1,5 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQLibrary.Messages.AccessControl.Requests;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Controllers;
@@ -11,9 +10,9 @@ public class ResourceController(IResourceService resourceService) : ControllerBa
 {
     [HttpPost]
     [Route("add-user-resource")]
-    public async Task<IActionResult> AddUserResource([FromBody] AddUserResourceRequestMessage message)
+    public async Task<IActionResult> AddUserResource([FromBody] UserResourceDto userResource)
     {
-        var response = await resourceService.AddUserResource(message.User, message.Resource);
+        var response = await resourceService.AddUserResource(userResource);
         return Ok(response);
     }
     
@@ -24,17 +23,14 @@ public class ResourceController(IResourceService resourceService) : ControllerBa
         var response = await resourceService.GetResourcesForUser(new UserDto{ Id = userId});
         return Ok(response);
     }
-    
         
     [HttpPost]
     [Route("remove-user-resource")]
-    public async Task<IActionResult> RemoveUserResource([FromBody] RemoveUserResourceRequestMessage message)
+    public async Task<IActionResult> RemoveUserResource([FromBody] UserResourceDto userResource)
     {
-        var response = await resourceService.RemoveUserResource(message.User, message.Resource);
+        var response = await resourceService.RemoveUserResource(userResource);
         return Ok(response);
     }
-
-    
     
     [HttpGet]
     [Route("get-all-user-resources")]

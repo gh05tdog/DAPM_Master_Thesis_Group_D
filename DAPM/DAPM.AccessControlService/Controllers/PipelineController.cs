@@ -1,6 +1,5 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQLibrary.Messages.AccessControl.Requests;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Controllers;
@@ -11,9 +10,9 @@ public class PipelineController(IPipelineService pipelineService) : ControllerBa
 {
    [HttpPost]
    [Route("add-user-pipeline")]
-   public async Task<IActionResult> AddUserPipeline([FromBody] AddUserPipelineRequestMessage message)
+   public async Task<IActionResult> AddUserPipeline([FromBody] UserPipelineDto userPipeline)
    {
-      var response = await pipelineService.AddUserPipeline(message.User, message.Pipeline);
+      var response = await pipelineService.AddUserPipeline(userPipeline);
       return Ok(response);
    }
    
@@ -27,12 +26,12 @@ public class PipelineController(IPipelineService pipelineService) : ControllerBa
    
    [HttpPost]
    [Route("remove-user-pipeline")]
-   public async Task<IActionResult> RemoveUserPipeline([FromBody] RemoveUserPipelineRequestMessage message)
+   public async Task<IActionResult> RemoveUserPipeline([FromBody] UserPipelineDto userPipeline)
    {
-      var response = await pipelineService.RemoveUserPipeline(message.User, message.Pipeline);
+      var response = await pipelineService.RemoveUserPipeline(userPipeline);
       return Ok(response);
    }
-   
+
    [HttpGet]
    [Route("get-all-user-pipelines")]
    public async Task<IActionResult> GetAllUserPipelines()

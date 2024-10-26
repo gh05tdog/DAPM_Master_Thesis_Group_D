@@ -4,8 +4,8 @@ namespace DAPM.AccessControlService.Core.Services.Abstractions;
 
 public interface IResourceService
 {
-    Task<bool> AddUserResource(UserDto user, ResourceDto resource);
+    Task<bool> AddUserResource(UserResourceDto userResource);
     Task<ICollection<ResourceDto>> GetResourcesForUser(UserDto user);
-    Task<bool> RemoveUserResource(UserDto user, ResourceDto resource);
+    Task<bool> RemoveUserResource(UserResourceDto userResource);
     Task<ICollection<UserResourceDto>> GetAllUserResources();
 }
