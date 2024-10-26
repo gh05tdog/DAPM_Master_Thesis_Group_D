@@ -25,8 +25,9 @@ public class RepositoryServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var repository = new RepositoryDto{Id = Guid.NewGuid()};
+        var userRepository = new UserRepositoryDto{UserId = user.Id, RepositoryId = repository.Id};
 
-        await service.AddUserRepository(user, repository);
+        await service.AddUserRepository(userRepository);
 
         var repositories = await service.GetRepositoriesForUser(user);
         Assert.Contains(repositories, p => p.Id == repository.Id);
@@ -39,9 +40,10 @@ public class RepositoryServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var repository = new RepositoryDto{Id = Guid.NewGuid()};
+        var userRepository = new UserRepositoryDto{UserId = user.Id, RepositoryId = repository.Id};
 
-        await service.AddUserRepository(user, repository);
-        await service.RemoveUserRepository(user, repository);
+        await service.AddUserRepository(userRepository);
+        await service.RemoveUserRepository(userRepository);
 
         var repositories = await service.GetRepositoriesForUser(user);
         Assert.DoesNotContain(repositories, p => p.Id == repository.Id);
@@ -54,8 +56,9 @@ public class RepositoryServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var repository = new RepositoryDto{Id = Guid.NewGuid()};
+        var userRepository = new UserRepositoryDto{UserId = user.Id, RepositoryId = repository.Id};
 
-        await service.AddUserRepository(user, repository);
+        await service.AddUserRepository(userRepository);
 
         var repositories = await service.GetAllUserRepositories();
         Assert.Contains(repositories, p => p.RepositoryId == repository.Id);
