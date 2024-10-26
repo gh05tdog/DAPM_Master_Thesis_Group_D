@@ -4,12 +4,18 @@ namespace DAPM.ClientApi.AccessControl;
 
 public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpClient
 {
-    private const string AddUserPipelineRoute = "add-user-pipeline";
-    private const string AddUserResourceRoute = "add-user-resource";
-    private const string AddUserRepositoryRoute = "add-user-repository";
-    private const string GetUserPipelinesRoute = "get-pipelines-for-user";
-    private const string GetUserResourcesRoute = "get-resources-for-user";
-    private const string GetUserRepositoriesRoute = "get-repositories-for-user";
+    private const string PipelineRoute = "pipeline";
+    private const string ResourceRoute = "resource";
+    private const string RepositoryRoute = "repository";
+    private const string OrganizationRoute = "organization";
+    private const string AddUserPipelineRoute = $"{PipelineRoute}/add-user-pipeline";
+    private const string AddUserResourceRoute = $"{ResourceRoute}/add-user-resource";
+    private const string AddUserRepositoryRoute = $"{RepositoryRoute}/add-user-repository";
+    private const string AddUserOrganizationRoute = $"{OrganizationRoute}/add-user-organization";
+    private const string GetUserPipelinesRoute = $"{PipelineRoute}/get-pipelines-for-user";
+    private const string GetUserResourcesRoute = $"{ResourceRoute}/get-resources-for-user";
+    private const string GetUserRepositoriesRoute = $"{RepositoryRoute}/get-repositories-for-user";
+    private const string GetUserOrganizationsRoute = $"{OrganizationRoute}/get-organizations-for-user";
     
     public async Task<bool> AddUserPipelineAsync(UserPipelineDto request)
     {
@@ -25,6 +31,11 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
     {
         return await SendRequestAsync<UserRepositoryDto, bool>(AddUserRepositoryRoute, request);
     }
+    
+    public async Task<bool> AddUserOrganizationAsync(UserOrganizationDto request)
+    {
+        return await SendRequestAsync<UserOrganizationDto, bool>(AddUserOrganizationRoute, request);
+    }
 
     public async Task<ICollection<PipelineDto>> GetPipelinesForUserAsync(UserDto request)
     {
@@ -39,6 +50,11 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
     public async Task<ICollection<RepositoryDto>> GetRepositoriesForUserAsync(UserDto request)
     {
         return await GetRequestAsync<ICollection<RepositoryDto>>(GetUserRepositoriesRoute, request.Id);
+    }
+    
+    public async Task<ICollection<OrganizationDto>> GetOrganizationsForUserAsync(UserDto request)
+    {
+        return await GetRequestAsync<ICollection<OrganizationDto>>(GetUserOrganizationsRoute, request.Id);
     }
     
     private async Task<TResponse> SendRequestAsync<TRequest, TResponse>(string route, TRequest request)
