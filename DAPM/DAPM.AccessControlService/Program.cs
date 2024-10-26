@@ -47,9 +47,6 @@ builder.Services.AddSingleton<IRepositoryService, RepositoryService>();
 builder.Services.AddSingleton<IResourceService, ResourceService>();
 builder.Services.AddSingleton<IOrganizationService, OrganizationService>();
 
-// Add facade
-builder.Services.AddSingleton<IAccessControlFacade, AccessControlFacade>();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
