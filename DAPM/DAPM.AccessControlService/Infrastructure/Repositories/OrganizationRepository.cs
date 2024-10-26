@@ -1,10 +1,10 @@
 using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
-using DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 using Dapper;
 
-namespace DAPM.AccessControlService.Infrastructure.Database;
+namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
 public class OrganizationRepository : IOrganizationRepository
 {

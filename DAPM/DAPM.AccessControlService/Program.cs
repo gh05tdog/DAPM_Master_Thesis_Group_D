@@ -5,8 +5,8 @@ using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Services;
 using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure;
-using DAPM.AccessControlService.Infrastructure.Database;
-using DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
+using DAPM.AccessControlService.Infrastructure.Repositories;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 var builder = WebApplication.CreateBuilder(args);
 

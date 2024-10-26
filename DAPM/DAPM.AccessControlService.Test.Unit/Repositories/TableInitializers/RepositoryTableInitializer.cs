@@ -1,6 +1,6 @@
 using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
-using DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 using Dapper;
 
 namespace DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;

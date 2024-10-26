@@ -2,7 +2,7 @@ using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
 using Dapper;
 
-namespace DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
+namespace DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 public class ResourceTableInitializer : ITableInitializer<UserResource>
 {

@@ -1,10 +1,10 @@
+using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 using Dapper;
-using System.Data;
-using DAPM.AccessControlService.Infrastructure.Database.TableInitializers;
 
-namespace DAPM.AccessControlService.Infrastructure.Database;
+namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
 public class ResourceRepository : IResourceRepository
 {
