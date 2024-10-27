@@ -15,7 +15,7 @@ public class PipelineServiceTests
         
         var repository = new PipelineRepository(connection, new PipelineTableInitializer(connection));
 
-        return new PipelineService(repository);
+        return new PipelineService(repository, repository);
     }
     
     [Fact]

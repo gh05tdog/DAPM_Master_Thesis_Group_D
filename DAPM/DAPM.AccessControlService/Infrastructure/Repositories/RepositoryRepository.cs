@@ -72,6 +72,6 @@ public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQuerie
                     WHERE UserId = @UserId AND RepositoryId = @RepositoryId
                 ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
             ";
-        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userRepository.UserId.Id, OrganizationId = userRepository.RepositoryId.Id });
+        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userRepository.UserId.Id, RepositoryId = userRepository.RepositoryId.Id });
     }
 }

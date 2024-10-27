@@ -15,7 +15,7 @@ public class RepositoryServiceTests
         
         var repository = new RepositoryRepository(connection, new RepositoryTableInitializer(connection));
 
-        return new RepositoryService(repository);
+        return new RepositoryService(repository, repository);
     }
     
     [Fact]

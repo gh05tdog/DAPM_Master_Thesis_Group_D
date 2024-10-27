@@ -72,6 +72,6 @@ public class ResourceRepository : IResourceRepository, IUserResourceQueries
                     WHERE UserId = @UserId AND ResourceId = @ResourceId
                 ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
             ";
-        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userResource.UserId.Id, OrganizationId = userResource.ResourceId.Id });
+        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
     }
 }

@@ -15,7 +15,7 @@ public class OrganizationServiceTests
         
         var repository = new OrganizationRepository(connection, new OrganizationTableInitializer(connection));
 
-        return new OrganizationService(repository);
+        return new OrganizationService(repository, repository);
     }
     
     [Fact]

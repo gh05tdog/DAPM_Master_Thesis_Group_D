@@ -15,7 +15,7 @@ public class ResourceServiceTests
         
         var repository = new ResourceRepository(connection, new ResourceTableInitializer(connection));
 
-        return new ResourceService(repository);
+        return new ResourceService(repository, repository);
     }
     
     [Fact]

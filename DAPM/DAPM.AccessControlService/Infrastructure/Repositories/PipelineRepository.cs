@@ -72,6 +72,6 @@ public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
                     WHERE UserId = @UserId AND PipelineId = @PipelineId
                 ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
             ";
-        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userPipeline.UserId.Id, OrganizationId = userPipeline.PipelineId.Id });
+        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
     }
 }
