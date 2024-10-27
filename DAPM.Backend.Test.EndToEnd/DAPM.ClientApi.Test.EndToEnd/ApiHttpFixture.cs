@@ -1,3 +1,4 @@
+using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 using DAPM.Test.EndToEnd.TestUtilities;
 using Microsoft.Extensions.Configuration;
 

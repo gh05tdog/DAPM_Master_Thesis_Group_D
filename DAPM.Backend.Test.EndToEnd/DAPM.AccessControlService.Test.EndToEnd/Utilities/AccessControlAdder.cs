@@ -1,9 +1,7 @@
 using System.Net.Http.Json;
-using DAPM.AccessControlService.Test.EndToEnd;
 using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 
-namespace DAPM.Test.EndToEnd.TestUtilities;
+namespace DAPM.AccessControlService.Test.EndToEnd.Utilities;
 
 public class AccessControlAdder
 {
@@ -12,6 +10,11 @@ public class AccessControlAdder
     public AccessControlAdder(Uri baseUri)
     {
         this.httpClientFactory = new HttpClientFactory(baseUri);
+    }
+    
+    public AccessControlAdder(IHttpClientFactory httpClientFactory)
+    {
+        this.httpClientFactory = httpClientFactory;
     }
     
     public async Task AddUserResourceAsync(Guid userId, Guid resourceId)
