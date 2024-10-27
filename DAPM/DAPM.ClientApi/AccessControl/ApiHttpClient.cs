@@ -4,58 +4,44 @@ namespace DAPM.ClientApi.AccessControl;
 
 public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpClient
 {
-    private const string PipelineRoute = "pipeline";
-    private const string ResourceRoute = "resource";
-    private const string RepositoryRoute = "repository";
-    private const string OrganizationRoute = "organization";
-    private const string AddUserPipelineRoute = $"{PipelineRoute}/add-user-pipeline";
-    private const string AddUserResourceRoute = $"{ResourceRoute}/add-user-resource";
-    private const string AddUserRepositoryRoute = $"{RepositoryRoute}/add-user-repository";
-    private const string AddUserOrganizationRoute = $"{OrganizationRoute}/add-user-organization";
-    private const string GetUserPipelinesRoute = $"{PipelineRoute}/get-pipelines-for-user";
-    private const string GetUserResourcesRoute = $"{ResourceRoute}/get-resources-for-user";
-    private const string GetUserRepositoriesRoute = $"{RepositoryRoute}/get-repositories-for-user";
-    private const string GetUserOrganizationsRoute = $"{OrganizationRoute}/get-organizations-for-user";
-    private const string CheckAccessRoute = "check-access";
-    
     public async Task<bool> AddUserPipelineAsync(UserPipelineDto request)
     {
-        return await SendRequestAsync<UserPipelineDto, bool>(AddUserPipelineRoute, request);
+        return await SendRequestAsync<UserPipelineDto, bool>(ApiRoutes.AddUserPipelineRoute, request);
     }
 
     public async Task<bool> AddUserResourceAsync(UserResourceDto request)
     {
-        return await SendRequestAsync<UserResourceDto, bool>(AddUserResourceRoute, request);
+        return await SendRequestAsync<UserResourceDto, bool>(ApiRoutes.AddUserResourceRoute, request);
     }
 
     public async Task<bool> AddUserRepositoryAsync(UserRepositoryDto request)
     {
-        return await SendRequestAsync<UserRepositoryDto, bool>(AddUserRepositoryRoute, request);
+        return await SendRequestAsync<UserRepositoryDto, bool>(ApiRoutes.AddUserRepositoryRoute, request);
     }
     
     public async Task<bool> AddUserOrganizationAsync(UserOrganizationDto request)
     {
-        return await SendRequestAsync<UserOrganizationDto, bool>(AddUserOrganizationRoute, request);
+        return await SendRequestAsync<UserOrganizationDto, bool>(ApiRoutes.AddUserOrganizationRoute, request);
     }
 
     public async Task<ICollection<PipelineDto>> GetPipelinesForUserAsync(UserDto request)
     {
-        return await GetRequestAsync<ICollection<PipelineDto>>(GetUserPipelinesRoute, request.Id);
+        return await GetRequestAsync<ICollection<PipelineDto>>(ApiRoutes.GetUserPipelinesRoute, request.Id);
     }
 
     public async Task<ICollection<ResourceDto>> GetResourcesForUserAsync(UserDto request)
     {
-        return await GetRequestAsync<ICollection<ResourceDto>>(GetUserResourcesRoute, request.Id);
+        return await GetRequestAsync<ICollection<ResourceDto>>(ApiRoutes.GetUserResourcesRoute, request.Id);
     }
 
     public async Task<ICollection<RepositoryDto>> GetRepositoriesForUserAsync(UserDto request)
     {
-        return await GetRequestAsync<ICollection<RepositoryDto>>(GetUserRepositoriesRoute, request.Id);
+        return await GetRequestAsync<ICollection<RepositoryDto>>(ApiRoutes.GetUserRepositoriesRoute, request.Id);
     }
     
     public async Task<ICollection<OrganizationDto>> GetOrganizationsForUserAsync(UserDto request)
     {
-        return await GetRequestAsync<ICollection<OrganizationDto>>(GetUserOrganizationsRoute, request.Id);
+        return await GetRequestAsync<ICollection<OrganizationDto>>(ApiRoutes.GetUserOrganizationsRoute, request.Id);
     }
 
     public async Task<UserAccessResponseDto> GetUserAccessAsync(UserAccessRequestDto request)
