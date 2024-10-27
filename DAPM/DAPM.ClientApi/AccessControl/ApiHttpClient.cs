@@ -16,6 +16,7 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
     private const string GetUserResourcesRoute = $"{ResourceRoute}/get-resources-for-user";
     private const string GetUserRepositoriesRoute = $"{RepositoryRoute}/get-repositories-for-user";
     private const string GetUserOrganizationsRoute = $"{OrganizationRoute}/get-organizations-for-user";
+    private const string CheckAccessRoute = "check-access";
     
     public async Task<bool> AddUserPipelineAsync(UserPipelineDto request)
     {
@@ -56,7 +57,12 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
     {
         return await GetRequestAsync<ICollection<OrganizationDto>>(GetUserOrganizationsRoute, request.Id);
     }
-    
+
+    public async Task<UserAccessResponseDto> GetUserAccessAsync(UserAccessRequestDto request)
+    {
+        return await SendRequestAsync<UserAccessRequestDto, UserAccessResponseDto>(CheckAccessRoute, request);
+    }
+
     private async Task<TResponse> SendRequestAsync<TRequest, TResponse>(string route, TRequest request)
     {
         var client = httpClientFactory.CreateClient();

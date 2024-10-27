@@ -8,6 +8,7 @@ public class ApiHttpFixture
 {
     public readonly DapmClientApiHttpClient Client;
     public readonly DapmClientApiHttpClient AuthenticatedClient;
+    public readonly IApiHttpClientFactory AuthenticatedHttpClientFactory;
     public readonly TokenFetcher TokenFetcher;
     public readonly string BaseUrl;
     public readonly AccessControlAdder AccessControlAdder;
@@ -34,10 +35,10 @@ public class ApiHttpFixture
             keycloakUsername, keycloakPassword, keycloakClientSecret);
 
         var apiHttpClientFactory = new ApiHttpClientFactory(baseAddress);
-        var authenticatedApiHttpClientFactory = new AuthenticatedApiHttpClientFactory(baseAddress, TokenFetcher);
+        AuthenticatedHttpClientFactory = new AuthenticatedApiHttpClientFactory(baseAddress, TokenFetcher);
         
         Client = new DapmClientApiHttpClient(apiHttpClientFactory);
-        AuthenticatedClient = new DapmClientApiHttpClient(authenticatedApiHttpClientFactory);
+        AuthenticatedClient = new DapmClientApiHttpClient(AuthenticatedHttpClientFactory);
         AccessControlAdder = new AccessControlAdder(new Uri(config["ApiHttpClientFactorySettings:BaseUrl"]));
     }
 }
