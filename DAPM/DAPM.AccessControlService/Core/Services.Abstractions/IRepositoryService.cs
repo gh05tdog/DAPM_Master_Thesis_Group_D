@@ -8,4 +8,5 @@ public interface IRepositoryService
     Task<ICollection<RepositoryDto>> GetRepositoriesForUser(UserDto user);
     Task<bool> RemoveUserRepository(UserRepositoryDto userRepository);
     Task<ICollection<UserRepositoryDto>> GetAllUserRepositories();
+    Task<bool> UserHasAccessToRepository(UserRepositoryDto userRepository);
 }

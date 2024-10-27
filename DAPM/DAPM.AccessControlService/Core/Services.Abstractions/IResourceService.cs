@@ -8,4 +8,5 @@ public interface IResourceService
     Task<ICollection<ResourceDto>> GetResourcesForUser(UserDto user);
     Task<bool> RemoveUserResource(UserResourceDto userResource);
     Task<ICollection<UserResourceDto>> GetAllUserResources();
+    Task<bool> UserHasAccessToResource(UserResourceDto userResource);
 }

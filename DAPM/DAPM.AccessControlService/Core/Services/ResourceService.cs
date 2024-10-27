@@ -1,4 +1,4 @@
-using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Queries;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -9,10 +9,12 @@ namespace DAPM.AccessControlService.Core.Services;
 public class ResourceService : IResourceService
 {
     private readonly IResourceRepository resourceRepository;
+    private readonly IUserResourceQueries userResourceQueries;
 
-    public ResourceService(IResourceRepository resourceRepository)
+    public ResourceService(IResourceRepository resourceRepository, IUserResourceQueries userResourceQueries)
     {
         this.resourceRepository = resourceRepository;
+        this.userResourceQueries = userResourceQueries;
     }
 
     public async Task<bool> AddUserResource(UserResourceDto userResource)
@@ -42,5 +44,10 @@ public class ResourceService : IResourceService
             UserId = ur.UserId.Id,
             ResourceId = ur.ResourceId.Id
         }).ToList();
+    }
+
+    public async Task<bool> UserHasAccessToResource(UserResourceDto userResource)
+    {
+        return await userResourceQueries.UserHasAccessToResource(userResource.ToUserResource());
     }
 }

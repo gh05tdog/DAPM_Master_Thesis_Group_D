@@ -1,4 +1,4 @@
-using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Queries;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -9,10 +9,12 @@ namespace DAPM.AccessControlService.Core.Services;
 public class PipelineService : IPipelineService
 {
     private readonly IPipelineRepository pipelineRepository;
+    private readonly IUserPipelineQueries userPipelineQueries;
 
-    public PipelineService(IPipelineRepository pipelineRepository)
+    public PipelineService(IPipelineRepository pipelineRepository, IUserPipelineQueries userPipelineQueries)
     {
         this.pipelineRepository = pipelineRepository;
+        this.userPipelineQueries = userPipelineQueries;
     }
 
     public async Task<bool> AddUserPipeline(UserPipelineDto userPipeline)
@@ -42,5 +44,10 @@ public class PipelineService : IPipelineService
             UserId = up.UserId.Id,
             PipelineId = up.PipelineId.Id
         }).ToList();
+    }
+
+    public async Task<bool> UserHasAccessToPipeline(UserPipelineDto userPipeline)
+    {
+        return await userPipelineQueries.UserHasAccessToPipeline(userPipeline.ToUserPipeline());
     }
 }

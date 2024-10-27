@@ -1,4 +1,4 @@
-using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Queries;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -9,10 +9,12 @@ namespace DAPM.AccessControlService.Core.Services;
 public class OrganizationService : IOrganizationService
 {
     private readonly IOrganizationRepository organizationRepository;
+    private readonly IUserOrganizationQueries userOrganizationQueries;
 
-    public OrganizationService(IOrganizationRepository organizationRepository)
+    public OrganizationService(IOrganizationRepository organizationRepository, IUserOrganizationQueries userOrganizationQueries)
     {
         this.organizationRepository = organizationRepository;
+        this.userOrganizationQueries = userOrganizationQueries;
     }
 
     public async Task<bool> AddUserOrganization(UserOrganizationDto userOrganization)
@@ -42,5 +44,10 @@ public class OrganizationService : IOrganizationService
             UserId = uo.UserId.Id,
             OrganizationId = uo.OrganizationId.Id
         }).ToList();
+    }
+
+    public async Task<bool> UserHasAccessToOrganization(UserOrganizationDto userOrganization)
+    {
+        return await userOrganizationQueries.UserHasAccessToOrganization(userOrganization.ToUserOrganization());
     }
 }

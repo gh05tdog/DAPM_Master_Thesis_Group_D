@@ -8,4 +8,5 @@ public interface IPipelineService
     Task<ICollection<PipelineDto>> GetPipelinesForUser(UserDto user); 
     Task<bool> RemoveUserPipeline(UserPipelineDto userPipeline);
     Task<ICollection<UserPipelineDto>> GetAllUserPipelines();
+    Task<bool> UserHasAccessToPipeline(UserPipelineDto userPipeline);
 }
