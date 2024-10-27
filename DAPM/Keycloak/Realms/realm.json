@@ -3179,6 +3179,25 @@
         "realmRoles": [
           "Manager"
         ]
+      },
+      {
+        "id": "h86d9920-a202-4e9d-bfa4-de4117a4c5e1",
+        "username": "Backend",
+        "enabled": true,
+        "emailVerified": true,
+        "firstName": "Backend",
+        "lastName": "Backend",
+        "email": "Backend@mail.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password",
+            "temporary": false
+          }
+        ],
+        "realmRoles": [
+          "Manager"
+        ]
       }
     ],
     "scopeMappings": [

@@ -67,6 +67,7 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
     {
         var client = httpClientFactory.CreateClient();
         var response = await client.PostAsJsonAsync(route, request);
+        response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<TResponse>();
     }
     
@@ -74,6 +75,7 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
     {
         var client = httpClientFactory.CreateClient();
         var response = await client.GetAsync($"{route}/{userId}");
+        response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<TResponse>();
     }
 }

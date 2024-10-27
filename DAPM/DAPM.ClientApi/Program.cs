@@ -44,7 +44,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddQueueing(new QueueingConfigurationSettings
 {
     RabbitMqConsumerConcurrency = 5,
-    RabbitMqHostname = "rabbitmq",
+    RabbitMqHostname = "localhost",
     RabbitMqPort = 5672,
     RabbitMqPassword = "guest",
     RabbitMqUsername = "guest"
@@ -77,7 +77,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Access control services
-builder.Services.Configure<ApiHttpClientFactorySettings>(configuration.GetSection("ApiHttpClientFactorySettings"));
+builder.Services.AddSingleton(configuration.GetSection("AccessControl").Get<AccessControlConfig>());
+builder.Services.AddSingleton<ITokenFetcher, TokenFetcher>();
 builder.Services.AddSingleton<IApiHttpClientFactory, ApiHttpClientFactory>();
 builder.Services.AddSingleton<IApiHttpClient, ApiHttpClient>();
 builder.Services.AddSingleton<IAccessControlService, AccessControlService>();
