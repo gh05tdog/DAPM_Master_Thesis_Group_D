@@ -3,12 +3,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace DAPM.Test.EndToEnd;
 
-public class ApiHttpFixture : IDisposable
+public class ApiHttpFixture
 {
     public readonly DapmClientApiHttpClient Client;
     public readonly DapmClientApiHttpClient AuthenticatedClient;
     public readonly TokenFetcher TokenFetcher;
     public readonly string BaseUrl;
+    public readonly AccessControlAdder AccessControlAdder;
 
     public ApiHttpFixture()
     {
@@ -36,9 +37,6 @@ public class ApiHttpFixture : IDisposable
         
         Client = new DapmClientApiHttpClient(apiHttpClientFactory);
         AuthenticatedClient = new DapmClientApiHttpClient(authenticatedApiHttpClientFactory);
-    }
-
-    public void Dispose()
-    {
+        AccessControlAdder = new AccessControlAdder(new Uri(config["ApiHttpClientFactorySettings:BaseUrl"]));
     }
 }
