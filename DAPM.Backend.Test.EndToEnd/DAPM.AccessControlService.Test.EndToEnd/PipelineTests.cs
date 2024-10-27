@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
-using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Utilities;
+using TestUtilities;
+using TestUtilities.Dtos;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
 
@@ -12,7 +12,7 @@ public class PipelineTests(TestFixture fixture)
     [Fact]
     public async Task AddUserPipelineSucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.PipelineManager);
         
         var request = new UserPipelineDto
         {
@@ -29,7 +29,7 @@ public class PipelineTests(TestFixture fixture)
     [Fact]
     public async Task AddPipelineForUserAndGetPipelinesForUserReturnsPipeline()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.PipelineManager);
         
         var addUserPipeline = new UserPipelineDto
         {
@@ -48,7 +48,7 @@ public class PipelineTests(TestFixture fixture)
     [Fact]
     public async Task AddPipelineForUserAndGetPipelinesForOtherUserReturnsNoPipelines()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.PipelineManager);
         
         var addUserPipeline = new UserPipelineDto
         {
@@ -67,7 +67,7 @@ public class PipelineTests(TestFixture fixture)
     [Fact]
     public async Task RemoveUserPipelineSucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.PipelineManager);
         
         var addUserPipeline = new UserPipelineDto
         {
@@ -92,7 +92,7 @@ public class PipelineTests(TestFixture fixture)
     [Fact]
     public async Task GetAllUserPipelinesReturnsPipelines()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.PipelineManager);
         
         var addUserPipeline = new UserPipelineDto
         {
@@ -113,7 +113,7 @@ public class PipelineTests(TestFixture fixture)
     [Fact]
     public async Task RemovePipelineForUserAndGetPipelinesForUserReturnsNoPipelines()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.PipelineManager);
         
         var addUserPipeline = new UserPipelineDto
         {

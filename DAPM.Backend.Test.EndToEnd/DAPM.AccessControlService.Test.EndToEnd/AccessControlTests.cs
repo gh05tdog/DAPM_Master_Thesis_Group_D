@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
-using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Utilities;
+using TestUtilities;
+using TestUtilities.Dtos;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
 
@@ -25,7 +25,7 @@ public class AccessControlTests(TestFixture fixture)
         await accessControlAdder.AddUserRepositoryAsync(userId, repositoryId);
         await accessControlAdder.AddUserOrganizationAsync(userId, organizationId);
         
-        var client = httpClientFactory.CreateClient();
+        var client = httpClientFactory.CreateAccessControlClient(Users.Manager);
 
         var request = new UserAccessRequestDto
         {
@@ -54,7 +54,7 @@ public class AccessControlTests(TestFixture fixture)
         var repositoryId = Guid.NewGuid();
         var organizationId = Guid.NewGuid();
         
-        var client = httpClientFactory.CreateClient();
+        var client = httpClientFactory.CreateAccessControlClient(Users.Manager);
 
         var request = new UserAccessRequestDto
         {
@@ -77,7 +77,7 @@ public class AccessControlTests(TestFixture fixture)
     [Fact]
     public async Task UserHasAccess_UserIsNull_ReturnsBadRequest()
     {
-        var client = httpClientFactory.CreateClient();
+        var client = httpClientFactory.CreateAccessControlClient(Users.Manager);
 
         var request = new UserAccessRequestDto
         {

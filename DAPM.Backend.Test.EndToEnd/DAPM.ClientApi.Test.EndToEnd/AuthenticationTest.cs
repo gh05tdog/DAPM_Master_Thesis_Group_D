@@ -1,32 +1,34 @@
+using System.Net;
 using DAPM.Test.EndToEnd.TestUtilities;
+using TestUtilities;
 
 namespace DAPM.Test.EndToEnd;
 
 [Collection("ApiHttpCollection")]
 public class AuthenticationTest(ApiHttpFixture apiHttpFixture)
 {
-    private readonly DapmClientApiHttpClient client = apiHttpFixture.Client;
-    private readonly DapmClientApiHttpClient authenticatedClient = apiHttpFixture.AuthenticatedClient;
-
     [Fact]
     public async Task Given_unauthenticated_client_anonymous_returns_200_ok_anonymous()
     {
-        var response = await client.GetAnonymousAsync();
-        Assert.Equal("Anonymous", response);
+        using var client = apiHttpFixture.HttpClientFactory.CreateClientApiClient(Users.Test);
+        var response = await client.GetAsync("test/authentication/anonymous");
+        var message = await response.Content.ReadAsStringAsync();
+        Assert.Equal("Anonymous", message);
     }
     
     [Fact]
     public async Task Given_unauthenticated_client_authenticated_throws_401_unauthorized()
     {
-        var exception = await Assert.ThrowsAsync<HttpRequestException>(async () => await client.GetAuthorizeAsync());
-        var response = exception.Message.Contains("401"); 
-        Assert.True(response, "Expected a 401 status code, but did not receive it.");
+        using var client = apiHttpFixture.HttpClientFactory.CreateClientApiClient(Users.Test);
+        client.DefaultRequestHeaders.Authorization = null;
+        var response = await client.GetAsync("test/authentication/authorize");
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     
     [Fact]
     public async Task Given_authenticated_client_authorize_returns_200_ok_authenticated()
     {
-        var response = await authenticatedClient.GetAuthorizeAsync();
+        var response = await apiHttpFixture.Client.GetAuthorizeAsync();
         Assert.Equal("Authorized", response);
     }
 }

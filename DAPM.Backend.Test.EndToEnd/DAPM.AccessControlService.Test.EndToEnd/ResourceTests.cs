@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
-using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Utilities;
+using TestUtilities;
+using TestUtilities.Dtos;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
 
@@ -12,7 +12,7 @@ public class ResourceTests(TestFixture fixture)
     [Fact]
     public async Task AddUserResourceSucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.ResourceManager);
         var request = new UserResourceDto
         {
             UserId = Guid.NewGuid(),
@@ -28,7 +28,7 @@ public class ResourceTests(TestFixture fixture)
     [Fact]
     public async Task AddResourceForUserAndGetResourcesForUserReturnsResource()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.ResourceManager);
         
         var addUserResource = new UserResourceDto
         {
@@ -47,7 +47,7 @@ public class ResourceTests(TestFixture fixture)
     [Fact]
     public async Task AddResourceForUserAndGetResourcesForOtherUserReturnsNoResource()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.ResourceManager);
         
         var addUserResource = new UserResourceDto
         {
@@ -66,7 +66,7 @@ public class ResourceTests(TestFixture fixture)
     [Fact]
     public async Task RemoveUserResourceSucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.ResourceManager);
         
         var addUserResource = new UserResourceDto
         {
@@ -91,7 +91,7 @@ public class ResourceTests(TestFixture fixture)
     [Fact]
     public async Task GetAllUserResourcesReturnsResources()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.ResourceManager);
         
         var addUserResource = new UserResourceDto
         {
@@ -112,7 +112,7 @@ public class ResourceTests(TestFixture fixture)
     [Fact]
     public async Task RemoveResourceForUserAndGetResourcesForUserReturnsNoResource()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.ResourceManager);
         
         var addUserResource = new UserResourceDto
         {

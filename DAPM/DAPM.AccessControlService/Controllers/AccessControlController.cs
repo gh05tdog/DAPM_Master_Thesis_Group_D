@@ -1,4 +1,5 @@
 using DAPM.AccessControlService.Core.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQLibrary.Models.AccessControl;
 
@@ -6,6 +7,7 @@ namespace DAPM.AccessControlService.Controllers;
 
 [ApiController]
 [Route("api/access-control")]
+[Authorize(Policy = "Manager")]
 public class AccessControlController : ControllerBase
 {
     private readonly IOrganizationService organizationService;

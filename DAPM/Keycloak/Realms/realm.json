@@ -2575,6 +2575,59 @@
     "roles": {
       "realm": [
         {
+          "id": "7aeff530-c6ad-4fe1-b69a-706ebce09bcb",
+          "name": "OrganizationManager",
+          "description": "",
+          "composite": false,
+          "clientRole": false,
+          "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
+          "attributes": {}
+        },
+        {
+          "id": "43a38c0e-1722-40fb-9eed-d2345cfdf46e",
+          "name": "PipelineManager",
+          "description": "",
+          "composite": false,
+          "clientRole": false,
+          "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
+          "attributes": {}
+        },
+        {
+          "id": "f7e992b9-a055-4b4b-b0d9-3ad7b9cf2af6",
+          "name": "ResourceManager",
+          "description": "",
+          "composite": false,
+          "clientRole": false,
+          "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
+          "attributes": {}
+        },
+        {
+          "id": "d1c8e99b-3e44-421a-8331-629527a64445",
+          "name": "Manager",
+          "description": "",
+          "composite": true,
+          "composites": {
+            "realm": [
+              "PipelineManager",
+              "RepositoryManager",
+              "ResourceManager",
+              "OrganizationManager"
+            ]
+          },
+          "clientRole": false,
+          "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
+          "attributes": {}
+        },
+        {
+          "id": "3df143e0-1306-47a3-a6da-7e9a9797e3cb",
+          "name": "RepositoryManager",
+          "description": "",
+          "composite": false,
+          "clientRole": false,
+          "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
+          "attributes": {}
+        },
+        {
           "id": "db6ea397-b395-4e97-9513-4d964fd68f9b",
           "name": "default-roles-test",
           "description": "${role_default-roles}",
@@ -3031,6 +3084,120 @@
             "temporary": false
           }
         ]
+      },
+      {
+        "id": "f86d9920-a202-4e9d-bfa4-de4117a4c5e6",
+        "username": "OrganizationManager",
+        "enabled": true,
+        "emailVerified": true,
+        "firstName": "Organization",
+        "lastName": "Manager",
+        "email": "OrganizationManager@mail.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password",
+            "temporary": false
+          }
+        ],
+        "realmRoles": [
+          "OrganizationManager"
+        ]
+      },
+      {
+        "id": "a86d9920-a202-4e9d-bfa4-de4117a4c5e7",
+        "username": "PipelineManager",
+        "enabled": true,
+        "emailVerified": true,
+        "firstName": "Pipeline",
+        "lastName": "Manager",
+        "email": "PipelineManager@mail.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password",
+            "temporary": false
+          }
+        ],
+        "realmRoles": [
+          "PipelineManager"
+        ]
+      },
+      {
+        "id": "b86d9920-a202-4e9d-bfa4-de4117a4c5e8",
+        "username": "RepositoryManager",
+        "enabled": true,
+        "emailVerified": true,
+        "firstName": "Repository",
+        "lastName": "Manager",
+        "email": "RepositoryManager@mail.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password",
+            "temporary": false
+          }
+        ],
+        "realmRoles": [
+          "RepositoryManager"
+        ]
+      },
+      {
+        "id": "c86d9920-a202-4e9d-bfa4-de4117a4c5e9",
+        "username": "ResourceManager",
+        "enabled": true,
+        "emailVerified": true,
+        "firstName": "Resource",
+        "lastName": "Manager",
+        "email": "ResourceManager@mail.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password",
+            "temporary": false
+          }
+        ],
+        "realmRoles": [
+          "ResourceManager"
+        ]
+      },
+      {
+        "id": "d86d9920-a202-4e9d-bfa4-de4117a4c5e0",
+        "username": "Manager",
+        "enabled": true,
+        "emailVerified": true,
+        "firstName": "Manager",
+        "lastName": "Manager",
+        "email": "Manager@mail.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password",
+            "temporary": false
+          }
+        ],
+        "realmRoles": [
+          "Manager"
+        ]
+      },
+      {
+        "id": "e86d9920-a202-4e9d-bfa4-de4117a4c5e1",
+        "username": "Backend",
+        "enabled": true,
+        "emailVerified": true,
+        "firstName": "Backend",
+        "lastName": "Backend",
+        "email": "Backend@mail.com",
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password",
+            "temporary": false
+          }
+        ],
+        "realmRoles": [
+          "Manager"
+        ]
       }
     ],
     "scopeMappings": [
@@ -3398,6 +3565,23 @@
         "fullScopeAllowed": true,
         "nodeReRegistrationTimeout": -1,
         "protocolMappers": [
+          {
+            "id": "5561a7ab-d781-489a-aa28-ad3d023d9533",
+            "name": "User realm roles",
+            "protocol": "openid-connect",
+            "protocolMapper": "oidc-usermodel-realm-role-mapper",
+            "consentRequired": false,
+            "config": {
+              "introspection.token.claim": "true",
+              "multivalued": "true",
+              "userinfo.token.claim": "true",
+              "id.token.claim": "true",
+              "lightweight.claim": "false",
+              "access.token.claim": "true",
+              "claim.name": "user_realm_roles",
+              "jsonType.label": "String"
+            }
+          },
           {
             "id": "d2a4bc8e-3de6-4534-a093-4f517d76c8df",
             "name": "Client Host",

@@ -1,5 +1,5 @@
-using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 using Microsoft.Extensions.Configuration;
+using TestUtilities;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
 
@@ -31,13 +31,8 @@ public class TestFixture
      
      public TestFixture()
      {
-         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-         var config = new ConfigurationBuilder()
-             .AddJsonFile("appsettings.json", optional: false)
-             .AddJsonFile($"appsettings.{environment}.json", optional: true)  
-             .Build();
-         
-         HttpClientFactory = new HttpClientFactory(new Uri(config["ApiHttpClientFactorySettings:BaseUrl"]));
-         AccessControlAdder = new AccessControlAdder(HttpClientFactory);
+         var fixture = new TestUtility();
+         HttpClientFactory = fixture.HttpClientFactory;
+         AccessControlAdder = new AccessControlAdder(Users.Manager);
      }
 }

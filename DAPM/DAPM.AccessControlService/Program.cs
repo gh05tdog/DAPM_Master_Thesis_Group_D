@@ -8,6 +8,8 @@ using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Repositories;
 using DAPM.AccessControlService.Infrastructure.TableInitializers;
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +60,32 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Keycloak
+builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Manager", builder =>
+    {
+        builder.RequireRealmRoles("Manager");
+    });
+    options.AddPolicy("PipelineManager", builder =>
+    {
+        builder.RequireRealmRoles("PipelineManager");
+    });
+    options.AddPolicy("RepositoryManager", builder =>
+    {
+        builder.RequireRealmRoles("RepositoryManager");
+    });
+    options.AddPolicy("ResourceManager", builder =>
+    {
+        builder.RequireRealmRoles("ResourceManager");
+    });
+    options.AddPolicy("OrganizationManager", builder =>
+    {
+        builder.RequireRealmRoles("OrganizationManager");
+    });
+}).AddKeycloakAuthorization(builder.Configuration);
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -65,10 +93,9 @@ app.MapDefaultEndpoints();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

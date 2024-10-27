@@ -77,7 +77,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Access control services
-builder.Services.Configure<ApiHttpClientFactorySettings>(configuration.GetSection("ApiHttpClientFactorySettings"));
+builder.Services.AddSingleton(configuration.GetSection("AccessControl").Get<AccessControlConfig>());
+builder.Services.AddSingleton<ITokenFetcher, TokenFetcher>();
 builder.Services.AddSingleton<IApiHttpClientFactory, ApiHttpClientFactory>();
 builder.Services.AddSingleton<IApiHttpClient, ApiHttpClient>();
 builder.Services.AddSingleton<IAccessControlService, AccessControlService>();
