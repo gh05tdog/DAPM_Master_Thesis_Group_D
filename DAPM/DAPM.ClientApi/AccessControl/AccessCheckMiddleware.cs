@@ -22,6 +22,12 @@ public class AccessCheckMiddleware
         var pipelineId = context.Request.RouteValues["pipelineId"] as string;
         var resourceId = context.Request.RouteValues["resourceId"] as string;
         var userId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+        if (organizationId is null && repositoryId is null && pipelineId is null && resourceId is null)
+        {
+            await _next(context);
+            return;
+        }
 
         var userAccessRequest = new UserAccessRequestDto
         {
