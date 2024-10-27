@@ -15,15 +15,12 @@ namespace DAPM.ClientApi.Controllers
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations")]
-    public class OrganizationController : BaseController
+    public class OrganizationController : ControllerBase
     {
-
-        private readonly ILogger<OrganizationController> _logger;
         private readonly IOrganizationService _organizationService;
 
-        public OrganizationController(ILogger<OrganizationController> logger, IOrganizationService organizationService, IAccessControlService accessControlService) : base(accessControlService)
+        public OrganizationController(IOrganizationService organizationService)
         {
-            _logger = logger;
             _organizationService = organizationService;
         }
 
@@ -41,9 +38,6 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetById(Guid organizationId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-
             Guid id = _organizationService.GetOrganizationById(organizationId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetOrganizationById", TicketId = id });
         }
@@ -52,9 +46,6 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets all the repositories of an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetRepositoriesOfOrganization(Guid organizationId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
             Guid id = _organizationService.GetRepositoriesOfOrganization(organizationId, this.UserId());
             return Ok(new ApiResponse {RequestName = "GetRepositoriesOfOrganization", TicketId = id });
         }
@@ -64,9 +55,6 @@ namespace DAPM.ClientApi.Controllers
             "only be able to create repositories for your own organization.")]
         public async Task<ActionResult<Guid>> PostRepositoryToOrganization(Guid organizationId, [FromBody] RepositoryApiDto repositoryDto)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
             Guid id = _organizationService.PostRepositoryToOrganization(organizationId, repositoryDto.Name, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostRepositoryToOrganization", TicketId = id });
         }
