@@ -15,11 +15,9 @@ public class RepositoryService : IRepositoryService
         this.repositoryRepository = repositoryRepository;
     }
 
-    public async Task<bool> AddUserRepository(UserDto user, RepositoryDto repository)
+    public async Task<bool> AddUserRepository(UserRepositoryDto userRepository)
     {
-        var userId = user.ToUserId();
-        var repositoryId = repository.ToRepositoryId();
-        await repositoryRepository.CreateUserRepository(new UserRepository(userId, repositoryId));
+        await repositoryRepository.CreateUserRepository(userRepository.ToUserRepository());
         return true;
     }
 
@@ -30,11 +28,9 @@ public class RepositoryService : IRepositoryService
         return repositoryIds.Select(r => new RepositoryDto{Id = r.Id}).ToList();
     }
     
-    public async Task<bool> RemoveUserRepository(UserDto user, RepositoryDto repository)
+    public async Task<bool> RemoveUserRepository(UserRepositoryDto userRepository)
     {
-        var userId = user.ToUserId();
-        var repositoryId = repository.ToRepositoryId();
-        await repositoryRepository.DeleteUserRepository(new UserRepository(userId, repositoryId));
+        await repositoryRepository.DeleteUserRepository(userRepository.ToUserRepository());
         return true;
     }
     

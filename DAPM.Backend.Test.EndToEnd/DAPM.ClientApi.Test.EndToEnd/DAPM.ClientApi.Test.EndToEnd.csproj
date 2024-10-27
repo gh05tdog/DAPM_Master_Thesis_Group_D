@@ -51,4 +51,8 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\DAPM.AccessControlService.Test.EndToEnd\DAPM.AccessControlService.Test.EndToEnd.csproj" />
+    </ItemGroup>
+
 </Project>

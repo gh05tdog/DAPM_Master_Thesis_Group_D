@@ -13,7 +13,7 @@ public class RepositoryTest
     public RepositoryTest(ApiHttpFixture apiHttpFixture)
     {
         this.client = apiHttpFixture.AuthenticatedClient;
-        
+        apiHttpFixture.AccessControlAdder.AddUserOrganizationAsync(TestHelper.UserId, TestHelper.OrganizationId).GetAwaiter().GetResult();
     }
     
     [Fact]

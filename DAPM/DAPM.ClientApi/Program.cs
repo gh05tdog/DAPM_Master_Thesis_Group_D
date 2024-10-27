@@ -13,7 +13,6 @@ using Microsoft.IdentityModel.Logging;
 using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using Microsoft.OpenApi.Models;
-using RabbitMQLibrary.Messages.AccessControl.Responses;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 
 var builder = WebApplication.CreateBuilder(args);

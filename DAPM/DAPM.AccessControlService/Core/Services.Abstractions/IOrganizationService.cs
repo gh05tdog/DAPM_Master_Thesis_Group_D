@@ -4,8 +4,8 @@ namespace DAPM.AccessControlService.Core.Services.Abstractions;
 
 public interface IOrganizationService
 {
-    Task<bool> AddUserOrganization(UserDto user, OrganizationDto organization);
+    Task<bool> AddUserOrganization(UserOrganizationDto userOrganization);
     Task<ICollection<OrganizationDto>> GetOrganizationsForUser(UserDto user);
-    Task<bool> RemoveUserOrganization(UserDto user, OrganizationDto organization);
+    Task<bool> RemoveUserOrganization(UserOrganizationDto userOrganization);
     Task<ICollection<UserOrganizationDto>> GetAllUserOrganizations();
 }

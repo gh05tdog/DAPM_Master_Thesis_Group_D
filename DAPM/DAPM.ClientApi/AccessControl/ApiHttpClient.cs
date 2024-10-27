@@ -1,45 +1,47 @@
-using RabbitMQLibrary.Messages.AccessControl.Requests;
-using RabbitMQLibrary.Messages.AccessControl.Responses;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.AccessControl;
 
 public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpClient
 {
-    private const string AddUserPipelineRoute = "add-user-pipeline";
-    private const string AddUserResourceRoute = "add-user-resource";
-    private const string AddUserRepositoryRoute = "add-user-repository";
-    private const string GetUserPipelinesRoute = "get-pipelines-for-user";
-    private const string GetUserResourcesRoute = "get-resources-for-user";
-    private const string GetUserRepositoriesRoute = "get-repositories-for-user";
+    public async Task<bool> AddUserPipelineAsync(UserPipelineDto request)
+    {
+        return await SendRequestAsync<UserPipelineDto, bool>(ApiRoutes.AddUserPipelineRoute, request);
+    }
+
+    public async Task<bool> AddUserResourceAsync(UserResourceDto request)
+    {
+        return await SendRequestAsync<UserResourceDto, bool>(ApiRoutes.AddUserResourceRoute, request);
+    }
+
+    public async Task<bool> AddUserRepositoryAsync(UserRepositoryDto request)
+    {
+        return await SendRequestAsync<UserRepositoryDto, bool>(ApiRoutes.AddUserRepositoryRoute, request);
+    }
     
-    public async Task<AddUserPipelineResponseMessage> AddUserPipelineAsync(AddUserPipelineRequestMessage request)
+    public async Task<bool> AddUserOrganizationAsync(UserOrganizationDto request)
     {
-        return await SendRequestAsync<AddUserPipelineRequestMessage, AddUserPipelineResponseMessage>(AddUserPipelineRoute, request);
+        return await SendRequestAsync<UserOrganizationDto, bool>(ApiRoutes.AddUserOrganizationRoute, request);
     }
 
-    public async Task<AddUserResourceResponseMessage> AddUserResourceAsync(AddUserResourceRequestMessage request)
+    public async Task<ICollection<PipelineDto>> GetPipelinesForUserAsync(UserDto request)
     {
-        return await SendRequestAsync<AddUserResourceRequestMessage, AddUserResourceResponseMessage>(AddUserResourceRoute, request);
+        return await GetRequestAsync<ICollection<PipelineDto>>(ApiRoutes.GetUserPipelinesRoute, request.Id);
     }
 
-    public async Task<AddUserRepositoryResponseMessage> AddUserRepositoryAsync(AddUserRepositoryRequestMessage request)
+    public async Task<ICollection<ResourceDto>> GetResourcesForUserAsync(UserDto request)
     {
-        return await SendRequestAsync<AddUserRepositoryRequestMessage, AddUserRepositoryResponseMessage>(AddUserRepositoryRoute, request);
+        return await GetRequestAsync<ICollection<ResourceDto>>(ApiRoutes.GetUserResourcesRoute, request.Id);
     }
 
-    public async Task<GetPipelinesForUserResponseMessage> GetPipelinesForUserAsync(GetPipelinesForUserRequestMessage request)
+    public async Task<ICollection<RepositoryDto>> GetRepositoriesForUserAsync(UserDto request)
     {
-        return await GetRequestAsync<GetPipelinesForUserResponseMessage>(GetUserPipelinesRoute, request.User.Id);
+        return await GetRequestAsync<ICollection<RepositoryDto>>(ApiRoutes.GetUserRepositoriesRoute, request.Id);
     }
-
-    public async Task<GetResourcesForUserResponseMessage> GetResourcesForUserAsync(GetResourcesForUserRequestMessage request)
+    
+    public async Task<ICollection<OrganizationDto>> GetOrganizationsForUserAsync(UserDto request)
     {
-        return await GetRequestAsync<GetResourcesForUserResponseMessage>(GetUserResourcesRoute, request.User.Id);
-    }
-
-    public async Task<GetRepositoriesForUserResponseMessage> GetRepositoriesForUserAsync(GetRepositoriesForUserRequestMessage request)
-    {
-        return await GetRequestAsync<GetRepositoriesForUserResponseMessage>(GetUserRepositoriesRoute, request.User.Id);
+        return await GetRequestAsync<ICollection<OrganizationDto>>(ApiRoutes.GetUserOrganizationsRoute, request.Id);
     }
     
     private async Task<TResponse> SendRequestAsync<TRequest, TResponse>(string route, TRequest request)

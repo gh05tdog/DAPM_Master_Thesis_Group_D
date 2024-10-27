@@ -1,5 +1,5 @@
 using DAPM.AccessControlService.Core.Services;
-using DAPM.AccessControlService.Infrastructure.Database;
+using DAPM.AccessControlService.Infrastructure.Repositories;
 using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
 using Microsoft.Data.Sqlite;
 using RabbitMQLibrary.Models.AccessControl;
@@ -25,8 +25,9 @@ public class ResourceServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var resource = new ResourceDto{Id = Guid.NewGuid()};
+        var userResource = new UserResourceDto{UserId = user.Id, ResourceId = resource.Id};
 
-        await service.AddUserResource(user, resource);
+        await service.AddUserResource(userResource);
 
         var resources = await service.GetResourcesForUser(user);
         Assert.Contains(resources, p => p.Id == resource.Id);
@@ -39,9 +40,10 @@ public class ResourceServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var resource = new ResourceDto{Id = Guid.NewGuid()};
+        var userResource = new UserResourceDto{UserId = user.Id, ResourceId = resource.Id};
 
-        await service.AddUserResource(user, resource);
-        await service.RemoveUserResource(user, resource);
+        await service.AddUserResource(userResource);
+        await service.RemoveUserResource(userResource);
 
         var resources = await service.GetResourcesForUser(user);
         Assert.DoesNotContain(resources, p => p.Id == resource.Id);
@@ -54,8 +56,9 @@ public class ResourceServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var resource = new ResourceDto{Id = Guid.NewGuid()};
+        var userResource = new UserResourceDto{UserId = user.Id, ResourceId = resource.Id};
 
-        await service.AddUserResource(user, resource);
+        await service.AddUserResource(userResource);
 
         var resources = await service.GetAllUserResources();
         Assert.Contains(resources, p => p.ResourceId == resource.Id);

@@ -8,26 +8,20 @@ using DAPM.Test.EndToEnd.TestUtilities;
 using Xunit;
 
 [Collection("ApiHttpCollection")]
-public class ResourceTest
+public class ResourceTest(ApiHttpFixture apiHttpFixture)
 {
-    private readonly HttpClient _httpClient;
+    private readonly HttpClient _httpClient = new();
     private const string FilePath = "test.txt"; // Path to the file you want to send
-    private readonly DapmClientApiHttpClient client;
-    private readonly string baseUrl;
-    private readonly TokenFetcher TokenFetcher;
-    
-    public ResourceTest(ApiHttpFixture apiHttpFixture)
-    {
-        _httpClient = new HttpClient();
-        this.client = apiHttpFixture.AuthenticatedClient;
-        this.baseUrl = apiHttpFixture.BaseUrl;
-        this.TokenFetcher = apiHttpFixture.TokenFetcher;
-    }
+    private readonly DapmClientApiHttpClient client = apiHttpFixture.AuthenticatedClient;
+    private readonly string baseUrl = apiHttpFixture.BaseUrl;
+    private readonly TokenFetcher TokenFetcher = apiHttpFixture.TokenFetcher;
+    private readonly AccessControlAdder AccessControlAdder = apiHttpFixture.AccessControlAdder;
 
     [Fact]
     public async Task PostApi_WithMultipartData_Returns200()
     {
         // Arrange
+        await AccessControlAdder.AddUserOrganizationAsync(TestHelper.UserId, TestHelper.OrganizationId);
         var organizationId = (await client.GetOrganizationsAsync()).First().Id;
         var repositoryResult = await client.PostRepositoryAsync(organizationId, Guid.NewGuid().ToString());
         var repositoryId = repositoryResult.ItemIds.RepositoryId;

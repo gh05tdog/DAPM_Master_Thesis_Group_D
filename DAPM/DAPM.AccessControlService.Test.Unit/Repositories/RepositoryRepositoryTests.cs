@@ -1,7 +1,7 @@
 using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
-using DAPM.AccessControlService.Infrastructure.Database;
+using DAPM.AccessControlService.Infrastructure.Repositories;
 using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
 using Microsoft.Data.Sqlite;
 

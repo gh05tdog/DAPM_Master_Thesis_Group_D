@@ -1,5 +1,5 @@
 using DAPM.AccessControlService.Core.Services;
-using DAPM.AccessControlService.Infrastructure.Database;
+using DAPM.AccessControlService.Infrastructure.Repositories;
 using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
 using Microsoft.Data.Sqlite;
 using RabbitMQLibrary.Models.AccessControl;
@@ -25,8 +25,9 @@ public class PipelineServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var pipeline = new PipelineDto{Id = Guid.NewGuid()};
+        var userPipeline = new UserPipelineDto{UserId = user.Id, PipelineId = pipeline.Id};
 
-        await service.AddUserPipeline(user, pipeline);
+        await service.AddUserPipeline(userPipeline);
 
         var pipelines = await service.GetPipelinesForUser(user);
         Assert.Contains(pipelines, p => p.Id == pipeline.Id);
@@ -39,9 +40,10 @@ public class PipelineServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var pipeline = new PipelineDto{Id = Guid.NewGuid()};
+        var userPipeline = new UserPipelineDto{UserId = user.Id, PipelineId = pipeline.Id};
 
-        await service.AddUserPipeline(user, pipeline);
-        await service.RemoveUserPipeline(user, pipeline);
+        await service.AddUserPipeline(userPipeline);
+        await service.RemoveUserPipeline(userPipeline);
 
         var pipelines = await service.GetPipelinesForUser(user);
         Assert.DoesNotContain(pipelines, p => p.Id == pipeline.Id);
@@ -54,8 +56,9 @@ public class PipelineServiceTests
 
         var user = new UserDto{Id = Guid.NewGuid()};
         var pipeline = new PipelineDto{Id = Guid.NewGuid()};
+        var userPipeline = new UserPipelineDto{UserId = user.Id, PipelineId = pipeline.Id};
 
-        await service.AddUserPipeline(user, pipeline);
+        await service.AddUserPipeline(userPipeline);
 
         var pipelines = await service.GetAllUserPipelines();
         Assert.Contains(pipelines, p => p.PipelineId == pipeline.Id);

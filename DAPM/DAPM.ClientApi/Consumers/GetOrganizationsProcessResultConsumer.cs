@@ -1,4 +1,5 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+﻿using DAPM.ClientApi.AccessControl;
+using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -12,18 +13,24 @@ namespace DAPM.ClientApi.Consumers
     {
         private ILogger<GetOrganizationsProcessResultConsumer> _logger;
         private readonly ITicketService _ticketService;
-        public GetOrganizationsProcessResultConsumer(ILogger<GetOrganizationsProcessResultConsumer> logger, ITicketService ticketService)
+        private readonly IAccessControlService _accessControlService;
+        
+        public GetOrganizationsProcessResultConsumer(ILogger<GetOrganizationsProcessResultConsumer> logger, ITicketService ticketService, IAccessControlService accessControlService)
         {
             _logger = logger;
             _ticketService = ticketService;
+            _accessControlService = accessControlService;
         }
 
-        public Task ConsumeAsync(GetOrganizationsProcessResult message)
+        public async Task ConsumeAsync(GetOrganizationsProcessResult message)
         {
             _logger.LogInformation("GetOrganizationsResultMessage received");
 
 
             IEnumerable<OrganizationDTO> organizationsDTOs = message.Organizations;
+            var userId = _ticketService.GetUserFromTicket(message.TicketId);
+            var organizations = (await _accessControlService.GetUserOrganizations(userId)).Select(o => o.Id).ToHashSet();
+            organizationsDTOs = organizationsDTOs.Where(o => organizations.Contains(o.Id));
 
             // Objects used for serialization
             JToken result = new JObject();
@@ -38,7 +45,7 @@ namespace DAPM.ClientApi.Consumers
             // Update resolution
             _ticketService.UpdateTicketResolution(message.TicketId, result);
             
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
     }

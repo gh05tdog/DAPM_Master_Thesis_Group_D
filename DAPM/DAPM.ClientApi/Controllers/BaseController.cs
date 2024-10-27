@@ -16,6 +16,11 @@ public abstract class BaseController : ControllerBase
         this.accessControlService = accessControlService;
     }
     
+    protected async Task<bool> HasOrganizationAccess(Guid organizationId)
+    {
+        return await accessControlService.UserHasAccessToOrganization(this.User(), new OrganizationDto { Id = organizationId });
+    }
+    
     protected async Task<bool> HasRepositoryAccess(Guid repositoryId)
     {
         return await accessControlService.UserHasAccessToRepository(this.User(), new RepositoryDto { Id = repositoryId });

@@ -1,7 +1,5 @@
 using System.Net.Http.Json;
 using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Requests;
-using DAPM.AccessControlService.Test.EndToEnd.Responses;
 using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
@@ -15,22 +13,16 @@ public class ResourceTests(TestFixture fixture)
     public async Task AddUserResourceSucceeds()
     {
         using var client = httpClientFactory.CreateClient();
-        var request = new AddUserResourceRequestMessage
+        var request = new UserResourceDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Resource = new ResourceDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            ResourceId = Guid.NewGuid()
         };
         
         var response = await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , request);
-        var result = await response.Content.ReadFromJsonAsync<AddUserResourceResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        Assert.True(result.Success);
+        Assert.True(result);
     }
     
     [Fact]
@@ -38,65 +30,37 @@ public class ResourceTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserResource = new AddUserResourceRequestMessage
+        var addUserResource = new UserResourceDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Resource = new ResourceDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            ResourceId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , addUserResource);
         
-        var request = new GetResourcesForUserRequestMessage
-        {
-            User = new UserDto
-            {
-                Id = addUserResource.User.Id
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserResourcesRoute}/{addUserResource.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<ResourceDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserResourcesRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetResourcesForUserResponseMessage>();
-        
-        Assert.Contains(addUserResource.Resource.Id, result.Resources.Select(r => r.Id));
+        Assert.Contains(addUserResource.ResourceId, result.Select(r => r.Id));
     }
     
     [Fact]
-    public async Task AddResourceForUserAndGetResourcesForUserReturnsResource2()
+    public async Task AddResourceForUserAndGetResourcesForOtherUserReturnsNoResource()
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserResource = new AddUserResourceRequestMessage
+        var addUserResource = new UserResourceDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Resource = new ResourceDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            ResourceId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , addUserResource);
         
-        var request = new GetResourcesForUserRequestMessage
-        {
-            User = new UserDto
-            {
-                Id = addUserResource.User.Id
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserResourcesRoute}/{Guid.NewGuid()}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<ResourceDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserResourcesRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetResourcesForUserResponseMessage>();
-        
-        Assert.Contains(addUserResource.Resource.Id, result.Resources.Select(r => r.Id));
+        Assert.DoesNotContain(addUserResource.ResourceId, result.Select(r => r.Id));
     }
     
     [Fact]
@@ -104,36 +68,24 @@ public class ResourceTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserResource = new AddUserResourceRequestMessage
+        var addUserResource = new UserResourceDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Resource = new ResourceDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            ResourceId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , addUserResource);
         
-        var request = new RemoveUserResourceRequestMessage
+        var request = new UserResourceDto
         {
-            User = new UserDto
-            {
-                Id = addUserResource.User.Id
-            },
-            Resource = new ResourceDto
-            {
-                Id = addUserResource.Resource.Id
-            }
+            UserId = addUserResource.UserId,
+            ResourceId = addUserResource.ResourceId
         };
         
         var response = await client.PostAsJsonAsync(TestFixture.RemoveUserResourceRoute , request);
-        var result = await response.Content.ReadFromJsonAsync<RemoveUserResourceResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        Assert.True(result.Success);
+        Assert.True(result);
     }
     
     [Fact]
@@ -141,23 +93,46 @@ public class ResourceTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserResource = new AddUserResourceRequestMessage
+        var addUserResource = new UserResourceDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Resource = new ResourceDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            ResourceId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , addUserResource);
         
         var response = await client.GetAsync(TestFixture.GetAllUserResourcesRoute);
-        var result = await response.Content.ReadFromJsonAsync<GetAllUserResourcesResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<ICollection<UserResourceDto>>();
         
-        Assert.Contains(result.Resources, p => p.ResourceId == addUserResource.Resource.Id);
+        Assert.Contains(result, p => 
+            p.ResourceId == addUserResource.ResourceId && 
+            p.UserId == addUserResource.UserId);
+    }
+    
+    [Fact]
+    public async Task RemoveResourceForUserAndGetResourcesForUserReturnsNoResource()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserResource = new UserResourceDto
+        {
+            UserId = Guid.NewGuid(),
+            ResourceId = Guid.NewGuid()
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserResourceRoute , addUserResource);
+        
+        var request = new UserResourceDto
+        {
+            UserId = addUserResource.UserId,
+            ResourceId = addUserResource.ResourceId
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.RemoveUserResourceRoute , request);
+        
+        var response = await client.GetAsync($"{TestFixture.GetUserResourcesRoute}/{addUserResource.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<ResourceDto>>();
+        
+        Assert.DoesNotContain(addUserResource.ResourceId, result.Select(r => r.Id));
     }
 }

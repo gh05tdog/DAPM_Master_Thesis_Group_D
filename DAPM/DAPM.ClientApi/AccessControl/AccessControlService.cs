@@ -1,4 +1,3 @@
-using RabbitMQLibrary.Messages.AccessControl.Requests;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.ClientApi.AccessControl;
@@ -7,65 +6,42 @@ public class AccessControlService(IApiHttpClient apiHttpClient) : IAccessControl
 {
     public async Task<ICollection<PipelineDto>> GetUserPipelines(UserDto user)
     {
-        var message = new GetPipelinesForUserRequestMessage
-        {
-            User = user
-        };
-
-        return (await apiHttpClient.GetPipelinesForUserAsync(message)).Pipelines;
+        return await apiHttpClient.GetPipelinesForUserAsync(user);
     }
 
     public async Task<ICollection<RepositoryDto>> GetUserRepositories(UserDto user)
     {
-        var message = new GetRepositoriesForUserRequestMessage
-        {
-            User = user
-        };
-        
-        return (await apiHttpClient.GetRepositoriesForUserAsync(message)).Repositories;
+        return await apiHttpClient.GetRepositoriesForUserAsync(user);
     }
 
     public async Task<ICollection<ResourceDto>> GetUserResources(UserDto user)
     {
-        var message = new GetResourcesForUserRequestMessage
-        {
-            User = user
-        };
-        
-        return (await apiHttpClient.GetResourcesForUserAsync(message)).Resources;
+        return await apiHttpClient.GetResourcesForUserAsync(user);
+    }
+    
+    public async Task<ICollection<OrganizationDto>> GetUserOrganizations(UserDto user)
+    {
+        return await apiHttpClient.GetOrganizationsForUserAsync(user);
     }
 
     public async Task<bool> AddUserToPipeline(UserDto user, PipelineDto pipeline)
     {
-        var message = new AddUserPipelineRequestMessage
-        {
-            User = user,
-            Pipeline = pipeline
-        };
-        
-        return (await apiHttpClient.AddUserPipelineAsync(message)).Success;
+        return await apiHttpClient.AddUserPipelineAsync(new UserPipelineDto{ UserId = user.Id, PipelineId = pipeline.Id });
     }
 
     public async Task<bool> AddUserToResource(UserDto user, ResourceDto resource)
     {
-        var message = new AddUserResourceRequestMessage
-        {
-            User = user,
-            Resource = resource
-        };
-
-        return (await apiHttpClient.AddUserResourceAsync(message)).Success;
+        return await apiHttpClient.AddUserResourceAsync(new UserResourceDto{ UserId = user.Id, ResourceId = resource.Id });
     }
 
     public async Task<bool> AddUserToRepository(UserDto user, RepositoryDto repository)
     {
-        var message = new AddUserRepositoryRequestMessage
-        {
-            User = user,
-            Repository = repository
-        };
-        
-        return (await apiHttpClient.AddUserRepositoryAsync(message)).Success;
+        return await apiHttpClient.AddUserRepositoryAsync(new UserRepositoryDto{ UserId = user.Id, RepositoryId = repository.Id });
+    }
+    
+    public async Task<bool> AddUserToOrganization(UserDto user, OrganizationDto organization)
+    {
+        return await apiHttpClient.AddUserOrganizationAsync(new UserOrganizationDto{ UserId = user.Id, OrganizationId = organization.Id });
     }
 
     public async Task<bool> UserHasAccessToPipeline(UserDto user, PipelineDto pipeline)
@@ -84,5 +60,11 @@ public class AccessControlService(IApiHttpClient apiHttpClient) : IAccessControl
     {
         var repositories = await GetUserRepositories(user);
         return repositories.Any(r => r.Id == repository.Id);
+    }
+    
+    public async Task<bool> UserHasAccessToOrganization(UserDto user, OrganizationDto organization)
+    {
+        var organizations = await GetUserOrganizations(user);
+        return organizations.Any(o => o.Id == organization.Id);
     }
 }

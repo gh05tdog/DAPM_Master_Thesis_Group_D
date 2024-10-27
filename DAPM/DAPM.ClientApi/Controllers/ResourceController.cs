@@ -28,6 +28,9 @@ namespace DAPM.ClientApi.Controllers
             "a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetResourceById(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
+            if (!await HasOrganizationAccess(organizationId))
+                return UnauthorizedResponse("organization", organizationId);
+            
             if (!await HasRepositoryAccess(repositoryId))
                 return UnauthorizedResponse("repository", repositoryId);
 
@@ -43,6 +46,9 @@ namespace DAPM.ClientApi.Controllers
             "a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetResourceFileById(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
+            if (!await HasOrganizationAccess(organizationId))
+                return UnauthorizedResponse("organization", organizationId);
+            
             if (!await HasRepositoryAccess(repositoryId))
                 return UnauthorizedResponse("repository", repositoryId);
 
