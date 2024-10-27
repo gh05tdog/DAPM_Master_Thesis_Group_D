@@ -12,4 +12,5 @@ public interface IApiHttpClient
     Task<ICollection<ResourceDto>> GetResourcesForUserAsync(UserDto request);
     Task<ICollection<RepositoryDto>> GetRepositoriesForUserAsync(UserDto request);
     Task<ICollection<OrganizationDto>> GetOrganizationsForUserAsync(UserDto request);
+    Task<UserAccessResponseDto> GetUserAccessAsync(UserAccessRequestDto request);
 }

@@ -123,6 +123,8 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<AccessCheckMiddleware>();
+
 app.MapControllers();
 
 app.MapGet("/", (ClaimsPrincipal user) =>

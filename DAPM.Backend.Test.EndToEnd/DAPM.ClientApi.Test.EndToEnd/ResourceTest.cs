@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 using DAPM.Test.EndToEnd;
 using DAPM.Test.EndToEnd.TestUtilities;
 using Xunit;

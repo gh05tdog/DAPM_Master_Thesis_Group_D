@@ -15,7 +15,7 @@ public class PipelineServiceTests
         
         var repository = new PipelineRepository(connection, new PipelineTableInitializer(connection));
 
-        return new PipelineService(repository);
+        return new PipelineService(repository, repository);
     }
     
     [Fact]
@@ -62,5 +62,35 @@ public class PipelineServiceTests
 
         var pipelines = await service.GetAllUserPipelines();
         Assert.Contains(pipelines, p => p.PipelineId == pipeline.Id);
+    }
+    
+    [Fact]
+    public async Task UserHasAccessToPipeline_WhenUserHasAccessToPipeline_ReturnsTrue()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var pipeline = new PipelineDto{Id = Guid.NewGuid()};
+        var userPipeline = new UserPipelineDto{UserId = user.Id, PipelineId = pipeline.Id};
+
+        await service.AddUserPipeline(userPipeline);
+
+        var result = await service.UserHasAccessToPipeline(userPipeline);
+
+        Assert.True(result);
+    }
+    
+    [Fact]
+    public async Task UserHasAccessToPipeline_WhenUserDoesNotHaveAccessToPipeline_ReturnsFalse()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var pipeline = new PipelineDto{Id = Guid.NewGuid()};
+        var userPipeline = new UserPipelineDto{UserId = user.Id, PipelineId = pipeline.Id};
+
+        var result = await service.UserHasAccessToPipeline(userPipeline);
+
+        Assert.False(result);
     }
 }

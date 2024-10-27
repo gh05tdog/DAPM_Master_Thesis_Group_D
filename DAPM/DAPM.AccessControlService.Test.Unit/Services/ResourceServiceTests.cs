@@ -15,7 +15,7 @@ public class ResourceServiceTests
         
         var repository = new ResourceRepository(connection, new ResourceTableInitializer(connection));
 
-        return new ResourceService(repository);
+        return new ResourceService(repository, repository);
     }
     
     [Fact]
@@ -62,5 +62,30 @@ public class ResourceServiceTests
 
         var resources = await service.GetAllUserResources();
         Assert.Contains(resources, p => p.ResourceId == resource.Id);
+    }
+    
+    [Fact]
+    public async Task UserHasAccessToResource_WhenUserHasAccessToResource_ReturnsTrue()
+    {
+        var service = CreateService();
+
+        var userResource = new UserResourceDto{UserId = Guid.NewGuid(), ResourceId = Guid.NewGuid()};
+        await service.AddUserResource(userResource);
+        
+        var result = await service.UserHasAccessToResource(userResource);
+        
+        Assert.True(result);
+    }
+    
+    [Fact]
+    public async Task UserHasAccessToResource_WhenUserDoesNotHaveAccessToResource_ReturnsFalse()
+    {
+        var service = CreateService();
+
+        var userResource = new UserResourceDto{UserId = Guid.NewGuid(), ResourceId = Guid.NewGuid()};
+        
+        var result = await service.UserHasAccessToResource(userResource);
+        
+        Assert.False(result);
     }
 }

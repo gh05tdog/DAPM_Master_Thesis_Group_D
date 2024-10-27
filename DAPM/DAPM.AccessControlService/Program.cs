@@ -1,6 +1,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Queries;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Services;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -40,6 +41,12 @@ builder.Services.AddSingleton<IPipelineRepository, PipelineRepository>();
 builder.Services.AddSingleton<IRepositoryRepository, RepositoryRepository>();
 builder.Services.AddSingleton<IResourceRepository, ResourceRepository>();
 builder.Services.AddSingleton<IOrganizationRepository, OrganizationRepository>();
+
+// Add query services
+builder.Services.AddSingleton<IUserPipelineQueries, PipelineRepository>();
+builder.Services.AddSingleton<IUserRepositoryQueries, RepositoryRepository>();
+builder.Services.AddSingleton<IUserResourceQueries, ResourceRepository>();
+builder.Services.AddSingleton<IUserOrganizationQueries, OrganizationRepository>();
 
 // Add services
 builder.Services.AddSingleton<IPipelineService, PipelineService>();

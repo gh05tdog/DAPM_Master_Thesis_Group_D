@@ -1,12 +1,13 @@
 using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Queries;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Infrastructure.TableInitializers;
 using Dapper;
 
 namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
-public class RepositoryRepository : IRepositoryRepository
+public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQueries
 {
     private readonly IDbConnection dbConnection;
     private bool initialized;
@@ -60,5 +61,17 @@ public class RepositoryRepository : IRepositoryRepository
         return userRepositories
             .Select(x => new UserRepository(new UserId(Guid.Parse(x.Item1)), new RepositoryId(Guid.Parse(x.Item2))))
             .ToList();
+    }
+
+    public async Task<bool> UserHasAccessToRepository(UserRepository userRepository)
+    {
+        const string sql = @"
+                SELECT CASE WHEN EXISTS (
+                    SELECT 1
+                    FROM UserRepositories
+                    WHERE UserId = @UserId AND RepositoryId = @RepositoryId
+                ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
+            ";
+        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userRepository.UserId.Id, RepositoryId = userRepository.RepositoryId.Id });
     }
 }

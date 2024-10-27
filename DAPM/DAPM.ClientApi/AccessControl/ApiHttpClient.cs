@@ -43,7 +43,12 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
     {
         return await GetRequestAsync<ICollection<OrganizationDto>>(ApiRoutes.GetUserOrganizationsRoute, request.Id);
     }
-    
+
+    public async Task<UserAccessResponseDto> GetUserAccessAsync(UserAccessRequestDto request)
+    {
+        return await SendRequestAsync<UserAccessRequestDto, UserAccessResponseDto>(ApiRoutes.CheckAccessRoute, request);
+    }
+
     private async Task<TResponse> SendRequestAsync<TRequest, TResponse>(string route, TRequest request)
     {
         var client = httpClientFactory.CreateClient();

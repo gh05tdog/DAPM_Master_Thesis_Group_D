@@ -16,11 +16,11 @@ namespace DAPM.ClientApi.Controllers
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations/")]
-    public class RepositoryController : BaseController
+    public class RepositoryController : ControllerBase
     {
         private readonly IRepositoryService repositoryService;
         
-        public RepositoryController(IRepositoryService repositoryService, IAccessControlService accessControlService) : base(accessControlService)
+        public RepositoryController(IRepositoryService repositoryService)
         {
             this.repositoryService = repositoryService;
         }
@@ -29,12 +29,6 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets a repository by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetRepositoryById(Guid organizationId, Guid repositoryId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-            
             Guid id = repositoryService.GetRepositoryById(organizationId, repositoryId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetRepositoryById", TicketId = id});
         }
@@ -44,12 +38,6 @@ namespace DAPM.ClientApi.Controllers
             "does not include the resource files. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetResourcesOfRepository(Guid organizationId, Guid repositoryId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-            
             Guid id = repositoryService.GetResourcesOfRepository(organizationId, repositoryId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetResourcesOfRepository", TicketId = id});
         }
@@ -59,12 +47,6 @@ namespace DAPM.ClientApi.Controllers
             "does not include the JSON models of the pipelines. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetPipelinesOfRepository(Guid organizationId, Guid repositoryId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-            
             Guid id = repositoryService.GetPipelinesOfRepository(organizationId, repositoryId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetPipelinesOfRepository", TicketId = id });
         }
@@ -73,12 +55,6 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Posts a new resource into a repository by id.")]
         public async Task<ActionResult<Guid>> PostResourceToRepository(Guid organizationId, Guid repositoryId, [FromForm]ResourceForm resourceForm)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-            
             if (resourceForm.Name == null || resourceForm.ResourceFile == null)
                 return BadRequest();
 
@@ -91,12 +67,6 @@ namespace DAPM.ClientApi.Controllers
             "Dockerfile to build it and execute it.")]
         public async Task<ActionResult<Guid>> PostOperatorToRepository(Guid organizationId, Guid repositoryId, [FromForm] OperatorForm resourceForm)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-
             if (resourceForm.Name == null || resourceForm.SourceCodeFile == null)
                 return BadRequest();
 
@@ -110,12 +80,6 @@ namespace DAPM.ClientApi.Controllers
             " we agreed on.")]
         public async Task<ActionResult<Guid>> PostPipelineToRepository(Guid organizationId, Guid repositoryId, [FromBody]PipelineApiDto pipelineApiDto)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-            
             Guid id = repositoryService.PostPipelineToRepository(organizationId, repositoryId, pipelineApiDto, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostPipelineToRepository", TicketId = id });
         }

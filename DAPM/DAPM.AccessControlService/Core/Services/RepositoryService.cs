@@ -1,4 +1,4 @@
-using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Queries;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Core.Extensions;
 using DAPM.AccessControlService.Core.Services.Abstractions;
@@ -9,10 +9,12 @@ namespace DAPM.AccessControlService.Core.Services;
 public class RepositoryService : IRepositoryService
 {
     private readonly IRepositoryRepository repositoryRepository;
+    private readonly IUserRepositoryQueries userRepositoryQueries;
 
-    public RepositoryService(IRepositoryRepository repositoryRepository)
+    public RepositoryService(IRepositoryRepository repositoryRepository, IUserRepositoryQueries userRepositoryQueries)
     {
         this.repositoryRepository = repositoryRepository;
+        this.userRepositoryQueries = userRepositoryQueries;
     }
 
     public async Task<bool> AddUserRepository(UserRepositoryDto userRepository)
@@ -42,5 +44,10 @@ public class RepositoryService : IRepositoryService
             UserId = ur.UserId.Id,
             RepositoryId = ur.RepositoryId.Id
         }).ToList();
+    }
+
+    public async Task<bool> UserHasAccessToRepository(UserRepositoryDto userRepository)
+    {
+        return await userRepositoryQueries.UserHasAccessToRepository(userRepository.ToUserRepository());
     }
 }

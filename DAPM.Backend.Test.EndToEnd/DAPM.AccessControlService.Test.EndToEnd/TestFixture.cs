@@ -6,6 +6,7 @@ namespace DAPM.AccessControlService.Test.EndToEnd;
 public class TestFixture
 {
      public readonly IHttpClientFactory HttpClientFactory;
+     public readonly AccessControlAdder AccessControlAdder;
      private const string PipelineRoute = "pipeline";
      private const string ResourceRoute = "resource";
      private const string RepositoryRoute = "repository";
@@ -26,6 +27,7 @@ public class TestFixture
      public const string GetAllUserResourcesRoute = $"{ResourceRoute}/get-all-user-resources";
      public const string GetAllUserRepositoriesRoute = $"{RepositoryRoute}/get-all-user-repositories";
      public const string GetAllUserOrganizationsRoute = $"{OrganizationRoute}/get-all-user-organizations";
+     public const string AccessControlCheckAccessRoute = "check-access";
      
      public TestFixture()
      {
@@ -36,5 +38,6 @@ public class TestFixture
              .Build();
          
          HttpClientFactory = new HttpClientFactory(new Uri(config["ApiHttpClientFactorySettings:BaseUrl"]));
+         AccessControlAdder = new AccessControlAdder(HttpClientFactory);
      }
 }

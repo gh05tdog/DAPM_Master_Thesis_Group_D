@@ -16,11 +16,11 @@ namespace DAPM.ClientApi.Controllers
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations/")]
-    public class PipelineController : BaseController
+    public class PipelineController : ControllerBase
     {
         private readonly IPipelineService pipelineService;
 
-        public PipelineController(IAccessControlService accessControlService, IPipelineService pipelineService) : base(accessControlService)
+        public PipelineController(IPipelineService pipelineService)
         {
             this.pipelineService = pipelineService;
         }
@@ -30,15 +30,6 @@ namespace DAPM.ClientApi.Controllers
             "pipeline model in JSON. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetPipelineById(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-
-            if (!await HasPipelineAccess(pipelineId))
-                return UnauthorizedResponse("pipeline", pipelineId);
-            
             Guid id = pipelineService.GetPipelineById(organizationId, repositoryId, pipelineId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetPipelineById", TicketId = id });
         }
@@ -47,15 +38,6 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Creates a new execution instance for a pipeline previously saved in the system. The execution is created but not started")]
         public async Task<ActionResult<Guid>> CreatePipelineExecutionInstance(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-
-            if (!await HasPipelineAccess(pipelineId))
-                return UnauthorizedResponse("pipeline", pipelineId);
-            
             Guid id = pipelineService.CreatePipelineExecution(organizationId, repositoryId, pipelineId, this.UserId());
             return Ok(new ApiResponse { RequestName = "CreatePipelineExecutionInstance", TicketId = id });
         }
@@ -64,15 +46,6 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Posts a start command to the defined pipeline execution. The start command will start the pipeline execution.")]
         public async Task<ActionResult<Guid>> PostStartCommand(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-
-            if (!await HasPipelineAccess(pipelineId))
-                return UnauthorizedResponse("pipeline", pipelineId);
-            
             Guid id = pipelineService.PostStartCommand(organizationId, repositoryId, pipelineId, executionId, this.UserId());
             return Ok(new ApiResponse { RequestName = "PostStartCommand", TicketId = id });
         }
@@ -81,15 +54,6 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets the status of a running execution")]
         public async Task<ActionResult<Guid>> GetPipelineExecutionStatus(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId)
         {
-            if (!await HasOrganizationAccess(organizationId))
-                return UnauthorizedResponse("organization", organizationId);
-            
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-
-            if (!await HasPipelineAccess(pipelineId))
-                return UnauthorizedResponse("pipeline", pipelineId);
-            
             Guid id = pipelineService.GetExecutionStatus(organizationId, repositoryId, pipelineId, executionId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
         }

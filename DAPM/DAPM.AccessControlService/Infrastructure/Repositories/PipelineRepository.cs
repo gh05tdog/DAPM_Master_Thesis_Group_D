@@ -1,12 +1,13 @@
 using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Core.Domain.Queries;
 using DAPM.AccessControlService.Core.Domain.Repositories;
 using DAPM.AccessControlService.Infrastructure.TableInitializers;
 using Dapper;
 
 namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
-public class PipelineRepository : IPipelineRepository
+public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
 {
     private readonly IDbConnection dbConnection;
 
@@ -60,5 +61,17 @@ public class PipelineRepository : IPipelineRepository
             .Select(x => new UserPipeline(new UserId(Guid.Parse(x.Item1)), new PipelineId(Guid.Parse(x.Item2))))
             .ToList();
 
+    }
+
+    public async Task<bool> UserHasAccessToPipeline(UserPipeline userPipeline)
+    {
+        const string sql = @"
+                SELECT CASE WHEN EXISTS (
+                    SELECT 1
+                    FROM UserPipelines
+                    WHERE UserId = @UserId AND PipelineId = @PipelineId
+                ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
+            ";
+        return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
     }
 }

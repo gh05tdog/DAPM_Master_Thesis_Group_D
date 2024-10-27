@@ -8,4 +8,5 @@ public interface IOrganizationService
     Task<ICollection<OrganizationDto>> GetOrganizationsForUser(UserDto user);
     Task<bool> RemoveUserOrganization(UserOrganizationDto userOrganization);
     Task<ICollection<UserOrganizationDto>> GetAllUserOrganizations();
+    Task<bool> UserHasAccessToOrganization(UserOrganizationDto userOrganization);
 }
