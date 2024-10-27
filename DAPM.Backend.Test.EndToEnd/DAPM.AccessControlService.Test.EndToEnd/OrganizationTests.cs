@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
-using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Utilities;
+using TestUtilities;
+using TestUtilities.Dtos;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
 
@@ -12,7 +12,7 @@ public class OrganizationTests(TestFixture fixture)
     [Fact]
     public async Task AddUserOrganizationSucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.OrganizationManager);
         var request = new UserOrganizationDto
         {
             UserId = Guid.NewGuid(),
@@ -28,7 +28,7 @@ public class OrganizationTests(TestFixture fixture)
     [Fact]
     public async Task AddOrganizationForUserAndGetOrganizationsForUserReturnsOrganization()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.OrganizationManager);
         
         var addUserOrganization = new UserOrganizationDto
         {
@@ -47,7 +47,7 @@ public class OrganizationTests(TestFixture fixture)
     [Fact]
     public async Task AddOrganizationForUserAndGetOrganizationsForOtherUserReturnsNoOrganization()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.OrganizationManager);
         
         var addUserOrganization = new UserOrganizationDto
         {
@@ -66,7 +66,7 @@ public class OrganizationTests(TestFixture fixture)
     [Fact]
     public async Task RemoveUserOrganizationSucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.OrganizationManager);
         
         var addUserOrganization = new UserOrganizationDto
         {
@@ -91,7 +91,7 @@ public class OrganizationTests(TestFixture fixture)
     [Fact]
     public async Task GetAllUserOrganizationsReturnsOrganizations()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.OrganizationManager);
         
         var addUserOrganization = new UserOrganizationDto
         {
@@ -112,7 +112,7 @@ public class OrganizationTests(TestFixture fixture)
     [Fact]
     public async Task RemoveOrganizationForUserAndGetOrganizationsForUserReturnsNoOrganization()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.OrganizationManager);
         
         var addUserOrganization = new UserOrganizationDto
         {

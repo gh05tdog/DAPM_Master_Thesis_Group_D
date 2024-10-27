@@ -1,4 +1,4 @@
-namespace DAPM.AccessControlService.Test.EndToEnd.Dtos;
+namespace TestUtilities.Dtos;
 
 public record ResourceDto
 {

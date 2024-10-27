@@ -8,6 +8,8 @@ using DAPM.AccessControlService.Core.Services.Abstractions;
 using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Repositories;
 using DAPM.AccessControlService.Infrastructure.TableInitializers;
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +59,22 @@ builder.Services.AddSingleton<IOrganizationService, OrganizationService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Keycloak
+builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Manager", policy =>
+        policy.RequireClaim("user_realm_roles", "[Manager]"));
+    options.AddPolicy("OrganizationManager", policy =>
+        policy.RequireClaim("user_realm_roles", "[OrganizationManager]"));
+    options.AddPolicy("PipelineManager", policy =>
+        policy.RequireClaim("user_realm_roles", "[PipelineManager]"));
+    options.AddPolicy("RepositoryManager", policy =>
+        policy.RequireClaim("user_realm_roles", "[RepositoryManager]"));
+    options.AddPolicy("ResourceManager", policy =>
+        policy.RequireClaim("user_realm_roles", "[ResourceManager]"));
+}).AddKeycloakAuthorization(builder.Configuration);
 
 var app = builder.Build();
 

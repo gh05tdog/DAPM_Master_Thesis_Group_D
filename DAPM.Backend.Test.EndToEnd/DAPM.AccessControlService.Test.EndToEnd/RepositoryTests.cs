@@ -1,6 +1,6 @@
 using System.Net.Http.Json;
-using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Utilities;
+using TestUtilities;
+using TestUtilities.Dtos;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
 
@@ -12,7 +12,7 @@ public class RepositoryTests(TestFixture fixture)
     [Fact]
     public async Task AddUserRepositorySucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.RepositoryManager);
         
         var request = new UserRepositoryDto
         {
@@ -29,7 +29,7 @@ public class RepositoryTests(TestFixture fixture)
     [Fact]
     public async Task AddRepositoryForUserAndGetRepositoriesForUserReturnsRepository()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.RepositoryManager);
         
         var addUserRepository = new UserRepositoryDto
         {
@@ -48,7 +48,7 @@ public class RepositoryTests(TestFixture fixture)
     [Fact]
     public async Task AddRepositoryForUserAndGetRepositoriesForOtherUserReturnsNoRepository()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.RepositoryManager);
         
         var addUserRepository = new UserRepositoryDto
         {
@@ -67,7 +67,7 @@ public class RepositoryTests(TestFixture fixture)
     [Fact]
     public async Task RemoveRepositoryForUserAndGetRepositoriesForUserReturnsNoRepository()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.RepositoryManager);
         
         var addUserRepository = new UserRepositoryDto
         {
@@ -94,7 +94,7 @@ public class RepositoryTests(TestFixture fixture)
     [Fact]
     public async Task RemoveUserRepositorySucceeds()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.RepositoryManager);
         
         var addUserRepository = new UserRepositoryDto
         {
@@ -119,7 +119,7 @@ public class RepositoryTests(TestFixture fixture)
     [Fact]
     public async Task GetAllUserRepositoriesReturnsRepositories()
     {
-        using var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateAccessControlClient(Users.RepositoryManager);
         
         var addUserRepository = new UserRepositoryDto
         {

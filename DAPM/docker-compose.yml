@@ -73,6 +73,9 @@ services:
       - DAPM
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "localhost:host-gateway"
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server

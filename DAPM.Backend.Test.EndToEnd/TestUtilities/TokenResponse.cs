@@ -1,4 +1,4 @@
-namespace DAPM.Test.EndToEnd.Models;
+namespace TestUtilities;
 
 public record TokenResponse
 {

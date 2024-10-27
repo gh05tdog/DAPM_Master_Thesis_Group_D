@@ -1,37 +1,38 @@
 using System.Net.Http.Json;
-using DAPM.Test.EndToEnd.Models;
 
-namespace DAPM.Test.EndToEnd.TestUtilities;
+namespace TestUtilities;
 
-public class TokenFetcher(Uri baseAddress, string realm, string clientId, string username, 
-    string password, string clientSecret)
+public class TokenFetcher(Uri baseAddress, string realm, string clientId)
 {
-    private DateTime? tokenExpire;
-    private DateTime? refreshTokenExpire;
-    private string token;
-    private string refreshToken;
+    private readonly Dictionary<string, Token> tokens = new();
     
-    public async Task<string> GetTokenAsync()
+    public async Task<string> GetTokenAsync(KeycloakUser keycloakUser)
     {
-        if (tokenExpire != null && DateTime.UtcNow <= tokenExpire)
-            return token;
+        var token = tokens.GetValueOrDefault(keycloakUser.Username);
+        
+        if (token != null && DateTime.UtcNow <= token.TokenExpire)
+            return token.AccessToken;
 
         TokenResponse tokenResponse;
-        if (refreshTokenExpire != null && DateTime.UtcNow <= refreshTokenExpire)
-            tokenResponse = await RefreshTokenAsync();
+        if (token != null && DateTime.UtcNow <= token.RefreshTokenExpire)
+            tokenResponse = await RefreshTokenAsync(token.RefreshToken);
         else
-            tokenResponse = await FetchTokenAsync();
-    
-        tokenExpire = DateTime.UtcNow.AddSeconds(tokenResponse.Expires_In - 30);
-        refreshTokenExpire = DateTime.UtcNow.AddSeconds(tokenResponse.Refresh_Expires_In - 30);
+            tokenResponse = await FetchTokenAsync(keycloakUser.Username, keycloakUser.Password);
+
+        token = new Token
+        {
+            AccessToken = tokenResponse.Access_Token,
+            RefreshToken = tokenResponse.Refresh_Token,
+            TokenExpire = DateTime.UtcNow.AddSeconds(tokenResponse.Expires_In - 30),
+            RefreshTokenExpire = DateTime.UtcNow.AddSeconds(tokenResponse.Refresh_Expires_In - 30)
+        };
         
-        token = tokenResponse.Access_Token;
-        refreshToken = tokenResponse.Refresh_Token;
+        tokens[keycloakUser.Username] = token;
         
-        return token;
+        return token.AccessToken;
     }
 
-    private async Task<TokenResponse> FetchTokenAsync()
+    private async Task<TokenResponse> FetchTokenAsync(string username, string password)
     {
         var formContent = new FormUrlEncodedContent(new[]
         {
@@ -39,13 +40,12 @@ public class TokenFetcher(Uri baseAddress, string realm, string clientId, string
             new KeyValuePair<string, string>("client_id", clientId),
             new KeyValuePair<string, string>("username", username),
             new KeyValuePair<string, string>("password", password),
-            new KeyValuePair<string, string>("client_secret", clientSecret),
         });
         
         return await PostTokenRequestAsync(formContent);
     }
     
-    private async Task<TokenResponse> RefreshTokenAsync()
+    private async Task<TokenResponse> RefreshTokenAsync(string refreshToken)
     {
         var formContent = new FormUrlEncodedContent(new[]
         {
@@ -67,6 +67,6 @@ public class TokenFetcher(Uri baseAddress, string realm, string clientId, string
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync<TokenResponse>() ??
-               throw new ArgumentNullException(nameof(TicketResponse));
+               throw new ArgumentNullException(nameof(TokenResponse));
     }
 }
