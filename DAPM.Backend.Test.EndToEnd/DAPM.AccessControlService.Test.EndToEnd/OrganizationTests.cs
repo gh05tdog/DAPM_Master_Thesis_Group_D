@@ -1,7 +1,5 @@
 using System.Net.Http.Json;
 using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Requests;
-using DAPM.AccessControlService.Test.EndToEnd.Responses;
 using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
@@ -15,22 +13,16 @@ public class OrganizationTests(TestFixture fixture)
     public async Task AddUserOrganizationSucceeds()
     {
         using var client = httpClientFactory.CreateClient();
-        var request = new AddUserOrganizationRequestMessage
+        var request = new UserOrganizationDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Organization = new OrganizationDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            OrganizationId = Guid.NewGuid()
         };
         
         var response = await client.PostAsJsonAsync(TestFixture.AddUserOrganizationRoute , request);
-        var result = await response.Content.ReadFromJsonAsync<AddUserOrganizationResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        Assert.True(result.Success);
+        Assert.True(result);
     }
     
     [Fact]
@@ -38,32 +30,18 @@ public class OrganizationTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserOrganization = new AddUserOrganizationRequestMessage
+        var addUserOrganization = new UserOrganizationDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Organization = new OrganizationDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            OrganizationId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserOrganizationRoute , addUserOrganization);
         
-        var request = new GetOrganizationsForUserRequestMessage
-        {
-            User = new UserDto
-            {
-                Id = addUserOrganization.User.Id
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserOrganizationsRoute}/{addUserOrganization.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<OrganizationDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserOrganizationsRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetOrganizationsForUserResponseMessage>();
-        
-        Assert.Contains(result.Organizations, o => o.Id == addUserOrganization.Organization.Id);
+        Assert.Contains(result, o => o.Id == addUserOrganization.OrganizationId);
     }
 
     [Fact]
@@ -71,32 +49,18 @@ public class OrganizationTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserOrganization = new AddUserOrganizationRequestMessage()
+        var addUserOrganization = new UserOrganizationDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Organization = new OrganizationDto()
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            OrganizationId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserOrganization);
         
-        var request = new GetOrganizationsForUserRequestMessage()
-        {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserOrganizationsRoute}/{Guid.NewGuid()}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<OrganizationDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserOrganizationsRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetOrganizationsForUserResponseMessage>();
-        
-        Assert.Empty(result.Organizations);
+        Assert.Empty(result);
     }
     
     [Fact]
@@ -104,36 +68,24 @@ public class OrganizationTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserOrganization = new AddUserOrganizationRequestMessage
+        var addUserOrganization = new UserOrganizationDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Organization = new OrganizationDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            OrganizationId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserOrganizationRoute , addUserOrganization);
         
-        var request = new RemoveUserOrganizationRequestMessage
+        var request = new UserOrganizationDto
         {
-            User = new UserDto
-            {
-                Id = addUserOrganization.User.Id
-            },
-            Organization = new OrganizationDto
-            {
-                Id = addUserOrganization.Organization.Id
-            }
+            UserId = addUserOrganization.UserId,
+            OrganizationId = addUserOrganization.OrganizationId
         };
         
         var response = await client.PostAsJsonAsync(TestFixture.RemoveUserOrganizationRoute , request);
-        var result = await response.Content.ReadFromJsonAsync<RemoveUserOrganizationResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        Assert.True(result.Success);
+        Assert.True(result);
     }
     
     [Fact]
@@ -141,23 +93,46 @@ public class OrganizationTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserOrganization = new AddUserOrganizationRequestMessage
+        var addUserOrganization = new UserOrganizationDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Organization = new OrganizationDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            OrganizationId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserOrganizationRoute , addUserOrganization);
         
         var response = await client.GetAsync(TestFixture.GetAllUserOrganizationsRoute);
-        var result = await response.Content.ReadFromJsonAsync<GetAllUserOrganizationsResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<ICollection<UserOrganizationDto>>();
         
-        Assert.Contains(result.Organizations, o => o.OrganizationId == addUserOrganization.Organization.Id);
+        Assert.Contains(result, o => 
+            o.OrganizationId == addUserOrganization.OrganizationId && 
+            o.UserId == addUserOrganization.UserId);
+    }
+    
+    [Fact]
+    public async Task RemoveOrganizationForUserAndGetOrganizationsForUserReturnsNoOrganization()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserOrganization = new UserOrganizationDto
+        {
+            UserId = Guid.NewGuid(),
+            OrganizationId = Guid.NewGuid()
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserOrganizationRoute , addUserOrganization);
+        
+        var request = new UserOrganizationDto
+        {
+            UserId = addUserOrganization.UserId,
+            OrganizationId = addUserOrganization.OrganizationId
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.RemoveUserOrganizationRoute , request);
+        
+        var response = await client.GetAsync($"{TestFixture.GetUserOrganizationsRoute}/{addUserOrganization.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<OrganizationDto>>();
+        
+        Assert.DoesNotContain(addUserOrganization.OrganizationId, result.Select(o => o.Id));
     }
 }

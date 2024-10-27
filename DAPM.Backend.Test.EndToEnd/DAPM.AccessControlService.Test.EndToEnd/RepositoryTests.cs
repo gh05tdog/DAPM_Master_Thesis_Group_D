@@ -1,7 +1,5 @@
 using System.Net.Http.Json;
 using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Requests;
-using DAPM.AccessControlService.Test.EndToEnd.Responses;
 using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
@@ -15,22 +13,17 @@ public class RepositoryTests(TestFixture fixture)
     public async Task AddUserRepositorySucceeds()
     {
         using var client = httpClientFactory.CreateClient();
-        var request = new AddUserRepositoryRequestMessage
+        
+        var request = new UserRepositoryDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Repository = new RepositoryDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            RepositoryId = Guid.NewGuid()
         };
         
         var response = await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute , request);
-        var result = await response.Content.ReadFromJsonAsync<AddUserRepositoryResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        Assert.True(result.Success);
+        Assert.True(result);
     }
     
     [Fact]
@@ -38,65 +31,37 @@ public class RepositoryTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserRepository = new AddUserRepositoryRequestMessage
+        var addUserRepository = new UserRepositoryDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Repository = new RepositoryDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            RepositoryId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute , addUserRepository);
         
-        var request = new GetRepositoriesForUserRequestMessage
-        {
-            User = new UserDto
-            {
-                Id = addUserRepository.User.Id
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserRepositoriesRoute}/{addUserRepository.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<RepositoryDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserRepositoriesRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetRepositoriesForUserResponseMessage>();
-        
-        Assert.True(result.Repositories.Any(r => r.Id == addUserRepository.Repository.Id));
+        Assert.True(result.Any(r => r.Id == addUserRepository.RepositoryId));
     }
     
     [Fact]
-    public async Task AddRepositoryForUserAndGetRepositoriesForUserReturnsRepository2()
+    public async Task AddRepositoryForUserAndGetRepositoriesForOtherUserReturnsNoRepository()
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserRepository = new AddUserRepositoryRequestMessage
+        var addUserRepository = new UserRepositoryDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Repository = new RepositoryDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            RepositoryId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute , addUserRepository);
         
-        var request = new GetRepositoriesForUserRequestMessage
-        {
-            User = new UserDto
-            {
-                Id = addUserRepository.User.Id
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserRepositoriesRoute}/{Guid.NewGuid()}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<RepositoryDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserRepositoriesRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetRepositoriesForUserResponseMessage>();
-        
-        Assert.True(result.Repositories.Any(r => r.Id == addUserRepository.Repository.Id));
+        Assert.False(result.Any(r => r.Id == addUserRepository.RepositoryId));
     }
     
     [Fact]
@@ -104,38 +69,51 @@ public class RepositoryTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserRepository = new AddUserRepositoryRequestMessage
+        var addUserRepository = new UserRepositoryDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Repository = new RepositoryDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            RepositoryId = Guid.NewGuid()
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute, addUserRepository);
+        
+        var request = new UserRepositoryDto
+        {
+            UserId = addUserRepository.UserId,
+            RepositoryId = addUserRepository.RepositoryId
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.RemoveUserRepositoryRoute, request);
+        
+        var response = await client.GetAsync($"{TestFixture.GetUserRepositoriesRoute}/{addUserRepository.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<RepositoryDto>>();
+        
+        Assert.False(result.Any(r => r.Id == addUserRepository.RepositoryId));
+    }
+    
+    [Fact]
+    public async Task RemoveUserRepositorySucceeds()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserRepository = new UserRepositoryDto
+        {
+            UserId = Guid.NewGuid(),
+            RepositoryId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute , addUserRepository);
         
-        var request = new RemoveUserRepositoryRequestMessage
+        var request = new UserRepositoryDto
         {
-            User = new UserDto
-            {
-                Id = addUserRepository.User.Id
-            },
-            Repository = new RepositoryDto
-            {
-                Id = addUserRepository.Repository.Id
-            }
+            UserId = addUserRepository.UserId,
+            RepositoryId = addUserRepository.RepositoryId
         };
         
-        await client.PostAsJsonAsync(TestFixture.RemoveUserRepositoryRoute , request);
+        var response = await client.PostAsJsonAsync(TestFixture.RemoveUserRepositoryRoute , request);
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserRepositoriesRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetRepositoriesForUserResponseMessage>();
-        
-        Assert.False(result.Repositories.Any(r => r.Id == addUserRepository.Repository.Id));
+        Assert.True(result);
     }
     
     [Fact]
@@ -143,23 +121,19 @@ public class RepositoryTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserRepository = new AddUserRepositoryRequestMessage
+        var addUserRepository = new UserRepositoryDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Repository = new RepositoryDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            RepositoryId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserRepositoryRoute , addUserRepository);
         
         var response = await client.GetAsync(TestFixture.GetAllUserRepositoriesRoute);
-        var result = await response.Content.ReadFromJsonAsync<GetAllUserRepositoriesResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<ICollection<UserRepositoryDto>>();
         
-        Assert.Contains(result.Repositories, p => p.RepositoryId == addUserRepository.Repository.Id);
+        Assert.Contains(result, p => 
+            p.RepositoryId == addUserRepository.RepositoryId && 
+            p.UserId == addUserRepository.UserId);
     }
 }

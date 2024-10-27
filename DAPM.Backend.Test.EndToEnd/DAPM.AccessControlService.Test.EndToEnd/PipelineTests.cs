@@ -1,7 +1,5 @@
 using System.Net.Http.Json;
 using DAPM.AccessControlService.Test.EndToEnd.Dtos;
-using DAPM.AccessControlService.Test.EndToEnd.Requests;
-using DAPM.AccessControlService.Test.EndToEnd.Responses;
 using DAPM.AccessControlService.Test.EndToEnd.Utilities;
 
 namespace DAPM.AccessControlService.Test.EndToEnd;
@@ -15,22 +13,17 @@ public class PipelineTests(TestFixture fixture)
     public async Task AddUserPipelineSucceeds()
     {
         using var client = httpClientFactory.CreateClient();
-        var request = new AddUserPipelineRequestMessage
+        
+        var request = new UserPipelineDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Pipeline = new PipelineDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            PipelineId = Guid.NewGuid()
         };
         
         var response = await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , request);
-        var result = await response.Content.ReadFromJsonAsync<AddUserPipelineResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        Assert.True(result.Success);
+        Assert.True(result);
     }
     
     [Fact]
@@ -38,32 +31,18 @@ public class PipelineTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserPipeline = new AddUserPipelineRequestMessage
+        var addUserPipeline = new UserPipelineDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Pipeline = new PipelineDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            PipelineId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserPipeline);
         
-        var request = new GetPipelinesForUserRequestMessage
-        {
-            User = new UserDto
-            {
-                Id = addUserPipeline.User.Id
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserPipelinesRoute}/{addUserPipeline.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<PipelineDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserPipelinesRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetPipelinesForUserResponseMessage>();
-        
-        Assert.Contains(result.Pipelines, p => p.Id == addUserPipeline.Pipeline.Id);
+        Assert.Contains(result, p => p.Id == addUserPipeline.PipelineId);
     }
     
     [Fact]
@@ -71,32 +50,18 @@ public class PipelineTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserPipeline = new AddUserPipelineRequestMessage
+        var addUserPipeline = new UserPipelineDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Pipeline = new PipelineDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            PipelineId = Guid.NewGuid()
         };
         
-        await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserPipeline);
+        await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute, addUserPipeline);
         
-        var request = new GetPipelinesForUserRequestMessage
-        {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            }
-        };
+        var response = await client.GetAsync($"{TestFixture.GetUserPipelinesRoute}/{Guid.NewGuid()}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<PipelineDto>>();
         
-        var response = await client.GetAsync($"{TestFixture.GetUserPipelinesRoute}/{request.User.Id}");
-        var result = await response.Content.ReadFromJsonAsync<GetPipelinesForUserResponseMessage>();
-        
-        Assert.Empty(result.Pipelines);
+        Assert.Empty(result);
     }
     
     [Fact]
@@ -104,36 +69,24 @@ public class PipelineTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserPipeline = new AddUserPipelineRequestMessage
+        var addUserPipeline = new UserPipelineDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Pipeline = new PipelineDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            PipelineId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserPipeline);
         
-        var request = new RemoveUserPipelineRequestMessage
+        var request = new UserPipelineDto
         {
-            User = new UserDto
-            {
-                Id = addUserPipeline.User.Id
-            },
-            Pipeline = new PipelineDto
-            {
-                Id = addUserPipeline.Pipeline.Id
-            }
+            UserId = addUserPipeline.UserId, 
+            PipelineId = addUserPipeline.PipelineId 
         };
         
         var response = await client.PostAsJsonAsync(TestFixture.RemoveUserPipelineRoute , request);
-        var result = await response.Content.ReadFromJsonAsync<RemoveUserPipelineResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<bool>();
         
-        Assert.True(result.Success);
+        Assert.True(result);
     }
     
     [Fact]
@@ -141,23 +94,46 @@ public class PipelineTests(TestFixture fixture)
     {
         using var client = httpClientFactory.CreateClient();
         
-        var addUserPipeline = new AddUserPipelineRequestMessage
+        var addUserPipeline = new UserPipelineDto
         {
-            User = new UserDto
-            {
-                Id = Guid.NewGuid()
-            },
-            Pipeline = new PipelineDto
-            {
-                Id = Guid.NewGuid()
-            }
+            UserId = Guid.NewGuid(),
+            PipelineId = Guid.NewGuid()
         };
         
         await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserPipeline);
         
         var response = await client.GetAsync(TestFixture.GetAllUserPipelinesRoute);
-        var result = await response.Content.ReadFromJsonAsync<GetAllUserPipelinesResponseMessage>();
+        var result = await response.Content.ReadFromJsonAsync<ICollection<UserPipelineDto>>();
         
-        Assert.Contains(result.Pipelines, p => p.PipelineId == addUserPipeline.Pipeline.Id);
+        Assert.Contains(result, p => 
+            p.PipelineId == addUserPipeline.PipelineId && 
+            p.UserId == addUserPipeline.UserId);
+    }
+    
+    [Fact]
+    public async Task RemovePipelineForUserAndGetPipelinesForUserReturnsNoPipelines()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserPipeline = new UserPipelineDto
+        {
+            UserId = Guid.NewGuid(),
+            PipelineId = Guid.NewGuid()
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserPipeline);
+        
+        var request = new UserPipelineDto
+        {
+            UserId = addUserPipeline.UserId,
+            PipelineId = addUserPipeline.PipelineId
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.RemoveUserPipelineRoute , request);
+        
+        var response = await client.GetAsync($"{TestFixture.GetUserPipelinesRoute}/{addUserPipeline.UserId}");
+        var result = await response.Content.ReadFromJsonAsync<ICollection<PipelineDto>>();
+        
+        Assert.DoesNotContain(addUserPipeline.PipelineId, result.Select(p => p.Id));
     }
 }
