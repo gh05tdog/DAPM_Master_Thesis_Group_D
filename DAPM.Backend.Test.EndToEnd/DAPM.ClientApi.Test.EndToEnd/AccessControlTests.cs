@@ -18,7 +18,7 @@ public class AccessControlTests
         var fixture = new TestUtility();
         httpClientFactory = fixture.HttpClientFactory;
 
-        var accessControlAdder = new AccessControlAdder(Users.Test);
+        var accessControlAdder = new AccessControlAdder(Users.Manager);
         accessControlAdder.AddUserOrganizationAsync(TestHelper.UserId, organizationId).Wait();
         accessControlAdder.AddUserRepositoryAsync(TestHelper.UserId, repositoryId).Wait();
         accessControlAdder.AddUserResourceAsync(TestHelper.UserId, resourceId).Wait();
@@ -28,7 +28,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetOrganizationById_UserHasAccess_RequestIsAuthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{organizationId}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -36,7 +36,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetOrganizationById_UserHasNoAccess_RequestIsUnauthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{Guid.NewGuid()}");
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -44,7 +44,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetRepositoryById_UserHasAccess_RequestIsAuthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{organizationId}/repositories/{repositoryId}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -52,7 +52,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetRepositoryById_UserHasNoAccess_RequestIsUnauthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{organizationId}/repositories/{Guid.NewGuid()}");
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -60,7 +60,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetResourceById_UserHasAccess_RequestIsAuthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{organizationId}/repositories/{repositoryId}/resources/{resourceId}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -68,7 +68,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetResourceById_UserHasNoAccess_RequestIsUnauthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{organizationId}/repositories/{repositoryId}/resources/{Guid.NewGuid()}");
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -76,7 +76,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetPipelineById_UserHasAccess_RequestIsAuthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -84,7 +84,7 @@ public class AccessControlTests
     [Fact]
     public async Task GetPipelineById_UserHasNoAccess_RequestIsUnauthorized()
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         var response = await client.GetAsync($"organizations/{organizationId}/repositories/{repositoryId}/pipelines/{Guid.NewGuid()}");
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }

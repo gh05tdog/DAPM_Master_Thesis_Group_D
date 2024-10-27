@@ -20,6 +20,7 @@ public class AuthenticationTest(ApiHttpFixture apiHttpFixture)
     public async Task Given_unauthenticated_client_authenticated_throws_401_unauthorized()
     {
         using var client = apiHttpFixture.HttpClientFactory.CreateClientApiClient(Users.Test);
+        client.DefaultRequestHeaders.Authorization = null;
         var response = await client.GetAsync("test/authentication/authorize");
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }

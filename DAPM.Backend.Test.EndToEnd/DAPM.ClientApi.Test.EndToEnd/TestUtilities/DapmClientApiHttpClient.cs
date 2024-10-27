@@ -93,7 +93,7 @@ public class DapmClientApiHttpClient(IHttpClientFactory httpClientFactory)
         var uri = $"status/{ticketResponse.TicketId}";
         var maxTries = 100;
 
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         
         for (var i = 0; i < maxTries; i++)
         {
@@ -110,7 +110,7 @@ public class DapmClientApiHttpClient(IHttpClientFactory httpClientFactory)
 
     private async Task<TicketResponse> GetAsync(string uri)
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
 
         var response = await client.GetAsync(uri);
         response.EnsureSuccessStatusCode();
@@ -121,7 +121,7 @@ public class DapmClientApiHttpClient(IHttpClientFactory httpClientFactory)
 
     private async Task<TicketResponse> PostAsync(string uri, object obj)
     {
-        using var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        using var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         
         var response = await client.PostAsJsonAsync(uri, obj);
         response.EnsureSuccessStatusCode();

@@ -47,7 +47,7 @@ public class ResourceTest(ApiHttpFixture apiHttpFixture)
         content.Add(fileContent, "ResourceFile", Path.GetFileName(filePath)); // Field name and filename
 
         // Set headers
-        var client = httpClientFactory.CreateClientApiClient(Users.Test);
+        var client = httpClientFactory.CreateClientApiClient(Users.Manager);
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
         
         var requestUri = $"organizations/{organization}/repositories/{repository}/resources";

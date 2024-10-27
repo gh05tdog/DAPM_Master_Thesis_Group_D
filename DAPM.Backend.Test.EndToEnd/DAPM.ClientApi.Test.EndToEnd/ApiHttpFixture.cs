@@ -6,7 +6,6 @@ namespace DAPM.Test.EndToEnd;
 public class ApiHttpFixture
 {
     public readonly DapmClientApiHttpClient Client;
-    public readonly TokenFetcher TokenFetcher;
     public readonly AccessControlAdder AccessControlAdder;
     public readonly IHttpClientFactory HttpClientFactory;
 
@@ -16,6 +15,6 @@ public class ApiHttpFixture
         HttpClientFactory = fixture.HttpClientFactory;
 
         Client = new DapmClientApiHttpClient(HttpClientFactory);
-        AccessControlAdder = new AccessControlAdder(Users.Test);
+        AccessControlAdder = new AccessControlAdder(Users.Manager);
     }
 }
