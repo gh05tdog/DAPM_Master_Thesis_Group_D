@@ -212,4 +212,72 @@ public class AccessControlFacadeTests
         organizationServiceMock.Verify(service => service.RemoveUserOrganization(user, organization), Times.Once);
         organizationServiceMock.Verify(service => service.GetOrganizationsForUser(user), Times.Once);
     }
+    
+    [Fact]
+    public async Task ReadAllUserOrganizations_ShouldReturnAllOrganizations()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var organization = new UserOrganizationDto() { UserId = Guid.NewGuid(), OrganizationId = Guid.NewGuid() };
+        
+        organizationServiceMock.Setup(service => service.GetAllUserOrganizations()).ReturnsAsync(new List<UserOrganizationDto>{organization});
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var organizations = (await accessControlFacade.GetAllUserOrganizations()).Organizations;
+
+        Assert.Contains(organizations, p => p.OrganizationId == organization.OrganizationId);
+        
+        organizationServiceMock.Verify(service => service.GetAllUserOrganizations(), Times.Once);
+    }
+    
+    [Fact]
+    public async Task ReadAllUserRepositories_ShouldReturnAllRepositories()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var repository = new UserRepositoryDto() { UserId = Guid.NewGuid(), RepositoryId = Guid.NewGuid() };
+        
+        repositoryServiceMock.Setup(service => service.GetAllUserRepositories()).ReturnsAsync(new List<UserRepositoryDto>{repository});
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var repositories = (await accessControlFacade.GetAllUserRepositories()).Repositories;
+
+        Assert.Contains(repositories, p => p.RepositoryId == repository.RepositoryId);
+        
+        repositoryServiceMock.Verify(service => service.GetAllUserRepositories(), Times.Once);
+    }
+    
+    [Fact]
+    public async Task ReadAllUserPipelines_ShouldReturnAllPipelines()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var pipeline = new UserPipelineDto() { UserId = Guid.NewGuid(), PipelineId = Guid.NewGuid() };
+        
+        pipelineServiceMock.Setup(service => service.GetAllUserPipelines()).ReturnsAsync(new List<UserPipelineDto>{pipeline});
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var pipelines = (await accessControlFacade.GetAllUserPipelines()).Pipelines;
+
+        Assert.Contains(pipelines, p => p.PipelineId == pipeline.PipelineId);
+        
+        pipelineServiceMock.Verify(service => service.GetAllUserPipelines(), Times.Once);
+    }
+    
+    [Fact]
+    public async Task ReadAllUserResources_ShouldReturnAllResources()
+    {
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var resource = new UserResourceDto() { UserId = Guid.NewGuid(), ResourceId = Guid.NewGuid() };
+        
+        resourceServiceMock.Setup(service => service.GetAllUserResources()).ReturnsAsync(new List<UserResourceDto>{resource});
+        
+        var accessControlFacade = new AccessControlFacade(pipelineServiceMock.Object, resourceServiceMock.Object, repositoryServiceMock.Object, organizationServiceMock.Object);
+        
+        var resources = (await accessControlFacade.GetAllUserResources()).Resources;
+
+        Assert.Contains(resources, p => p.ResourceId == resource.ResourceId);
+        
+        resourceServiceMock.Verify(service => service.GetAllUserResources(), Times.Once);
+    }
 }

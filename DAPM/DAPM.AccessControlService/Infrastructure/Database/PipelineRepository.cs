@@ -47,4 +47,18 @@ public class PipelineRepository : IPipelineRepository
         
         await dbConnection.ExecuteAsync(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
     }
+    
+    public async Task<ICollection<UserPipeline>> ReadAllUserPipelines()
+    {
+        const string sql = @"
+                SELECT UserId, PipelineId
+                FROM UserPipelines;
+            ";
+        
+        var userPipelines = await dbConnection.QueryAsync<(string, string)>(sql);
+        return userPipelines
+            .Select(x => new UserPipeline(new UserId(Guid.Parse(x.Item1)), new PipelineId(Guid.Parse(x.Item2))))
+            .ToList();
+
+    }
 }

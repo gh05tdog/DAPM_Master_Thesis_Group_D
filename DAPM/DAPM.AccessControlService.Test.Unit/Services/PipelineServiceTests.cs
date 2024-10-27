@@ -46,4 +46,18 @@ public class PipelineServiceTests
         var pipelines = await service.GetPipelinesForUser(user);
         Assert.DoesNotContain(pipelines, p => p.Id == pipeline.Id);
     }
+    
+    [Fact]
+    public async Task ReadAllPipelines_ShouldReturnPipelines()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var pipeline = new PipelineDto{Id = Guid.NewGuid()};
+
+        await service.AddUserPipeline(user, pipeline);
+
+        var pipelines = await service.GetAllUserPipelines();
+        Assert.Contains(pipelines, p => p.PipelineId == pipeline.Id);
+    }
 }

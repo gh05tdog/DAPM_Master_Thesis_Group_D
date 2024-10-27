@@ -37,4 +37,14 @@ public class OrganizationService : IOrganizationService
         await organizationRepository.DeleteUserOrganization(new UserOrganization(userId, organizationId));
         return true;
     }
+    
+    public async Task<ICollection<UserOrganizationDto>> GetAllUserOrganizations()
+    {
+        var userOrganizations = await organizationRepository.ReadAllUserOrganizations();
+        return userOrganizations.Select(uo => new UserOrganizationDto
+        {
+            UserId = uo.UserId.Id,
+            OrganizationId = uo.OrganizationId.Id
+        }).ToList();
+    }
 }

@@ -37,4 +37,14 @@ public class ResourceService : IResourceService
         await resourceRepository.DeleteUserResource(new UserResource(userId, resourceId));
         return true;
     }
+    
+    public async Task<ICollection<UserResourceDto>> GetAllUserResources()
+    {
+        var userResources = await resourceRepository.ReadAllUserResources();
+        return userResources.Select(ur => new UserResourceDto
+        {
+            UserId = ur.UserId.Id,
+            ResourceId = ur.ResourceId.Id
+        }).ToList();
+    }
 }

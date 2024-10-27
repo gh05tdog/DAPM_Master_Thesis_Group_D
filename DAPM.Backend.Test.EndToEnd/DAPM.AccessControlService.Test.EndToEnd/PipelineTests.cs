@@ -135,4 +135,29 @@ public class PipelineTests(TestFixture fixture)
         
         Assert.True(result.Success);
     }
+    
+    [Fact]
+    public async Task GetAllUserPipelinesReturnsPipelines()
+    {
+        using var client = httpClientFactory.CreateClient();
+        
+        var addUserPipeline = new AddUserPipelineRequestMessage
+        {
+            User = new UserDto
+            {
+                Id = Guid.NewGuid()
+            },
+            Pipeline = new PipelineDto
+            {
+                Id = Guid.NewGuid()
+            }
+        };
+        
+        await client.PostAsJsonAsync(TestFixture.AddUserPipelineRoute , addUserPipeline);
+        
+        var response = await client.GetAsync(TestFixture.GetAllUserPipelinesRoute);
+        var result = await response.Content.ReadFromJsonAsync<GetAllUserPipelinesResponseMessage>();
+        
+        Assert.Contains(result.Pipelines, p => p.PipelineId == addUserPipeline.Pipeline.Id);
+    }
 }

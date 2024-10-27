@@ -7,4 +7,5 @@ public interface IOrganizationRepository
     Task CreateUserOrganization(UserOrganization userOrganization);
     Task<ICollection<OrganizationId>> ReadOrganizationsForUser(UserId userId);
     Task DeleteUserOrganization(UserOrganization userOrganization);
+    Task<ICollection<UserOrganization>> ReadAllUserOrganizations();
 }

@@ -43,4 +43,16 @@ public class RepositoryRepositoryTests
         var repositories = await repository.ReadRepositoriesForUser(userId);
         Assert.DoesNotContain(repositories, p => p.Id == repositoryId.Id);
     }
+
+    [Fact]
+    public async Task ReadAllRepositories_ShouldReturnRepositories()
+    {
+        var userId = new UserId(Guid.NewGuid());
+        var repositoryId = new RepositoryId(Guid.NewGuid());
+
+        await repository.CreateUserRepository(new UserRepository(userId, repositoryId));
+
+        var repositories = await repository.ReadAllUserRepositories();
+        Assert.Contains(repositories, p => p.RepositoryId.Id == repositoryId.Id);
+    }
 }
