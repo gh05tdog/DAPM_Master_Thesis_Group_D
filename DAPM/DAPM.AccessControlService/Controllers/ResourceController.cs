@@ -7,7 +7,7 @@ namespace DAPM.AccessControlService.Controllers;
 
 [ApiController]
 [Route("api/access-control/resource")]
-[Authorize(Roles = "ResourceManager")]
+[Authorize(Policy = "ResourceManager")]
 public class ResourceController(IResourceService resourceService) : ControllerBase
 {
     [HttpPost]

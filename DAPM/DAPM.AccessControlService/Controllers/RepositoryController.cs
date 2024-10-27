@@ -7,7 +7,7 @@ namespace DAPM.AccessControlService.Controllers;
 
 [ApiController]
 [Route("api/access-control/repository")]
-[Authorize(Roles = "RepositoryManager")]
+[Authorize(Policy = "RepositoryManager")]
 public class RepositoryController(IRepositoryService repositoryService) : ControllerBase
 {
     [HttpPost]

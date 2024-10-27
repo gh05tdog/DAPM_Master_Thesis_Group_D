@@ -7,7 +7,7 @@ namespace DAPM.AccessControlService.Controllers;
 
 [ApiController]
 [Route("api/access-control/pipeline")]
-[Authorize(Roles = "PipelineManager")]
+[Authorize(Policy = "PipelineManager")]
 public class PipelineController(IPipelineService pipelineService) : ControllerBase
 {
    [HttpPost]

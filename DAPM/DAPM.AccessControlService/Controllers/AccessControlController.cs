@@ -7,7 +7,7 @@ namespace DAPM.AccessControlService.Controllers;
 
 [ApiController]
 [Route("api/access-control")]
-[Authorize(Roles = "Manager")]
+[Authorize(Policy = "Manager")]
 public class AccessControlController : ControllerBase
 {
     private readonly IOrganizationService organizationService;

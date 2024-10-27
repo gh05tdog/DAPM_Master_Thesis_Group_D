@@ -64,16 +64,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Manager", policy =>
-        policy.RequireClaim("user_realm_roles", "[Manager]"));
-    options.AddPolicy("OrganizationManager", policy =>
-        policy.RequireClaim("user_realm_roles", "[OrganizationManager]"));
-    options.AddPolicy("PipelineManager", policy =>
-        policy.RequireClaim("user_realm_roles", "[PipelineManager]"));
-    options.AddPolicy("RepositoryManager", policy =>
-        policy.RequireClaim("user_realm_roles", "[RepositoryManager]"));
-    options.AddPolicy("ResourceManager", policy =>
-        policy.RequireClaim("user_realm_roles", "[ResourceManager]"));
+    options.AddPolicy("Manager", builder =>
+    {
+        builder.RequireRealmRoles("Manager");
+    });
+    options.AddPolicy("PipelineManager", builder =>
+    {
+        builder.RequireRealmRoles("PipelineManager");
+    });
+    options.AddPolicy("RepositoryManager", builder =>
+    {
+        builder.RequireRealmRoles("RepositoryManager");
+    });
+    options.AddPolicy("ResourceManager", builder =>
+    {
+        builder.RequireRealmRoles("ResourceManager");
+    });
+    options.AddPolicy("OrganizationManager", builder =>
+    {
+        builder.RequireRealmRoles("OrganizationManager");
+    });
 }).AddKeycloakAuthorization(builder.Configuration);
 
 var app = builder.Build();
@@ -83,10 +93,9 @@ app.MapDefaultEndpoints();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

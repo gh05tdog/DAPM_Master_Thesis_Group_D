@@ -7,7 +7,7 @@ namespace DAPM.AccessControlService.Controllers;
 
 [ApiController]
 [Route("api/access-control/organization")]
-[Authorize(Roles = "OrganizationManager")]
+[Authorize(Policy = "OrganizationManager")]
 public class OrganizationController(IOrganizationService organizationService) : ControllerBase
 {
     [HttpPost]
