@@ -14,4 +14,5 @@ public class ApiRoutes
    public const string GetUserResourcesRoute = $"{ResourceRoute}/get-resources-for-user";
    public const string GetUserRepositoriesRoute = $"{RepositoryRoute}/get-repositories-for-user";
    public const string GetUserOrganizationsRoute = $"{OrganizationRoute}/get-organizations-for-user";
+   public const string CheckAccessRoute = "check-access";
 }

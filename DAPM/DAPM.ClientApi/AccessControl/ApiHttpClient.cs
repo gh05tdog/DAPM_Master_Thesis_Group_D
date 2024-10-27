@@ -46,7 +46,7 @@ public class ApiHttpClient(IApiHttpClientFactory httpClientFactory) : IApiHttpCl
 
     public async Task<UserAccessResponseDto> GetUserAccessAsync(UserAccessRequestDto request)
     {
-        return await SendRequestAsync<UserAccessRequestDto, UserAccessResponseDto>(CheckAccessRoute, request);
+        return await SendRequestAsync<UserAccessRequestDto, UserAccessResponseDto>(ApiRoutes.CheckAccessRoute, request);
     }
 
     private async Task<TResponse> SendRequestAsync<TRequest, TResponse>(string route, TRequest request)
