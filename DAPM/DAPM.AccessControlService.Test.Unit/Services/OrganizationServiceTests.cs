@@ -63,4 +63,34 @@ public class OrganizationServiceTests
         var organizations = await service.GetAllUserOrganizations();
         Assert.Contains(organizations, p => p.OrganizationId == organization.Id);
     }
+    
+    [Fact]
+    public async Task UserHasAccessToOrganization_WhenUserHasAccessToOrganization_ReturnsTrue()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var organization = new OrganizationDto{Id = Guid.NewGuid()};
+        var userOrganization = new UserOrganizationDto{UserId = user.Id, OrganizationId = organization.Id};
+
+        await service.AddUserOrganization(userOrganization);
+
+        var result = await service.UserHasAccessToOrganization(userOrganization);
+        
+        Assert.True(result);
+    }
+    
+    [Fact]
+    public async Task UserHasAccessToOrganization_WhenUserDoesNotHaveAccessToOrganization_ReturnsFalse()
+    {
+        var service = CreateService();
+
+        var user = new UserDto{Id = Guid.NewGuid()};
+        var organization = new OrganizationDto{Id = Guid.NewGuid()};
+        var userOrganization = new UserOrganizationDto{UserId = user.Id, OrganizationId = organization.Id};
+
+        var result = await service.UserHasAccessToOrganization(userOrganization);
+        
+        Assert.False(result);
+    }
 }

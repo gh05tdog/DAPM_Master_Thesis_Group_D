@@ -63,4 +63,32 @@ public class RepositoryServiceTests
         var repositories = await service.GetAllUserRepositories();
         Assert.Contains(repositories, p => p.RepositoryId == repository.Id);
     }
+
+    [Fact]
+    public async Task UserHasAccessToRepository_WhenUserHasAccessToRepository_ReturnsTrue()
+    {
+        var service = CreateService();
+
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var repository = new RepositoryDto { Id = Guid.NewGuid() };
+        var userRepository = new UserRepositoryDto { UserId = user.Id, RepositoryId = repository.Id };
+
+        await service.AddUserRepository(userRepository);
+
+        var result = await service.UserHasAccessToRepository(userRepository);
+        Assert.True(result);
+    }
+    
+    [Fact]
+    public async Task UserHasAccessToRepository_WhenUserDoesNotHaveAccessToRepository_ReturnsFalse()
+    {
+        var service = CreateService();
+
+        var user = new UserDto { Id = Guid.NewGuid() };
+        var repository = new RepositoryDto { Id = Guid.NewGuid() };
+        var userRepository = new UserRepositoryDto { UserId = user.Id, RepositoryId = repository.Id };
+
+        var result = await service.UserHasAccessToRepository(userRepository);
+        Assert.False(result);
+    }
 }
