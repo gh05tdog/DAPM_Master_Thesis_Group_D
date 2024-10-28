@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getToken } from './keycloak.ts'; // Import the getToken utility
-import { environment } from '../configs/environments.ts'; // Assuming environment has keycloak_url
+import { environment } from '../configs/environments.ts'; 
 
 const getUsersFromKeycloak = async () => {
   try {

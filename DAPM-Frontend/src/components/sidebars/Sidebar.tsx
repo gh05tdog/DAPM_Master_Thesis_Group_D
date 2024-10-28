@@ -46,7 +46,8 @@ const Sidebar: React.FC = () => (
         <ResourceList />
 
         <Divider sx={{ my: 2 }} />
-        
+
+        {/* Will only be displayed if a user has access to view-users */}
         <UserList />
         
       </List>
