@@ -18,14 +18,8 @@ const RepoList: React.FC = () => {
     dispatch(organizationThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (organizations.length > 0) {
-      try {
-        dispatch(repositoryThunk(organizations));
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  useEffect(() => {    
+      dispatch(repositoryThunk(organizations));
   }, [dispatch, organizations]);
   
  
@@ -41,11 +35,13 @@ const RepoList: React.FC = () => {
  if (loading) {
         return(
             <div>
-                <h1>Repositories</h1>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <h2>Repositories</h2>
+              </div>  
                 <Spinner />
             </div>
         )
-    }
+  }
   return (
     <Accordion defaultExpanded sx={{ boxShadow: 3, borderRadius: 2 }}>
       <AccordionSummary

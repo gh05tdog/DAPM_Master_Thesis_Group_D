@@ -21,8 +21,10 @@ const OrgList: React.FC = () => {
     if (loading) {
         return(
             <div>
-                <h1>Organizations</h1>
-                <Spinner />
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <h2>Organizations</h2>
+              </div>
+              <Spinner />
             </div>
         )
     }
