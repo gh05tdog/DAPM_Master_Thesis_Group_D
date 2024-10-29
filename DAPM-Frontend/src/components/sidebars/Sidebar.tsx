@@ -12,7 +12,7 @@ const Sidebar: React.FC = () => (
     position: 'flex',
     top: 0, 
     left: 0, 
-    height: 'flex',
+    height: '100vh',
     bgcolor: 'background.paper',
     borderRight: '1px solid lightgray',
     overflowY: 'auto', 

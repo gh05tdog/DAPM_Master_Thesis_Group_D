@@ -5,6 +5,7 @@ import LightModeIcon from '@mui/icons-material/LightModeRounded';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Menu from '@mui/material/Menu/Menu';
 import MenuItem from '@mui/material/MenuItem/MenuItem';
+import Button from '@mui/material';
 
 interface ColorModeIconDropdownProps {
   setMode: (mode: 'light' | 'dark') => void;
@@ -30,7 +31,7 @@ export default function ColorModeIconDropdown({ setMode, currentMode }: ColorMod
   const icon = currentMode === 'light' ? <LightModeIcon /> : <DarkModeIcon />;
 
   return (
-    <>
+    <IconButton sx={{ borderRadius: 50, backgroundColor: '#4caf50', "&:hover": { backgroundColor: '#388e3c' } }}>
       <IconButton onClick={handleClick} size="small" aria-haspopup="true">
         {icon}
       </IconButton>
@@ -42,6 +43,6 @@ export default function ColorModeIconDropdown({ setMode, currentMode }: ColorMod
           Dark Mode
         </MenuItem>
       </Menu>
-    </>
+    </IconButton>
   );
 }

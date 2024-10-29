@@ -34,33 +34,19 @@ const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => 
 
     return (
       <ThemeProvider theme={theme}>
-      <div>
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', height: '100vh'  }}>
+          {/* Sidebar */}
           <Sidebar />
-          <Box
-          component="main"
-          sx={(theme) => ({
-            flexGrow: 1,
-            overflow: 'auto',
-          })}
-        >
-          <Stack
-            spacing={2}
-            sx={{
-              alignItems: 'center',
-              mx: 3,
-              pb: 5,
-              mt: { xs: 8, md: 0 },
-            }}
-          >
-            <Header setMode={setMode} currentMode={mode} />
-            <MainContent />
-          </Stack>
-        </Box>
-        </Box>
-      </div>
-    </ThemeProvider>
 
+          {/* Main Area */}
+          <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            {/* Header at the top */}
+            <Header setMode={setMode} currentMode={mode} />
+            {/* Main Content below the Header */}
+            <MainContent />
+          </Box>
+        </Box>
+      </ThemeProvider>
     )
 }
 export default PipelineOverviewPage;
