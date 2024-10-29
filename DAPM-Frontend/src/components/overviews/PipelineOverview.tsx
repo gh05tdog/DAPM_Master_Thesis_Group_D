@@ -13,24 +13,13 @@ import Pipeline4 from '../pipelines/Pipeline4.tsx';
 
 const MainContent: React.FC = () => {
     return (
-        <Box
-            component="main"
-            sx={{
-                flexGrow: 1,  
-                bgcolor: 'background.default',
-                p: 3,
-                marginLeft: '250px',  
-                display: 'flex',
-                flexDirection: 'column', 
-                height: '100vh',  
-            }}
-        >
             <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     gap: '5px',
                     flexGrow: 1,  
+                    width: '100%',
                 }}
             >
                 <Box sx={{ flexGrow: 1, flexBasis: 0 }}>
@@ -46,7 +35,6 @@ const MainContent: React.FC = () => {
                     <Pipeline4 />
                 </Box>
             </Box>
-        </Box>
     );
 };
 

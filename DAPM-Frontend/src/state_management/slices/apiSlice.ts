@@ -25,13 +25,7 @@ export const initialState: ApiState = {
       id: "22222222-7898-4771-bb60-53ea6c03dce4"
   },],
   loadingRepositories: true,
-    resources: [{
-      id: "33333333-7898-4771-bb60-53ea6c03dce7",
-      name: "resource 1",
-      organizationId: "11111111-828f-46c8-aa44-ded7729eaa83",
-      repositoryId: "22222222-7898-4771-bb60-53ea6c03dce4",
-      type: "eventLog"
-  },]
+    resources: []
   }
 
 const apiSlice = createSlice({

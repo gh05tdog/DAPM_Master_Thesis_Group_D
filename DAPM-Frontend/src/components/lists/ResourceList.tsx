@@ -38,7 +38,7 @@ const ResourceList: React.FC = () => {
         expandIcon={<ExpandMoreIcon />}
         aria-controls="resource-list-content"
         id="resource-list-header"
-        sx={{ bgcolor: 'primary.main', color: 'white', borderRadius: '4px' }}
+        sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: '4px' }}
       >
         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Resources</Typography>
       </AccordionSummary>
@@ -46,7 +46,7 @@ const ResourceList: React.FC = () => {
         <List sx={{ width: '100%' }}>
           {resources?.map((resource) => (
             <ListItem key={resource.id} sx={{ borderBottom: '1px solid lightgray', padding: 1 }}>
-              <Typography variant="body1">{resource.name}</Typography>
+              <Typography variant="body1" color="text.primary">{resource.name}</Typography>
             </ListItem>
           ))}
         </List>

@@ -39,12 +39,18 @@ const RepoList: React.FC = () => {
   };
   
  if (loading) {
-        return(
-            <div>
-                <h1>Repositories</h1>
-                <Spinner />
-            </div>
-        )
+    return(
+      <Box>
+        <Accordion disabled sx={{ boxShadow: 3, borderRadius: 2 }}>
+          <AccordionSummary aria-controls="org-list-content" id="org-list-header" sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: '4px' }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Repositories</Typography>
+          </AccordionSummary>
+        </Accordion>
+        <Box sx={{ mt: 2, display:'flex', justifyContent:'center', alignItems:'center' }}>
+          <Spinner />
+        </Box>
+      </Box>
+  )
     }
   return (
     <Accordion defaultExpanded sx={{ boxShadow: 3, borderRadius: 2 }}>
