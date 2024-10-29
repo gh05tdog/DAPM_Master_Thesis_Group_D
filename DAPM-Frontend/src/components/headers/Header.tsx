@@ -1,33 +1,28 @@
-import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+// src/components/Header.tsx
+import * as React from 'react';
+import Box from '@mui/material/Box/Box';
+import ColorModeIconDropdown from '../../assets/theme/ColorModeIconDropdown.tsx';
 
-interface PipelineOverviewPageProps {
-    userInfo: any;
-  }
+interface HeaderProps {
+  setMode: (mode: 'light' | 'dark') => void;
+  currentMode: 'light' | 'dark';
+}
 
-const Header: React.FC<PipelineOverviewPageProps> = ({ userInfo }) => (
-    <AppBar
-        position="static"
-        sx={{ bgcolor: 'rgba(54,55,56,1)', paddingX: 3 }}
-        elevation={3}
+export default function Header({ setMode, currentMode }: HeaderProps) {
+  return (
+    <Box
+      display="horizontal"
+      sx={{
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        maxWidth: { sm: '100%', md: '1700px' },
+        pt: 1.5,
+      }}
     >
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}> 
-                </Typography>
-            </Box>
-
-            <Box>
-                <IconButton color="inherit" aria-label="account">
-                    <AccountCircle />
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
-                        {userInfo?.name}
-                    </Typography>
-                </IconButton>
-            </Box>
-        </Toolbar>
-    </AppBar>
-);
-
-export default Header;
+      <Box display="flex" sx={{ gap: 1 }}>
+        <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
+      </Box>
+    </Box>
+  );
+}
