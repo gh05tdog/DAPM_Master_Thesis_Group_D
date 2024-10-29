@@ -34,18 +34,14 @@ const MainContent: React.FC = () => {
                         <TableRow>
                             <TableCell>Name</TableCell>
                             <TableCell>Status</TableCell>
-                            <TableCell>Organization</TableCell>
-                            <TableCell>Repository</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {pipelines.map(({ id, name, status, organizationId, repositoryId, createdBy }) => (
+                        {pipelines.map(({ id, name, status }) => (
                             <TableRow key={id}>
                                 <TableCell>{name}</TableCell>
                                 <TableCell>{status}</TableCell>
-                                <TableCell>{organizationId}</TableCell>
-                                <TableCell>{repositoryId}</TableCell>
                                 <TableCell>
                                     <Button
                                         variant="outlined"

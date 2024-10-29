@@ -19,10 +19,7 @@ export interface HistoryItem {
 export interface PipelineData {
     id: string;
     name: string;
-    status : string
-    organizationId: string;
-    repositoryId: string;
-    createdBy: string,
+    status : string;
     pipeline: NodeState;
     history: HistoryData;
 }
