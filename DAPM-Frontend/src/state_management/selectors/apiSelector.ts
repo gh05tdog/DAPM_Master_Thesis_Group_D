@@ -5,3 +5,6 @@ export const selectLoadingRepositories = (state: RootState) =>  state.apiState.l
 export const getRepositories = (state: RootState) => state.apiState.repositories
 export const selectLoadingOrganisation = (state: RootState) => state.apiState.loadingOrganizations
 export const getResources = (state: RootState) => state.apiState.resources
+export const selectLoadingResources = (state: RootState) => state.apiState.loadingResources
+
+
