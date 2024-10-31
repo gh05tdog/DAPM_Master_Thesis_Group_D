@@ -1,8 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ApiState, Organization, Repository, Resource } from "../states/apiState.ts";
-import { fetchOrganisationRepositories, fetchOrganisations, fetchRepository, fetchRepositoryResources } from "../../services/backendAPI.tsx";
-import { useAppSelector } from "../../hooks";
-import { getOrganizations } from "../selectors/apiSelector.ts";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {ApiState, Organization, Repository, Resource} from "../states/apiState.ts";
+import {PipelineData} from "../states/pipelineState.ts"
+import {
+  fetchOrganisationRepositories,
+  fetchOrganisations,
+  fetchRepositoryPipelines,
+  fetchRepositoryResources
+} from "../../services/backendAPI.tsx";
 
 
 export const initialState: ApiState = {
@@ -64,6 +68,12 @@ const apiSlice = createSlice({
           })
           .addCase(resourceThunk.rejected, (state, action) => {
             console.log("resorce thunk failed")
+          })
+          .addCase(pipelineThunk.fulfilled, (state, action) => {
+            state.resources = action.payload
+          })
+          .addCase(pipelineThunk.rejected, (state, action) => {
+            console.log("pipeline thunk failed")
           })
       }
     
@@ -130,6 +140,27 @@ export const resourceThunk = createAsyncThunk<
     }
     const result = await Promise.all(resources)
       return result;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error); // Handle error
+  }
+});
+
+export const pipelineThunk = createAsyncThunk<
+    PipelineData[],
+    { organizations: Organization[]; repositories: Repository[] }
+>("api/fetchPipelines", async ({organizations, repositories}, thunkAPI) => {
+  try {
+
+    const pipelines: PipelineData[] = [];
+    for (const org of organizations) {
+      for (const repo of repositories) {
+        if (org.id === repo.organizationId) {
+          const res = await fetchRepositoryPipelines(org.id, repo.id);
+          pipelines.push(...res.result.resources);
+        }
+      }
+    }
+    return await Promise.all(pipelines);
   } catch (error) {
     return thunkAPI.rejectWithValue(error); // Handle error
   }

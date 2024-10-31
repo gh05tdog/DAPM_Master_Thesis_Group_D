@@ -25,5 +25,4 @@ export interface Resource {
     organizationId: string,
     repositoryId: string,
     type: string,
-
 }
