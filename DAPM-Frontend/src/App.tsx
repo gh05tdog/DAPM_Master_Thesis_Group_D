@@ -62,7 +62,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Navigate to="/user" />} />
                 <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
                 <Route path="/pipeline" element={<PipelineComposer />} />
-                <Route path="/manage_pipeline" element = {<PipelineManager />} />
+                <Route path="/manage-pipeline" element = {<PipelineManager />} />
               </>
             )}
           </Routes>

@@ -1,9 +1,13 @@
 ﻿import React from 'react';
+import PipelineManageHeader from '../components/headers/PipelineManageHeader.tsx';
 
 const PipelineManager: React.FC = () => {
+    
     return (
-        <div style={{ width: '100%', height: '100vh', backgroundColor: 'black' }}></div>
-    );
+            <PipelineManageHeader/>
+    )
 };
+
+
 
 export default PipelineManager;
