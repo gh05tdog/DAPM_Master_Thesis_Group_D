@@ -3,7 +3,8 @@ export interface ApiState {
     loadingOrganizations: boolean,
     repositories: Repository[],
     loadingRepositories: boolean,
-    resources: Resource[]
+    resources: Resource[],
+    loadingResources: boolean,
 }
 
 export interface Organization {

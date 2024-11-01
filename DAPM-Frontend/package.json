@@ -20,6 +20,7 @@
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.22",
     "@types/uuid": "^9.0.8",
+    "axios": "^1.7.7",
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
     "keycloak": "^1.2.0",
@@ -63,7 +64,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1",
-    "@types/node": "^16.18.89"
+    "@types/node": "^16.18.89",
+    "gh-pages": "^6.1.1"
   }
 }

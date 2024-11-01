@@ -4,7 +4,9 @@ import '../CSS/Spinner.css'; // Make sure to import your CSS file
 
 const Spinner = () => {
   return (
-    <div className="loader"></div>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <div className="loader"></div>
+    </div>
   );
 };
 
