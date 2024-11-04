@@ -21,7 +21,10 @@ const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => {
     console.log(info);
     
     return (
+      <>
             <Header userInfo={info}/>
+            <choosePipeline/>
+      </>
     )
 };
 
