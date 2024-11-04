@@ -7,6 +7,12 @@ interface PipelineOverviewPageProps {
     userInfo: any;
   }
 
+  const navigate = useNavigate();
+
+  const navigateToPipeline = () => {
+    navigate('/pipeline');
+  };
+
 const Header: React.FC<PipelineOverviewPageProps> = ({ userInfo }) => {
 
        const navigate = useNavigate();
@@ -35,6 +41,10 @@ const Header: React.FC<PipelineOverviewPageProps> = ({ userInfo }) => {
                 <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}> 
                 </Typography>
             </Box>
+
+            <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={navigateToManage}>
+                  Pipeline Manager
+              </Button>
             
 
             <Box>
