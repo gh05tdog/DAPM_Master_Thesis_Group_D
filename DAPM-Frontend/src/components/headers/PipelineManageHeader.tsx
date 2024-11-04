@@ -20,9 +20,8 @@ const PipelineManageHeader: React.FC = () => {
             sx={{ bgcolor: 'rgba(54,55,56,1)', paddingX: 3 }}
             elevation={3}
         >
-            <Toolbar sx={{ justifyContent: 'space-between' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="h6" sx={{maringLeft: 2, fontWeight: 'bold', whiteSpace: 'nowrap' }}>
                         {pipelineName}
                     </Typography>
 
@@ -30,10 +29,9 @@ const PipelineManageHeader: React.FC = () => {
                             color="primary"
                             sx={{marginRight: 2}}
                             onClick = {returnToOverview}>
-                        Go back
+                        Go forward my trusty dusty
                     </Button>
                 </Box>
-            </Toolbar>
         </AppBar>
 
     );
