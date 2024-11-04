@@ -13,7 +13,11 @@ interface PipelineOverviewPageProps {
     navigate('/pipeline');
   };
 
-const Header: React.FC<PipelineOverviewPageProps> = ({ userInfo }) => {
+  const navigateToManage = () => {
+    navigate('/manage-pipeline')
+  }
+
+  export default function Header({userInfo}: PipelineOverviewPageProps) {
 
        const navigate = useNavigate();
        
@@ -59,5 +63,3 @@ const Header: React.FC<PipelineOverviewPageProps> = ({ userInfo }) => {
     </AppBar>
 );
 };
-
-export default Header;
