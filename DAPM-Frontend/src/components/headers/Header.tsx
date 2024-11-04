@@ -7,16 +7,6 @@ interface PipelineOverviewPageProps {
     userInfo: any;
   }
 
-  const navigate = useNavigate();
-
-  const navigateToPipeline = () => {
-    navigate('/pipeline');
-  };
-
-  const navigateToManage = () => {
-    navigate('/manage-pipeline')
-  }
-
   export default function Header({userInfo}: PipelineOverviewPageProps) {
 
        const navigate = useNavigate();
@@ -24,6 +14,15 @@ interface PipelineOverviewPageProps {
        const returnToOverview = () => {
            navigate("/user");
        };
+
+       const navigateToPipeline = () => {
+        navigate('/pipeline');
+      };
+    
+      const navigateToManage = () => {
+        navigate('/manage-pipeline')
+      }
+    
 
        return (
 
