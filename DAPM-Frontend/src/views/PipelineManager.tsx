@@ -1,10 +1,27 @@
-﻿import React from 'react';
-import PipelineManageHeader from '../components/headers/PipelineManageHeader.tsx';
+﻿import Header from '../components/headers/Header.tsx';
+import { useEffect, useState } from "react";
 
-const PipelineManager: React.FC = () => {
+interface PipelineOverviewPageProps {
+  user: any;
+}
+
+const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => { 
+    const [info, setInfo] = useState<any>(null);
+    console.log(user);
+    useEffect(() => {
+      const getUserInfo = async () => {
+        const response = await user;
+        console.log(response);
+        setInfo(response);
+      };
+
+      getUserInfo();
+    }, [user]);
+
+    console.log(info);
     
     return (
-            <PipelineManageHeader/>
+            <Header userInfo={info}/>
     )
 };
 
