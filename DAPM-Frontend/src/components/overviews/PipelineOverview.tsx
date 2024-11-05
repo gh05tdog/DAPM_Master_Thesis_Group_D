@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
 import {getPipelines} from '../../state_management/selectors';
 import {useNavigate} from 'react-router-dom';
@@ -11,6 +11,8 @@ import {organizationThunk, repositoryThunk} from "../../state_management/slices/
 import {pipelineThunk} from "../../state_management/slices/pipelineSlice.ts"
 import {Organization, Repository} from "../../state_management/states/apiState.ts";
 import {PipelineData} from "../../state_management/states/pipelineState.ts";
+import ExecutionOverview from './ExecutionOverview.tsx';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 const MainContent: React.FC = () => {
     const dispatch = useDispatch();
@@ -19,6 +21,11 @@ const MainContent: React.FC = () => {
     const repositories: Repository[] = useSelector(getRepositories);
     const pipelines: PipelineData[] = useSelector(getPipelines);
     const navigate = useNavigate();
+    const [openRows, setOpenRows] = useState<{ [key: string]: boolean }>({});
+
+    const toggleRow = (id: string) => {
+        setOpenRows((prev) => ({ ...prev, [id]: !prev[id] }));
+    }
     
 
     useEffect(() => {
@@ -61,16 +68,27 @@ const MainContent: React.FC = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
+                            <TableCell />
                             <TableCell>Name</TableCell>
-                            <TableCell>Status</TableCell>
+                            <TableCell>Pipeline ID</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {pipelines?.map(({ id, name, status }) => (
+                            <>
                             <TableRow key={id}>
+                                <TableCell>
+                                    <IconButton
+                                        aria-label="expand row"
+                                        size="small"
+                                        onClick={() => toggleRow(id)}
+                                    >
+                                        {openRows[id] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                                    </IconButton>
+                                </TableCell>
                                 <TableCell>{name}</TableCell>
-                                <TableCell>{status}</TableCell>
+                                <TableCell>{id}</TableCell>
                                 <TableCell>
                                     <Button
                                         variant="outlined"
@@ -80,7 +98,10 @@ const MainContent: React.FC = () => {
                                         Edit
                                     </Button>
                                 </TableCell>
+                                
                             </TableRow>
+                            <ExecutionOverview isOpen={openRows[id]}/>
+                            </>
                         ))}
                     </TableBody>
                 </Table>
