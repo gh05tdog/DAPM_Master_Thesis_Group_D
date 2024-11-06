@@ -48,7 +48,8 @@ const App: React.FC = () => {
   if (!initialized) {
     return <div>Loading...</div>;
   }
-
+  
+  
   return (
     <ThemeProvider theme={lightTheme}>
       <Provider store={store}>
@@ -62,7 +63,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Navigate to="/user" />} />
                 <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
                 <Route path="/pipeline" element={<PipelineComposer />} />
-                <Route path="/manage-pipeline" element = {<PipelineManager />} />
+                <Route path="/manage-pipeline" element = {<PipelineManager user = {user} />} />
               </>
             )}
           </Routes>

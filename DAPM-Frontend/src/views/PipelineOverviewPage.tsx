@@ -3,10 +3,14 @@ import Header from '../components/headers/Header.tsx';
 import Sidebar from '../components/sidebars/Sidebar.tsx'
 import MainContent from '../components/overviews/PipelineOverview.tsx'
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
+import PageLayout from './PageLayout.tsx';
 
 interface PipelineOverviewPageProps {
   user: any;
+  children?: React.ReactNode;
 }
+
 
 const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => { 
     const [info, setInfo] = useState<any>(null);
@@ -22,15 +26,12 @@ const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => 
     }, [user]);
 
     console.log(info);
-
+    
     return (
-        <>
-             <Header userInfo={info}/>
-             <Box sx={{ display: 'flex', height: '100vh' }}>
+             <PageLayout user={info}>
                <Sidebar />
                <MainContent />
-             </Box>
-        </>
+             </PageLayout>
 
     )
 }

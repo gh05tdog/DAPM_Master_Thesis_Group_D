@@ -2,6 +2,7 @@ import React from 'react';
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
+import DropDownManage from '../buttons/DropDownManage.tsx';
 
 interface PipelineOverviewPageProps {
     userInfo: any;
@@ -39,16 +40,21 @@ interface PipelineOverviewPageProps {
                 Go back
 
             </Button>
+
+            <Button variant="contained"
+                    color="primary"
+                    sx={{marginRight: 2}}
+                    onClick = {navigateToPipeline}>
+                Create new pipeline
+
+            </Button>
             
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}> 
                 </Typography>
             </Box>
-
-            <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={navigateToManage}>
-                  Pipeline Manager
-              </Button>
             
+            <DropDownManage/>
 
             <Box>
                 <IconButton color="inherit" aria-label="account">

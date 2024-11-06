@@ -1,33 +1,29 @@
 ﻿import Header from '../components/headers/Header.tsx';
 import { useEffect, useState } from "react";
+import PageLayout from './PageLayout.tsx';
 
 interface PipelineOverviewPageProps {
-  user: any;
+    user: any;
 }
 
-const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => { 
+const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => {
     const [info, setInfo] = useState<any>(null);
-    console.log(user);
+
     useEffect(() => {
-      const getUserInfo = async () => {
-        const response = await user;
-        console.log(response);
-        setInfo(response);
-      };
+        const fetchUserInfo = async () => {
+            // Assuming `user` is an API call or some promise
+            const response = await user;
+            setInfo(response);
+        };
 
-      getUserInfo();
-    }, [user]);
+        fetchUserInfo();
+    }, [user]); // Runs the effect whenever `user` changes
 
-    console.log(info);
-    
     return (
-      <>
-            <Header userInfo={info}/>
-            <choosePipeline/>
-      </>
-    )
+        <PageLayout user={info}>
+            <text> Pipeline Manager </text>
+        </PageLayout>
+    );
 };
-
-
 
 export default PipelineManager;
