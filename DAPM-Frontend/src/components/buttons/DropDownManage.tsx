@@ -51,6 +51,7 @@ export default function DropDownManage() {
                 aria-haspopup="true"
                 aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
                 onClick={handleClick}
+
             >
                 Manage
             </Button>
@@ -60,17 +61,21 @@ export default function DropDownManage() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Button onClick={navigateToManagePipeline}>
+                <Button sx={{width: '100%'}} 
+                        onClick={navigateToManagePipeline}>
                     Pipeline
                 </Button>
                 <Divider />
-                <Button onClick={handleClose}>
+                <Button sx={{width: '100%'}} 
+                        onClick={handleClose}>
                     Organization</Button>
                 <Divider />
-                <Button onClick={handleClose}>
+                <Button sx={{width: '100%'}} 
+                        onClick={handleClose}>
                     Repository</Button>
                 <Divider />
-                <Button onClick={handleClose}>
+                <Button sx={{width: '100%'}} 
+                        onClick={handleClose}>
                     Resource</Button>
                 
             </StyledMenu>
