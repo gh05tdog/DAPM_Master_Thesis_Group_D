@@ -2580,6 +2580,11 @@
           "description": "",
           "composite": false,
           "clientRole": false,
+          "composites": {
+            "client": {
+              "realm-management": ["view-users"]
+            }
+          },
           "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
           "attributes": {}
         },
@@ -2589,6 +2594,11 @@
           "description": "",
           "composite": false,
           "clientRole": false,
+          "composites": {
+            "client": {
+              "realm-management": ["view-users"]
+            }
+          },
           "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
           "attributes": {}
         },
@@ -2598,6 +2608,11 @@
           "description": "",
           "composite": false,
           "clientRole": false,
+          "composites": {
+            "client": {
+              "realm-management": ["view-users"]
+            }
+          },
           "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
           "attributes": {}
         },
@@ -2612,7 +2627,10 @@
               "RepositoryManager",
               "ResourceManager",
               "OrganizationManager"
-            ]
+            ],
+            "client": {
+              "realm-management": ["view-users"]
+            }
           },
           "clientRole": false,
           "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
@@ -2624,6 +2642,11 @@
           "description": "",
           "composite": false,
           "clientRole": false,
+          "composites": {
+            "client": {
+              "realm-management": ["view-users"]
+            }
+          },
           "containerId": "afcf1106-e4d9-4d5a-aa16-9417bcfdf0e4",
           "attributes": {}
         },
