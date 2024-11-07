@@ -1,7 +1,8 @@
 ﻿import Header from '../components/headers/Header.tsx';
 import PipelineManagerSearch from '../components/searchFields/PipelineManageSearch.tsx';
 import { useEffect, useState } from "react";
-
+import PipelineManageTable from '../components/overviews/PipelineManageTable.tsx';
+import {Box} from "@mui/material";
 interface PipelineOverviewPageProps {
   user: any;
 }
@@ -25,6 +26,9 @@ const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => {
       <>
             <Header userInfo={info}/>
            <PipelineManagerSearch />
+          <Box sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
+           <PipelineManageTable/>
+            </Box>
       </>
     )
 };

@@ -1,9 +1,6 @@
-import { Box } from "@mui/material";
-import Header from '../components/headers/Header.tsx';
 import Sidebar from '../components/sidebars/Sidebar.tsx'
 import MainContent from '../components/overviews/PipelineOverview.tsx'
 import { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
 import PageLayout from './PageLayout.tsx';
 
 interface PipelineOverviewPageProps {
