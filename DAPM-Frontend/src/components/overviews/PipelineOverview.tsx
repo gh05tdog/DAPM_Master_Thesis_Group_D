@@ -1,51 +1,61 @@
 import React from 'react';
-import BackButton from '../buttons/BackButton.tsx';
-import { Box, Typography } from '@mui/material';
-import OrgList from '../lists/OrgList.tsx';
-import RepoList from '../lists/RepoList.tsx';
-import ResourceList from '../lists/ResourceList.tsx';
-import Spinner from '../cards/SpinnerCard.tsx';
-import Pipeline1 from '../pipelines/Pipeline1.tsx';
-import Pipeline2 from '../pipelines/Pipeline2.tsx';
-import Pipeline3 from '../pipelines/Pipeline3.tsx';
-import Pipeline4 from '../pipelines/Pipeline4.tsx';
-
+import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
+import {useDispatch, useSelector} from 'react-redux';
+import {getPipelines} from '../../state_management/selectors/index.ts';
+import {useNavigate} from 'react-router-dom';
+import {addNewPipeline, setActivePipeline} from '../../state_management/slices/pipelineSlice.ts';
+import AddIcon from '@mui/icons-material/Add';
+import {v4 as uuidv4} from "uuid";
 
 const MainContent: React.FC = () => {
+    const pipelines = useSelector(getPipelines);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const navigateToPipeline = (id: string) => {
+        dispatch(setActivePipeline(id));
+        navigate('/pipeline');
+    };
+    
+    const createNewPipeline = () => {
+        dispatch(addNewPipeline({ id: `pipeline-${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
+        navigate("/pipeline");
+    };
+
     return (
         <Box
-            component="main"
             sx={{
-                flexGrow: 1,  
-                bgcolor: 'background.default',
-                p: 3,
-                marginLeft: '250px',  
-                display: 'flex',
-                flexDirection: 'column', 
-                height: '100vh',  
+                width: '100%',
+                p: 0
             }}
         >
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: '5px',
-                    flexGrow: 1,  
-                }}
-            >
-                <Box sx={{ flexGrow: 1, flexBasis: 0 }}>
-                    <Pipeline1 />
-                </Box>
-                <Box sx={{ flexGrow: 1, flexBasis: 0 }}>
-                    <Pipeline2 />
-                </Box>
-                <Box sx={{ flexGrow: 1, flexBasis: 0 }}>
-                    <Pipeline3 />
-                </Box>
-                <Box sx={{ flexGrow: 1, flexBasis: 0 }}>
-                    <Pipeline4 />
-                </Box>
-            </Box>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Status</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {pipelines.map(({ id, name, status }) => (
+                            <TableRow key={id}>
+                                <TableCell>{name}</TableCell>
+                                <TableCell>{status}</TableCell>
+                                <TableCell>
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={() => navigateToPipeline(id)}
+                                    >
+                                        Edit
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Box>
     );
 };

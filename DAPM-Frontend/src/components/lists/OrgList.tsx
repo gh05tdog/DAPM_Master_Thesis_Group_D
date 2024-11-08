@@ -20,12 +20,17 @@ const OrgList: React.FC = () => {
     
     if (loading) {
         return(
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <h2>Organizations</h2>
-              </div>
-              <Spinner />
-            </div>
+          <Box>
+          <Accordion disabled sx={{ boxShadow: 3, borderRadius: 2 }}>
+            <AccordionSummary aria-controls="org-list-content" id="org-list-header" sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: '4px' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Organizations</Typography>
+            </AccordionSummary>
+          </Accordion>
+          <Box sx={{ mt: 2, display:'flex', justifyContent:'center', alignItems:'center' }}>
+            <Spinner />
+          </Box>
+        </Box>
+          
         )
     }
 
@@ -43,7 +48,7 @@ const OrgList: React.FC = () => {
         expandIcon={<ExpandMoreIcon />}
         aria-controls="org-list-content"
         id="org-list-header"
-        sx={{ bgcolor: 'primary.main', color: 'white', borderRadius: '4px' }}
+        sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: '4px' }}
       >
         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Organizations</Typography>
       </AccordionSummary>

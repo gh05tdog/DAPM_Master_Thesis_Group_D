@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => (
   <Box
   sx={{
     width: 250,
-    position: 'fixed',
+    position: 'flex',
     top: 0, 
     left: 0, 
     height: '100vh',
@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => (
     zIndex: 1, 
 }}
   >
-    <Box sx={{ p: 2, textAlign: 'center', bgcolor: 'primary.main', color: 'white', borderBottom: '1px solid lightgray' }}>
+    <Box sx={{ p: 2, textAlign: 'center', bgcolor: 'primary.main', color: 'primary.contrastText', borderBottom: '1px solid', borderColor: 'divider' }}>
       <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Control Panel</Typography>
     </Box>
 
@@ -30,7 +30,7 @@ const Sidebar: React.FC = () => (
           <ListItemIcon>
             <ArrowBackIcon color="primary" />
           </ListItemIcon>
-          <Typography variant="body1">Back</Typography>
+          <Typography variant="body1" color="text.primary">Back</Typography>
         </ListItem>
 
         <Divider sx={{ my: 2 }} />
@@ -41,7 +41,6 @@ const Sidebar: React.FC = () => (
         
         <RepoList />
 
-        <Divider sx={{ my: 2 }} />
 
         <ResourceList />
 
@@ -53,8 +52,8 @@ const Sidebar: React.FC = () => (
       </List>
     </Box>
 
-    <Box sx={{ p: 2, textAlign: 'center', bgcolor: 'background.paper', borderTop: '1px solid lightgray' }}>
-      <Typography variant="body2" color="textSecondary">
+    <Box sx={{p: 2, textAlign: 'center', borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+      <Typography variant="body2" color="text.secondary">
         &copy; 2024 Group D
       </Typography>
     </Box>
