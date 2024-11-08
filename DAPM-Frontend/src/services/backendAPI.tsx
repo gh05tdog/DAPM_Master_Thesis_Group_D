@@ -471,9 +471,9 @@ export async function putResource(orgId: string, repId: string, formData: FormDa
 }
 
 export async function putPipeline(orgId: string, repId: string, pipelineData:any){
-    console.log(pipelineData)
+
     try {
-        const response = await fetch(`http://${path}/Organizations/${orgId}/repositories/${repId}/pipelines`, {
+        const response = await fetch(`${path}/Organizations/${orgId}/repositories/${repId}/pipelines`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
