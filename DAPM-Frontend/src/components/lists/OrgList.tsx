@@ -31,6 +31,12 @@ const OrgList: React.FC = () => {
           </Box>
         </Box>
           
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <h2>Organizations</h2>
+              </div>
+              <Spinner />
+            </div>
         )
     }
 

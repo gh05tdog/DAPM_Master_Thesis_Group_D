@@ -6,25 +6,10 @@ import { getOrganizations } from "../selectors/apiSelector.ts";
 
 
 export const initialState: ApiState = {
-    organizations: [
-      {
-        id: "11111111-828f-46c8-aa44-ded7729eaa83",
-        name: "HARALD&RAVN UNI",
-        apiUrl: "https://api.organization1.com"
-      }
-    ],
+    organizations: [],
     loadingOrganizations: true,
-    repositories: [{
-      organizationId: "11111111-828f-46c8-aa44-ded7729eaa83",
-      name: "Repository 1",
-      id: "22222222-7898-4771-bb60-53ea6c03dce3"
-  },
-  {
-      organizationId: "11111111-828f-46c8-aa44-ded7729eaa83",
-      name: "Repository 2",
-      id: "22222222-7898-4771-bb60-53ea6c03dce4"
-  },],
-  loadingRepositories: true,
+    repositories: [],
+    loadingRepositories: true,
     resources: []
   }
 
@@ -43,6 +28,7 @@ const apiSlice = createSlice({
             state.organizations = action.payload.organizations
           })
           .addCase(organizationThunk.rejected, (state, action) => {
+            state.loadingOrganizations=false;
             console.log("org thunk failed")
           })
           .addCase(repositoryThunk.pending, (state, action) => {
@@ -54,15 +40,20 @@ const apiSlice = createSlice({
             state.repositories = action.payload
           })
           .addCase(repositoryThunk.rejected, (state, action) => {
+            state.loadingRepositories=false;
+
             console.log("repo thunk failed")
           })
           .addCase(resourceThunk.pending, (state, action) => {
+            state.loadingResources= true;
           })
           .addCase(resourceThunk.fulfilled, (state, action) => {
+            state.loadingResources= false;
             // Add any fetched posts to the array
             state.resources = action.payload
           })
           .addCase(resourceThunk.rejected, (state, action) => {
+            state.loadingResources= false;
             console.log("resorce thunk failed")
           })
       }
@@ -98,6 +89,9 @@ export const repositoryThunk = createAsyncThunk<
   Repository[],
   Organization[]
 >("api/fetchRespositories", async (organizations: Organization[], thunkAPI) => {
+  if (!organizations || organizations.length === 0) {
+    return thunkAPI.rejectWithValue("Organizations list is null or empty.");
+  }
   try {
     
     const repositories = [];

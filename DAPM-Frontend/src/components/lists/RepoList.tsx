@@ -18,14 +18,8 @@ const RepoList: React.FC = () => {
     dispatch(organizationThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (organizations.length > 0) {
-      try {
-        dispatch(repositoryThunk(organizations));
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  useEffect(() => {    
+      dispatch(repositoryThunk(organizations));
   }, [dispatch, organizations]);
   
  

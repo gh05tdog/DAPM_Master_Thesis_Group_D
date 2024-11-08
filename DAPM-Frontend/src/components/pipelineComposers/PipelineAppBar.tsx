@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getActiveFlowData, getActivePipeline } from "../../state_management/selectors/index.ts";
 import { useState } from "react";
 import { updatePipelineName } from "../../state_management/slices/pipelineSlice.ts";
-import EditIcon from '@mui/icons-material/Edit';
+import { Edit as EditIcon } from '@mui/icons-material';
 import { Node } from "reactflow";
 import { DataSinkNodeData, DataSourceNodeData, OperatorNodeData } from "../../state_management/states/pipelineState.ts";
 import { putCommandStart, putExecution, putPipeline } from "../../services/backendAPI.tsx";
@@ -132,6 +132,49 @@ export default function PipelineAppBar() {
 
   }
 
+  //Post pipeline to backend
+  const savePipeline = async () => {
+    const requestData = {
+      name: pipelineName,
+      pipeline: {
+        nodes: flowData?.nodes?.map(node => ({
+          type: node.type,
+          data: {
+            ...node.data,
+            instantiationData: {
+              resource: {
+                organizationId: node?.data?.instantiationData?.resource?.organizationId,
+                repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
+                resourceId: node?.data?.instantiationData?.resource?.id,
+              },
+            }
+          },
+          width: 100, 
+          height: 100, 
+          position: { x: 100, y: 100 }, 
+          id: node.id, 
+          label: "",
+        })),
+        edges: flowData?.edges?.map(edge => ({
+          sourceHandle: edge.sourceHandle,
+          targetHandle: edge.targetHandle
+        }))
+      }
+    };
+  
+    const selectedOrg = organizations[0];
+    const selectedRepo = repositories.filter(repo => 
+      repo.organizationId === selectedOrg.id)[0];
+  
+    try {
+      await putPipeline(selectedOrg.id, selectedRepo.id, requestData);
+
+    } catch (error) {
+      console.error('Error saving pipeline:', error);
+
+    }
+  };
+
   return (
     <AppBar position="fixed">
       <Toolbar sx={{ flexGrow: 1 }}>
@@ -156,6 +199,9 @@ export default function PipelineAppBar() {
         </Box>
         <Button onClick={() => generateJson()}>
           <Typography variant="body1" sx={{ color: "white" }}>Deploy pipeline</Typography>
+        </Button>
+        <Button onClick={savePipeline}>
+        <Typography variant="body1" sx={{ color: "white" }}>Save pipeline</Typography>
         </Button>
       </Toolbar>
     </AppBar>
