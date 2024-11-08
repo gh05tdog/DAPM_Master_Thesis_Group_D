@@ -53,9 +53,6 @@ export default function SimpleTable() {
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const currentRows = rows.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  function navigateToAddUser() {
-    navigate('/add-user')
-  }
 
   return (
       <Box sx={{ width: '100%', margin: 'auto', mt: 4 }}>
@@ -104,7 +101,7 @@ export default function SimpleTable() {
               variant="contained"
               color="primary"
               disabled={page === totalPages}
-              onClick={navigateToAddUser}
+              onClick={handleNextPage}
           >
             Next Page
           </Button>
