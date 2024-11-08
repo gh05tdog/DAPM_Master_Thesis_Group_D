@@ -13,30 +13,14 @@ import {
 } from '@mui/material';
 import {useNavigate} from "react-router-dom";
 
-// Sample data for rows
-const Users = [
-  { id: 1, name: 'Olivia Rhye' },
-  { id: 2, name: 'Ciaran Murray' },
-  { id: 3, name: 'Marina Macdonald' },
-  { id: 4, name: 'Charles Fulton' },
-  { id: 5, name: 'Jay Hoper' },
-  { id: 6, name: 'Steve Hampton' },
-  { id: 7, name: 'Liam Peterson' },
-  { id: 8, name: 'Ava Martinez' },
-  { id: 9, name: 'Mia Robinson' },
-  { id: 10, name: 'Sophia Johnson' },
-  { id: 11, name: 'James Brown' },
-  { id: 12, name: 'Emily Davis' },
-];
-
 const ITEMS_PER_PAGE = 10;
 
-export default function SimpleTable() {
+export default function PipelineManageTable(Users: any) {
   const [rows, setRows] = useState(Users);
   const [page, setPage] = useState(1);
 
   const handleRemove = (id: number) => {
-    setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+    setRows((prevRows: { id: number; name: string }[]) => prevRows.filter((row) => row.id !== id));
   };
 
   // Pagination controls
@@ -48,16 +32,14 @@ export default function SimpleTable() {
     setPage((prevPage) => Math.max(prevPage - 1, 1));
   };
   
-  const navigate = useNavigate();
-
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const currentRows = rows.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
 
   return (
-      <Box sx={{ width: '100%', margin: 'auto', mt: 4 }}>
+      <Box sx={{ width: '100%', margin: 'auto', mt: 4 }}>row
         <TableContainer component={Paper}>
-          <Table aria-label="Simple Table">
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -66,7 +48,7 @@ export default function SimpleTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentRows.map((row) => (
+              {currentRows.map((row: { id: number; name: string }) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.id}</TableCell>
                     <TableCell>{row.name}</TableCell>
