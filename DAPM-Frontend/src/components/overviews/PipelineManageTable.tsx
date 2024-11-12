@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Table,
@@ -11,6 +11,7 @@ import {
   Button,
   Typography,
 } from '@mui/material';
+import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,13 +20,36 @@ interface PipelineData {
   name: string;
 }
 
+interface User {
+  id: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+
+
+
 export default function PipelineManageTable({ data }: { data: PipelineData[] }) {
   const [rows, setRows] = useState<PipelineData[]>(data || []);
   const [page, setPage] = useState(1);
+  const [users, setUsers] = useState<User[]>([]);
 
   const handleRemove = (id: number) => {  
     setRows((prevRows: { id: number; name: string }[]) => prevRows.filter((row) => row.id !== id));
   };
+
+  useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const userData = await getUsersFromKeycloak();
+      setUsers(userData);
+    } catch (error) {
+      console.error('Failed to fetch users:', error); // Log the error but don't set it in the UI
+    }
+  };
+  fetchUsers();
+}, []);
 
   // Pagination controls
   const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
@@ -52,15 +76,15 @@ export default function PipelineManageTable({ data }: { data: PipelineData[] }) 
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentRows.map((row: { id: number; name: string }) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.name}</TableCell>
+              {users.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>{user.id}</TableCell>
+                    <TableCell>{user.firstName}</TableCell>
                     <TableCell align="right">
                       <Button
                           variant="outlined"
                           color="error"
-                          onClick={() => handleRemove(row.id)}
+                           //onClick={() => handleRemove(user.id)}
                       >
                         Remove
                       </Button>
