@@ -12,15 +12,15 @@ import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
 
 const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
+    palette: {
+        mode: 'dark',
+    },
 });
 
-const lightTheme = createTheme({ 
-  palette: {
-    mode: 'light',
-  },
+const lightTheme = createTheme({
+    palette: {
+        mode: 'light',
+    },
 });
 
 console.log('Client api url:', environment.clientapi_url);
@@ -29,45 +29,45 @@ console.log('Peer api url:', environment.peerapi_url);
 console.log('Access control url:', environment.accesscontrol_url);
 
 const App: React.FC = () => {
-  const [initialized, setInitialized] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
-  const [user, setUser] = useState<any>(null);
+    const [initialized, setInitialized] = useState(false);
+    const [authenticated, setAuthenticated] = useState(false);
+    const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-    const initialize = async () => {
-      await initKeycloak();
-      setInitialized(true);
-      // Assuming initKeycloak sets the keycloakConfig.authenticated value
-      setAuthenticated(keycloak.authenticated ?? false); // Update this based on your keycloak logic
-      setUser(keycloak.loadUserInfo());
-    };
-    initialize();
-  }, []);
+    useEffect(() => {
+        const initialize = async () => {
+            await initKeycloak();
+            setInitialized(true);
+            // Assuming initKeycloak sets the keycloakConfig.authenticated value
+            setAuthenticated(keycloak.authenticated ?? false); // Update this based on your keycloak logic
+            setUser(keycloak.loadUserInfo());
+        };
+        initialize();
+    }, []);
 
-  if (!initialized) {
-    return <div>Loading...</div>;
-  }
+    if (!initialized) {
+        return <div>Loading...</div>;
+    }
 
-  return (
-    <ThemeProvider theme={lightTheme}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Routes>
-            {!authenticated ? (
-              <Route path="/user" element={<LoginPage />} />
-            ) : (
-              <>
-                {/* Automatically redirect to /user when authenticated */}
-                <Route path="/" element={<Navigate to="/user" />} />
-                <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
-                <Route path="/pipeline" element={<PipelineComposer />} />
-              </>
-            )}
-          </Routes>
-        </BrowserRouter>
-      </Provider>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={lightTheme}>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Routes>
+                        {!authenticated ? (
+                            <Route path="/user" element={<LoginPage />} />
+                        ) : (
+                            <>
+                                {/* Automatically redirect to /user when authenticated */}
+                                <Route path="/" element={<Navigate to="/user" />} />
+                                <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
+                                <Route path="/pipeline" element={<PipelineComposer />} />
+                            </>
+                        )}
+                    </Routes>
+                </BrowserRouter>
+            </Provider>
+        </ThemeProvider>
+    );
 };
 
 export default App;

@@ -9,7 +9,8 @@ public class OrganizationTest
 
     public OrganizationTest(ApiHttpFixture apiHttpFixture)
     {
-        this.client = apiHttpFixture.AuthenticatedClient;
+        this.client = apiHttpFixture.Client;
+        apiHttpFixture.AccessControlAdder.AddUserOrganizationAsync(TestHelper.UserId, TestHelper.OrganizationId).GetAwaiter().GetResult();
     }
     
     [Fact]

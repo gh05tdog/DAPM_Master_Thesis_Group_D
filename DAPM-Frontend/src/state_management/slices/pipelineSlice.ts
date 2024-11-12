@@ -19,16 +19,11 @@ const pipelineSlice = createSlice({
   initialState: initialState,
   reducers: {
     addNewPipeline: (state, { payload }: PayloadAction<{ id: string, flowData: NodeState }>) => {
-      state.pipelines.push({ id: payload.id, name: 'unnamed pipeline', pipeline: payload.flowData, history: { past: [], future: []}, imgData: '' } as PipelineData)
+      state.pipelines.push({ id: payload.id, name: 'unnamed pipeline', pipeline: payload.flowData, history: { past: [], future: []}, imgData: '', status: 'not started'} as PipelineData)
       state.activePipelineId = payload.id
     },
     setActivePipeline: (state, { payload }: PayloadAction<string>) => {
       state.activePipelineId = payload
-    },
-    setImageData: (state, { payload }: PayloadAction<{ id: string, imgData: string }>) => {
-      var pipeline = state.pipelines.find((pipeline: { id: string; }) => pipeline.id === payload.id)
-      if (!pipeline) return
-      pipeline.imgData = payload.imgData
     },
 
     // actions for undo and redo
@@ -193,7 +188,6 @@ export const {
   //actions for all pipelines
   addNewPipeline, 
   setActivePipeline, 
-  setImageData, 
   
   // actions for undo and redo
   undo,

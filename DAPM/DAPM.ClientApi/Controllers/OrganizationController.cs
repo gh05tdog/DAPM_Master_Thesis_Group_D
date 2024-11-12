@@ -15,15 +15,12 @@ namespace DAPM.ClientApi.Controllers
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations")]
-    public class OrganizationController : BaseController
+    public class OrganizationController : ControllerBase
     {
-
-        private readonly ILogger<OrganizationController> _logger;
         private readonly IOrganizationService _organizationService;
 
-        public OrganizationController(ILogger<OrganizationController> logger, IOrganizationService organizationService, IAccessControlService accessControlService) : base(accessControlService)
+        public OrganizationController(IOrganizationService organizationService)
         {
-            _logger = logger;
             _organizationService = organizationService;
         }
 

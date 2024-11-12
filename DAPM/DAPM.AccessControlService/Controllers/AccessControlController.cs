@@ -1,69 +1,62 @@
-using DAPM.AccessControlService.Infrastructure;
+using DAPM.AccessControlService.Core.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQLibrary.Messages.AccessControl.Requests;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Controllers;
 
 [ApiController]
 [Route("api/access-control")]
+[Authorize(Policy = "Manager")]
 public class AccessControlController : ControllerBase
 {
-    private readonly IAccessControlFacade accessControlFacade;
+    private readonly IOrganizationService organizationService;
+    private readonly IPipelineService pipelineService;
+    private readonly IRepositoryService repositoryService;
+    private readonly IResourceService resourceService;
 
-    public AccessControlController(IAccessControlFacade accessControlFacade)
+    public AccessControlController(IOrganizationService organizationService, IPipelineService pipelineService, 
+        IRepositoryService repositoryService, IResourceService resourceService)
     {
-        this.accessControlFacade = accessControlFacade;
-    }
-
-    [HttpPost]
-    [Route("add-user-resource")]
-    public async Task<IActionResult> AddUserResource([FromBody] AddUserResourceRequestMessage message)
-    {
-        var response = await accessControlFacade.AddUserResource(message);
-        return Ok(response);
+        this.organizationService = organizationService;
+        this.pipelineService = pipelineService;
+        this.repositoryService = repositoryService;
+        this.resourceService = resourceService;
     }
     
     [HttpPost]
-    [Route("add-user-repository")]
-    public async Task<IActionResult> AddUserRepository([FromBody] AddUserRepositoryRequestMessage message)
+    [Route("check-access")]
+    public async Task<IActionResult> CheckUserAccess([FromBody] UserAccessRequestDto userAccessRequest)
     {
-        var response = await accessControlFacade.AddUserRepository(message);
-        return Ok(response);
-    }
-    
-    [HttpPost]
-    [Route("add-user-pipeline")]
-    public async Task<IActionResult> AddUserPipeline([FromBody] AddUserPipelineRequestMessage message)
-    {
-        var response = await accessControlFacade.AddUserPipeline(message);
-        return Ok(response);
-    }
-    
-    [HttpGet]
-    [Route("get-pipelines-for-user/{userId}")]
-    public async Task<IActionResult> GetPipelinesForUser(Guid userId)
-    {
-        var message = new GetPipelinesForUserRequestMessage{ User = new UserDto{ Id = userId} };
-        var response = await accessControlFacade.GetPipelinesForUser(message);
-        return Ok(response);
-    }
-    
-    [HttpGet]
-    [Route("get-repositories-for-user/{userId}")]
-    public async Task<IActionResult> GetRepositoriesForUser(Guid userId)
-    {
-        var message = new GetRepositoriesForUserRequestMessage{ User = new UserDto{ Id = userId} };
-        var response = await accessControlFacade.GetRepositoriesForUser(message);
-        return Ok(response);
-    }
-    
-    [HttpGet]
-    [Route("get-resources-for-user/{userId}")]
-    public async Task<IActionResult> GetResourcesForUser(Guid userId)
-    {
-        var message = new GetResourcesForUserRequestMessage{ User = new UserDto{ Id = userId} };
-        var response = await accessControlFacade.GetResourcesForUser(message);
+        var response = new UserAccessResponseDto();
+        
+        if (userAccessRequest.User is null)
+            return BadRequest("User is required.");
+        
+        if (userAccessRequest.Organization is not null)
+        {
+            var access = await organizationService.UserHasAccessToOrganization(new UserOrganizationDto { UserId = userAccessRequest.User.Id, OrganizationId = userAccessRequest.Organization.Id });
+            response.HasOrganizationAccess = access;
+        }
+        
+        if (userAccessRequest.Pipeline is not null)
+        {
+            var access = await pipelineService.UserHasAccessToPipeline(new UserPipelineDto { UserId = userAccessRequest.User.Id, PipelineId = userAccessRequest.Pipeline.Id });
+            response.HasPipelineAccess = access;
+        }
+        
+        if (userAccessRequest.Repository is not null)
+        {
+            var access = await repositoryService.UserHasAccessToRepository(new UserRepositoryDto { UserId = userAccessRequest.User.Id, RepositoryId = userAccessRequest.Repository.Id });
+            response.HasRepositoryAccess = access;
+        }
+        
+        if (userAccessRequest.Resource is not null)
+        {
+            var access = await resourceService.UserHasAccessToResource(new UserResourceDto { UserId = userAccessRequest.User.Id, ResourceId = userAccessRequest.Resource.Id });
+            response.HasResourceAccess = access;
+        }
+        
         return Ok(response);
     }
 }

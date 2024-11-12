@@ -14,11 +14,11 @@ namespace DAPM.ClientApi.Controllers
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations/")]
-    public class ResourceController : BaseController
+    public class ResourceController : ControllerBase
     {
         private readonly IResourceService resourceService;
 
-        public ResourceController(IResourceService resourceService, IAccessControlService accessControlService) : base(accessControlService)
+        public ResourceController(IResourceService resourceService)
         {
             this.resourceService = resourceService;
         }
@@ -28,12 +28,6 @@ namespace DAPM.ClientApi.Controllers
             "a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetResourceById(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-
-            if (!await HasResourceAccess(resourceId))
-                return UnauthorizedResponse("resource", resourceId);
-            
             Guid id = resourceService.GetResourceById(organizationId, repositoryId, resourceId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetResourceById", TicketId = id });
         }
@@ -43,12 +37,6 @@ namespace DAPM.ClientApi.Controllers
             "a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetResourceFileById(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
-            if (!await HasRepositoryAccess(repositoryId))
-                return UnauthorizedResponse("repository", repositoryId);
-
-            if (!await HasResourceAccess(resourceId))
-                return UnauthorizedResponse("resource", resourceId);
-            
             Guid id = resourceService.GetResourceFileById(organizationId, repositoryId, resourceId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetResourceFileById", TicketId = id });
         }

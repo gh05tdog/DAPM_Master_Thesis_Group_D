@@ -2,8 +2,10 @@ using DAPM.AccessControlService.Core.Domain.Entities;
 
 namespace DAPM.AccessControlService.Core.Domain.Repositories;
 
-public interface IResourceRepository : IRepository
+public interface IResourceRepository
 {
-    Task AddUserResource(UserId userId, ResourceId resourceId);
-    Task<ICollection<ResourceId>> GetResourcesForUser(UserId userId);
+    Task CreateUserResource(UserResource userResource);
+    Task<ICollection<ResourceId>> ReadResourcesForUser(UserId userId);
+    Task DeleteUserResource(UserResource userResource);
+    Task<ICollection<UserResource>> ReadAllUserResources();
 }

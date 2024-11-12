@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAPM.AccessControlService.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAPM.ClientApi.Test.EndToEnd", "DAPM.ClientApi.Test.EndToEnd\DAPM.ClientApi.Test.EndToEnd.csproj", "{EEDEBBDD-8EF6-4E1B-ABB3-4908A88B637F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtilities", "TestUtilities\TestUtilities.csproj", "{DAB2BCE7-DBA6-4843-92E5-6CBDA15AC4B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{EEDEBBDD-8EF6-4E1B-ABB3-4908A88B637F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEDEBBDD-8EF6-4E1B-ABB3-4908A88B637F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEDEBBDD-8EF6-4E1B-ABB3-4908A88B637F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAB2BCE7-DBA6-4843-92E5-6CBDA15AC4B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB2BCE7-DBA6-4843-92E5-6CBDA15AC4B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAB2BCE7-DBA6-4843-92E5-6CBDA15AC4B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAB2BCE7-DBA6-4843-92E5-6CBDA15AC4B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

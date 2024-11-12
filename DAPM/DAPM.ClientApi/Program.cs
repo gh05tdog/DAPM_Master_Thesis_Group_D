@@ -13,7 +13,6 @@ using Microsoft.IdentityModel.Logging;
 using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using Microsoft.OpenApi.Models;
-using RabbitMQLibrary.Messages.AccessControl.Responses;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,7 +77,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Access control services
-builder.Services.Configure<ApiHttpClientFactorySettings>(configuration.GetSection("ApiHttpClientFactorySettings"));
+builder.Services.AddSingleton(configuration.GetSection("AccessControl").Get<AccessControlConfig>());
+builder.Services.AddSingleton<ITokenFetcher, TokenFetcher>();
 builder.Services.AddSingleton<IApiHttpClientFactory, ApiHttpClientFactory>();
 builder.Services.AddSingleton<IApiHttpClient, ApiHttpClient>();
 builder.Services.AddSingleton<IAccessControlService, AccessControlService>();
@@ -108,7 +108,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Keycloak
-builder.Services.AddKeycloakWebApiAuthentication(configuration);
+builder.Services.AddKeycloakWebApiAuthentication(configuration, options =>
+{
+    options.BackchannelHttpHandler = new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+    };
+});
 
 var app = builder.Build();
 
@@ -123,6 +129,8 @@ app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<AccessCheckMiddleware>();
 
 app.MapControllers();
 

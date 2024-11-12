@@ -1,33 +1,65 @@
-import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+// src/components/Header.tsx
+import * as React from 'react';
+import Box from '@mui/material/Box/Box';
+import ColorModeIconDropdown from '../../assets/theme/ColorModeIconDropdown.tsx';
+import {Button} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addNewPipeline } from '../../state_management/slices/pipelineSlice.ts';
+import { v4 as uuidv4 } from 'uuid';
+import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
 
-interface PipelineOverviewPageProps {
-    userInfo: any;
-  }
 
-const Header: React.FC<PipelineOverviewPageProps> = ({ userInfo }) => (
-    <AppBar
-        position="static"
-        sx={{ bgcolor: 'rgba(54,55,56,1)', paddingX: 3 }}
-        elevation={3}
+interface HeaderProps {
+  setMode: (mode: 'light' | 'dark') => void;
+  currentMode: 'light' | 'dark';
+}
+
+export default function Header({ setMode, currentMode }: HeaderProps) {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigateToPipeline = (id: string) => {
+      dispatch(setActivePipeline(id));
+      navigate('/pipeline');
+  };
+  
+  const createNewPipeline = () => {
+      dispatch(addNewPipeline({ id: `pipeline-${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
+      navigate("/pipeline");
+  };
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        width: '100%',
+        alignItems: 'center',
+        color: 'primary',
+        justifyContent: 'space-between',
+      }}
     >
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}> 
-                </Typography>
-            </Box>
+      {/* Left Spacer Box */}
+      <Box></Box>
 
-            <Box>
-                <IconButton color="inherit" aria-label="account">
-                    <AccountCircle />
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
-                        {userInfo?.name}
-                    </Typography>
-                </IconButton>
-            </Box>
-        </Toolbar>
-    </AppBar>
-);
+      {/* Center-aligned Button */}
+      <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<AddIcon />}
+          sx={{ borderRadius: 50, backgroundColor: '#4caf50', "&:hover": { backgroundColor: '#388e3c' } }}
+          onClick={() => createNewPipeline()} // Adjust to create a new pipeline logic
+        >
+          Create New Pipeline
+        </Button>
+      </Box>
 
-export default Header;
+      {/* Right-aligned Color Mode Icon */}
+      <Box sx={{ ml: 'auto' }}>
+        <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
+      </Box>
+    </Box>
+  );
+}
