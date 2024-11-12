@@ -28,7 +28,6 @@ namespace DAPM.Orchestrator.Processes.PipelineCommands
                 ProcessId = _processId,
                 TimeToLive = TimeSpan.FromMinutes(1),
                 ExecutionId = _executionId,
-                
             };
 
             getPipelineExecutionStatusProducer.PublishMessage(message);

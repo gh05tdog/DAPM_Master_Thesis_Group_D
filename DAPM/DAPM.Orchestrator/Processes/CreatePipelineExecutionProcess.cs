@@ -39,7 +39,6 @@ namespace DAPM.Orchestrator.Processes
                 TimeToLive = TimeSpan.FromMinutes(1),
                 RepositoryId = _repositoryId,
                 PipelineId = _pipelineId,
-            
             };
 
             getPipelinesFromRepoMessageProducer.PublishMessage(message);

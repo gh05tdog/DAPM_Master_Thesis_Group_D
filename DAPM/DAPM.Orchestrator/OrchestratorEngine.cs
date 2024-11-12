@@ -141,6 +141,14 @@ namespace DAPM.Orchestrator
             getPipelineExecutionStatusProcess.StartProcess();
         }
 
+        public void StartGetPipelineExecutionsProcess(Guid ticketId)
+        {
+            var processId = Guid.NewGuid();
+            var getPipelineExecutionsProcess = new GetPipelineExecutionsProcess(this, _serviceProvider, ticketId, processId);
+            _processes[processId] = getPipelineExecutionsProcess;
+            getPipelineExecutionsProcess.StartProcess();
+        }
+
         #endregion
 
         #region PROCESSES TRIGGERED BY SYSTEM

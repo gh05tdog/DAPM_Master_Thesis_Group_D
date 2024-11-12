@@ -100,7 +100,7 @@ const MainContent: React.FC = () => {
                                 </TableCell>
                                 
                             </TableRow>
-                            <ExecutionOverview isOpen={openRows[id]}/>
+                            <ExecutionOverview isOpen={openRows[id]} parentPipelineId={id}/>
                             </>
                         ))}
                     </TableBody>

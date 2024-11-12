@@ -48,6 +48,11 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             return _pipelineExecutions[executionId];
         }
 
+        public Dictionary<Guid, IPipelineExecution> GetPipelineExecutions()
+        {
+            return _pipelineExecutions;
+        }
+
         public PipelineExecutionStatus GetPipelineExecutionStatus(Guid executionId)
         {
             return _pipelineExecutions[executionId].GetStatus();

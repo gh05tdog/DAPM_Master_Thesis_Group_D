@@ -14,13 +14,16 @@ namespace DAPM.ClientApi.Services
         private readonly IQueueProducer<CreatePipelineExecutionRequest> _createInstanceProducer;
         private readonly IQueueProducer<PipelineStartCommandRequest> _pipelineStartCommandProducer;
         private readonly IQueueProducer<GetPipelineExecutionStatusRequest> _getPipelineExecutionStatusProducer;
+        private readonly IQueueProducer<GetPipelineExecutionsRequest> _getPipelineExecutionsRequestProducer;
+
         public PipelineService(
             ILogger<PipelineService> logger,
             ITicketService ticketService,
             IQueueProducer<GetPipelinesRequest> getPipelinesRequestProducer,
             IQueueProducer<CreatePipelineExecutionRequest> createInstanceProducer,
             IQueueProducer<PipelineStartCommandRequest> pipelineStartCommandProducer,
-            IQueueProducer<GetPipelineExecutionStatusRequest> getPipelineExecutionStatusProducer)
+            IQueueProducer<GetPipelineExecutionStatusRequest> getPipelineExecutionStatusProducer,
+            IQueueProducer<GetPipelineExecutionsRequest> getPipelineExecutionsRequestProducer)
         {
             _logger = logger;
             _ticketService = ticketService;
@@ -28,6 +31,7 @@ namespace DAPM.ClientApi.Services
             _createInstanceProducer = createInstanceProducer;
             _pipelineStartCommandProducer = pipelineStartCommandProducer;
             _getPipelineExecutionStatusProducer = getPipelineExecutionStatusProducer;
+            _getPipelineExecutionsRequestProducer = getPipelineExecutionsRequestProducer;
         }
 
         public Guid CreatePipelineExecution(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
@@ -42,7 +46,7 @@ namespace DAPM.ClientApi.Services
 
                 OrganizationId = organizationId,
                 RepositoryId = repositoryId,
-                PipelineId = pipelineId
+                PipelineId = pipelineId,
             };
 
             _createInstanceProducer.PublishMessage(message);
@@ -87,6 +91,26 @@ namespace DAPM.ClientApi.Services
             _getPipelinesRequestProducer.PublishMessage(message);
 
             _logger.LogDebug("GetPipelinesRequest Enqueued");
+
+            return ticketId;
+        }
+
+        public Guid GetPipelineExecutions(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
+        {
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+            _ticketService.AddUserToTicket(ticketId, userId);
+
+            var message = new GetPipelineExecutionsRequest
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                TicketId = ticketId,
+                OrganizationId = organizationId,
+                RepositoryId = repositoryId,
+                PipelineId = pipelineId
+            };
+
+            _getPipelineExecutionsRequestProducer.PublishMessage(message);
+            _logger.LogDebug("GetPipelineExecutionsRequest Enqueued");
 
             return ticketId;
         }
