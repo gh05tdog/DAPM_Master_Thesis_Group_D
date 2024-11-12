@@ -70,8 +70,7 @@ services:
       context: .
       dockerfile: DAPM.AccessControlService/Dockerfile
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - sqlserver
     ports:
       - "5002:8080"
     networks:
