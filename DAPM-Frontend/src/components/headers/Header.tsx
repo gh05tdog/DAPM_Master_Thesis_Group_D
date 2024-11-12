@@ -34,13 +34,11 @@ export default function Header({setMode, currentMode}: HeaderProps) {
                 alignItems: 'center',
                 color: 'primary',
                 justifyContent: 'space-between',
-                maxWidth: {sm: '100%', md: '1700px'},
-                pt: 1.5,
-                px: 2, // Optional: padding for overall header spacing
+                
             }}
         >
             {/* Left Spacer Box */}
-            <Box sx={{flexGrow: 1}}></Box>
+            <Box ></Box>
 
             {/* Center-aligned Button */}
             <Box sx={{flexGrow: 1, textAlign: 'center'}}>
