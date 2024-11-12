@@ -12,7 +12,11 @@ import { putCommandStart, putExecution, putPipeline } from "../../services/backe
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { getHandleId, getNodeId } from "./Flow.tsx";
 
-export default function PipelineAppBar() {
+interface PipelineAppBarProps {
+  pipelineId: string;
+}
+
+export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -125,11 +129,9 @@ export default function PipelineAppBar() {
 
     const selectedOrg = organizations[0]
     const selectedRepo = repositories.filter(repo => repo.organizationId === selectedOrg.id)[0]
-
-    const pipelineId = await putPipeline(selectedOrg.id, selectedRepo.id, requestData)
+    
     const executionId = await putExecution(selectedOrg.id, selectedRepo.id, pipelineId)
     await putCommandStart(selectedOrg.id, selectedRepo.id, pipelineId, executionId)
-
   }
 
   //Post pipeline to backend

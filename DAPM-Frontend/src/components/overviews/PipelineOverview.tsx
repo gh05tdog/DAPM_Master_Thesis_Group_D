@@ -44,10 +44,11 @@ const MainContent: React.FC = () => {
             }
         }
     }, [dispatch, repositories]);
-    
+
     const navigateToPipeline = (id: string) => {
+        console.log("pipeline-Id", id);
         dispatch(setActivePipeline(id));
-        navigate('/pipeline');
+        navigate(`/pipeline/${id}`);
     };
     
     return (
