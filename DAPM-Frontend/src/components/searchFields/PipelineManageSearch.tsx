@@ -76,8 +76,8 @@ function ManagePipelinePopup({ open, onClose }) {
                 {/* Add any content you want in the popup */}
                 <p>Give user authority to this pipeline.</p>
             </DialogContent>
-            <FormControl sx={{ flex: 1, bgcolor: 'white' }}>
-                <Autocomplete
+            <FormControl sx={{flex: 0, bgcolor: 'white' }}>
+                <Autocomplete 
                     disablePortal
                     
                     options={Users}

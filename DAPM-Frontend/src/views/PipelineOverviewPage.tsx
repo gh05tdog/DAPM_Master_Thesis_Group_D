@@ -1,7 +1,9 @@
 import Sidebar from '../components/sidebars/Sidebar.tsx'
 import MainContent from '../components/overviews/PipelineOverview.tsx'
+import MainContentList from '../components/overviews/PipelineOverviewList.tsx'
 import { useEffect, useState } from "react";
 import PageLayout from './PageLayout.tsx';
+import {Box} from "@mui/material";
 
 interface PipelineOverviewPageProps {
   user: any;
@@ -27,7 +29,9 @@ const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => 
     return (
              <PageLayout user={info}>
                <Sidebar />
-               <MainContent />
+                 <Box sx={{marginLeft: '250px', display: 'static', minHeight: '100dvh', padding: '10px' }}>
+               <MainContentList />
+                </Box>
              </PageLayout>
 
     )

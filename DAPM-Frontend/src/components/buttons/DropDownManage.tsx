@@ -5,6 +5,11 @@ import {useNavigate} from "react-router-dom";
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
+        sx={{
+            '& .MuiPaper-root': {
+                boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+            },
+        }}
         elevation={0}
         anchorOrigin={{
             vertical: 'bottom',
@@ -47,11 +52,8 @@ export default function DropDownManage() {
         <div>
             <Button
                 variant={"contained"}
-                aria-controls="basic-menu"
-                aria-haspopup="true"
                 aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
                 onClick={handleClick}
-
             >
                 Manage
             </Button>
