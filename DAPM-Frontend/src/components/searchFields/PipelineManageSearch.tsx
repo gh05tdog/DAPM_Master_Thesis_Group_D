@@ -6,7 +6,6 @@ import {
     FormControl,
     Button,
     MenuItem,
-    SelectChangeEvent,
     Select,
     InputLabel,
     Dialog,
@@ -16,43 +15,13 @@ import {
 } from '@mui/material';
 import { fetchPipelineUsers } from '../../../src/services/backendAPI.tsx';
 
-const authority = [
-    {
-        value: '1',
-        label: 'Observe',
-    },
-    {
-        value: '2',
-        label: 'Run',
-    },
-    {
-        value: '3',
-        label: 'Edit',
-    },
-    {
-        value: '4',
-        label: 'Manage',
-    },
-]
 
 const Users = [
     { label: 'Olivia Rhye' },
     { label: 'Ciaran Murray' },
-    { label: 'Marina Macdonald' },
-    { label: 'Charles Fulton' },
-    { label: 'Jay Hoper' },
-    { label: 'Steve Hampton' },
-    { label: 'Liam Peterson' },
-    { label: 'Ava Martinez' },
-    { label: 'Mia Robinson' },
-    { label: 'Sophia Johnson' },
-    { label: 'James Brown' },
-    { label: 'Emily Davis' },
+    // ... other users
 ];
 
-
-
-// Popup Component
 function ManagePipelinePopup({ open, onClose }) {
     return (
         <Dialog open={open} onClose={onClose}>
@@ -64,43 +33,20 @@ function ManagePipelinePopup({ open, onClose }) {
             <FormControl sx={{flex: 0, bgcolor: 'white' }}>
                 <Autocomplete 
                     disablePortal
-                    
+
                     options={Users}
                     renderInput={(params) => (
                         <TextField {...params} label="Select User" variant="outlined" />
                     )}
                 />
             </FormControl>
-
-            <FormControl sx={{bgcolor: 'white', mt: 2}}>
-                <InputLabel>Select Authority</InputLabel>
-                <Select
-                    variant="filled"
-                    label="Select Authority"
-                    displayEmpty
-                    sx={{
-                        textAlign: 'left',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    <MenuItem value="" disabled>
-                        Select Authority
-                    </MenuItem>
-                    <MenuItem value={1}>Observe</MenuItem>
-                    <MenuItem value={2}>Run</MenuItem>
-                    <MenuItem value={3}>Edit</MenuItem>
-                    <MenuItem value={4}>Manage</MenuItem>
-                </Select>
-            </FormControl>
-
-
             <DialogActions>
-                
+
                 <Box sx={{width: '100%', justifyContent: 'space-between' }} />
                 <Button onClick={onClose} color="primary">
                     Add
                 </Button>
-                    
+
                 <Button onClick={onClose} color="primary">
                     Close
                 </Button>
@@ -110,10 +56,8 @@ function ManagePipelinePopup({ open, onClose }) {
     );
 }
 
-
-  export default function PipelineManageSearch() {
-    const [authority, setAuthority] = useState('');
-    const [pipeline, setPipeline] = useState<{ pipelineId: string }[]>([]);
+export default function PipelineManageSearch({ setSelectedPipeline }) {
+    const [pipelineOptions, setPipelineOptions] = useState<{ pipelineId: string }[]>([]); // Changed variable name
     const [openPopup, setOpenPopup] = useState(false);
 
     // Fetch data using useEffect
@@ -121,17 +65,16 @@ function ManagePipelinePopup({ open, onClose }) {
         const fetchData = async () => {
             try {
                 const data = await fetchPipelineUsers();
-                setPipeline(data);
+                // Extract unique pipelines from the data
+                const uniquePipelines = Array.from(new Set(data.map(item => item.pipelineId)))
+                    .map(pipelineId => ({ pipelineId: pipelineId as string }));
+                setPipelineOptions(uniquePipelines);
             } catch (error) {
                 console.error("Error fetching pipeline users:", error);
             }
         };
         fetchData();
     }, []);
-
-    const handleAuthorityChange = (event: SelectChangeEvent) => {
-        setAuthority(event.target.value);
-    };
 
     const handleOpenPopup = () => {
         setOpenPopup(true);
@@ -157,28 +100,15 @@ function ManagePipelinePopup({ open, onClose }) {
             <FormControl sx={{ flex: 1, bgcolor: 'white' }}>
                 <Autocomplete
                     disablePortal
-                    options={pipeline}
+                    options={pipelineOptions}
                     getOptionLabel={(option) => `PipelineId: ${option.pipelineId}`}
-
+                    onChange={(event, newValue) => {
+                        setSelectedPipeline(newValue);
+                    }}
                     renderInput={(params) => (
                         <TextField {...params} label="Select Pipeline" variant="outlined" />
                     )}
                 />
-            </FormControl>
-
-            <FormControl sx={{ width: '20%', bgcolor: 'white' }}>
-                <InputLabel>Select Authority</InputLabel>
-                <Select
-                    value={authority}
-                    onChange={handleAuthorityChange}
-                    variant="filled"
-                    label="Select Authority"
-                >
-                    <MenuItem value={1}>Observe</MenuItem>
-                    <MenuItem value={2}>Run</MenuItem>
-                    <MenuItem value={3}>Edit</MenuItem>
-                    <MenuItem value={4}>Manage</MenuItem>
-                </Select>
             </FormControl>
 
             <Button
