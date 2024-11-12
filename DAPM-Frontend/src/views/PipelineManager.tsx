@@ -7,6 +7,21 @@ interface PipelineOverviewPageProps {
   user: any;
 }
 
+const Users = [
+  { id: 1, surfsup: 'gg', name: 'Olivia Rhye' },
+  { id: 2, name: 'Ciaran Murray' },
+  { id: 3, name: 'Marina Macdonald' },
+  { id: 4, name: 'Charles Fulton' },
+  { id: 5, name: 'Jay Hoper' },
+  { id: 6, name: 'Steve Hampton' },
+  { id: 7, name: 'Liam Peterson' },
+  { id: 8, name: 'Ava Martinez' },
+  { id: 9, name: 'Mia Robinson' },
+  { id: 10, name: 'Sophia Johnson' },
+  { id: 11, name: 'James Brown' },
+  { id: 12, name: 'Emily Davis' },
+];
+
 const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => { 
     const [info, setInfo] = useState<any>(null);
     console.log(user);
@@ -27,7 +42,7 @@ const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => {
             <Header userInfo={info}/>
            <PipelineManagerSearch />
           <Box sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
-           <PipelineManageTable/>
+           <PipelineManageTable data = {Users}/>
             </Box>
       </>
     )

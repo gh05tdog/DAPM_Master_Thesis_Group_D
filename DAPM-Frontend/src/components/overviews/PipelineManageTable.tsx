@@ -11,15 +11,19 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import {useNavigate} from "react-router-dom";
 
 const ITEMS_PER_PAGE = 10;
 
-export default function PipelineManageTable(Users: any) {
-  const [rows, setRows] = useState(Users);
+interface PipelineData {
+  id: number;
+  name: string;
+}
+
+export default function PipelineManageTable({ data }: { data: PipelineData[] }) {
+  const [rows, setRows] = useState<PipelineData[]>(data || []);
   const [page, setPage] = useState(1);
 
-  const handleRemove = (id: number) => {
+  const handleRemove = (id: number) => {  
     setRows((prevRows: { id: number; name: string }[]) => prevRows.filter((row) => row.id !== id));
   };
 
