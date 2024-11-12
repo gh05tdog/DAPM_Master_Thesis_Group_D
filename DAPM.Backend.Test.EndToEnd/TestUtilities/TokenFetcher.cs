@@ -59,7 +59,12 @@ public class TokenFetcher(Uri baseAddress, string realm, string clientId)
 
     private async Task<TokenResponse> PostTokenRequestAsync(FormUrlEncodedContent formContent)
     {
-        using var client = new HttpClient();
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        };
+        
+        using var client = new HttpClient(handler);
         client.BaseAddress = baseAddress;
 
         var uri = $"/realms/{realm}/protocol/openid-connect/token";
