@@ -76,8 +76,6 @@ services:
       - "5002:8080"
     networks:
       - DAPM
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "localhost:host-gateway"
