@@ -12,12 +12,27 @@ import {
   Typography,
 } from '@mui/material';
 import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
-import { fetchPipelineUsers } from '../../../src/services/backendAPI.tsx';
+import { fetchPipelineUsers, removeUserPipeline } from '../../../src/services/backendAPI.tsx';
 
 const ITEMS_PER_PAGE = 10;
 
-export default function PipelineManageTable({ selectedPipeline }) {
-  const [users, setUsers] = useState([]);
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+}
+
+interface Pipeline {
+  pipelineId: string;
+}
+
+interface PipelineManageTableProps {
+  selectedPipeline: Pipeline | null;
+}
+
+export default function PipelineManageTable({ selectedPipeline }: PipelineManageTableProps) {
+  const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -29,12 +44,12 @@ export default function PipelineManageTable({ selectedPipeline }) {
           
           // Filter pipelineUsers for the selected pipeline
           const filteredPipelineUsers = pipelineUsers.filter(
-            (pu) => pu.pipelineId === selectedPipeline.pipelineId
+            (pu: { pipelineId: string; }) => pu.pipelineId === selectedPipeline.pipelineId
           );
           
           // Map userIds to user details
-          const usersForPipeline = allUsers.filter((user) =>
-            filteredPipelineUsers.some((pu) => pu.userId === user.id)
+          const usersForPipeline = allUsers.filter((user: { id: any; }) =>
+            filteredPipelineUsers.some((pu: { userId: any; }) => pu.userId === user.id)
           );
           setUsers(usersForPipeline);
           setPage(1); // Reset to first page when pipeline changes
@@ -59,6 +74,15 @@ export default function PipelineManageTable({ selectedPipeline }) {
   
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const currentUsers = users.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  function handleRemove(id: string): void {
+    if (selectedPipeline) {
+      removeUserPipeline(id, selectedPipeline.pipelineId);
+      //Reload the users list
+      const newUsers = users.filter((user) => user.id !== id);
+      setUsers(newUsers);
+    }
+  }
 
   return (
     <Box sx={{ width: '100%', margin: 'auto', mt: 4 }}>
@@ -86,7 +110,7 @@ export default function PipelineManageTable({ selectedPipeline }) {
                       <Button
                         variant="outlined"
                         color="error"
-                        // onClick={() => handleRemove(user.id)}
+                        onClick={() => handleRemove(user.id)}
                       >
                         Remove
                       </Button>

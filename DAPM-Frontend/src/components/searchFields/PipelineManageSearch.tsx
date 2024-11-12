@@ -13,52 +13,16 @@ import {
     DialogContent,
     DialogActions,
 } from '@mui/material';
-import { fetchPipelineUsers } from '../../../src/services/backendAPI.tsx';
+import { fetchPipelineUsers, addUserPipeline } from '../../../src/services/backendAPI.tsx';
 
 
-const Users = [
-    { label: 'Olivia Rhye' },
-    { label: 'Ciaran Murray' },
-    // ... other users
-];
 
-function ManagePipelinePopup({ open, onClose }) {
-    return (
-        <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Manage Pipeline</DialogTitle>
-            <DialogContent>
-                {/* Add any content you want in the popup */}
-                <p>Give user authority to this pipeline.</p>
-            </DialogContent>
-            <FormControl sx={{flex: 0, bgcolor: 'white' }}>
-                <Autocomplete 
-                    disablePortal
-
-                    options={Users}
-                    renderInput={(params) => (
-                        <TextField {...params} label="Select User" variant="outlined" />
-                    )}
-                />
-            </FormControl>
-            <DialogActions>
-
-                <Box sx={{width: '100%', justifyContent: 'space-between' }} />
-                <Button onClick={onClose} color="primary">
-                    Add
-                </Button>
-
-                <Button onClick={onClose} color="primary">
-                    Close
-                </Button>
-                <Box/>
-            </DialogActions>
-        </Dialog>
-    );
+interface PipelineManageSearchProps {
+    setSelectedPipeline: (pipeline: { pipelineId: string } | null) => void;
 }
 
-export default function PipelineManageSearch({ setSelectedPipeline }) {
-    const [pipelineOptions, setPipelineOptions] = useState<{ pipelineId: string }[]>([]); // Changed variable name
-    const [openPopup, setOpenPopup] = useState(false);
+export default function PipelineManageSearch({ setSelectedPipeline }: PipelineManageSearchProps) {
+    const [pipelineOptions, setPipelineOptions] = useState<{ pipelineId: string }[]>([]);
 
     // Fetch data using useEffect
     useEffect(() => {
@@ -66,7 +30,7 @@ export default function PipelineManageSearch({ setSelectedPipeline }) {
             try {
                 const data = await fetchPipelineUsers();
                 // Extract unique pipelines from the data
-                const uniquePipelines = Array.from(new Set(data.map(item => item.pipelineId)))
+                const uniquePipelines = Array.from(new Set(data.map((item: { pipelineId: any; }) => item.pipelineId)))
                     .map(pipelineId => ({ pipelineId: pipelineId as string }));
                 setPipelineOptions(uniquePipelines);
             } catch (error) {
@@ -76,13 +40,6 @@ export default function PipelineManageSearch({ setSelectedPipeline }) {
         fetchData();
     }, []);
 
-    const handleOpenPopup = () => {
-        setOpenPopup(true);
-    };
-
-    const handleClosePopup = () => {
-        setOpenPopup(false);
-    };
 
     return (
         <Box
@@ -102,7 +59,7 @@ export default function PipelineManageSearch({ setSelectedPipeline }) {
                     disablePortal
                     options={pipelineOptions}
                     getOptionLabel={(option) => `PipelineId: ${option.pipelineId}`}
-                    onChange={(event, newValue) => {
+                    onChange={(_event, newValue) => {
                         setSelectedPipeline(newValue);
                     }}
                     renderInput={(params) => (
@@ -111,16 +68,7 @@ export default function PipelineManageSearch({ setSelectedPipeline }) {
                 />
             </FormControl>
 
-            <Button
-                variant="contained"
-                color="primary"
-                sx={{ width: '10%' }}
-                onClick={handleOpenPopup}
-            >
-                Add user
-            </Button>
-
-            <ManagePipelinePopup open={openPopup} onClose={handleClosePopup} />
+            
         </Box>
     );
 }

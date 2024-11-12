@@ -471,6 +471,8 @@ export async function putResource(orgId: string, repId: string, formData: FormDa
     }
 }
 
+
+
 export async function fetchPipelineUsers() {
     try {
       const response = await fetch(access + `/api/access-control/pipeline/get-all-user-pipelines/`, {
@@ -483,6 +485,50 @@ export async function fetchPipelineUsers() {
       }
       const jsonData = await response.json();
       //console.log(jsonData)
+      return jsonData;
+    } catch (error) {
+          console.error('Error fetching status:', error);
+          return error;
+    }
+  } 
+
+  export async function removeUserPipeline(userId: string, pipelineId: string) {
+    try {
+        
+        const response = await fetch(access + `/api/access-control/pipeline/remove-user-pipeline/`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({userId: userId, pipelineId: pipelineId})
+        });
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      const jsonData = await response.json();
+      return jsonData;
+    } catch (error) {
+          console.error('Error fetching status:', error);
+          return error;
+    }
+  } 
+
+  export async function addUserPipeline(userId: string, pipelineId: string) {
+    try {
+        
+        const response = await fetch(access + `/api/access-control/pipeline/add-user-pipeline/`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({userId: userId, pipelineId: pipelineId})
+        });
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      const jsonData = await response.json();
       return jsonData;
     } catch (error) {
           console.error('Error fetching status:', error);
