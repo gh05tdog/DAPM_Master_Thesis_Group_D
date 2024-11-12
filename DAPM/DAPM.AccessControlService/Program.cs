@@ -86,7 +86,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Keycloak
-builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
+builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration, options =>
+{
+    options.BackchannelHttpHandler = new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+    };
+});
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Manager", builder =>
