@@ -9,7 +9,7 @@ Feature: Login Feature
     When I type "test" value in the "username" field
     And I type "test" value in the "password" field
     And I submit by clicking the login button
-    Then I validate that navigation bar contains message "Pipeline Processing for dummies group D"
+    Then I validate that navigation bar contains message "Create New Pipeline"
 
     Scenario: Log in with wrong credentials
 
