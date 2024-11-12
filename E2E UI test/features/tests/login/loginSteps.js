@@ -1,47 +1,57 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const utils = require('../../lib/utils');
-const loginWindow = require('../../support/windows/loginWindow');
+const { LoginPage } = require('../../support/pages/LoginPage');
 const navigationBar = require('../../support/components/UpperNavigationBar')
 const expect = require('chai').expect;
+const environments = require("../../support/components/Environments");
+
 
 When(
 	'I type {string} value in the {string} field',
 	async function (value, textField) {
-		switch (textField) {
-			case 'username':
-				await utils.clickAndTypeText(
-					this.page,
-					loginWindow.textFields.username,
-					value
-				);
-				break;
-			case 'password':
-				await utils.clickAndTypeText(
-					this.page,
-					loginWindow.textFields.password,
-					value
-				);
-                await utils.delay(1000);
-				break;
-		}
+		const loginPage = new LoginPage(this.page);
+
+		await utils.clickAndTypeText(
+			loginPage.page,
+			loginPage[textField + 'CSS'],
+			value
+		);
+		await utils.delay(1000);
 	}
 );
 
 When('I submit by clicking the login button', async function () {
-	await utils.click(this.page, loginWindow.buttons.login);
+	const loginPage = new LoginPage(this.page);
+	await loginPage.clickLoginButton();
 });
 
-Then('I validate that navigation bar contains message {string}', async function(expectedMessage){
-    let message = await utils.getText(this.page, navigationBar["title"]);
-    expect(message).to.contain(expectedMessage);
+Then('I validate that navigation bar contains message {string}', async function (expectedMessage) {
+	let message = await utils.getText(this.page, navigationBar["headerCSS"]);
+	expect(message).to.contain(expectedMessage);
 	await utils.delay(100);
 })
-Then('I validate redirection to the KeycloakLoginPage',async  function () {
+Then('I validate redirection to the KeycloakLoginPage', async function () {
 	let mainUrl = await this.page.url();
 	expect(mainUrl).to.contain("/realms/test/protocol/openid-connect/auth?client_id")
 	console.log(mainUrl);
-  });
-Then('I validate that alert message {string} is shown',async  function (expectedMessage) {
-	let message = await utils.getText(this.page, loginWindow.errormessage);
+});
+Then('I validate that alert message {string} is shown', async function (expectedMessage) {
+	const loginPage = new LoginPage(this.page);
+	let message = await utils.getText(this.page, loginPage.errormessageCSS);
 	expect(message).to.contain(expectedMessage)
-  });
+});
+Given('A manager is logged in', async function () {
+	const currentPage = new LoginPage(this.page);
+	await currentPage.openBasepage(environments.local.url);
+	await utils.clickAndTypeText(currentPage.page, currentPage.usernameCSS, "manager");
+	await utils.clickAndTypeText(currentPage.page, currentPage.passwordCSS, "password");
+	await Promise.all([
+		await utils.click(currentPage.page, currentPage.loginButtonCSS),
+		await currentPage.page.waitForNavigation()
+	]);
+	//Assert
+	await utils.delay(500);
+	let mainUrl = await this.page.url();
+	expect(mainUrl).to.contain("/user")
+
+});

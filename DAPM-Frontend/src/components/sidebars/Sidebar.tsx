@@ -7,7 +7,8 @@ import ResourceList from '../lists/ResourceList.tsx';
 import UserList from '../../components/lists/UserLists.tsx';
 
 const Sidebar: React.FC = () => (
-  <Box
+  <Box 
+  data-qa='Sidebar'
   sx={{
     width: 250,
     position: 'flex',
@@ -40,7 +41,8 @@ const Sidebar: React.FC = () => (
         <Divider sx={{ my: 2 }} />
         
         <RepoList />
-
+        
+        <Divider sx={{ my: 2 }} />
 
         <ResourceList />
 

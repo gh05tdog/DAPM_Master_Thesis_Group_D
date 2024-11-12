@@ -31,7 +31,8 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
   };
 
   return (
-    <Box
+    <Box 
+      data-qa='Header'
       sx={{
         display: 'flex',
         width: '100%',
