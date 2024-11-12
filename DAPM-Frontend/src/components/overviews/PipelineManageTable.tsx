@@ -12,6 +12,8 @@ import {
   Typography,
 } from '@mui/material';
 import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { fetchPipelineUsers } from '../../../src/services/backendAPI.tsx';
+
 
 const ITEMS_PER_PAGE = 10;
 
@@ -26,9 +28,6 @@ interface User {
   firstName?: string;
   lastName?: string;
 }
-
-
-
 
 export default function PipelineManageTable({ data }: { data: PipelineData[] }) {
   const [rows, setRows] = useState<PipelineData[]>(data || []);
@@ -49,6 +48,7 @@ export default function PipelineManageTable({ data }: { data: PipelineData[] }) 
     }
   };
   fetchUsers();
+  fetchPipelineUsers();
 }, []);
 
   // Pagination controls

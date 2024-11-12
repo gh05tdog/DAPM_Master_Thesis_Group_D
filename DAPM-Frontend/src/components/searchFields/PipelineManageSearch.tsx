@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Autocomplete,
     TextField,
@@ -14,6 +14,7 @@ import {
     DialogContent,
     DialogActions,
 } from '@mui/material';
+import { fetchPipelineUsers } from '../../../src/services/backendAPI.tsx';
 
 const authority = [
     {
@@ -47,22 +48,6 @@ const Users = [
     { label: 'Sophia Johnson' },
     { label: 'James Brown' },
     { label: 'Emily Davis' },
-];
-
-// Define your pipelines data
-const Pipelines = [
-    { label: 'Data Ingestion Pipeline' },
-    { label: 'ETL Process Pipeline' },
-    { label: 'Sales Data Pipeline' },
-    { label: 'Customer Analytics Pipeline' },
-    { label: 'Marketing Automation Pipeline' },
-    { label: 'Financial Reporting Pipeline' },
-    { label: 'Data Cleansing Pipeline' },
-    { label: 'Real-Time Monitoring Pipeline' },
-    { label: 'Machine Learning Training Pipeline' },
-    { label: 'Data Warehouse Pipeline' },
-    { label: 'Product Usage Pipeline' },
-    { label: 'User Activity Pipeline' },
 ];
 
 
@@ -125,12 +110,27 @@ function ManagePipelinePopup({ open, onClose }) {
     );
 }
 
-export default function PipelineManageSearch() {
+
+  export default function PipelineManageSearch() {
     const [authority, setAuthority] = useState('');
+    const [pipeline, setPipeline] = useState<{ pipelineId: string }[]>([]);
     const [openPopup, setOpenPopup] = useState(false);
 
+    // Fetch data using useEffect
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchPipelineUsers();
+                setPipeline(data);
+            } catch (error) {
+                console.error("Error fetching pipeline users:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     const handleAuthorityChange = (event: SelectChangeEvent) => {
-        setAuthority(event.target.value as string);
+        setAuthority(event.target.value);
     };
 
     const handleOpenPopup = () => {
@@ -157,7 +157,9 @@ export default function PipelineManageSearch() {
             <FormControl sx={{ flex: 1, bgcolor: 'white' }}>
                 <Autocomplete
                     disablePortal
-                    options={Pipelines}
+                    options={pipeline}
+                    getOptionLabel={(option) => `PipelineId: ${option.pipelineId}`}
+
                     renderInput={(params) => (
                         <TextField {...params} label="Select Pipeline" variant="outlined" />
                     )}
@@ -171,7 +173,6 @@ export default function PipelineManageSearch() {
                     onChange={handleAuthorityChange}
                     variant="filled"
                     label="Select Authority"
-                    sx={{ textAlign: 'left', justifyContent: 'flex-start' }}
                 >
                     <MenuItem value={1}>Observe</MenuItem>
                     <MenuItem value={2}>Run</MenuItem>
@@ -189,7 +190,6 @@ export default function PipelineManageSearch() {
                 Add user
             </Button>
 
-            {/* Popup component, rendered only when openPopup is true */}
             <ManagePipelinePopup open={openPopup} onClose={handleClosePopup} />
         </Box>
     );

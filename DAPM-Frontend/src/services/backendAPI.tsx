@@ -4,6 +4,7 @@ import keycloak, { getToken } from "../utils/keycloak.ts"
 import { environment } from "../configs/environments.ts";
 
 const path = environment.clientapi_url;
+const access = environment.accesscontrol_url;
 
 export async function fetchStatus(ticket: string) {
 
@@ -469,6 +470,25 @@ export async function putResource(orgId: string, repId: string, formData: FormDa
         throw error; // Propagate error to the caller
     }
 }
+
+export async function fetchPipelineUsers() {
+    try {
+      const response = await fetch(access + `/api/access-control/pipeline/get-all-user-pipelines/`, {
+          headers: {
+              'Authorization': `Bearer ${await getToken()}`
+          },
+      });
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      const jsonData = await response.json();
+      //console.log(jsonData)
+      return jsonData;
+    } catch (error) {
+          console.error('Error fetching status:', error);
+          return error;
+    }
+  } 
 
 export async function putPipeline(orgId: string, repId: string, pipelineData:any){
     console.log(pipelineData)
