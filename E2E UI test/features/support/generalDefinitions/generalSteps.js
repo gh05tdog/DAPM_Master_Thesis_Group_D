@@ -2,14 +2,14 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 const utils = require('../../lib/utils');
 const upperNavigationBar = require('../components/UpperNavigationBar');
 const environments = require("../components/Environments");
+const { LoginPage} = require('../pages/LoginPage');
 const expect = require('chai').expect;
 
 let alertMessage = '';
 
-Given('I open a main page', async function () {
-	await utils.delay(100);
-	await this.page.goto(environments.local.url);	
-	await utils.delay(100);
+Given('I open a main page',async function () {
+	const currentPage = new LoginPage(this.page);
+	await currentPage.openBasepage(environments.local.url);
 });
 
 Then("I validate redirection to the main page", async function(){
