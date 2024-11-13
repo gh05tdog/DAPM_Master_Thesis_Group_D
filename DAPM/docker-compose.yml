@@ -70,14 +70,11 @@ services:
       context: .
       dockerfile: DAPM.AccessControlService/Dockerfile
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - sqlserver
     ports:
       - "5002:8080"
     networks:
       - DAPM
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "localhost:host-gateway"
