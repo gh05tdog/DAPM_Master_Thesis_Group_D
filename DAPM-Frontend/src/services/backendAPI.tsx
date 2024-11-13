@@ -228,7 +228,7 @@ export async function putPipeline(orgId: string, repId: string, pipelineData: an
 }
 export async function putExecution(orgId: string, repId: string, pipeId: string) {
     try {
-        const response = await fetch(`http://${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions`, {
+        const response = await fetch(`${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${await getToken()}`
@@ -250,7 +250,7 @@ export async function putExecution(orgId: string, repId: string, pipeId: string)
 }
 export async function putCommandStart(orgId: string, repId: string, pipeId: string, exeId: string) {
     try {
-        const response = await fetch(`http://${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions/${exeId}/commands/start`, {
+        const response = await fetch(`${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions/${exeId}/commands/start`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${await getToken()}`
