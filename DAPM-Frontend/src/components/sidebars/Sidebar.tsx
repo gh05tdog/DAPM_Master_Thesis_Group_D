@@ -4,6 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import OrgList from '../lists/OrgList.tsx';
 import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';
+import UserList from '../../components/lists/UserLists.tsx';
 
 const Sidebar: React.FC = () => (
   <Box
@@ -41,6 +42,13 @@ const Sidebar: React.FC = () => (
         <RepoList />
 
 
+        <ResourceList />
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* Will only be displayed if a user has access to view-users */}
+        <UserList />
+        
       </List>
     </Box>
 
