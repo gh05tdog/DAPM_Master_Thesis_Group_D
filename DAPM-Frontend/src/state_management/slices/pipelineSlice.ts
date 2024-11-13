@@ -26,14 +26,16 @@ export const pipelineThunk = createAsyncThunk<
       for (const repo of repositories) {
         if (org.id === repo.organizationId) {
           const pipes = await fetchRepositoryPipelines(org.id, repo.id);
-          const mappedPipelines = pipes.result.pipelines.map((pipeline) => ({
-            id: pipeline.id,
-            name: pipeline.name,
-            status: "unknown",
-            pipeline: pipeline.pipeline || { nodes: [], edges: [] },
-            history: { past: [], future: [] },
-          }));
-          pipelines.push(...mappedPipelines);
+          for (const pipeline of pipes.result.pipelines) {
+            const pipelineData: PipelineData = {
+              id: pipeline.id,
+              name: pipeline.name,
+              status: "unknown",
+              pipeline: pipeline.pipeline || { nodes: [], edges: [] },
+              history: { past: [], future: [] },
+            };
+            pipelines.push(pipelineData);
+          }
         }
       }
     }
