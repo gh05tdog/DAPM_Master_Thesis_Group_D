@@ -2,7 +2,7 @@ import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection,
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EdgeData, NodeData, NodeState, PipelineData, PipelineState } from "../states/pipelineState.ts";
 import { Organization, Repository } from "../states/apiState.ts";
-import { fetchRepositoryPipelines } from "../../services/backendAPI.tsx";
+import {fetchPipeline, fetchRepositoryPipelines} from "../../services/backendAPI.tsx";
 
 export const initialState: PipelineState = {
   pipelines: [],
@@ -27,14 +27,16 @@ export const pipelineThunk = createAsyncThunk<
         if (org.id === repo.organizationId) {
           const pipes = await fetchRepositoryPipelines(org.id, repo.id);
           for (const pipeline of pipes.result.pipelines) {
-            const pipelineData: PipelineData = {
-              id: pipeline.id,
-              name: pipeline.name,
-              status: "unknown",
-              pipeline: pipeline.pipeline || { nodes: [], edges: [] },
+            const pipelineData = await fetchPipeline(org.id, repo.id, pipeline.id);
+            console.log(JSON.stringify(pipelineData));
+            const pipelineDetails = pipelineData.result.pipelines[0];
+            pipelines.push({
+              id: pipelineDetails.id,
+              name: pipelineDetails.name,
+              status: 'unknown',
+              pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
               history: { past: [], future: [] },
-            };
-            pipelines.push(pipelineData);
+            });
           }
         }
       }
