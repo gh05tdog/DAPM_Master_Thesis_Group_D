@@ -149,21 +149,24 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
                 repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
                 resourceId: node?.data?.instantiationData?.resource?.id,
               },
-            }
+            },
           },
-          width: 100, 
-          height: 100, 
-          position: { x: 100, y: 100 }, 
-          id: node.id, 
-          label: "",
+          width: node.width || 100,
+          height: node.height || 100,
+          position: node.position, 
+          id: node.id,
+          label: node.label || "", 
         })),
+
         edges: flowData?.edges?.map(edge => ({
+          source: edge.source, 
+          target: edge.target, 
           sourceHandle: edge.sourceHandle,
-          targetHandle: edge.targetHandle
-        }))
-      }
+          targetHandle: edge.targetHandle,
+        })),
+      },
     };
-  
+    
     const selectedOrg = organizations[0];
     const selectedRepo = repositories.filter(repo => 
       repo.organizationId === selectedOrg.id)[0];

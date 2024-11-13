@@ -22,30 +22,37 @@ export const pipelineThunk = createAsyncThunk<
 >("pipelines/fetchPipelines", async ({ organizations, repositories }, thunkAPI) => {
   try {
     const pipelines: PipelineData[] = [];
+
     for (const org of organizations) {
       for (const repo of repositories) {
         if (org.id === repo.organizationId) {
           const pipes = await fetchRepositoryPipelines(org.id, repo.id);
+
+          // Iterate over each pipeline returned from `fetchRepositoryPipelines`
           for (const pipeline of pipes.result.pipelines) {
             const pipelineData = await fetchPipeline(org.id, repo.id, pipeline.id);
-            console.log(JSON.stringify(pipelineData));
-            const pipelineDetails = pipelineData.result.pipelines[0];
-            pipelines.push({
-              id: pipelineDetails.id,
-              name: pipelineDetails.name,
-              status: 'unknown',
-              pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
-              history: { past: [], future: [] },
-            });
+
+            // Iterate over all pipeline details returned in the response
+            for (const pipelineDetails of pipelineData.result.pipelines) {
+              pipelines.push({
+                id: pipelineDetails.id,
+                name: pipelineDetails.name,
+                status: 'unknown',
+                pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
+                history: { past: [], future: [] },
+              });
+            }
           }
         }
       }
     }
+
     return pipelines;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 });
+
 
 const pipelineSlice = createSlice({
   name: 'pipelines',
