@@ -43,6 +43,7 @@ export default function PipelineManageSearch({ setSelectedPipeline }: PipelineMa
 
     return (
         <Box
+            data-qa = "pipeline-searchField"
             sx={{
                 color: 'primary.main',
                 width: '100%',

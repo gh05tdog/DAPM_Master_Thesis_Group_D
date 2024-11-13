@@ -34,6 +34,7 @@ interface PipelineOverviewPageProps {
        return (
 
            <AppBar
+               data-qa = "header"
                position="relative"
                sx={{
                    bgcolor: 'rgba(54,55,56,1)',

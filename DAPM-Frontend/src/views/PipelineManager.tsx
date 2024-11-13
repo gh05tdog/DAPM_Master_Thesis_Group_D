@@ -49,7 +49,8 @@ const handleOpenPopup = () => {
       <Header userInfo={info}/>
       {/* Pass setSelectedPipeline to PipelineManageSearch */}
       <PipelineManageSearch setSelectedPipeline={setSelectedPipeline} />
-      <Box sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
+      <Box data-qa = "pipeline-manager"
+          sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
         {/* Pass selectedPipeline to PipelineManageTable */}
         <PipelineManageTable selectedPipeline={selectedPipeline} />
         <Button

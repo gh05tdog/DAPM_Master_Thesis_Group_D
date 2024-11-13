@@ -85,7 +85,8 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
   }
 
   return (
-    <Box sx={{ width: '100%', margin: 'auto', mt: 4 }}>
+    <Box data-qa = "pipelineManager-user-table" 
+        sx={{ width: '100%', margin: 'auto', mt: 4 }}>
       {selectedPipeline ? (
         <>
           <TableContainer component={Paper}>

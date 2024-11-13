@@ -51,6 +51,7 @@ export default function DropDownManage() {
     return (
         <div>
             <Button
+                data-qa={"manage-button"}
                 variant={"contained"}
                 aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
                 onClick={handleClick}

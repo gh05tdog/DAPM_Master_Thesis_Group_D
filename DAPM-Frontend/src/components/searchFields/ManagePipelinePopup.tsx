@@ -66,7 +66,8 @@ function ManagePipelinePopup({ open, onClose, selectedPipeline }: ManagePipeline
         }
     }
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog data-qa="add-user-popup"
+            open={open} onClose={onClose}>
             <DialogTitle>Manage Pipeline</DialogTitle>
             <DialogContent>
                 <p>Give user authority to this pipeline.</p>
