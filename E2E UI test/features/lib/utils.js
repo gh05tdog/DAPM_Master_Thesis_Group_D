@@ -67,9 +67,21 @@ module.exports = {
           throw new Error(`Could not click on selector: ${selector}`);
         }
       },
-      delay(time){
+      delay: async function (time){
         return new Promise(function(resolve){
           setTimeout(resolve, time)
         });
+      },
+      highlightElement: async function (page, selector) {
+        // Evaluate the page and add a red border to the element matching the selector
+        page.evaluate((selector) => {
+          const element = document.querySelector(selector);
+          if (element) {
+            // Add a red border around the element
+            element.style.border = '5px solid red';
+            element.style.position = 'relative'; // Ensure the element is positioned to show the border correctly
+            element.style.zIndex = '9999'; // Make sure the border is visible on top
+          }
+        }, selector);
       },
 }

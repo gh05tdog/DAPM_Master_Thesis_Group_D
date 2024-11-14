@@ -26,19 +26,19 @@ export default function Header({setMode, currentMode}: HeaderProps) {
         navigate(`/pipeline/pipeline-${uuidv4()}`);
     };
 
-    return (
-        <Box
-            sx={{
-                display: 'flex',
-                width: '100%',
-                alignItems: 'center',
-                color: 'primary',
-                justifyContent: 'space-between',
-                
-            }}
-        >
-            {/* Left Spacer Box */}
-            <Box ></Box>
+  return (
+    <Box 
+      data-qa='Header'
+      sx={{
+        display: 'flex',
+        width: '100%',
+        alignItems: 'center',
+        color: 'primary',
+        justifyContent: 'space-between',
+      }}
+    >
+      {/* Left Spacer Box */}
+      <Box></Box>
 
             {/* Center-aligned Button */}
             <Box sx={{flexGrow: 1, textAlign: 'center'}}>
