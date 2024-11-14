@@ -58,9 +58,9 @@ function ManagePipelinePopup({ open, onClose, selectedPipeline }: ManagePipeline
         } else {
             if (!selectedUser) {
                 alert('Please select a user.');
-            }
-            if (!selectedPipeline) {
+            } else if (!selectedPipeline) {
                 alert('Please select a pipeline.');
+                onClose();
             }
             
         }
@@ -73,7 +73,7 @@ function ManagePipelinePopup({ open, onClose, selectedPipeline }: ManagePipeline
                 <p>Give user authority to this pipeline.</p>
                 <FormControl sx={{ width: '100%', bgcolor: 'white' }}>
                     <Autocomplete
-                        disablePortal
+                        disablePortal = {false}
                         options={users}
                         value={selectedUser}
                         onChange={(event, newValue) => {

@@ -45,14 +45,9 @@ export default function PipelineManageSearch({ setSelectedPipeline }: PipelineMa
         <Box
             data-qa = "pipeline-searchField"
             sx={{
-                color: 'primary.main',
-                width: '100%',
-                margin: 'auto',
-                mt: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-                paddingRight: 10,
+                width: '80%',
+                display: 'flex'
+                
             }}
         >
             <FormControl sx={{ flex: 1, bgcolor: 'white' }}>
