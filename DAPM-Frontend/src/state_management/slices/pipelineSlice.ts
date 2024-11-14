@@ -1,7 +1,8 @@
-import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, MarkerType, Node, NodeChange } from "reactflow";
-
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, Node, NodeChange } from "reactflow";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EdgeData, NodeData, NodeState, PipelineData, PipelineState } from "../states/pipelineState.ts";
+import { Organization, Repository } from "../states/apiState.ts";
+import {fetchPipeline, fetchRepositoryPipelines} from "../../services/backendAPI.tsx";
 
 export const initialState: PipelineState = {
   pipelines: [],
@@ -13,6 +14,47 @@ const takeSnapshot = (state: PipelineState) => {
   if (!activePipeline) return
   activePipeline?.history?.past?.push({nodes: activePipeline.pipeline.nodes, edges: activePipeline.pipeline.edges})
 }
+
+
+
+// Thunk to fetch pipelines
+export const pipelineThunk = createAsyncThunk<
+    PipelineData[],
+    { organizations: Organization[]; repositories: Repository[] }
+>("pipelines/fetchPipelines", async ({ organizations, repositories }, thunkAPI) => {
+  try {
+    const pipelines: PipelineData[] = [];
+
+    for (const org of organizations) {
+      for (const repo of repositories) {
+        if (org.id === repo.organizationId) {
+          const pipes = await fetchRepositoryPipelines(org.id, repo.id);
+
+          // Iterate over each pipeline returned from `fetchRepositoryPipelines`
+          for (const pipeline of pipes.result.pipelines) {
+            const pipelineData = await fetchPipeline(org.id, repo.id, pipeline.id);
+            // Iterate over all pipeline details returned in the response
+            for (const pipelineDetails of pipelineData.result.pipelines) {
+              console.log("pipelineDetails", JSON.stringify(pipelineDetails, null, 2));
+              pipelines.push({
+                id: pipelineDetails.id,
+                name: pipelineDetails.name,
+                status: 'unknown',
+                pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
+                history: { past: [], future: [] },
+              });
+            }
+          }
+        }
+      }
+    }
+
+    return pipelines;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 
 const pipelineSlice = createSlice({
   name: 'pipelines',
@@ -182,7 +224,16 @@ const pipelineSlice = createSlice({
       activeFlowData.edges = payload;
     },
   },
-})
+  extraReducers: (builder) => {
+    builder
+        .addCase(pipelineThunk.fulfilled, (state, action) => {
+          state.pipelines = action.payload;
+        })
+        .addCase(pipelineThunk.rejected, (state, action) => {
+          console.error("Pipeline thunk failed", action.error);
+        });
+  },
+});
 
 export const { 
   //actions for all pipelines
@@ -211,4 +262,4 @@ export const {
   setEdges 
 } = pipelineSlice.actions
 
-export default pipelineSlice.reducer 
+export default pipelineSlice.reducer;

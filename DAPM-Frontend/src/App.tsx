@@ -60,7 +60,7 @@ const App: React.FC = () => {
                                 {/* Automatically redirect to /user when authenticated */}
                                 <Route path="/" element={<Navigate to="/user" />} />
                                 <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
-                                <Route path="/pipeline" element={<PipelineComposer />} />
+                                <Route path="/pipeline/:id" element={<PipelineComposer />} />
                             </>
                         )}
                     </Routes>
