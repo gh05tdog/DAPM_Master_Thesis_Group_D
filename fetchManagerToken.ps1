@@ -1,4 +1,4 @@
-$url = "https://localhost:8888/realms/test/protocol/openid-connect/token"
+$url = "http://localhost:8888/realms/test/protocol/openid-connect/token"
 
 $body = @{grant_type='password'
       client_id='test-client'

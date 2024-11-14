@@ -108,13 +108,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Keycloak
-builder.Services.AddKeycloakWebApiAuthentication(configuration, options =>
-{
-    options.BackchannelHttpHandler = new HttpClientHandler
-    {
-        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-    };
-});
+builder.Services.AddKeycloakWebApiAuthentication(configuration);
 
 var app = builder.Build();
 

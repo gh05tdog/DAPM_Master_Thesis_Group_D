@@ -53,12 +53,7 @@ public class TokenFetcher(AccessControlConfig accessControlConfig) : ITokenFetch
 
     private async Task<TokenResponse> PostTokenRequestAsync(FormUrlEncodedContent formContent)
     {
-        var handler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-        };
-
-        using var client = new HttpClient(handler);
+        using var client = new HttpClient();
         client.BaseAddress = new Uri(accessControlConfig.KeycloakUrl);
 
         var uri = $"/realms/{accessControlConfig.Realm}/protocol/openid-connect/token";
