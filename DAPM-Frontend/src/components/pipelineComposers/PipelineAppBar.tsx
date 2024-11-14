@@ -144,6 +144,17 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
         nodes: flowData?.nodes?.map((node, index) => {
           console.log(`Processing node #${index + 1} - ID: ${node.id}, Type: ${node.type}`);
 
+          // Ensure handles have a `type` field
+          const sourceHandles = (node.data?.templateData?.sourceHandles || []).map((handle) => ({
+            id: handle.id,
+            type: handle.type || "default",
+          }));
+
+          const targetHandles = (node.data?.templateData?.targetHandles || []).map((handle) => ({
+            id: handle.id,
+            type: handle.type || "default",
+          }));
+
           const nodeData = {
             id: node.id,
             type: node.type,
@@ -163,8 +174,8 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
                 },
               },
               templateData: {
-                sourceHandles: node.data?.templateData?.sourceHandles || [],
-                targetHandles: node.data?.templateData?.targetHandles || [],
+                sourceHandles,
+                targetHandles,
                 hint: node.data?.templateData?.hint || "",
               },
             },
@@ -217,6 +228,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
       console.error("Error saving pipeline:", error);
     }
   };
+
 
 
 
