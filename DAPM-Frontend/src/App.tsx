@@ -7,7 +7,7 @@ import store from './state_management/store/stores.ts';
 
 import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
 import PipelineComposer from './views/old_PipeLineComposer.tsx';
-import PipelineManager from './views/PipelineManager.tsx';
+import PipelineManager from './views/ManagerViews/PipelineManager.tsx';
 import LoginPage from './views/LoginPage.tsx';
 import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
