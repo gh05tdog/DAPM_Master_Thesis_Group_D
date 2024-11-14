@@ -46,7 +46,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Consumers
                 ProcessId = message.ProcessId,
                 TimeToLive = TimeSpan.FromMinutes(1),
                 Succeeded = true,
-                Status = pipelineExecutionsDtos
+                Executions = pipelineExecutionsDtos
             };
 
             _getPipelineExecutionsProducer.PublishMessage(resultMessage);

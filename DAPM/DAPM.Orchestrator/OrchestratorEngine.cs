@@ -143,8 +143,9 @@ namespace DAPM.Orchestrator
 
         public void StartGetPipelineExecutionsProcess(Guid ticketId)
         {
+            _logger.LogInformation("ORCHESTRATOR ENGINE starting get pipeline executions process");
             var processId = Guid.NewGuid();
-            var getPipelineExecutionsProcess = new GetPipelineExecutionsProcess(this, _serviceProvider, ticketId, processId);
+            var getPipelineExecutionsProcess = new GetPipelineExecutionsProcess(this, _logger, _serviceProvider, ticketId, processId);
             _processes[processId] = getPipelineExecutionsProcess;
             getPipelineExecutionsProcess.StartProcess();
         }

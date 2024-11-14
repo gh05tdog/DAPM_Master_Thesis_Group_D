@@ -47,6 +47,7 @@ namespace RabbitMQLibrary.Implementation
                 properties.Type = _queueName;
                 properties.Expiration = message.TimeToLive.TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
 
+                _logger.LogInformation($"Message: {message}");
                 _channel.BasicPublish(_queueName, _queueName, properties, serializedMessage);
 
                 _logger.LogInformation(

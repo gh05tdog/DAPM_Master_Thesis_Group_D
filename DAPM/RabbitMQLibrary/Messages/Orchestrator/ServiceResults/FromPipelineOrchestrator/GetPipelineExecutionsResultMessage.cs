@@ -14,6 +14,6 @@ namespace RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrche
         public Guid ProcessId { get; set; }
         public TimeSpan TimeToLive { get; set; }
         public Boolean Succeeded { get; set; }
-        public PipelineExecutionsDTO Status { get; set; }
+        public PipelineExecutionsDTO Executions { get; set; }
     }
 }
