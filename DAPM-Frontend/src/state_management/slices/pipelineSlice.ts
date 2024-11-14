@@ -15,6 +15,39 @@ const takeSnapshot = (state: PipelineState) => {
   activePipeline?.history?.past?.push({nodes: activePipeline.pipeline.nodes, edges: activePipeline.pipeline.edges})
 }
 
+// Transform fetched pipeline nodes and edges to React Flow-compatible format
+const transformPipelineData = (pipeline) => {
+  const nodes = pipeline.nodes.map((node) => {
+    const instantiationData = node.data?.instantiationData || {};
+
+    // Ensure organizationId and repositoryId are set
+    if (node.type === "operator" && !instantiationData.resource?.organizationId) {
+      instantiationData.resource = {
+        ...instantiationData.resource,
+        organizationId: pipeline.organizationId,
+        repositoryId: pipeline.repositoryId,
+      };
+    }
+
+    return {
+      id: node.id,
+      type: node.type,
+      position: {
+        x: node.position?.x || 0,
+        y: node.position?.y || 0,
+      },
+      width: node.width || 100,
+      height: node.height || 100,
+      data: {
+        ...node.data,
+        instantiationData,
+      },
+    };
+  });
+
+  return { nodes, edges: pipeline.edges };
+};
+
 // Thunk to fetch pipelines
 export const pipelineThunk = createAsyncThunk<
     PipelineData[],
@@ -31,14 +64,17 @@ export const pipelineThunk = createAsyncThunk<
           // Iterate over each pipeline returned from `fetchRepositoryPipelines`
           for (const pipeline of pipes.result.pipelines) {
             const pipelineData = await fetchPipeline(org.id, repo.id, pipeline.id);
-
             // Iterate over all pipeline details returned in the response
             for (const pipelineDetails of pipelineData.result.pipelines) {
+              console.log("pipelineDetails", JSON.stringify(pipelineDetails, null, 2));
+
+              const transformedPipeline = transformPipelineData(pipelineDetails.pipeline);
+
               pipelines.push({
                 id: pipelineDetails.id,
                 name: pipelineDetails.name,
                 status: 'unknown',
-                pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
+                pipeline: transformedPipeline,
                 history: { past: [], future: [] },
               });
             }

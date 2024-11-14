@@ -136,49 +136,89 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
 
   //Post pipeline to backend
   const savePipeline = async () => {
+    console.log("Starting savePipeline function...");
+
     const requestData = {
       name: pipelineName,
       pipeline: {
-        nodes: flowData?.nodes?.map(node => ({
-          type: node.type,
-          data: {
-            ...node.data,
-            instantiationData: {
-              resource: {
-                organizationId: node?.data?.instantiationData?.resource?.organizationId,
-                repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
-                resourceId: node?.data?.instantiationData?.resource?.id,
+        nodes: flowData?.nodes?.map((node, index) => {
+          console.log(`Processing node #${index + 1} - ID: ${node.id}, Type: ${node.type}`);
+
+          const nodeData = {
+            id: node.id,
+            type: node.type,
+            width: node.width || 100,
+            height: node.height || 100,
+            position: {
+              x: node.position?.x || 0,
+              y: node.position?.y || 0,
+            },
+            data: {
+              label: node.label || "",
+              instantiationData: {
+                resource: {
+                  organizationId: node?.data?.instantiationData?.resource?.organizationId,
+                  repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
+                  resourceId: node?.data?.instantiationData?.resource?.id,
+                },
+              },
+              templateData: {
+                sourceHandles: node.data?.templateData?.sourceHandles || [],
+                targetHandles: node.data?.templateData?.targetHandles || [],
+                hint: node.data?.templateData?.hint || "",
               },
             },
-          },
-          width: node.width || 100,
-          height: node.height || 100,
-          position: node.position, 
-          id: node.id,
-          label: node.label || "", 
-        })),
+          };
 
-        edges: flowData?.edges?.map(edge => ({
-          source: edge.source, 
-          target: edge.target, 
-          sourceHandle: edge.sourceHandle,
-          targetHandle: edge.targetHandle,
-        })),
+          // Log the node data and its instantiation/template details
+          console.log(`Node Data for ID ${node.id}:`, JSON.stringify(nodeData, null, 2));
+          console.log(`Instantiation Data for ID ${node.id}:`, JSON.stringify(nodeData.data.instantiationData, null, 2));
+          console.log(`Template Data for ID ${node.id}:`, JSON.stringify(nodeData.data.templateData, null, 2));
+
+          return nodeData;
+        }),
+
+        edges: flowData?.edges?.map((edge, index) => {
+          console.log(`Processing edge #${index + 1} - Source: ${edge.source}, Target: ${edge.target}`);
+          return {
+            source: edge.source,
+            target: edge.target,
+            sourceHandle: edge.sourceHandle,
+            targetHandle: edge.targetHandle,
+          };
+        }),
       },
     };
-    
+
+    // Debug the organization and repository selection
     const selectedOrg = organizations[0];
-    const selectedRepo = repositories.filter(repo => 
-      repo.organizationId === selectedOrg.id)[0];
-  
+    console.log("Selected Organization:", selectedOrg);
+
+    const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
+    console.log("Selected Repository:", selectedRepo);
+
+    // Include organizationId and repositoryId in the request
+    const pipelineDTO = {
+      organizationId: selectedOrg.id,
+      repositoryId: selectedRepo?.id,
+      id: pipelineId || '',
+      ...requestData,
+    };
+
+    // Log the entire request payload before sending
+    console.log("Final Pipeline DTO:", JSON.stringify(pipelineDTO, null, 2));
+
     try {
-      await putPipeline(selectedOrg.id, selectedRepo.id, requestData);
-
+      // Attempt to save the pipeline
+      console.log("Sending save request...");
+      await putPipeline(selectedOrg.id, selectedRepo.id, pipelineDTO);
+      console.log("Pipeline saved successfully!");
     } catch (error) {
-      console.error('Error saving pipeline:', error);
-
+      console.error("Error saving pipeline:", error);
     }
   };
+
+
 
   return (
     <AppBar position="fixed">
