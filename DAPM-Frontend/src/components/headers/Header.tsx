@@ -29,10 +29,6 @@ export default function Header({setMode, currentMode}: HeaderProps) {
           navigate(`/pipeline/pipeline-${uuidv4()}`);
       };
     
-      const navigateToManage = () => {
-        navigate('/manage-pipeline')
-      }
-    
 
        return (
 

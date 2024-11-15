@@ -46,6 +46,10 @@ export default function DropDownManage() {
     const navigateToManagePipeline = () => {
         navigate('/manage-pipeline')
     };
+    
+    const navigateToManageResource = () => {
+        navigate('/manage-resource')
+    };
 
 
     return (
@@ -80,7 +84,7 @@ export default function DropDownManage() {
                     Repository</Button>
                 <Divider />
                 <Button sx={{width: '100%'}} 
-                        onClick={handleClose}>
+                        onClick={navigateToManageResource}>
                     Resource</Button>
                 
             </StyledMenu>

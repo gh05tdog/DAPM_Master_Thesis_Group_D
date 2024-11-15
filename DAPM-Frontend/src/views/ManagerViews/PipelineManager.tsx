@@ -1,12 +1,13 @@
 ﻿import React, { useEffect, useState } from 'react';
 import {
-  Button,
+  Button, ThemeProvider,
 } from '@mui/material';
 import Header from '../../components/headers/Header.tsx';
 import PipelineManageSearch from '../../components/searchFields/PipelineManageSearch.tsx';
 import PipelineMangePopup from '../../components/searchFields/ManagePipelinePopup.tsx';
 import { Box } from "@mui/material";
 import PipelineManageTable from '../../components/overviews/PipelineManageTable.tsx';
+import {createTheme} from "@mui/material/styles";
 
 interface PipelineOverviewPageProps {
   user: any;
@@ -15,8 +16,9 @@ interface PipelineOverviewPageProps {
 const PipelineManager: React.FC<PipelineOverviewPageProps> = ({ user }) => { 
   const [info, setInfo] = useState<any>(null);
   const [selectedPipeline, setSelectedPipeline] = useState<{ pipelineId: string } | null>(null);
-  const [openPopup, setOpenPopup] = useState(false); 
-
+  const [openPopup, setOpenPopup] = useState(false);
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  
   useEffect(() => {
     const getUserInfo = async () => {
       const response = await user;
@@ -33,10 +35,15 @@ const handleOpenPopup = () => {
   setOpenPopup(true);
 };
 
-
+  const theme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  });
+  
   return (
-    <>
-      <Header userInfo={info}/>
+      <ThemeProvider theme={theme}>
+      <Header setMode={setMode} currentMode={mode} />
       {/* Pass setSelectedPipeline to PipelineManageSearch */}
       
       <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -60,7 +67,7 @@ const handleOpenPopup = () => {
         <PipelineManageTable selectedPipeline={selectedPipeline} />
         <PipelineMangePopup open={openPopup} onClose={handleClosePopup} selectedPipeline={selectedPipeline} />
       </Box>
-    </>
+      </ThemeProvider>
   )
 };
 

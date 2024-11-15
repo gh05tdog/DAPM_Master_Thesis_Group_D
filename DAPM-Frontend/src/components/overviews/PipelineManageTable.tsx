@@ -39,20 +39,20 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
     const fetchUsersData = async () => {
       try {
         if (selectedPipeline) {
-          const allUsers = await getUsersFromKeycloak(); // Array of user objects
-          const pipelineUsers = await fetchPipelineUsers(); // Array of {userId, pipelineId}
+          const allUsers = await getUsersFromKeycloak(); 
+          const pipelineUsers = await fetchPipelineUsers(); 
           
-          // Filter pipelineUsers for the selected pipeline
+
           const filteredPipelineUsers = pipelineUsers.filter(
             (pu: { pipelineId: string; }) => pu.pipelineId === selectedPipeline.pipelineId
           );
           
-          // Map userIds to user details
+
           const usersForPipeline = allUsers.filter((user: { id: any; }) =>
             filteredPipelineUsers.some((pu: { userId: any; }) => pu.userId === user.id)
           );
           setUsers(usersForPipeline);
-          setPage(1); // Reset to first page when pipeline changes
+          setPage(1);
         } else {
           setUsers([]);
         }
@@ -63,7 +63,7 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
     fetchUsersData();
   }, [selectedPipeline]);
 
-  // Pagination controls
+
   const totalPages = Math.ceil(users.length / ITEMS_PER_PAGE);
   const handleNextPage = () => {
     setPage((prevPage) => Math.min(prevPage + 1, totalPages));
@@ -78,7 +78,7 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
   function handleRemove(id: string): void {
     if (selectedPipeline) {
       removeUserPipeline(id, selectedPipeline.pipelineId);
-      //Reload the users list
+
       const newUsers = users.filter((user) => user.id !== id);
       setUsers(newUsers);
     }

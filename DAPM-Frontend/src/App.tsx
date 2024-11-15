@@ -8,6 +8,7 @@ import store from './state_management/store/stores.ts';
 import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
 import PipelineComposer from './views/old_PipeLineComposer.tsx';
 import PipelineManager from './views/ManagerViews/PipelineManager.tsx';
+import ResourceManager from './views/ManagerViews/ResourceManager.tsx';
 import LoginPage from './views/LoginPage.tsx';
 import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
@@ -64,6 +65,7 @@ const App: React.FC = () => {
                 <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
                 <Route path="/pipeline/:id" element={<PipelineComposer />} />
                 <Route path="/manage-pipeline" element = {<PipelineManager user = {user} />} />
+                <Route path="/manage-resource" element = {<ResourceManager user = {user} />} />
               </>
             )}
           </Routes>
