@@ -15,9 +15,12 @@ services:
       - dapm.peerapi
     networks:
       - DAPM
+    extra_hosts:
+      - "host.docker.internal:host-gateway" 
+      - "localhost:host-gateway"
 
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image:  quay.io/keycloak/keycloak:latest
     container_name: keycloak
     environment:
       - KEYCLOAK_ADMIN=admin
@@ -27,12 +30,17 @@ services:
       - DB_DATABASE=keycloakdb
       - DB_USER=postgres
       - DB_PASSWORD=postgres
-      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm.json -Dkeycloak.profile.feature.upload_scripts=enabled   
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm.json
+      - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/certs/cert.pem
+      - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/certs/key.pem
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_URL=https://localhost:8443
     ports:
-      - "8888:8888"  # No changes here, this is the external port
-    command: [ "start-dev", "--http-port=8888", "--import-realm" ]  # Bind to 0.0.0.0
+      - "8888:8443"
+    command: ["start-dev", "--https-port=8443", "--import-realm"]
     volumes:
       - ./Keycloak/Realms:/opt/keycloak/data/import
+      - ./certs:/opt/keycloak/certs  # Mount the certificates
     depends_on:
       - keycloak-postgres
     networks:

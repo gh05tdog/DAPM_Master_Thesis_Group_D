@@ -6,7 +6,12 @@ public class ApiHttpClientFactory(AccessControlConfig accessControlConfig, IToke
 {
     public HttpClient CreateClient()
     {
-        var client = new HttpClient();
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        };
+
+        var client = new HttpClient(handler);
         client.BaseAddress = new Uri(accessControlConfig.AccessControlUrl);
         var token = tokenFetcher.GetTokenAsync().GetAwaiter().GetResult();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
