@@ -53,6 +53,7 @@ const MainContent: React.FC = () => {
     
     return (
         <Box
+        data-qa="mainWindow"
             sx={{
                 width: '100%',
                 height:'100%',
