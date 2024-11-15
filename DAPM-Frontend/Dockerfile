@@ -14,10 +14,5 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 COPY --from=builder /app/build .
 
-COPY ./nginx/certs/cert.pem /etc/ssl/certs/cert.pem
-COPY ./nginx/certs/key.pem /etc/ssl/private/key.pem
-
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 443
+EXPOSE 80
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

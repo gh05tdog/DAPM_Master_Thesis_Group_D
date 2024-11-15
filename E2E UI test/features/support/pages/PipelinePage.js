@@ -7,8 +7,9 @@ exports.PipelinePage = class PipelinePage extends BasePage{
         super(page);
         this.page = page;
 
-        this.headerCSS = '[data-qa="Header"]';
+        this.headerCSS = '[data-qa="header"]';
         this.sidebarCSS = '[data-qa="Sidebar"]';
+        this.mainWindowCSS= '[data-qa="mainWindow"]';
     }
     async contains(element){
         await this.page.waitForSelector(this[element+'CSS'])

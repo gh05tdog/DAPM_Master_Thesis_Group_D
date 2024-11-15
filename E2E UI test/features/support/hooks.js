@@ -69,6 +69,8 @@ After(async function(testCase) {
      
     }
   }
+  await utils.delay(1000);
+
   if (testCase.result.status === Status.PASSED){
     console.log(`Test: '${testCase.pickle.name}' - passed!`)
   }
