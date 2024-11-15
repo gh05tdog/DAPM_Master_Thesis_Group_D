@@ -19,8 +19,8 @@ export interface HistoryItem {
 export interface PipelineData {
     id: string;
     name: string;
+    status : string;
     pipeline: NodeState;
-    imgData: string;
     history: HistoryData;
 }
 

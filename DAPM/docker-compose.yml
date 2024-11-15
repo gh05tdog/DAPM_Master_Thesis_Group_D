@@ -1,6 +1,21 @@
 version: '3.4'
 
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro 
+      - ./certs:/etc/nginx/certs:ro 
+    ports:
+      - "443:443"
+    depends_on:
+      - dapm.clientapi
+      - dapm.accessControlService
+      - dapm.peerapi
+    networks:
+      - DAPM
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
@@ -65,14 +80,11 @@ services:
       context: .
       dockerfile: DAPM.AccessControlService/Dockerfile
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - sqlserver
     ports:
       - "5002:8080"
     networks:
       - DAPM
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "localhost:host-gateway"

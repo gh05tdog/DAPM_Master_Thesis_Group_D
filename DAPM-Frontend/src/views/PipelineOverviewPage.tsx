@@ -1,17 +1,17 @@
+import { Box } from "@mui/material";
+import Header from '../components/headers/Header.tsx';
 import Sidebar from '../components/sidebars/Sidebar.tsx'
 import MainContent from '../components/overviews/PipelineOverview.tsx'
-import MainContentList from '../components/overviews/PipelineOverviewList.tsx'
 import { useEffect, useState } from "react";
-import PageLayout from './PageLayout.tsx';
-import {Box} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Stack } from "@mui/material";
 
 interface PipelineOverviewPageProps {
   user: any;
-  children?: React.ReactNode;
 }
 
-
 const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => { 
+    const [mode, setMode] = useState<'light' | 'dark'>('light');
     const [info, setInfo] = useState<any>(null);
     console.log(user);
     useEffect(() => {
@@ -25,15 +25,28 @@ const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => 
     }, [user]);
 
     console.log(info);
-    
-    return (
-             <PageLayout user={info}>
-               <Sidebar />
-                 <Box sx={{marginLeft: '250px', display: 'static', minHeight: '100dvh', padding: '10px' }}>
-               <MainContentList />
-                </Box>
-             </PageLayout>
 
+    const theme = createTheme({
+        palette: {
+            mode: mode,
+        },
+    });
+
+    return (
+      <ThemeProvider theme={theme}>
+        <Box sx={{ display: 'flex', height: '100vh'  }}>
+          {/* Sidebar */}
+          <Sidebar />
+
+          {/* Main Area */}
+          <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            {/* Header at the top */}
+            <Header setMode={setMode} currentMode={mode} />
+            {/* Main Content below the Header */}
+            <MainContent />
+          </Box>
+        </Box>
+      </ThemeProvider>
     )
 }
 export default PipelineOverviewPage;

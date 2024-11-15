@@ -24,7 +24,7 @@ AfterStep(async function(testCase){
 AfterAll(async function() {
   // Make sure the browser is closed
   if (browser != null) {
-    browser.close()
+    await browser.close()
   }
 })
 
@@ -35,8 +35,9 @@ Before(async function() {
     // only use --no-sandbox on websites you trust!
     args: [ '--start-maximized'],
     slowMo: 10,
+    ignoreHTTPSErrors: true, // Ignore certificate errors
   })
-  await utils.delay(100);
+  await utils.delay(500);
   // GitLab prefers there to be only one page, so use the automatically created first tab in the browser...
   page = await browser.targets()[0].page()
   // ...unless it's not there for some reason.
@@ -74,8 +75,9 @@ After(async function(testCase) {
   if(testCase.result.status === Status.FAILED){
     console.log(`Test: '${testCase.pickle.name}' - failed...`)
   }
-
+  await utils.delay(100);
   if (browser != null) {
-    browser.close()
+    await browser.close()
   }
+  await utils.delay(100);
 })

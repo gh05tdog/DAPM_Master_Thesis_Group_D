@@ -5,14 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { getActiveFlowData, getActivePipeline } from "../../state_management/selectors/index.ts";
 import { useState } from "react";
 import { updatePipelineName } from "../../state_management/slices/pipelineSlice.ts";
-import EditIcon from '@mui/icons-material/Edit';
+import { Edit as EditIcon } from '@mui/icons-material';
 import { Node } from "reactflow";
 import { DataSinkNodeData, DataSourceNodeData, OperatorNodeData } from "../../state_management/states/pipelineState.ts";
 import { putCommandStart, putExecution, putPipeline } from "../../services/backendAPI.tsx";
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { getHandleId, getNodeId } from "./Flow.tsx";
 
-export default function PipelineAppBar() {
+interface PipelineAppBarProps {
+  pipelineId: string;
+}
+
+export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -125,12 +129,108 @@ export default function PipelineAppBar() {
 
     const selectedOrg = organizations[0]
     const selectedRepo = repositories.filter(repo => repo.organizationId === selectedOrg.id)[0]
-
-    const pipelineId = await putPipeline(selectedOrg.id, selectedRepo.id, requestData)
+    
     const executionId = await putExecution(selectedOrg.id, selectedRepo.id, pipelineId)
     await putCommandStart(selectedOrg.id, selectedRepo.id, pipelineId, executionId)
-
   }
+
+  //Post pipeline to backend
+  const savePipeline = async () => {
+    console.log("Starting savePipeline function...");
+
+    const requestData = {
+      name: pipelineName,
+      pipeline: {
+        nodes: flowData?.nodes?.map((node, index) => {
+          console.log(`Processing node #${index + 1} - ID: ${node.id}, Type: ${node.type}`);
+
+          // Ensure handles have a `type` field
+          const sourceHandles = (node.data?.templateData?.sourceHandles || []).map((handle) => ({
+            id: handle.id,
+            type: handle.type || "default",
+          }));
+
+          const targetHandles = (node.data?.templateData?.targetHandles || []).map((handle) => ({
+            id: handle.id,
+            type: handle.type || "default",
+          }));
+
+          const nodeData = {
+            id: node.id,
+            type: node.type,
+            width: node.width || 100,
+            height: node.height || 100,
+            position: {
+              x: node.position?.x || 0,
+              y: node.position?.y || 0,
+            },
+            data: {
+              label: node.label || "",
+              instantiationData: {
+                resource: {
+                  organizationId: node?.data?.instantiationData?.resource?.organizationId,
+                  repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
+                  resourceId: node?.data?.instantiationData?.resource?.id,
+                },
+              },
+              templateData: {
+                sourceHandles,
+                targetHandles,
+                hint: node.data?.templateData?.hint || "",
+              },
+            },
+          };
+
+          // Log the node data and its instantiation/template details
+          console.log(`Node Data for ID ${node.id}:`, JSON.stringify(nodeData, null, 2));
+          console.log(`Instantiation Data for ID ${node.id}:`, JSON.stringify(nodeData.data.instantiationData, null, 2));
+          console.log(`Template Data for ID ${node.id}:`, JSON.stringify(nodeData.data.templateData, null, 2));
+
+          return nodeData;
+        }),
+
+        edges: flowData?.edges?.map((edge, index) => {
+          console.log(`Processing edge #${index + 1} - Source: ${edge.source}, Target: ${edge.target}`);
+          return {
+            source: edge.source,
+            target: edge.target,
+            sourceHandle: edge.sourceHandle,
+            targetHandle: edge.targetHandle,
+          };
+        }),
+      },
+    };
+
+    // Debug the organization and repository selection
+    const selectedOrg = organizations[0];
+    console.log("Selected Organization:", selectedOrg);
+
+    const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
+    console.log("Selected Repository:", selectedRepo);
+
+    // Include organizationId and repositoryId in the request
+    const pipelineDTO = {
+      organizationId: selectedOrg.id,
+      repositoryId: selectedRepo?.id,
+      id: pipelineId || '',
+      ...requestData,
+    };
+
+    // Log the entire request payload before sending
+    console.log("Final Pipeline DTO:", JSON.stringify(pipelineDTO, null, 2));
+
+    try {
+      // Attempt to save the pipeline
+      console.log("Sending save request...");
+      await putPipeline(selectedOrg.id, selectedRepo.id, pipelineDTO);
+      console.log("Pipeline saved successfully!");
+    } catch (error) {
+      console.error("Error saving pipeline:", error);
+    }
+  };
+
+
+
 
   return (
     <AppBar position="fixed">
@@ -156,6 +256,9 @@ export default function PipelineAppBar() {
         </Box>
         <Button onClick={() => generateJson()}>
           <Typography variant="body1" sx={{ color: "white" }}>Deploy pipeline</Typography>
+        </Button>
+        <Button onClick={savePipeline}>
+        <Typography variant="body1" sx={{ color: "white" }}>Save pipeline</Typography>
         </Button>
       </Toolbar>
     </AppBar>

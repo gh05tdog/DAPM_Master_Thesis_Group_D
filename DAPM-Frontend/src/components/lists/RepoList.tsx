@@ -18,8 +18,14 @@ const RepoList: React.FC = () => {
     dispatch(organizationThunk());
   }, [dispatch]);
 
-  useEffect(() => {    
-      dispatch(repositoryThunk(organizations));
+  useEffect(() => {
+    if (organizations.length > 0) {
+      try {
+        dispatch(repositoryThunk(organizations));
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }, [dispatch, organizations]);
   
  
@@ -33,15 +39,19 @@ const RepoList: React.FC = () => {
   };
   
  if (loading) {
-        return(
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <h2>Repositories</h2>
-              </div>  
-                <Spinner />
-            </div>
-        )
-  }
+    return(
+      <Box>
+        <Accordion disabled sx={{ boxShadow: 3, borderRadius: 2 }}>
+          <AccordionSummary aria-controls="org-list-content" id="org-list-header" sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: '4px' }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Repositories</Typography>
+          </AccordionSummary>
+        </Accordion>
+        <Box sx={{ mt: 2, display:'flex', justifyContent:'center', alignItems:'center' }}>
+          <Spinner />
+        </Box>
+      </Box>
+  )
+    }
   return (
     <Accordion defaultExpanded sx={{ boxShadow: 3, borderRadius: 2 }}>
       <AccordionSummary
