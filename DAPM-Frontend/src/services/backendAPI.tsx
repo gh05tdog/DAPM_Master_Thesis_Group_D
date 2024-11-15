@@ -273,7 +273,7 @@ export async function fetchPipelineUsers() {
 
 export async function fetchResourceUsers() {
     try {
-        const response = await fetch(access + `/api/access-control/pipeline/get-all-user-resources/`, {
+        const response = await fetch(access + `/api/access-control/resource/get-all-user-resources/`, {
             headers: {
                 'Authorization': `Bearer ${await getToken()}`
             },
@@ -293,7 +293,7 @@ export async function fetchResourceUsers() {
 export async function removeUserResource(userId: string, resourceId: string) {
     try {
 
-        const response = await fetch(access + `/api/access-control/pipeline/remove-user-resource/`, {
+        const response = await fetch(access + `/api/access-control/resource/remove-user-resource/`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${await getToken()}`,
@@ -315,7 +315,7 @@ export async function removeUserResource(userId: string, resourceId: string) {
 export async function addUserResource(userId: string, resourceId: string) {
     try {
 
-        const response = await fetch(access + `/api/access-control/pipeline/add-user-resource/`, {
+        const response = await fetch(access + `/api/access-control/resource/add-user-resource/`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${await getToken()}`,
@@ -334,7 +334,68 @@ export async function addUserResource(userId: string, resourceId: string) {
     }
 }
 
+export async function fetchRepositoryUsers() {
+    try {
+        const response = await fetch(access + `/api/access-control/repository/get-all-user-repositories/`, {
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const jsonData = await response.json();
+        //console.log(jsonData)
+        return jsonData;
+    } catch (error) {
+        console.error('Error fetching status:', error);
+        return error;
+    }
+}
 
+export async function removeUserRepository(userId: string, repositoryId: string) {
+    try {
+
+        const response = await fetch(access + `/api/access-control/pipeline/remove-user-repository/`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({userId: userId, repositoryId: repositoryId})
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const jsonData = await response.json();
+        return jsonData;
+    } catch (error) {
+        console.error('Error fetching status:', error);
+        return error;
+    }
+}
+
+export async function addUserRepository(userId: string, repositoryId: string) {
+    try {
+
+        const response = await fetch(access + `/api/access-control/pipeline/add-user-repository/`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${await getToken()}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({userId: userId, repositoryId: repositoryId})
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const jsonData = await response.json();
+        return jsonData;
+    } catch (error) {
+        console.error('Error fetching status:', error);
+        return error;
+    }
+}
 
 
 
