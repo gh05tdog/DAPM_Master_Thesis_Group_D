@@ -34,7 +34,9 @@ const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => 
 
     return (
       <ThemeProvider theme={theme}>
-        <Box sx={{ display: 'flex', height: '100vh'  }}>
+        <Box 
+        data-qa="Pipeline Overview Page"
+        sx={{ display: 'flex', height: '100vh'  }}>
           {/* Sidebar */}
           <Sidebar />
 

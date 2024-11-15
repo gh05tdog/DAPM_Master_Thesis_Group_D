@@ -31,7 +31,8 @@ export default function ColorModeIconDropdown({ setMode, currentMode }: ColorMod
   const icon = currentMode === 'light' ? <LightModeIcon /> : <DarkModeIcon />;
 
   return (
-    <IconButton sx={{ borderRadius: 50, backgroundColor: '#4caf50', "&:hover": { backgroundColor: '#388e3c' } }}>
+    <IconButton sx={{ borderRadius: 50, color: "white", backgroundColor: (theme: { palette: { primary: { main: any; }; }; }) => theme.palette.primary.main, 
+      "&:hover": { backgroundColor: (theme: { palette: { primary: { dark: any; }; }; }) => theme.palette.primary.dark }}}>
       <IconButton onClick={handleClick} size="small" aria-haspopup="true">
         {icon}
       </IconButton>
