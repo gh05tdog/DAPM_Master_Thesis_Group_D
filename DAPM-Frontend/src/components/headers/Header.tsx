@@ -1,10 +1,7 @@
 import React from 'react';
-import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import DropDownManage from '../buttons/DropDownManage.tsx';
-import * as React from 'react';
-import Box from '@mui/material/Box/Box';
 import ColorModeIconDropdown from '../../assets/theme/ColorModeIconDropdown.tsx';
-import {Button} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
@@ -40,7 +37,7 @@ export default function Header({setMode, currentMode}: HeaderProps) {
        return (
 
            <AppBar
-               data-qa = "header"
+               data-qa="header"
                position="relative"
                sx={{
                    bgcolor: 'rgba(54,55,56,1)',
@@ -48,37 +45,30 @@ export default function Header({setMode, currentMode}: HeaderProps) {
                    width: 'calc(100%)'
                }}
            >
-        <Toolbar sx={{marginLeft: '230px', justifyContent: 'space-between' }}>
-            <Button variant="contained"
-                    color="primary"
-                    sx={{marginRight: 2}}
-                    onClick = {returnToOverview}>
-                Overview
+               <Box sx={{width: 'auto', display:'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: '230px' }}>
+                   <Button
+                       variant="contained"
+                       color="primary"
+                       sx={{ borderRadius: 50 }}
+                       onClick={returnToOverview}
+                   >
+                       Overview
+                   </Button>
 
-            </Button>
+                   <Button
+                       variant="contained"
+                       color="primary"
+                       startIcon={<AddIcon />}
+                       sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}
+                       onClick={() => createNewPipeline()}
+                   >
+                       Create New Pipeline
+                   </Button>
 
-            <Button
-                variant="contained"
-                color="success"
-                startIcon={<AddIcon/>}
-                sx={{borderRadius: 50, backgroundColor: '#4caf50', "&:hover": {backgroundColor: '#388e3c'}}}
-                onClick={() => createNewPipeline()} // Adjust to create a new pipeline logic
-            >
-                Create New Pipeline
-            </Button>
-            
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}> 
-                </Typography>
-            </Box>
-            
-            <DropDownManage/>
-
-            {/* Right-aligned Color Mode Icon */}
-            <Box sx={{ml: 'auto'}}>
-                <ColorModeIconDropdown setMode={setMode} currentMode={currentMode}/>
-            </Box>
-        </Toolbar>
-    </AppBar>
+                   <DropDownManage />
+                   
+                   <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
+               </Box>
+           </AppBar>
 );
 };

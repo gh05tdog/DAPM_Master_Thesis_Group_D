@@ -51,6 +51,8 @@ export default function DropDownManage() {
     return (
         <div>
             <Button
+                
+                sx = {{display: 'flex', height: '100%', borderRadius: 50}}
                 data-qa={"manage-button"}
                 variant={"contained"}
                 aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
