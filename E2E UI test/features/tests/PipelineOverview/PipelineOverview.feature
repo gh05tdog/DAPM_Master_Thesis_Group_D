@@ -13,5 +13,6 @@ Feature: Pipeline overview Layout
     |item|
     |"header"|
     |"sidebar"|
+    |"mainWindow"|
 
     

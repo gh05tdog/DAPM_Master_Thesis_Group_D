@@ -15,6 +15,9 @@ services:
       - dapm.peerapi
     networks:
       - DAPM
+    extra_hosts:
+      - "host.docker.internal:host-gateway" 
+      - "localhost:host-gateway"
 
   keycloak:
     image:  quay.io/keycloak/keycloak:latest

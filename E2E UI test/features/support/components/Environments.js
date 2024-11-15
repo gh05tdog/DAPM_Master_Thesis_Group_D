@@ -1,9 +1,9 @@
 const Environments = {
      local:{
-          url : "https://localhost:3000"
+          url : "http://localhost:3000"
         },
      prod:{
-          url:"https://se2-d.compute.dtu.dk/"
+          url:"http://se2-d.compute.dtu.dk/"
      },
     
 }

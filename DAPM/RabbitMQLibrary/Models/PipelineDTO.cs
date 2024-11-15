@@ -16,6 +16,7 @@ namespace RabbitMQLibrary.Models
    
     public class Handle
     {
+        public string type { get; set; }
         public string Id { get; set; }
     }
     
@@ -31,6 +32,8 @@ namespace RabbitMQLibrary.Models
     }
     public class Edge
     {
+        public string source { get; set; }
+        public string target { get; set; }
         public string SourceHandle { get; set; }
         public string TargetHandle { get; set; }
     }

@@ -1,5 +1,5 @@
 const defaultConf = {
-    "parallel": 4,
+    "parallel": 1,
     "format": [
         "html:output/report.html",
         "json:output/report.json",
