@@ -6,7 +6,7 @@ import Header from '../../components/headers/Header.tsx';
 import OrganizationManageSearch from '../../components/searchFields/OrganizationManageSearch.tsx';
 import OrganizationManagePopup from '../../components/searchFields/OrganizationManagePopup.tsx';
 import { Box } from "@mui/material";
-import OrganozationManageTable from '../../components/overviews/OrganizationManageTable.tsx';
+import OrganizationManageTable from '../../components/overviews/OrganizationManageTable.tsx';
 import {createTheme} from "@mui/material/styles";
 
 interface OrganizationOverviewPageProps {
