@@ -12,6 +12,8 @@ import ResourceManager from './views/ManagerViews/ResourceManager.tsx';
 import LoginPage from './views/LoginPage.tsx';
 import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
+import RepositoryManager from "./views/ManagerViews/RepositoryManager.tsx";
+import OrganizationManager from "./views/ManagerViews/OrganizationManager.tsx";
 
 const darkTheme = createTheme({
     palette: {
@@ -66,6 +68,8 @@ const App: React.FC = () => {
                 <Route path="/pipeline/:id" element={<PipelineComposer />} />
                 <Route path="/manage-pipeline" element = {<PipelineManager user = {user} />} />
                 <Route path="/manage-resource" element = {<ResourceManager user = {user} />} />
+                <Route path={"/manage-repository"} element = {<RepositoryManager user = {user} />} />
+                <Route path={"/manage-organization"} element = {<OrganizationManager user = {user} />} />
               </>
             )}
           </Routes>

@@ -64,6 +64,7 @@ export default function Header({setMode, currentMode}: HeaderProps) {
                    <DropDownManage />
                    
                    <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
+                   
                </Box>
            </AppBar>
 );

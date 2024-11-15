@@ -50,6 +50,14 @@ export default function DropDownManage() {
     const navigateToManageResource = () => {
         navigate('/manage-resource')
     };
+    
+    const navigateToManageRepository = () => {
+        navigate('/manage-repository')
+    };
+    
+    const navigateToManageOrganization = () => {
+        navigate('/manage-organization')
+    };
 
 
     return (
@@ -76,11 +84,11 @@ export default function DropDownManage() {
                 </Button>
                 <Divider />
                 <Button sx={{width: '100%'}} 
-                        onClick={handleClose}>
+                        onClick={navigateToManageOrganization}>
                     Organization</Button>
                 <Divider />
                 <Button sx={{width: '100%'}} 
-                        onClick={handleClose}>
+                        onClick={navigateToManageRepository}>
                     Repository</Button>
                 <Divider />
                 <Button sx={{width: '100%'}} 

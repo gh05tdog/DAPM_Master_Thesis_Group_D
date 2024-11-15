@@ -3,19 +3,19 @@ import {
     Button, ThemeProvider,
 } from '@mui/material';
 import Header from '../../components/headers/Header.tsx';
-import RepositoryManageSearch from '../../components/searchFields/RepositoryManageSearch.tsx';
-import RepositoryManagePopup from "../../components/searchFields/RepositoryManagePopup.tsx";
+import OrganizationManageSearch from '../../components/searchFields/OrganizationManageSearch.tsx';
+import OrganizationManagePopup from '../../components/searchFields/OrganizationManagePopup.tsx';
 import { Box } from "@mui/material";
-import RepositoryManageTable from '../../components/overviews/RepositoryManageTable.tsx';
+import OrganozationManageTable from '../../components/overviews/OrganizationManageTable.tsx';
 import {createTheme} from "@mui/material/styles";
 
-interface RepositoryOverviewPageProps {
+interface OrganizationOverviewPageProps {
     user: any;
 }
 
-const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
+const OrganizationManager: React.FC<OrganizationOverviewPageProps> = ({ user }) => {
     const [info, setInfo] = useState<any>(null);
-    const [selectedRepository, setSelectedRepository] = useState<{ repositoryId: string } | null>(null);
+    const [selectedOrganization, setSelectedOrganization] = useState<{ organizationId: string } | null>(null);
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
 
@@ -46,7 +46,7 @@ const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
             <Header setMode={setMode} currentMode={mode} />
 
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <RepositoryManageSearch setSelectedRepository={setSelectedRepository} />
+                <OrganizationManageSearch setSelectedOrganization={setSelectedOrganization} />
 
                 <Button
                     variant="contained"
@@ -60,13 +60,13 @@ const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
             </Box>
 
 
-            <Box data-qa = "repository-manager"
+            <Box data-qa = "organization-manager"
                  sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
-                <RepositoryManageTable selectedRepository={selectedRepository} />
-                <RepositoryManagePopup open={openPopup} onClose={handleClosePopup} selectedRepository={selectedRepository} />
+                <OrganizationManageTable selectedOrganization={selectedOrganization} />
+                <OrganizationManagePopup open={openPopup} onClose={handleClosePopup} selectedOrganization={selectedOrganization} />
             </Box>
         </ThemeProvider>
     )
 };
 
-export default RepositoryManager;
+export default OrganizationManager;
