@@ -6,14 +6,14 @@ namespace DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 public class OrganizationTableInitializer : ITableInitializer<UserOrganization>
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnectionFactory dbConnectionFactory;
 
-    public OrganizationTableInitializer(IDbConnection dbConnection)
+    public OrganizationTableInitializer(IDbConnectionFactory dbConnectionFactory)
     {
-        this.dbConnection = dbConnection;
+        this.dbConnectionFactory = dbConnectionFactory;
     }
 
-    public async Task InitializeTable()
+    public void InitializeTable()
     {
         const string sql = @"
             IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserOrganizations' AND xtype='U')
@@ -26,6 +26,9 @@ public class OrganizationTableInitializer : ITableInitializer<UserOrganization>
             END
         ";
         
-        await dbConnection.ExecuteAsync(sql);
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
+        dbConnection.Execute(sql);
     }
 }
