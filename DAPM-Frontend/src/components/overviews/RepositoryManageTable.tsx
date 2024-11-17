@@ -11,7 +11,7 @@ import {
     Button,
     Typography,
 } from '@mui/material';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 import { fetchRepositoryUsers, removeUserRepository } from '../../../src/services/backendAPI.tsx';
 
 const ITEMS_PER_PAGE = 10;
@@ -85,8 +85,8 @@ export default function RepositoryManageTable({ selectedRepository }: Repository
     }
 
     return (
-        <Box data-qa = "repositoryManager-user-table"
-             sx={{ width: '100%', margin: 'auto', mt: 4 }}>
+        <Box data-qa="repositoryManager-user-table"
+            sx={{ width: '100%', margin: 'auto', mt: 4 }}>
             {selectedRepository ? (
                 <>
                     <TableContainer component={Paper}>
