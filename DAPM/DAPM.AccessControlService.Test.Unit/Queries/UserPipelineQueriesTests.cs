@@ -14,8 +14,7 @@ public class UserPipelineQueriesTests
     
     public UserPipelineQueriesTests()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         var repository = new PipelineRepository(connection, new PipelineTableInitializer(connection));
         userPipelineQueries = repository;
         pipelineRepository = repository;

@@ -13,8 +13,7 @@ public class PipelineRepositoryTests
 
     public PipelineRepositoryTests()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         repository = new PipelineRepository(connection, new PipelineTableInitializer(connection));
     }
     

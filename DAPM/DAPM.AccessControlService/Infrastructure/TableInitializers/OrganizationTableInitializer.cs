@@ -6,11 +6,11 @@ namespace DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 public class OrganizationTableInitializer : ITableInitializer<UserOrganization>
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnectionFactory dbConnectionFactory;
 
-    public OrganizationTableInitializer(IDbConnection dbConnection)
+    public OrganizationTableInitializer(IDbConnectionFactory dbConnectionFactory)
     {
-        this.dbConnection = dbConnection;
+        this.dbConnectionFactory = dbConnectionFactory;
     }
 
     public async Task InitializeTable()
@@ -25,6 +25,9 @@ public class OrganizationTableInitializer : ITableInitializer<UserOrganization>
                 );
             END
         ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
         
         await dbConnection.ExecuteAsync(sql);
     }

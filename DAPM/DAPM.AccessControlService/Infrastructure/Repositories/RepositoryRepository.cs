@@ -9,12 +9,11 @@ namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
 public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQueries
 {
-    private readonly IDbConnection dbConnection;
-    private bool initialized;
-
-    public RepositoryRepository(IDbConnection dbConnection, ITableInitializer<UserRepository> tableInitializer)
+    private readonly IDbConnectionFactory dbConnectionFactory;
+    
+    public RepositoryRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserRepository> tableInitializer)
     {
-        this.dbConnection = dbConnection;
+        this.dbConnectionFactory = dbConnectionFactory;
         tableInitializer.InitializeTable().Wait();
     }
     
@@ -24,6 +23,9 @@ public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQuerie
                 INSERT INTO UserRepositories (UserId, RepositoryId)
                 VALUES (@UserId, @RepositoryId);
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
         
         await dbConnection.ExecuteAsync(sql, new { UserId = userRepository.UserId.Id, RepositoryId = userRepository.RepositoryId.Id });
     }
@@ -36,6 +38,9 @@ public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQuerie
                 WHERE UserId = @UserId;
             ";
         
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         var repositoryIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
         return repositoryIds.Select(id => new RepositoryId(Guid.Parse(id))).ToList();
     }
@@ -47,6 +52,9 @@ public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQuerie
                 WHERE UserId = @UserId AND RepositoryId = @RepositoryId;
             ";
         
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         await dbConnection.ExecuteAsync(sql, new { UserId = userRepository.UserId.Id, RepositoryId = userRepository.RepositoryId.Id });
     }
     
@@ -56,6 +64,9 @@ public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQuerie
                 SELECT UserId, RepositoryId
                 FROM UserRepositories;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
         
         var userRepositories = await dbConnection.QueryAsync<(string, string)>(sql);
         return userRepositories
@@ -72,6 +83,10 @@ public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQuerie
                     WHERE UserId = @UserId AND RepositoryId = @RepositoryId
                 ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userRepository.UserId.Id, RepositoryId = userRepository.RepositoryId.Id });
     }
 }

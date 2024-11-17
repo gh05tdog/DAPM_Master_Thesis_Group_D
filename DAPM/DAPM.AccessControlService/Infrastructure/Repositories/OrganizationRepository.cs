@@ -9,11 +9,11 @@ namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
 public class OrganizationRepository : IOrganizationRepository, IUserOrganizationQueries
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnectionFactory dbConnectionFactory;
 
-    public OrganizationRepository(IDbConnection dbConnection, ITableInitializer<UserOrganization> tableInitializer)
+    public OrganizationRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserOrganization> tableInitializer)
     {
-        this.dbConnection = dbConnection;
+        this.dbConnectionFactory = dbConnectionFactory;
         tableInitializer.InitializeTable().Wait();
     }
 
@@ -23,6 +23,10 @@ public class OrganizationRepository : IOrganizationRepository, IUserOrganization
                 INSERT INTO UserOrganizations (UserId, OrganizationId)
                 VALUES (@UserId, @OrganizationId);
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         await dbConnection.ExecuteAsync(sql, new { UserId = userOrganization.UserId.Id, OrganizationId = userOrganization.OrganizationId.Id });
     }
 
@@ -33,6 +37,10 @@ public class OrganizationRepository : IOrganizationRepository, IUserOrganization
                 FROM UserOrganizations
                 WHERE UserId = @UserId;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         var organizationIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
         return organizationIds.Select(id => new OrganizationId(Guid.Parse(id))).ToList();
     }
@@ -43,6 +51,10 @@ public class OrganizationRepository : IOrganizationRepository, IUserOrganization
                 DELETE FROM UserOrganizations
                 WHERE UserId = @UserId AND OrganizationId = @OrganizationId;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         await dbConnection.ExecuteAsync(sql, new { UserId = userOrganization.UserId.Id, OrganizationId = userOrganization.OrganizationId.Id });
     }
     
@@ -52,6 +64,10 @@ public class OrganizationRepository : IOrganizationRepository, IUserOrganization
                 SELECT UserId, OrganizationId
                 FROM UserOrganizations;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         var userOrganizations = await dbConnection.QueryAsync<(string, string)>(sql);
         return userOrganizations
             .Select(x => new UserOrganization(new UserId(Guid.Parse(x.Item1)), new OrganizationId(Guid.Parse(x.Item2))))
@@ -67,6 +83,10 @@ public class OrganizationRepository : IOrganizationRepository, IUserOrganization
                     WHERE UserId = @UserId AND OrganizationId = @OrganizationId
                 ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userOrganization.UserId.Id, OrganizationId = userOrganization.OrganizationId.Id });
     }
 }

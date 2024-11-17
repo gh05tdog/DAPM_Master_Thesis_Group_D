@@ -9,11 +9,11 @@ namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
 public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnectionFactory dbConnectionFactory;
 
-    public PipelineRepository(IDbConnection dbConnection, ITableInitializer<UserPipeline> tableInitializer)
+    public PipelineRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserPipeline> tableInitializer)
     {
-        this.dbConnection = dbConnection;
+        this.dbConnectionFactory = dbConnectionFactory;
         tableInitializer.InitializeTable().Wait();
     }
     
@@ -23,6 +23,9 @@ public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
                 INSERT INTO UserPipelines (UserId, PipelineId)
                 VALUES (@UserId, @PipelineId);
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
         
         await dbConnection.ExecuteAsync(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
     }
@@ -35,6 +38,9 @@ public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
                 WHERE UserId = @UserId;
             ";
         
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         var pipelineIds = await dbConnection.QueryAsync<String>(sql, new { UserId = userId.Id });
         return pipelineIds.Select(id => new PipelineId(Guid.Parse(id))).ToList();
     }
@@ -46,6 +52,9 @@ public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
                 WHERE UserId = @UserId AND PipelineId = @PipelineId;
             ";
         
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         await dbConnection.ExecuteAsync(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
     }
     
@@ -55,6 +64,9 @@ public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
                 SELECT UserId, PipelineId
                 FROM UserPipelines;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
         
         var userPipelines = await dbConnection.QueryAsync<(string, string)>(sql);
         return userPipelines
@@ -72,6 +84,10 @@ public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
                     WHERE UserId = @UserId AND PipelineId = @PipelineId
                 ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userPipeline.UserId.Id, PipelineId = userPipeline.PipelineId.Id });
     }
 }

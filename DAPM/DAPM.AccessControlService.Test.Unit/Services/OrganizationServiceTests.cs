@@ -10,8 +10,7 @@ public class OrganizationServiceTests
 {
     private OrganizationService CreateService()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         
         var repository = new OrganizationRepository(connection, new OrganizationTableInitializer(connection));
 

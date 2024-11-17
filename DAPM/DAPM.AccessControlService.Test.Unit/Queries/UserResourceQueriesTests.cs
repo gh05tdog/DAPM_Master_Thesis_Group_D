@@ -14,8 +14,7 @@ public class UserResourceQueriesTests
     
     public UserResourceQueriesTests()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         var repository = new ResourceRepository(connection, new ResourceTableInitializer(connection));
         userResourceQueries = repository;
         resourceRepository = repository;

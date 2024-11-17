@@ -12,8 +12,7 @@ public class OrganizationRepositoryTests
 
     public OrganizationRepositoryTests()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         repository = new OrganizationRepository(connection, new OrganizationTableInitializer(connection));
     }
     

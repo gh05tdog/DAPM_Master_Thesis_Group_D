@@ -12,8 +12,7 @@ public class ResourceRepositoryTests
     
     public ResourceRepositoryTests()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         repository = new ResourceRepository(connection, new ResourceTableInitializer(connection));
     }
 

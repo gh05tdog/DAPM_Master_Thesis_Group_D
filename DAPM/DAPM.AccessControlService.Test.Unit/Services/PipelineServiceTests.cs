@@ -10,8 +10,7 @@ public class PipelineServiceTests
 {
     private PipelineService CreateService()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         
         var repository = new PipelineRepository(connection, new PipelineTableInitializer(connection));
 

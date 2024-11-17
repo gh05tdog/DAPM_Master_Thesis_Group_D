@@ -13,8 +13,7 @@ public class RepositoryRepositoryTests
 
     public RepositoryRepositoryTests()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        var connection = new SqlliteConnectionFactory();
         repository = new RepositoryRepository(connection, new RepositoryTableInitializer(connection));
     }
 
