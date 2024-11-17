@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/gh05tdog/DAPM_Master_Thesis_Group_D.git'
-            }
-        }
-
         stage('Replace localhost in appsettings.json to se2-d.compute.dtu.dk') {
             steps {
                 script {
