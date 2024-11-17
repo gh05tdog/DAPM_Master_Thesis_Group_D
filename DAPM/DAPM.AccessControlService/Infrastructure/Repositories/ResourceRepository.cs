@@ -14,7 +14,7 @@ public class ResourceRepository : IResourceRepository, IUserResourceQueries
     public ResourceRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserResource> tableInitializer)
     {
         this.dbConnectionFactory = dbConnectionFactory;
-        tableInitializer.InitializeTable().Wait();
+        tableInitializer.InitializeTable();
     }
 
     public async Task CreateUserResource(UserResource userResource)

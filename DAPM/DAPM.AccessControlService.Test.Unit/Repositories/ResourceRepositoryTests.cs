@@ -1,8 +1,7 @@
-using System.Data;
 using DAPM.AccessControlService.Core.Domain.Entities;
+using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Repositories;
-using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
-using Microsoft.Data.Sqlite;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 namespace DAPM.AccessControlService.Test.Unit.Repositories;
 
@@ -12,7 +11,7 @@ public class ResourceRepositoryTests
     
     public ResourceRepositoryTests()
     {
-        var connection = new SqlliteConnectionFactory();
+        var connection = new DbConnectionFactory(TestHelper.ConnectionString);
         repository = new ResourceRepository(connection, new ResourceTableInitializer(connection));
     }
 

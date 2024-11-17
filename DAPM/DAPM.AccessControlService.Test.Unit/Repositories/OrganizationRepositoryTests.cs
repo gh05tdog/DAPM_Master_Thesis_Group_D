@@ -1,8 +1,8 @@
 using DAPM.AccessControlService.Core.Domain.Entities;
 using DAPM.AccessControlService.Core.Domain.Repositories;
+using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Repositories;
-using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
-using Microsoft.Data.Sqlite;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 namespace DAPM.AccessControlService.Test.Unit.Repositories;
 
@@ -12,7 +12,7 @@ public class OrganizationRepositoryTests
 
     public OrganizationRepositoryTests()
     {
-        var connection = new SqlliteConnectionFactory();
+        var connection = new DbConnectionFactory(TestHelper.ConnectionString);
         repository = new OrganizationRepository(connection, new OrganizationTableInitializer(connection));
     }
     

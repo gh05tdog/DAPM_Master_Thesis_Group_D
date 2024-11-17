@@ -13,7 +13,7 @@ public class PipelineTableInitializer : ITableInitializer<UserPipeline>
         this.dbConnectionFactory = dbConnectionFactory;
     }
 
-    public async Task InitializeTable()
+    public void InitializeTable()
     {
         const string sql = @"
             IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserPipelines' AND xtype='U')
@@ -29,6 +29,6 @@ public class PipelineTableInitializer : ITableInitializer<UserPipeline>
         using var dbConnection = dbConnectionFactory.CreateConnection();
         dbConnection.Open();
         
-        await dbConnection.ExecuteAsync(sql);
+        dbConnection.Execute(sql);
     }
 }

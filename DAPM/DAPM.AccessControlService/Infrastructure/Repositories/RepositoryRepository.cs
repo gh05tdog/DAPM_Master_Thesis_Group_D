@@ -14,7 +14,7 @@ public class RepositoryRepository : IRepositoryRepository, IUserRepositoryQuerie
     public RepositoryRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserRepository> tableInitializer)
     {
         this.dbConnectionFactory = dbConnectionFactory;
-        tableInitializer.InitializeTable().Wait();
+        tableInitializer.InitializeTable();
     }
     
     public async Task CreateUserRepository(UserRepository userRepository)

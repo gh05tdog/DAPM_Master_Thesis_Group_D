@@ -1,7 +1,7 @@
 using DAPM.AccessControlService.Core.Services;
+using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Repositories;
-using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
-using Microsoft.Data.Sqlite;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Test.Unit.Services;
@@ -10,8 +10,7 @@ public class OrganizationServiceTests
 {
     private OrganizationService CreateService()
     {
-        var connection = new SqlliteConnectionFactory();
-        
+        var connection = new DbConnectionFactory(TestHelper.ConnectionString);
         var repository = new OrganizationRepository(connection, new OrganizationTableInitializer(connection));
 
         return new OrganizationService(repository, repository);

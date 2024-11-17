@@ -14,7 +14,7 @@ public class OrganizationRepository : IOrganizationRepository, IUserOrganization
     public OrganizationRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserOrganization> tableInitializer)
     {
         this.dbConnectionFactory = dbConnectionFactory;
-        tableInitializer.InitializeTable().Wait();
+        tableInitializer.InitializeTable();
     }
 
     public async Task CreateUserOrganization(UserOrganization userOrganization)

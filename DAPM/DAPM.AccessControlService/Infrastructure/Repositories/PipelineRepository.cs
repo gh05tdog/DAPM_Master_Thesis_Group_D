@@ -14,7 +14,7 @@ public class PipelineRepository : IPipelineRepository, IUserPipelineQueries
     public PipelineRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserPipeline> tableInitializer)
     {
         this.dbConnectionFactory = dbConnectionFactory;
-        tableInitializer.InitializeTable().Wait();
+        tableInitializer.InitializeTable();
     }
     
     public async Task CreateUserPipeline(UserPipeline userPipeline)

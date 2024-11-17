@@ -13,7 +13,7 @@ public class OrganizationTableInitializer : ITableInitializer<UserOrganization>
         this.dbConnectionFactory = dbConnectionFactory;
     }
 
-    public async Task InitializeTable()
+    public void InitializeTable()
     {
         const string sql = @"
             IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserOrganizations' AND xtype='U')
@@ -29,6 +29,6 @@ public class OrganizationTableInitializer : ITableInitializer<UserOrganization>
         using var dbConnection = dbConnectionFactory.CreateConnection();
         dbConnection.Open();
         
-        await dbConnection.ExecuteAsync(sql);
+        dbConnection.Execute(sql);
     }
 }
