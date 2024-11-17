@@ -27,11 +27,8 @@ builder.Services.AddCors(options =>
 });
 
 // Configure database connection
-builder.Services.AddTransient<IDbConnection>(sp =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    return new SqlConnection(connectionString);
-});
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddTransient<IDbConnectionFactory>(sp => new DbConnectionFactory(connectionString));
 
 // Add table initializers
 builder.Services.AddSingleton<ITableInitializer<UserRepository>, RepositoryTableInitializer>();
