@@ -56,6 +56,15 @@ pipeline {
             }
         }
 
+        stage('Wait') {
+            steps {
+                script {
+                    echo "Waiting for 1 minute before proceeding..."
+                    sleep(time: 1, unit: 'MINUTES')
+                }
+            }
+        }
+
         stage('Run unit tests') {
             steps {
                 sh 'dotnet test ./DAPM/DAPM.AccessControlService.Test.Unit/DAPM.AccessControlService.Test.Unit.csproj'
