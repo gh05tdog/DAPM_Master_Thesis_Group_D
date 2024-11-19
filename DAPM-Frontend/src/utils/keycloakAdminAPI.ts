@@ -27,13 +27,37 @@ export const getUsersFromKeycloak = async () => {
   }
 };
 
+export const getUser = async (username: string) => {
+  try {
+    const token = await getToken();
+    if (!token) throw new Error("No token available");
+
+    const response = await axios.get(
+      `${environment.keycloak_url}/admin/realms/test/users`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          username: username,
+        },
+      }
+    );
+
+    return response.data[0] as UserRepresentation;
+  } catch (error) {
+    console.error("Error fetching users from Keycloak:", error);
+    throw error;
+  }
+};
+
 export const createUser = async (user: UserRepresentation) => {
   try {
     const token = await getToken();
     if (!token) throw new Error("No token available");
-    const response = await axios.post(
+    await axios.post(
       `${environment.keycloak_url}/admin/realms/test/users`,
-      { user },
+      user,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -41,15 +65,13 @@ export const createUser = async (user: UserRepresentation) => {
         },
       }
     );
-
-    return response.data; // Returns the created user
   } catch (error) {
     console.error("Error creating user to Keycloak:", error);
     throw error;
   }
 };
 
-export const roleMapUser = async (
+export const updateUserRoles = async (
   userId: string,
   roles: RoleRepresentation[]
 ) => {

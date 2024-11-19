@@ -1,6 +1,6 @@
 import { SelectChangeEvent } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { createUser, getRolesFromKeycloak } from "../../../utils/keycloakAdminAPI.ts";
+import { createUser, getRolesFromKeycloak, getUser, updateUserRoles } from "../../../utils/keycloakAdminAPI.ts";
 import { RoleRepresentation, UserRepresentation } from "../../../utils/types/keycloakTypes.ts";
 
 interface UserCreationForm {
@@ -20,7 +20,7 @@ const initialFormState: UserCreationForm = {
     roles: [],
 };
 
-const useUserCreation = () => {
+const useUserCreation = (onClose: () => void) => {
     const [roles, setRoles] = useState<RoleRepresentation[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [formState, setFormState] = useState<UserCreationForm>(initialFormState);
@@ -59,14 +59,19 @@ const useUserCreation = () => {
         }
     };
 
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
     const handleCreateUser = useCallback(async () => {
         try {
             if (!formState.user.username) return alert("Please enter a username");
             if (!formState.roles.length) return alert("Please select at least one role");
             setIsLoading(true);
-            console.log("Creating user:", formState.user);
             await createUser(formState.user);
-            setFormState({ ...initialFormState, user: { ...initialFormState.user, id: crypto.randomUUID() } });
+            const user = await getUser(formState.user.username);
+
+            setFormState({ ...initialFormState });
+            await sleep(500);
+            await updateUserRoles(user.id as string, formState.roles);
+            onClose();
             alert("User created successfully");
         } catch (error) {
             console.error("Error creating user:", error);
@@ -74,7 +79,7 @@ const useUserCreation = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [formState]);
+    }, [formState.roles, formState.user, onClose]);
 
     useEffect(() => {
         getUserRoles();

@@ -1,4 +1,5 @@
 export interface UserRepresentation {
+  id?: string;
   username: string;
   firstName?: string;
   lastName?: string;
