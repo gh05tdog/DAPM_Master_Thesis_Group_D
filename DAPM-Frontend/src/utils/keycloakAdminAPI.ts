@@ -31,10 +31,35 @@ export const createUser = async (user: UserRepresentation) => {
   try {
     const token = await getToken();
     if (!token) throw new Error("No token available");
-
     const response = await axios.post(
       `${environment.keycloak_url}/admin/realms/test/users`,
-      user,
+      { user },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data; // Returns the created user
+  } catch (error) {
+    console.error("Error creating user to Keycloak:", error);
+    throw error;
+  }
+};
+
+export const roleMapUser = async (
+  userId: string,
+  roles: RoleRepresentation[]
+) => {
+  try {
+    const token = await getToken();
+    if (!token) throw new Error("No token available");
+
+    const response = await axios.post(
+      `${environment.keycloak_url}/admin/realms/test/users/${userId}/role-mappings/realm`,
+      roles,
       {
         headers: {
           Authorization: `Bearer ${token}`,

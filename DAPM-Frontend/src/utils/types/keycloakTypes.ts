@@ -4,7 +4,13 @@ export interface UserRepresentation {
   lastName?: string;
   email?: string;
   enabled: boolean;
-  clientRoles: { [clientId: string]: string[] };
+  credentials: CredentialRepresentation[];
+}
+
+interface CredentialRepresentation {
+  type: string;
+  value: string;
+  temporary: boolean;
 }
 
 export interface RoleRepresentation {
