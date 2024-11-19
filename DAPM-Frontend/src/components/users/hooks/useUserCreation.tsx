@@ -67,8 +67,8 @@ const useUserCreation = (onClose: () => void) => {
             setIsLoading(true);
             await createUser(formState.user);
             const user = await getUser(formState.user.username);
-
             setFormState({ ...initialFormState });
+            // Just for feel  
             await sleep(500);
             await updateUserRoles(user.id as string, formState.roles);
             onClose();
