@@ -6,3 +6,10 @@ export interface UserRepresentation {
   enabled: boolean;
   clientRoles: { [clientId: string]: string[] };
 }
+
+export interface RoleRepresentation {
+  id?: string;
+  name?: string;
+  description?: string;
+  clientRole?: boolean;
+}

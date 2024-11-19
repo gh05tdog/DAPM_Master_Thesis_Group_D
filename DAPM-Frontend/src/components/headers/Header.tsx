@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import DropDownManage from '../buttons/DropDownManage.tsx';
 import ColorModeIconDropdown from '../../assets/theme/ColorModeIconDropdown.tsx';
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { addNewPipeline } from '../../state_management/slices/pipelineSlice.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
+import CreateUserModal from '../users/CreateUserModal.tsx';
 
 
 interface HeaderProps {
@@ -19,7 +20,7 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const [isOpen, setIsOpen] = useState(false);
     const returnToOverview = () => {
         navigate("/user");
     };
@@ -36,7 +37,7 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
             data-qa="header"
             position="relative"
             sx={{
-                bgcolor: 'rgba(54,55,56,1)',
+                bgcolor: 'rgb(54,55,56,1)',
                 paddingX: 3,
                 paddingY: 1,
                 width: 'calc(100%)'
@@ -64,12 +65,14 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
 
                 <DropDownManage />
                 <Button
+                    onClick={() => setIsOpen(true)}
                     variant="contained"
                     color="primary"
                     startIcon={<AddIcon />}
                     sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
                     Create User
                 </Button>
+                <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
                 <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
 
             </Box>
