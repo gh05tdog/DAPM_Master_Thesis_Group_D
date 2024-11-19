@@ -9,6 +9,7 @@ import { addNewPipeline } from '../../state_management/slices/pipelineSlice.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
 import CreateUserModal from '../users/CreateUserModal.tsx';
+import { flexbox } from '@mui/system';
 
 
 interface HeaderProps {
@@ -43,38 +44,41 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                 width: 'calc(100%)'
             }}
         >
-            <Box sx={{ width: 'auto', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: '230px' }}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ borderRadius: 50 }}
-                    onClick={returnToOverview}
-                >
-                    Overview
-                </Button>
+            <Box sx={{ width: 'auto', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ borderRadius: 50 }}
+                        onClick={returnToOverview}
+                    >
+                        Overview
+                    </Button>
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                    sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}
-                    onClick={() => createNewPipeline()}
-                >
-                    Create New Pipeline
-                </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}
+                        onClick={() => createNewPipeline()}
+                    >
+                        Create New Pipeline
+                    </Button>
+                </Box>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                    <DropDownManage />
+                    <Button
+                        onClick={() => setIsOpen(true)}
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
+                        Create User
+                    </Button>
+                    <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+                    <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
 
-                <DropDownManage />
-                <Button
-                    onClick={() => setIsOpen(true)}
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                    sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
-                    Create User
-                </Button>
-                <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-                <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
-
+                </Box>
             </Box>
         </AppBar>
     );

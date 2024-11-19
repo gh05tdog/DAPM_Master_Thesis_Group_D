@@ -15,6 +15,7 @@ const CreateUserModal: FC<Props> = ({ isOpen, onClose }) => {
         <Modal open={isOpen} onClose={onClose}>
             <form onSubmit={e => { e.preventDefault(); handleCreateUser(); }}>
                 <Box
+                    data-qa="UserCreationModal"
                     sx={{
                         position: 'absolute',
                         top: '50%',
