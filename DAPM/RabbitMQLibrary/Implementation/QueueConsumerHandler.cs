@@ -48,6 +48,7 @@ namespace RabbitMQLibrary.Implementation
             try
             {
                 _consumerTag = _consumerRegistrationChannel.BasicConsume(_queueName, false, consumer);
+                _logger.LogInformation($"Succesfully registered {_consumerName} as a Consumer for Queue {_queueName}");
             }
             catch (Exception ex)
             {
