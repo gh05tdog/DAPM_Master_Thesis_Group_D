@@ -6,10 +6,9 @@ import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';
 import UserList from '../../components/lists/UserLists.tsx';
 import { useNavigate } from 'react-router-dom';
-import LogoutButton from '../buttons/LogoutButton.tsx';
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
-  
+
   return (
     <Box
       data-qa='Sidebar'
@@ -25,15 +24,12 @@ const Sidebar: React.FC = () => {
         zIndex: 1,
       }}
     >
-      <LogoutButton/>
+
       <Box sx={{ flexGrow: 1, p: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Control Panel</Typography>
+
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <ArrowBackIcon color="primary" />
-            </ListItemIcon>
-            <Typography variant="body1" color="text.primary">Back</Typography>
-          </ListItem>
+         
 
           <Divider sx={{ my: 2 }} />
 
