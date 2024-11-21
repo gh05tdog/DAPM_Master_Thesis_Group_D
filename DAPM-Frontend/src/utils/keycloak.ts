@@ -29,9 +29,9 @@ const login = () => {
   }
 };
 
-const logout = () => {
+const logout = async () => {
   if (keycloakInitialized) {
-    keycloak.logout();
+    keycloak.logout({redirectUri: environment.keycloak_url?.replace("8888", "3000").replace("https","http") });
   } else {
     console.error('Keycloak is not initialized');
   }
