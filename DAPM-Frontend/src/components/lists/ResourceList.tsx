@@ -14,21 +14,6 @@ const ResourceList: React.FC = () => {
   const resources = useSelector(getResources);
   const loading = useSelector(selectLoadingResources); // Get loading state
 
-
-  useEffect(() => {
-    dispatch(organizationThunk());
-  }, [dispatch]);
-
-  useEffect(() => {
-    //if (organizations.length > 0) {
-     // try {
-        dispatch(repositoryThunk(organizations));
-     // } catch (error) {
-     //   console.error(error);
-     // }
-    //}
-  }, [dispatch, organizations]);
-
   useEffect(() => {
     //if (repositories.length > 0) {
       dispatch(resourceThunk({ organizations, repositories }));

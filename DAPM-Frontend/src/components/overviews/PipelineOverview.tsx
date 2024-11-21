@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
-import {getPipelines} from '../../state_management/selectors';
+import {getPipelines} from '../../state_management/selectors/index.ts';
 import {useNavigate} from 'react-router-dom';
 import {addNewPipeline, setActivePipeline} from '../../state_management/slices/pipelineSlice';
 import AddIcon from '@mui/icons-material/Add';
@@ -19,21 +19,6 @@ const MainContent: React.FC = () => {
     const repositories: Repository[] = useSelector(getRepositories);
     const pipelines: PipelineData[] = useSelector(getPipelines);
     const navigate = useNavigate();
-    
-
-    useEffect(() => {
-        dispatch(organizationThunk());
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (organizations.length > 0) {
-            try {
-                dispatch(repositoryThunk(organizations));
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    }, [dispatch, organizations]);
     
     useEffect(() => {
         if (repositories.length > 0) {

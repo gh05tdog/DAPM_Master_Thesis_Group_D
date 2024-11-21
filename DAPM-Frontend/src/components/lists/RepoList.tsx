@@ -11,15 +11,12 @@ const RepoList: React.FC = () => {
   // Get organizations and repositories from the store
     const organizations = useSelector(getOrganizations);
     const repositories = useSelector(getRepositories);
+    const Orgsloading = useSelector(selectLoadingOrganisation); // Get loading state
     const loading = useSelector(selectLoadingRepositories); // Get loading state
   const [selectedRepos, setSelectedRepos] = useState<string[]>([]);
 
   useEffect(() => {
-    dispatch(organizationThunk());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (organizations.length > 0) {
+    if ((!Orgsloading) && organizations.length > 0) {
       try {
         dispatch(repositoryThunk(organizations));
       } catch (error) {

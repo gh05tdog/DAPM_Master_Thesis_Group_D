@@ -4,7 +4,6 @@ import Sidebar from '../components/sidebars/Sidebar.tsx'
 import MainContent from '../components/overviews/PipelineOverview.tsx'
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Stack } from "@mui/material";
 
 interface PipelineOverviewPageProps {
   user: any;
