@@ -1,13 +1,26 @@
 import React from "react";
 import { Organization } from "../../state_management/states/apiState.ts"
+import { FormControlLabel, Checkbox } from "@mui/material";
 
 interface OrganizationCardProps {
     organization: Organization;
+    isChecked: boolean;
+    handleToggle: () => void,
 }
 
-const OrganizationCard: React.FC<OrganizationCardProps> = ({ organization }) => {
+const OrganizationCard: React.FC<OrganizationCardProps> = ({ organization, isChecked, handleToggle }) => {
     return (
-        <li key={organization.id}>Organization: {organization.name} - {organization.apiUrl}</li>
+        <FormControlLabel
+            key={organization.id}
+            control={
+                <Checkbox
+                    checked={isChecked}
+                    onChange={handleToggle}
+                    color="primary"
+                />
+            }
+            label={organization.name}
+        />
     )
 }
 

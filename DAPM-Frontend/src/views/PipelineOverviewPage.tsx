@@ -37,15 +37,7 @@ const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => 
       <Box
         data-qa="Pipeline Overview Page"
         sx={{ display: 'flex', height: '100vh' }}>
-
-        {/* Main Area */}
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          {/* Header at the top */}
-          
-          {/* Main Content below the Header */}
-          <MainContent />
-        </Box>
-        {/* Sidebar */}
+        <MainContent />
         <Sidebar />
       </Box>
     </ThemeProvider>

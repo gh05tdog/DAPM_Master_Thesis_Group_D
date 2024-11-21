@@ -77,11 +77,8 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                         Create User
                     </Button>
                     <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-                    <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
-
-                </Box>
-                <Box sx={{ display: "flex", height: "60px", alignItems: "center", justifyContent: "center", gap: 3, p: 0, textAlign: 'center', bgcolor: 'primary.main', color: 'primary.contrastText', borderBottom: '1px solid', borderColor: 'divider' }}>
                     <LogoutButton />
+                    <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
                 </Box>
             </Box>
 

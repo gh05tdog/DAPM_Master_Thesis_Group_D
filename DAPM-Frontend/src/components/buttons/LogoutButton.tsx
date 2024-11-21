@@ -1,7 +1,8 @@
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { logout } from '../../utils/keycloak.ts';
 import { LogoutOutlined } from '@mui/icons-material';
+import { flexbox } from "@mui/system";
 
 
 const LogoutButton = () => {
@@ -16,11 +17,17 @@ const LogoutButton = () => {
     };
 
     return (
-        <IconButton
+        <Button
             data-qa="logout button"
             onClick={handleLogout}
-            sx={{ color: "white" }} ><LogoutOutlined />
-        </IconButton>
+            color="primary"
+            variant="contained"
+            sx={{ borderRadius: "2em", backgroundColor: 'primary.main', "&:hover": { backgroundColor: 'primary' } }}>
+            <Box sx={{ display: "flex", direction: "row", gap: 2, p: 0.5 }}>
+                Logout
+                <LogoutOutlined />
+            </Box>
+        </Button >
     );
 };
 

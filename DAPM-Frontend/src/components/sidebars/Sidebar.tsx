@@ -13,7 +13,7 @@ const Sidebar: React.FC = () => {
     <Box
       data-qa='Sidebar'
       sx={{
-        width: 250,
+        width: 300,
         position: 'flex',
         top: 0,
         left: 0,
@@ -29,7 +29,7 @@ const Sidebar: React.FC = () => {
         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Control Panel</Typography>
 
         <List>
-         
+
 
           <Divider sx={{ my: 2 }} />
 

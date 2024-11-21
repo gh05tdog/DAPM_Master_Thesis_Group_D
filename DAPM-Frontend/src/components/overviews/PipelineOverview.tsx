@@ -1,26 +1,26 @@
-import React, {useEffect} from 'react';
-import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
-import {useDispatch, useSelector} from 'react-redux';
-import {getPipelines} from '../../state_management/selectors/index.ts';
-import {useNavigate} from 'react-router-dom';
-import {addNewPipeline, setActivePipeline} from '../../state_management/slices/pipelineSlice';
-import {getOrganizations, getRepositories} from "../../state_management/selectors/apiSelector.ts";
-import {pipelineThunk} from "../../state_management/slices/pipelineSlice.ts"
-import {Organization, Repository} from "../../state_management/states/apiState.ts";
-import {PipelineData} from "../../state_management/states/pipelineState.ts";
+import React, { useEffect } from 'react';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPipelines } from '../../state_management/selectors/index.ts';
+import { useNavigate } from 'react-router-dom';
+import { addNewPipeline, setActivePipeline } from '../../state_management/slices/pipelineSlice';
+import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
+import { pipelineThunk } from "../../state_management/slices/pipelineSlice.ts"
+import { Organization, Repository } from "../../state_management/states/apiState.ts";
+import { PipelineData } from "../../state_management/states/pipelineState.ts";
 
 const MainContent: React.FC = () => {
     const dispatch = useDispatch();
-    
+
     const organizations: Organization[] = useSelector(getOrganizations);
     const repositories: Repository[] = useSelector(getRepositories);
     const pipelines: PipelineData[] = useSelector(getPipelines);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (repositories.length > 0) {
             try {
-                dispatch(pipelineThunk({organizations, repositories}));
+                dispatch(pipelineThunk({ organizations, repositories }));
             } catch (error) {
                 console.log(error);
             }
@@ -32,14 +32,14 @@ const MainContent: React.FC = () => {
         dispatch(setActivePipeline(id));
         navigate(`/pipeline/${id}`);
     };
-    
+
     return (
         <Box
-        data-qa="mainWindow"
+            data-qa="mainWindow"
             sx={{
                 width: '100%',
-                height:'100%',
-                p: 0
+                height: '100%',
+                p: 2
             }}
         >
             <TableContainer component={Paper}>
