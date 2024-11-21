@@ -1,9 +1,11 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const utils = require('../../lib/utils');
 const { LoginPage } = require('../../support/pages/LoginPage');
+const { LogoutPage } = require('../../support/pages/LogoutPage');
 const navigationBar = require('../../support/components/UpperNavigationBar')
 const expect = require('chai').expect;
 const environments = require("../../support/components/Environments");
+const upperNavigationBar = require('../../support/components/UpperNavigationBar');
 
 
 When(
@@ -33,7 +35,6 @@ Then('I validate that navigation bar contains message {string}', async function 
 Then('I validate redirection to the KeycloakLoginPage', async function () {
 	let mainUrl = await this.page.url();
 	expect(mainUrl).to.contain("/realms/test/protocol/openid-connect/auth?client_id")
-	console.log(mainUrl);
 });
 Then('I validate that alert message {string} is shown', async function (expectedMessage) {
 	const loginPage = new LoginPage(this.page);
@@ -55,3 +56,13 @@ Given('A manager is logged in', async function () {
 	expect(mainUrl).to.contain("/user")
 
 });
+
+When('the {string} is pressed on the header', async function (element) {
+	await utils.click(this.page, upperNavigationBar[element+"CSS"]);
+	await utils.delay(100);
+})
+Then('the logout page is loaded', async function () {
+	const logoutPage = new LogoutPage(this.page);
+	await logoutPage.page.waitForSelector(logoutPage["pageCSS"]);
+	await utils.delay(4000);
+})

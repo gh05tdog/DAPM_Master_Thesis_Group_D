@@ -18,7 +18,7 @@ const LogoutButton = () => {
 
     return (
         <Button
-            data-qa="logout button"
+            data-qa="logoutButton"
             onClick={handleLogout}
             color="primary"
             variant="contained"

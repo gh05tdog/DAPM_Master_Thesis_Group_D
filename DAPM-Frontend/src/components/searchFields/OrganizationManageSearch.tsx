@@ -4,16 +4,8 @@ import {
     TextField,
     Box,
     FormControl,
-    Button,
-    MenuItem,
-    Select,
-    InputLabel,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
 } from '@mui/material';
-import { fetchOrganizationUsers, addUserOrganization } from '../../../src/services/backendAPI.tsx';
+import { fetchOrganizationUsers } from '../../../src/services/backendAPI.tsx';
 
 
 

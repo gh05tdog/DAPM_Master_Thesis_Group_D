@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRepositories, getOrganizations, getResources, selectLoadingRepositories, selectLoadingResources } from "../../state_management/selectors/apiSelector.ts";
 import { resourceThunk } from "../../state_management/slices/apiSlice.ts";
 import Spinner from '../cards/SpinnerCard.tsx';
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, List, ListItem } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, Typography, List } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ResourceCard from "../cards/ResourceCard.tsx";
 

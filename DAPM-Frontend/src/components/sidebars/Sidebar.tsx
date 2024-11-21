@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Typography, List, ListItem, ListItemIcon, Divider, Button, IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Typography, List, Divider,  } from '@mui/material';
 import OrgList from '../lists/OrgList.tsx';
 import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';
