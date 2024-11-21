@@ -55,7 +55,8 @@ const OrgList: React.FC = () => {
       <AccordionDetails>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {organizations?.map((organization) => (
-            <OrganizationCard organization={organization}
+            
+            <OrganizationCard key={organization.id} organization={organization}
               isChecked={selectedOrgs.includes(organization.id)}
               handleToggle={() => handleToggleOrg(organization.id)} />
           ))}

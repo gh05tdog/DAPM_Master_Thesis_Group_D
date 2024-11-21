@@ -11,7 +11,6 @@ interface RepositoryCardProps {
 const RepositoryCard: React.FC<RepositoryCardProps> = ({ repository, isChecked, handleToggle }) => {
     return (
         <FormControlLabel
-            key={repository.id}
             control={
                 <Checkbox
                     checked={isChecked}

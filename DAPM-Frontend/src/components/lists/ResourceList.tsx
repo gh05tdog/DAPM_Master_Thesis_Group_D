@@ -47,7 +47,7 @@ const ResourceList: React.FC = () => {
       <AccordionDetails>
         <List sx={{ width: '100%' }}>
           {resources?.map((resource) => (
-            <ResourceCard resource={resource} />
+            <ResourceCard  key={resource.id} resource={resource} />
           ))}
         </List>
       </AccordionDetails>

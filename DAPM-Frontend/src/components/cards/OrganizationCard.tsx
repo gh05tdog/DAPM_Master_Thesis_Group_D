@@ -11,7 +11,7 @@ interface OrganizationCardProps {
 const OrganizationCard: React.FC<OrganizationCardProps> = ({ organization, isChecked, handleToggle }) => {
     return (
         <FormControlLabel
-            key={organization.id}
+            
             control={
                 <Checkbox
                     checked={isChecked}

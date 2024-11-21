@@ -8,7 +8,7 @@ interface ResourceCardProps {
 
 const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
     return (
-        <ListItem key={resource.id} sx={{ borderBottom: '1px solid lightgray', padding: 1 }}>
+        <ListItem sx={{ borderBottom: '1px solid lightgray', padding: 1 }}>
             <Typography variant="body1" color="text.primary">{resource.name}</Typography>
         </ListItem>
     )
