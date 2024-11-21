@@ -14,6 +14,7 @@ import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
 import RepositoryManager from "./views/ManagerViews/RepositoryManager.tsx";
 import OrganizationManager from "./views/ManagerViews/OrganizationManager.tsx";
+import LogoutPage from './views/LogoutPage.tsx';
 
 const darkTheme = createTheme({
     palette: {
@@ -58,8 +59,8 @@ const App: React.FC = () => {
       <Provider store={store}>
         <BrowserRouter>
           <Routes>
-            {!authenticated ? (
-              <Route path="/user" element={<LoginPage />} />
+            {!authenticated ? (       
+              <Route path="/login" element={<LoginPage />} />        
             ) : (
               <>
                 {/* Automatically redirect to /user when authenticated */}
@@ -70,6 +71,7 @@ const App: React.FC = () => {
                 <Route path="/manage-resource" element = {<ResourceManager user = {user} />} />
                 <Route path={"/manage-repository"} element = {<RepositoryManager user = {user} />} />
                 <Route path={"/manage-organization"} element = {<OrganizationManager user = {user} />} />
+                <Route path={"/logout"} element = {<LogoutPage user = {user} />} />
               </>
             )}
           </Routes>
