@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRepositories, getOrganizations,selectLoadingRepositories } from "../../state_management/selectors/apiSelector.ts";
-import { repositoryThunk, organizationThunk } from "../../state_management/slices/apiSlice.ts";
+import { getRepositories, getOrganizations,selectLoadingOrganisation, selectLoadingRepositories } from "../../state_management/selectors/apiSelector.ts";
+import { repositoryThunk} from "../../state_management/slices/apiSlice.ts";
 import Spinner from '../cards/SpinnerCard.tsx';
 import RepositoryCard from "../cards/RepositoryCard.tsx";
 import { Accordion, AccordionSummary, AccordionDetails, Checkbox, FormControlLabel, Typography, Box } from "@mui/material";

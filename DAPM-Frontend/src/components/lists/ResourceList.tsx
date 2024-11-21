@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRepositories, getOrganizations, getResources,selectLoadingResources } from "../../state_management/selectors/apiSelector.ts";
-import { repositoryThunk, organizationThunk, resourceThunk } from "../../state_management/slices/apiSlice.ts";
+import { getRepositories, getOrganizations, getResources,selectLoadingRepositories, selectLoadingResources } from "../../state_management/selectors/apiSelector.ts";
+import { resourceThunk } from "../../state_management/slices/apiSlice.ts";
 import Spinner from '../cards/SpinnerCard.tsx';
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, List, ListItem } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -12,12 +12,13 @@ const ResourceList: React.FC = () => {
   const organizations = useSelector(getOrganizations);
   const repositories = useSelector(getRepositories);
   const resources = useSelector(getResources);
+  const repoLoading = useSelector(selectLoadingRepositories); // Get loading state
   const loading = useSelector(selectLoadingResources); // Get loading state
 
   useEffect(() => {
-    //if (repositories.length > 0) {
+    if ((!repoLoading) && repositories.length > 0) {
       dispatch(resourceThunk({ organizations, repositories }));
-    //}
+    }
   }, [dispatch, organizations, repositories]);
 
   if (loading) {

@@ -4,10 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getPipelines} from '../../state_management/selectors/index.ts';
 import {useNavigate} from 'react-router-dom';
 import {addNewPipeline, setActivePipeline} from '../../state_management/slices/pipelineSlice';
-import AddIcon from '@mui/icons-material/Add';
-import {v4 as uuidv4} from "uuid";
 import {getOrganizations, getRepositories} from "../../state_management/selectors/apiSelector.ts";
-import {organizationThunk, repositoryThunk} from "../../state_management/slices/apiSlice.ts";
 import {pipelineThunk} from "../../state_management/slices/pipelineSlice.ts"
 import {Organization, Repository} from "../../state_management/states/apiState.ts";
 import {PipelineData} from "../../state_management/states/pipelineState.ts";
