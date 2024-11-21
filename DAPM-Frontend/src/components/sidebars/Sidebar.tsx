@@ -5,18 +5,11 @@ import OrgList from '../lists/OrgList.tsx';
 import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';
 import UserList from '../../components/lists/UserLists.tsx';
-import { LogoutOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../utils/keycloak.ts';
-
+import LogoutButton from '../buttons/LogoutButton.tsx';
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/user");
-  };
-
+  
   return (
     <Box
       data-qa='Sidebar'
@@ -32,11 +25,7 @@ const Sidebar: React.FC = () => {
         zIndex: 1,
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 3, p: 2, textAlign: 'center', bgcolor: 'primary.main', color: 'primary.contrastText', borderBottom: '1px solid', borderColor: 'divider' }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Control Panel</Typography>
-        <IconButton onClick={handleLogout} sx={{ color: "white" }} ><LogoutOutlined /></IconButton>
-      </Box>
-
+      <LogoutButton/>
       <Box sx={{ flexGrow: 1, p: 2 }}>
         <List>
           <ListItem button>
