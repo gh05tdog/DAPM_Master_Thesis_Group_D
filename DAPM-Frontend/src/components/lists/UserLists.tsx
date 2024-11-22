@@ -36,7 +36,7 @@ const UserList: React.FC = () => {
   if (error) return null;
 
   return (
-    <Accordion defaultExpanded sx={{ boxShadow: 3, borderRadius: 2 }}>
+    <Accordion sx={{ boxShadow: 3, borderRadius: 2 }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="user-list-content"

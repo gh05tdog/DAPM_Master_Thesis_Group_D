@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
 import CreateUserModal from '../users/CreateUserModal.tsx';
 import { flexbox } from '@mui/system';
+import LogoutButton from '../buttons/LogoutButton.tsx';
 
 
 interface HeaderProps {
@@ -76,10 +77,11 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                         Create User
                     </Button>
                     <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+                    <LogoutButton />
                     <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
-
                 </Box>
             </Box>
+
         </AppBar>
     );
 };

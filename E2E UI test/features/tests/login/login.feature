@@ -20,3 +20,9 @@ Feature: Login Feature
     And I submit by clicking the login button
     And I print a message to the console
     Then I validate that alert message "Invalid username or password." is shown
+    
+    Scenario: Logout of DAPM-E
+    Given A manager is logged in
+    When the "logoutButton" is pressed on the header
+    Then the logout page is loaded
+    And I validate redirection to the KeycloakLoginPage

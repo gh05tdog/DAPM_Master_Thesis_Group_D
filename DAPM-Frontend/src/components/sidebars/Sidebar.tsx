@@ -1,20 +1,18 @@
 import React from 'react';
-import { Box, Typography, List, ListItem, ListItemIcon, Divider, Button, IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Typography, List, Divider,  } from '@mui/material';
 import OrgList from '../lists/OrgList.tsx';
 import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';
 import UserList from '../../components/lists/UserLists.tsx';
 import { useNavigate } from 'react-router-dom';
-import LogoutButton from '../buttons/LogoutButton.tsx';
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
-  
+
   return (
     <Box
       data-qa='Sidebar'
       sx={{
-        width: 250,
+        width: 300,
         position: 'flex',
         top: 0,
         left: 0,
@@ -25,15 +23,12 @@ const Sidebar: React.FC = () => {
         zIndex: 1,
       }}
     >
-      <LogoutButton/>
+
       <Box sx={{ flexGrow: 1, p: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Control Panel</Typography>
+
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <ArrowBackIcon color="primary" />
-            </ListItemIcon>
-            <Typography variant="body1" color="text.primary">Back</Typography>
-          </ListItem>
+
 
           <Divider sx={{ my: 2 }} />
 
