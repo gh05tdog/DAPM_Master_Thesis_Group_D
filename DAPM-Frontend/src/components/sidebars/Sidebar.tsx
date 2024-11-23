@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, List, Divider,  } from '@mui/material';
+import { Box, Typography, List, Divider, } from '@mui/material';
 import OrgList from '../lists/OrgList.tsx';
 import RepoList from '../lists/RepoList.tsx';
 import ResourceList from '../lists/ResourceList.tsx';

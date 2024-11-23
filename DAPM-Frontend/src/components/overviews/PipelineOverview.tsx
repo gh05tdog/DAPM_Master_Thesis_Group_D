@@ -25,11 +25,11 @@ const MainContent: React.FC = () => {
                 dispatch(pipelineThunk({ organizations, repositories }));
             } catch (error) {
                 console.log(error);
-            } finally{
+            } finally {
                 setLoading(false);
             }
         }
-        
+
     }, [dispatch, repositories]);
 
     const navigateToPipeline = (id: string) => {
@@ -40,9 +40,9 @@ const MainContent: React.FC = () => {
 
     if (loading) {
         return (
-            <div>
-                <Spinner />
-             </div>
+            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Spinner color="white" />
+            </Box>
         )
     }
 
