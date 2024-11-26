@@ -19,10 +19,34 @@ namespace RabbitMQLibrary.Models
         public string type { get; set; }
         public string Id { get; set; }
     }
+    public class Algorithm
+    {
+        public Guid? OrganizationId { get; set; }
+        public Guid? RepositoryId { get; set; }
+        public Guid? Id { get; set; }
+        public string? Name { get; set; }
+    }
+
+    public class RepositoryData
+    {
+        public Guid? id { get; set; }
+        public string? name { get; set; }
+        public Guid? organizationId { get; set; }
+    }
+
+    public class OrganizationData
+    {
+        public Guid? id { get; set; }
+        public string? name { get; set; }
+        public string? domain { get; set; }
+    }
     
     public class InstantiationData
     {
         public Resource Resource { get; set; }
+        public RepositoryData Repository { get; set; }
+        public OrganizationData Organization { get; set; }
+        public Algorithm Algorithm { get; set; }
     }
     public class TemplateData
     {

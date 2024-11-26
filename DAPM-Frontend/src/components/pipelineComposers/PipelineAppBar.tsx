@@ -171,6 +171,23 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
                   organizationId: node?.data?.instantiationData?.resource?.organizationId,
                   repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
                   resourceId: node?.data?.instantiationData?.resource?.id,
+                  name: node?.data?.instantiationData?.resource?.name,
+                },
+                repository: {
+                    id: node?.data?.instantiationData?.repository?.id,
+                    name: node?.data?.instantiationData?.repository?.name,
+                    organizationId: node?.data?.instantiationData?.repository?.organizationId,
+                },
+                organization: {
+                    id: node?.data?.instantiationData?.organization?.id,
+                    name: node?.data?.instantiationData?.organization?.name,
+                    domain: node?.data?.instantiationData?.organization?.domain,
+                },
+                algorithm: {
+                    organizationId: node?.data?.instantiationData?.algorithm?.organizationId,
+                    repositoryId: node?.data?.instantiationData?.algorithm?.repositoryId,
+                    resourceId: node?.data?.instantiationData?.algorithm?.id,
+                    name: node?.data?.instantiationData?.algorithm?.name,
                 },
               },
               templateData: {
