@@ -55,7 +55,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             _pipeline = pipelineDto;
             _state = PipelineExecutionState.NotStarted;
 
-            InitGraph();
+            //InitGraph();
 
         }
 
@@ -247,7 +247,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
                 return result;
             }
 
-            ExecuteOperatorStep executeOperatorStep = new ExecuteOperatorStep(_id ,_serviceProvider);
+            //ExecuteOperatorStep executeOperatorStep = new ExecuteOperatorStep(_id ,_serviceProvider);
 
             var predecessorNodesIds = _predecessorDictionary[currentNode.Id];
 
@@ -267,13 +267,13 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
                 AssociateNodeWithStep(currentNode.Id, transferDataStep.Id);
                 _stepsDictionary[transferDataStep.Id] = transferDataStep;
 
-                if (currentNode.NodeType == "operator")
+               /* if (currentNode.NodeType == "operator")
                 {
                     executeOperatorStep.PrerequisiteSteps.Add(transferDataStep.Id);
                     executeOperatorStep.InputResources.Add(transferDataStep.GetResourceToTransfer());
-                }
+                }*/
             }
-            if (currentNode.NodeType == "operator")
+            /*if (currentNode.NodeType == "operator")
             {
                 var operatorResource = new EngineResource()
                 {
@@ -287,7 +287,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
                 result.Add(executeOperatorStep);
                 AssociateNodeWithStep(currentNode.Id, executeOperatorStep.Id);
                 _stepsDictionary[executeOperatorStep.Id] = executeOperatorStep;
-            }
+            }*/
 
             visitedNodes.Add(currentNode.Id);
             return result;
@@ -317,18 +317,18 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             var resourceToTransfer = new EngineResource();
 
 
-            if(sourceNode.NodeType == "operator")
+           /* if(sourceNode.NodeType == "operator")
             {
                 var operatorStep = (ExecuteOperatorStep)_stepsDictionary[sourceNode.GetLastAssociatedStep()];
                 resourceToTransfer.OrganizationId = operatorStep.OperatorResource.OrganizationId;
                 resourceToTransfer.ResourceId = operatorStep.OutputResourceId; 
             }
             else
-            {
+            {*/
                 resourceToTransfer.OrganizationId = sourceNode.OrganizationId;
                 resourceToTransfer.RepositoryId = sourceNode.RepositoryId;
                 resourceToTransfer.ResourceId = (Guid)sourceNode.ResourceId;
-            }
+            //}
 
             Guid? destinationRepository = null;
             string? destinationName = null; 
@@ -352,8 +352,8 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
 
         private StorageMode GetStorageModeFromNode(EngineNode node)
         {
-            if (node.NodeType == "operator")
-                return StorageMode.Temporary;
+            //if (node.NodeType == "operator")
+             //   return StorageMode.Temporary;
             if (node.NodeType == "dataSource")
                 return StorageMode.Permanent;
 

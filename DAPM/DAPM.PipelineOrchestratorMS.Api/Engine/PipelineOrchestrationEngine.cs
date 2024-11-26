@@ -20,7 +20,19 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
 
         public Guid CreatePipelineExecutionInstance(Pipeline pipeline)
         {
+            //outout the pipeline
             Guid guid = Guid.NewGuid();
+            _logger.LogInformation($"Creating a new pipeline execution instance with nodes: " + pipeline.Nodes.Count());
+            _logger.LogInformation($"Creating a new pipeline execution instance with edges: " + pipeline.Edges.Count());
+            
+            foreach (var node in pipeline.Nodes)
+            {
+                _logger.LogInformation($"Node: " + node?.Type);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Resource.Name);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Repository.name);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Organization.name);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Algorithm.Name);
+            }
 
             var pipelineExecution = new PipelineExecution(guid, pipeline, _serviceProvider);
             

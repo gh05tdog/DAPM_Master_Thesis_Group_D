@@ -16,8 +16,8 @@ namespace RabbitMQLibrary.Models
    
     public class Handle
     {
-        public string type { get; set; }
-        public string Id { get; set; }
+        public string? type { get; set; }
+        public string? Id { get; set; }
     }
     public class Algorithm
     {
@@ -50,16 +50,16 @@ namespace RabbitMQLibrary.Models
     }
     public class TemplateData
     {
-        public IEnumerable<Handle> SourceHandles { get; set; }
-        public IEnumerable<Handle> TargetHandles { get; set; }
+        public IEnumerable<Handle> SourceHandles { get; set; } = new List<Handle>();
+        public IEnumerable<Handle> TargetHandles { get; set; } = new List<Handle>();
         public string? Hint { get; set; }
     }
     public class Edge
     {
-        public string source { get; set; }
-        public string target { get; set; }
-        public string SourceHandle { get; set; }
-        public string TargetHandle { get; set; }
+        public string? source { get; set; }
+        public string? target { get; set; }
+        public string? SourceHandle { get; set; }
+        public string? TargetHandle { get; set; }
     }
 
     public class NodePosition
@@ -71,23 +71,23 @@ namespace RabbitMQLibrary.Models
     public class NodeData
     {
         public string? Label { get; set; }
-        public TemplateData TemplateData { get; set; }
-        public InstantiationData InstantiationData { get; set; }
+        public TemplateData? TemplateData { get; set; }
+        public InstantiationData? InstantiationData { get; set; }
     }
 
     public class Node
     {
-        public string Id { get; set;}
-        public string Type { get; set; }
+        public string? Id { get; set;} 
+        public string? Type { get; set; }
         public NodePosition? Position { get; set; }
-        public NodeData Data { get; set; }
+        public NodeData? Data { get; set; }
         public float? Width { get; set; }
         public float? Height { get; set; }
     }
     public class Pipeline
     {
-        public IEnumerable<Node> Nodes { get; set; }
-        public IEnumerable<Edge> Edges { get; set; }
+        public IEnumerable<Node> Nodes { get; set; } = new List<Node>();
+        public IEnumerable<Edge> Edges { get; set; } = new List<Edge>();
     }
 
     public class PipelineDTO
@@ -95,7 +95,7 @@ namespace RabbitMQLibrary.Models
         public Guid OrganizationId { get; set; }
         public Guid RepositoryId { get; set; }
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public Pipeline? Pipeline { get; set; }
     }
 }
