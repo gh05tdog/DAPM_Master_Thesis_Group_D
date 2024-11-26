@@ -24,7 +24,7 @@ interface User {
 }
 
 interface Repository {
-    repositoryId: string;
+    repositoryName: string;
 }
 
 interface RepositoryManageTableProps {

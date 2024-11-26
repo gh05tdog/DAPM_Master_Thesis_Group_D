@@ -1,4 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
+import { getRepositories} from "../../state_management/selectors/apiSelector.ts";
+
+
 import {
     Autocomplete,
     TextField,
@@ -6,32 +10,28 @@ import {
     FormControl,
 
 } from '@mui/material';
-import { fetchRepositoryUsers} from '../../../src/services/backendAPI.tsx';
-
 
 
 interface RepositoryManageSearchProps {
-    setSelectedRepository: (repository: { repositoryId: string } | null) => void;
+    setSelectedRepository: (repository: { repositoryName: string } | null) => void;
 }
 
 export default function RepositoryManageSearch({ setSelectedRepository }: RepositoryManageSearchProps) {
-    const [repositoryOptions, setRepositoryOptions] = useState<{ repositoryId: string }[]>([]);
-
+    const [repositoryOptions, setRepositoryOptions] = useState<{ repositoryName: string }[]>([]);
+    const repositories = useSelector(getRepositories);
     // Fetch data using useEffect
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchRepositoryUsers();
-                
-                const uniqueRepositories = Array.from(new Set(data.map((item: { repositoryId: any; }) => item.repositoryId)))
-                    .map(repositoryId => ({ repositoryId: repositoryId as string }));
+                const uniqueRepositories = Array.from(new Set(repositories.map((item) => item.name)))
+                    .map(repositoryName => ({ repositoryName: repositoryName as string }));
                 setRepositoryOptions(uniqueRepositories);
             } catch (error) {
                 console.error("Error fetching repository users:", error);
             }
         };
         fetchData();
-    }, []);
+    }, [repositories]);
 
 
     return (
@@ -47,7 +47,7 @@ export default function RepositoryManageSearch({ setSelectedRepository }: Reposi
                 <Autocomplete
                     disablePortal
                     options={repositoryOptions}
-                    getOptionLabel={(option) => `RepositoryId: ${option.repositoryId}`}
+                    getOptionLabel={(option) => `Repository name: ${option.repositoryName}`}
                     onChange={(_event, newValue) => {
                         setSelectedRepository(newValue);
                     }}

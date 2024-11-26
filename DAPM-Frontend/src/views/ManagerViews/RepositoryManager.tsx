@@ -15,7 +15,7 @@ interface RepositoryOverviewPageProps {
 
 const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
     const [info, setInfo] = useState<any>(null);
-    const [selectedRepository, setSelectedRepository] = useState<{ repositoryId: string } | null>(null);
+    const [selectedRepository, setSelectedRepository] = useState<{ repositoryName: string } | null>(null);
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
 

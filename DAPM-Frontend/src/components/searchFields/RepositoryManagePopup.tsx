@@ -21,7 +21,7 @@ interface UserOption {
 interface ManageRepositoryPopupProps {
     open: boolean;
     onClose: () => void;
-    selectedRepository: { repositoryId: string } | null;
+    selectedRepository: { repositoryName: string } | null;
 }
 
 function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepositoryPopupProps) {
@@ -47,7 +47,7 @@ function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepo
     async function addUser() {
         if (selectedUser && selectedRepository) {
             try {
-                await addUserRepository(selectedUser.id, selectedRepository.repositoryId);
+                await addUserRepository(selectedUser.id, selectedRepository.repositoryName);
                 alert('User added successfully! Reload page to see results');
 
                 onClose();
