@@ -26,7 +26,6 @@ namespace RabbitMQLibrary.Models
         public Guid? Id { get; set; }
         public string? Name { get; set; }
     }
-
     public class RepositoryData
     {
         public Guid? id { get; set; }
@@ -34,6 +33,12 @@ namespace RabbitMQLibrary.Models
         public Guid? organizationId { get; set; }
     }
 
+    public class RepositoryTransferData
+    {
+        public RepositoryData? Repository { get; set; }
+        public string? name { get; set; }
+        
+    }
     public class OrganizationData
     {
         public Guid? id { get; set; }
@@ -44,7 +49,7 @@ namespace RabbitMQLibrary.Models
     public class InstantiationData
     {
         public Resource Resource { get; set; }
-        public RepositoryData Repository { get; set; }
+        public RepositoryTransferData Repository { get; set; }
         public OrganizationData Organization { get; set; }
         public Algorithm Algorithm { get; set; }
     }
@@ -60,8 +65,9 @@ namespace RabbitMQLibrary.Models
         public string? target { get; set; }
         public string? SourceHandle { get; set; }
         public string? TargetHandle { get; set; }
+        
     }
-
+    
     public class NodePosition
     {
         public float? X { get; set; }
