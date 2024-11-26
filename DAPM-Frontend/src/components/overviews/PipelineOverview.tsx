@@ -13,7 +13,7 @@ import { PipelineData } from "../../state_management/states/pipelineState.ts";
 
 const MainContent: React.FC = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const organizations: Organization[] = useSelector(getOrganizations);
     const repositories: Repository[] = useSelector(getRepositories);
     const pipelines: PipelineData[] = useSelector(getPipelines);
@@ -21,6 +21,7 @@ const MainContent: React.FC = () => {
 
     useEffect(() => {
         if (repositories && repositories.length > 0) {
+            setLoading(true);
             try {
                 dispatch(pipelineThunk({ organizations, repositories }));
             } catch (error) {
