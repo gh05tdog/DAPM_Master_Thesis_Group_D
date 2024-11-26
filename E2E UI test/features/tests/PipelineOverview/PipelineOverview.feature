@@ -1,4 +1,3 @@
-@focus
 Feature: Pipeline overview Layout
 
     This function check if all components are loaded onto the Pipeline overview page
@@ -13,5 +12,6 @@ Feature: Pipeline overview Layout
     |item|
     |"header"|
     |"sidebar"|
+    |"mainWindow"|
 
     

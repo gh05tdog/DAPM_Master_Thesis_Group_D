@@ -6,15 +6,14 @@ namespace DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 public class RepositoryTableInitializer : ITableInitializer<UserRepository>
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnectionFactory dbConnectionFactory;
 
-    public RepositoryTableInitializer(IDbConnection dbConnection)
+    public RepositoryTableInitializer(IDbConnectionFactory dbConnectionFactory)
     {
-        this.dbConnection = dbConnection;
+        this.dbConnectionFactory = dbConnectionFactory;
     }
 
-
-    public async Task InitializeTable()
+    public void InitializeTable()
     {
         const string sql = @"
             IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserRepositories' AND xtype='U')
@@ -27,6 +26,9 @@ public class RepositoryTableInitializer : ITableInitializer<UserRepository>
             END
         ";
         
-        await dbConnection.ExecuteAsync(sql);
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
+        dbConnection.Execute(sql);
     }
 }

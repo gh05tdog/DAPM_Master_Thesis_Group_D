@@ -1,8 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ApiState, Organization, Repository, Resource } from "../states/apiState.ts";
-import { fetchOrganisationRepositories, fetchOrganisations, fetchRepository, fetchRepositoryResources } from "../../services/backendAPI.tsx";
-import { useAppSelector } from "../../hooks";
-import { getOrganizations } from "../selectors/apiSelector.ts";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {ApiState, Organization, Repository, Resource} from "../states/apiState.ts";
+import {
+  fetchOrganisationRepositories,
+  fetchOrganisations,
+  fetchRepositoryResources
+} from "../../services/backendAPI.tsx";
 
 
 export const initialState: ApiState = {
@@ -94,39 +96,45 @@ export const repositoryThunk = createAsyncThunk<
   }
   try {
     
-    const repositories = [];
-      for (const organization of organizations) {
-        const repos = await fetchOrganisationRepositories(organization.id);
-        repositories.push(...repos.result.repositories);
-      }
+    const fetchAllRepositories = async () => {
+      const fetchPromises = organizations.map((organization) =>
+        fetchOrganisationRepositories(organization.id)
+      );
+    
+      const results = await Promise.all(fetchPromises);
+    
+      const repositories = results.flatMap((result) => result.result.repositories);
+    
       return repositories;
+    }
+    return fetchAllRepositories();
   } catch (error) {
     return thunkAPI.rejectWithValue(error); // Handle error
   }
 });
 export const selectLoadingRepositories = (state) =>  state.loadingRepositories;
 
-
 export const resourceThunk = createAsyncThunk<
   Resource[],
   { organizations: Organization[]; repositories: Repository[] }
->("api/fetchResources", async ({organizations, repositories}, thunkAPI) => {
-  try {
-    
-    const resources: Resource[] = [];
-    for (const org of organizations) {
-      for (const repo of repositories) {
-        if (org.id === repo.organizationId) {
-          const res = await fetchRepositoryResources(org.id, repo.id);
-          resources.push(...res.result.resources);
+>(
+  "api/fetchResources",
+  async ({ organizations, repositories }, thunkAPI) => {
+    try {
+      const fetchPromises: Promise<any>[] = [];
+      for (const org of organizations) {
+        for (const repo of repositories) {
+          if (org.id === repo.organizationId) {
+            fetchPromises.push(fetchRepositoryResources(org.id, repo.id));
+          }
         }
       }
+      // Wait for all promises to resolve
+      const results = await Promise.all(fetchPromises);
+      const resources = results.flatMap((res) => res.result.resources);
+      return resources;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
-    const result = await Promise.all(resources)
-      return result;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error); // Handle error
   }
-});
-
-
+);

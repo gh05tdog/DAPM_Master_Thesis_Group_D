@@ -2,6 +2,8 @@ namespace DAPM.AccessControlService.Test.Unit;
 
 public static class TestHelper
 {
+    public const string ConnectionString = "Server=localhost,1433;Database=master;User Id=SA;Password=Password123;";
+    
     public const string PipelineInitSql = @"
                 CREATE TABLE IF NOT EXISTS UserPipelines (
                     UserId TEXT NOT NULL,

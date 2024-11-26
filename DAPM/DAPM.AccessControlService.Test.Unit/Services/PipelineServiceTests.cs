@@ -1,7 +1,7 @@
 using DAPM.AccessControlService.Core.Services;
+using DAPM.AccessControlService.Infrastructure;
 using DAPM.AccessControlService.Infrastructure.Repositories;
-using DAPM.AccessControlService.Test.Unit.Repositories.TableInitializers;
-using Microsoft.Data.Sqlite;
+using DAPM.AccessControlService.Infrastructure.TableInitializers;
 using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.AccessControlService.Test.Unit.Services;
@@ -10,9 +10,7 @@ public class PipelineServiceTests
 {
     private PipelineService CreateService()
     {
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
-        
+        var connection = new DbConnectionFactory(TestHelper.ConnectionString);
         var repository = new PipelineRepository(connection, new PipelineTableInitializer(connection));
 
         return new PipelineService(repository, repository);

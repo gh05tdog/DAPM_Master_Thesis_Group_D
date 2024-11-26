@@ -1,66 +1,87 @@
-// src/components/Header.tsx
-import * as React from 'react';
-import Box from '@mui/material/Box/Box';
+import React, { useState } from 'react';
+import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import DropDownManage from '../buttons/DropDownManage.tsx';
 import ColorModeIconDropdown from '../../assets/theme/ColorModeIconDropdown.tsx';
-import {Button} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addNewPipeline } from '../../state_management/slices/pipelineSlice.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
+import CreateUserModal from '../users/CreateUserModal.tsx';
+import { flexbox } from '@mui/system';
+import LogoutButton from '../buttons/LogoutButton.tsx';
 
 
 interface HeaderProps {
-  setMode: (mode: 'light' | 'dark') => void;
-  currentMode: 'light' | 'dark';
+    setMode: (mode: 'light' | 'dark') => void;
+    currentMode: 'light' | 'dark';
 }
 
 export default function Header({ setMode, currentMode }: HeaderProps) {
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const navigateToPipeline = (id: string) => {
-      dispatch(setActivePipeline(id));
-      navigate('/pipeline');
-  };
-  
-  const createNewPipeline = () => {
-      dispatch(addNewPipeline({ id: `pipeline-${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
-      navigate("/pipeline");
-  };
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [isOpen, setIsOpen] = useState(false);
+    const returnToOverview = () => {
+        navigate("/user");
+    };
 
-  return (
-    <Box 
-      data-qa='Header'
-      sx={{
-        display: 'flex',
-        width: '100%',
-        alignItems: 'center',
-        color: 'primary',
-        justifyContent: 'space-between',
-      }}
-    >
-      {/* Left Spacer Box */}
-      <Box></Box>
+    const createNewPipeline = () => {
+        dispatch(addNewPipeline({ id: `pipeline-${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
+        navigate(`/pipeline/pipeline-${uuidv4()}`);
+    };
 
-      {/* Center-aligned Button */}
-      <Box sx={{ flexGrow: 1, textAlign: 'center' }}>
-        <Button
-          variant="contained"
-          color="success"
-          startIcon={<AddIcon />}
-          sx={{ borderRadius: 50, backgroundColor: '#4caf50', "&:hover": { backgroundColor: '#388e3c' } }}
-          onClick={() => createNewPipeline()} // Adjust to create a new pipeline logic
+
+    return (
+
+        <AppBar
+            data-qa="header"
+            position="relative"
+            sx={{
+                bgcolor: 'rgb(54,55,56,1)',
+                paddingX: 3,
+                paddingY: 1,
+                width: 'calc(100%)'
+            }}
         >
-          Create New Pipeline
-        </Button>
-      </Box>
+            <Box sx={{ width: 'auto', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ borderRadius: 50 }}
+                        onClick={returnToOverview}
+                    >
+                        Overview
+                    </Button>
 
-      {/* Right-aligned Color Mode Icon */}
-      <Box sx={{ ml: 'auto' }}>
-        <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
-      </Box>
-    </Box>
-  );
-}
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}
+                        onClick={() => createNewPipeline()}
+                    >
+                        Create New Pipeline
+                    </Button>
+                </Box>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                    <DropDownManage />
+                    <Button
+                        onClick={() => setIsOpen(true)}
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
+                        Create User
+                    </Button>
+                    <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+                    <LogoutButton />
+                    <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
+                </Box>
+            </Box>
+
+        </AppBar>
+    );
+};

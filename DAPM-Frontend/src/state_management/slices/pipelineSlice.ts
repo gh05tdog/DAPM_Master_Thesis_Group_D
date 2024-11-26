@@ -1,7 +1,8 @@
-import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, MarkerType, Node, NodeChange } from "reactflow";
-
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, Node, NodeChange } from "reactflow";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EdgeData, NodeData, NodeState, PipelineData, PipelineState } from "../states/pipelineState.ts";
+import { Organization, Repository } from "../states/apiState.ts";
+import {fetchPipeline, fetchRepositoryPipelines} from "../../services/backendAPI.tsx";
 
 export const initialState: PipelineState = {
   pipelines: [],
@@ -13,6 +14,67 @@ const takeSnapshot = (state: PipelineState) => {
   if (!activePipeline) return
   activePipeline?.history?.past?.push({nodes: activePipeline.pipeline.nodes, edges: activePipeline.pipeline.edges})
 }
+
+
+export const pipelineThunk = createAsyncThunk<
+  PipelineData[],
+  { organizations: Organization[]; repositories: Repository[] }
+>(
+  "pipelines/fetchPipelines",
+  async ({ organizations, repositories }, thunkAPI) => {
+    try {
+      const pipelinePromises: Promise<any>[] = [];
+
+      // Iterate through organizations and repositories to gather all the promises
+      for (const org of organizations) {
+        for (const repo of repositories) {
+          if (org.id === repo.organizationId) {
+            // Fetch pipelines concurrently for each repo
+            const pipelinePromise = fetchRepositoryPipelines(org.id, repo.id).then(
+              (pipes) => {
+                // Iterate over pipelines returned and fetch details concurrently
+                const pipelineDetailsPromises = pipes.result.pipelines.map(
+                  async (pipeline:PipelineData) => {
+                    const pipelineData = await fetchPipeline(
+                      org.id,
+                      repo.id,
+                      pipeline.id
+                    );
+
+                    // Map over pipeline details and return the pipeline data
+                    return pipelineData.result.pipelines.map((pipelineDetails:PipelineData) => ({
+                      id: pipelineDetails.id,
+                      name: pipelineDetails.name,
+                      status: "unknown",
+                      pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
+                      history: { past: [], future: [] },
+                    }));
+                  }
+                );
+
+                // Wait for all pipeline detail promises to resolve
+                return Promise.all(pipelineDetailsPromises).then((pipelineDetailsArray) =>
+                  pipelineDetailsArray.flat() // Flatten the array of pipelines
+                );
+              }
+            );
+
+            pipelinePromises.push(pipelinePromise);
+          }
+        }
+      }
+
+      // Wait for all pipeline fetching promises to resolve
+      const pipelines = await Promise.all(pipelinePromises);
+
+      // Flatten the results of all pipeline fetches
+      return pipelines.flat();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 
 const pipelineSlice = createSlice({
   name: 'pipelines',
@@ -182,7 +244,16 @@ const pipelineSlice = createSlice({
       activeFlowData.edges = payload;
     },
   },
-})
+  extraReducers: (builder) => {
+    builder
+        .addCase(pipelineThunk.fulfilled, (state, action) => {
+          state.pipelines = action.payload;
+        })
+        .addCase(pipelineThunk.rejected, (state, action) => {
+          console.error("Pipeline thunk failed", action.error);
+        });
+  },
+});
 
 export const { 
   //actions for all pipelines
@@ -211,4 +282,4 @@ export const {
   setEdges 
 } = pipelineSlice.actions
 
-export default pipelineSlice.reducer 
+export default pipelineSlice.reducer;
