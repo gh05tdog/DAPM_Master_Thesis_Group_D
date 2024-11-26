@@ -1,0 +1,1 @@
+To start the script run "k6 run --out 'web-dashboard' LoadTest.js" 
