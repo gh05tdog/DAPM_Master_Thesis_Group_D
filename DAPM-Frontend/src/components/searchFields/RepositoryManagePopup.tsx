@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { addUserRepository } from '../../../src/services/backendAPI.tsx';
 import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
+import { Repository } from '../../state_management/states/apiState.ts';
 
 interface UserOption {
     label: string;
@@ -21,7 +22,7 @@ interface UserOption {
 interface ManageRepositoryPopupProps {
     open: boolean;
     onClose: () => void;
-    selectedRepository: { repositoryName: string } | null;
+    selectedRepository: { repository: Repository } | null;
 }
 
 function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepositoryPopupProps) {
@@ -47,7 +48,7 @@ function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepo
     async function addUser() {
         if (selectedUser && selectedRepository) {
             try {
-                await addUserRepository(selectedUser.id, selectedRepository.repositoryName);
+                await addUserRepository(selectedUser.id, selectedRepository.repository.id);
                 alert('User added successfully! Reload page to see results');
 
                 onClose();

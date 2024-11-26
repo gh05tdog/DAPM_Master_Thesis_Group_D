@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import {  useSelector } from "react-redux";
+import { getOrganizations} from "../../state_management/selectors/apiSelector.ts";
 import {
     Autocomplete,
     TextField,
@@ -15,13 +17,14 @@ interface OrganizationManageSearchProps {
 
 export default function OrganizationManageSearch({ setSelectedOrganization }: OrganizationManageSearchProps) {
     const [organizationOptions, setOrganizationOptions] = useState<{ organizationId: string }[]>([]);
-
+    const organizations = useSelector(getOrganizations); // Adjust state path as needed
     // Fetch data using useEffect
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await fetchOrganizationUsers();
-                const uniqueOrganizations = Array.from(new Set(data.map((item: { organizationId: any; }) => item.organizationId)))
+
+                const uniqueOrganizations = Array.from(new Set(organizations.map((item) => item.id)))
                     .map(organizationId => ({ organizationId: organizationId as string }));
                 setOrganizationOptions(uniqueOrganizations);
             } catch (error) {
@@ -29,7 +32,7 @@ export default function OrganizationManageSearch({ setSelectedOrganization }: Or
             }
         };
         fetchData();
-    }, []);
+    }, [organizations]);
 
 
     return (

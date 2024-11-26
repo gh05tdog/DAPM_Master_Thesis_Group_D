@@ -10,21 +10,22 @@ import {
     FormControl,
 
 } from '@mui/material';
+import { Repository } from '../../state_management/states/apiState.ts';
 
 
 interface RepositoryManageSearchProps {
-    setSelectedRepository: (repository: { repositoryName: string } | null) => void;
+    setSelectedRepository: (repository: {repository: Repository }| null) => void;
 }
 
 export default function RepositoryManageSearch({ setSelectedRepository }: RepositoryManageSearchProps) {
-    const [repositoryOptions, setRepositoryOptions] = useState<{ repositoryName: string }[]>([]);
+    const [repositoryOptions, setRepositoryOptions] = useState<{ repository: Repository }[]>([]);
     const repositories = useSelector(getRepositories);
     // Fetch data using useEffect
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const uniqueRepositories = Array.from(new Set(repositories.map((item) => item.name)))
-                    .map(repositoryName => ({ repositoryName: repositoryName as string }));
+                const uniqueRepositories = Array.from(new Set(repositories.map((item) => item)))
+                    .map(repository => ({ repository: repository }));
                 setRepositoryOptions(uniqueRepositories);
             } catch (error) {
                 console.error("Error fetching repository users:", error);
@@ -47,7 +48,7 @@ export default function RepositoryManageSearch({ setSelectedRepository }: Reposi
                 <Autocomplete
                     disablePortal
                     options={repositoryOptions}
-                    getOptionLabel={(option) => `Repository name: ${option.repositoryName}`}
+                    getOptionLabel={(option) => `Repository name: ${option.repository.name}`}
                     onChange={(_event, newValue) => {
                         setSelectedRepository(newValue);
                     }}
