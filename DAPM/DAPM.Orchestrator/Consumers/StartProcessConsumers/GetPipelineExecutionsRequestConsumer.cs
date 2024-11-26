@@ -13,7 +13,7 @@ namespace DAPM.Orchestrator.Consumers.StartProcessConsumers
         }
         public Task ConsumeAsync(GetPipelineExecutionsRequest message)
         {
-            _engine.StartGetPipelineExecutionsProcess(message.TicketId);
+            _engine.StartGetPipelineExecutionsProcess(message.TicketId, message.PipelineId);
             return Task.CompletedTask;
         }
     }

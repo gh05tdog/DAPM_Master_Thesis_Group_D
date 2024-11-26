@@ -11,12 +11,14 @@ namespace DAPM.Orchestrator.Processes.PipelineCommands
 
         private ILogger<OrchestratorEngine> _logger;
         private Guid _ticketId;
+        private Guid _pipelineId;
 
         public GetPipelineExecutionsProcess(OrchestratorEngine engine, ILogger<OrchestratorEngine> logger,IServiceProvider serviceProvider,
-            Guid ticketId, Guid processId) : base(engine, serviceProvider, processId)
+            Guid ticketId, Guid processId, Guid pipelineId) : base(engine, serviceProvider, processId)
         {
             _ticketId = ticketId;
             _logger = logger;
+            _pipelineId = pipelineId;
         }
 
         public override void StartProcess()
@@ -27,6 +29,7 @@ namespace DAPM.Orchestrator.Processes.PipelineCommands
             {
                 ProcessId = _processId,
                 TimeToLive = TimeSpan.FromMinutes(1),
+                PipelineId = _pipelineId
             };
             _logger.LogInformation("Sending GetPipelineExecutionsMessage");
 

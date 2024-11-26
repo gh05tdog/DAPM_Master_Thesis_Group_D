@@ -32,6 +32,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         private Dictionary<Guid, Step> _stepsDictionary;
 
         private PipelineExecutionState _state;
+        private PipelineDTO _pipelineDTO;
 
 
 
@@ -39,7 +40,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         private Stopwatch _stopwatch;
         private List<Guid> _currentSteps;
 
-        public PipelineExecution(Guid id, Pipeline pipelineDto, IServiceProvider serviceProvider) 
+        public PipelineExecution(Guid id, PipelineDTO pipelineDto, IServiceProvider serviceProvider) 
         {
             _id = id;
             _nodes = new Dictionary<Guid, EngineNode>();
@@ -51,8 +52,9 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             _currentSteps = new List<Guid>();
             _serviceProvider = serviceProvider;
             _logger = _serviceProvider.GetService<ILogger<PipelineExecution>>();
+            _pipelineDTO = pipelineDto;
 
-            _pipeline = pipelineDto;
+            _pipeline = pipelineDto.Pipeline;
             _state = PipelineExecutionState.NotStarted;
 
             InitGraph();
@@ -101,6 +103,11 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             {
                 _logger.LogInformation($"There was an error in step {actionResult.StepId}");
             }
+        }
+
+        public Guid GetPipelineId()
+        {
+            return _pipelineDTO.Id;
         }
 
         #endregion

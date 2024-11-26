@@ -54,7 +54,7 @@ namespace DAPM.Orchestrator.Processes
             {
                 ProcessId = _processId,
                 TimeToLive = TimeSpan.FromMinutes(1),
-                Pipeline = _pipelineDTO
+                PipelineDTO = _pipelineDTO
             };
 
             createInstanceExecutionMessageProducer.PublishMessage(createInstanceExecutionMessage);

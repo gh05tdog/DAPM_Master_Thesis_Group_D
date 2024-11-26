@@ -14,5 +14,7 @@ namespace RabbitMQLibrary.Messages.PipelineOrchestrator
         public Guid ProcessId { get; set; }
         public TimeSpan TimeToLive { get; set; }
         public Boolean Succeeded { get; set; }
+        public Guid PipelineId { get; set; }
+        
     }
 }

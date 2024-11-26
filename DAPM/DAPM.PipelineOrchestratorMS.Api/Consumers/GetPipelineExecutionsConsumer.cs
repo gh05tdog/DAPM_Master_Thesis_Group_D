@@ -25,28 +25,27 @@ namespace DAPM.PipelineOrchestratorMS.Api.Consumers
         {
             _logger.LogInformation("GetPipelineExecutionsMessage received");
 
-            var executions = _pipelineOrchestrationEngine.GetPipelineExecutions(/*message.Pipeline.Pipeline*/);
+            List<Guid> executions = _pipelineOrchestrationEngine.GetPipelineExecutions(message.PipelineId);
 
-            var pipelineExecutionsDtos = new PipelineExecutionsDTO();
-            
+            var pipelineExecutionDto = new PipelineExecutionDTO()
+                {
+                    ExecutionIds = new List<Guid>(),
+                    PipelineId = message.PipelineId /*execution.Value.Pipeline*/,
+                };            
             foreach (var execution in executions)
             {
-                var pipelineExecutionDto = new PipelineExecutionDTO()
-                {
-                    ExecutionId = execution.Key,
-                    PipelineId = "whatever"/*execution.Value.Pipeline*/,
-                };
-                pipelineExecutionsDtos.PipelineExecutions.Add(pipelineExecutionDto);
+                pipelineExecutionDto.ExecutionIds.Add(execution);
             }
             
-
+            var pipelineExecutionList = new List<PipelineExecutionDTO>();
+            pipelineExecutionList.Add(pipelineExecutionDto);
 
             var resultMessage = new GetPipelineExecutionsResultMessage()
             {
                 ProcessId = message.ProcessId,
                 TimeToLive = TimeSpan.FromMinutes(1),
                 Succeeded = true,
-                Executions = pipelineExecutionsDtos
+                Executions = pipelineExecutionList
             };
 
             _getPipelineExecutionsProducer.PublishMessage(resultMessage);

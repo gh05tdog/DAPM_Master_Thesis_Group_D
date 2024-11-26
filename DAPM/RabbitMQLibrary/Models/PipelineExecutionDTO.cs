@@ -2,7 +2,7 @@ namespace RabbitMQLibrary.Models
 {
     public class PipelineExecutionDTO
     {
-        public Guid ExecutionId { get; set; }
-        public String PipelineId { get; set; }
+        public List<Guid> ExecutionIds { get; set; }
+        public Guid PipelineId { get; set; }
     }
 }
