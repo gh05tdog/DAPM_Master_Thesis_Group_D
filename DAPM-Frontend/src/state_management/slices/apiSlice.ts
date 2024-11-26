@@ -9,9 +9,9 @@ import {
 
 export const initialState: ApiState = {
     organizations: [],
-    loadingOrganizations: true,
+    loadingOrganizations: false,
     repositories: [],
-    loadingRepositories: true,
+    loadingRepositories: false,
     resources: []
   }
 
