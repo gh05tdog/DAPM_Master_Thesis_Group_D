@@ -9,13 +9,12 @@ namespace DAPM.AccessControlService.Infrastructure.Repositories;
 
 public class ResourceRepository : IResourceRepository, IUserResourceQueries
 {
-    private readonly IDbConnection dbConnection;
-    private bool initialized;
+    private readonly IDbConnectionFactory dbConnectionFactory;
 
-    public ResourceRepository(IDbConnection dbConnection, ITableInitializer<UserResource> tableInitializer)
+    public ResourceRepository(IDbConnectionFactory dbConnectionFactory, ITableInitializer<UserResource> tableInitializer)
     {
-        this.dbConnection = dbConnection;
-        tableInitializer.InitializeTable().Wait();
+        this.dbConnectionFactory = dbConnectionFactory;
+        tableInitializer.InitializeTable();
     }
 
     public async Task CreateUserResource(UserResource userResource)
@@ -24,6 +23,9 @@ public class ResourceRepository : IResourceRepository, IUserResourceQueries
                 INSERT INTO UserResources (UserId, ResourceId)
                 VALUES (@UserId, @ResourceId);
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
         
         await dbConnection.ExecuteAsync(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
     }
@@ -36,6 +38,9 @@ public class ResourceRepository : IResourceRepository, IUserResourceQueries
                 WHERE UserId = @UserId;
             ";
         
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         var resourceIds = await dbConnection.QueryAsync<string>(sql, new { UserId = userId.Id });
         return resourceIds.Select(id => new ResourceId(Guid.Parse(id))).ToList();
     }
@@ -47,6 +52,9 @@ public class ResourceRepository : IResourceRepository, IUserResourceQueries
                 WHERE UserId = @UserId AND ResourceId = @ResourceId;
             ";
         
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         await dbConnection.ExecuteAsync(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
     }
     
@@ -56,6 +64,9 @@ public class ResourceRepository : IResourceRepository, IUserResourceQueries
                 SELECT UserId, ResourceId
                 FROM UserResources;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
         
         var userResources = await dbConnection.QueryAsync<(string, string)>(sql);
         return userResources
@@ -72,6 +83,10 @@ public class ResourceRepository : IResourceRepository, IUserResourceQueries
                     WHERE UserId = @UserId AND ResourceId = @ResourceId
                 ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END;
             ";
+        
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
         return await dbConnection.ExecuteScalarAsync<bool>(sql, new { UserId = userResource.UserId.Id, ResourceId = userResource.ResourceId.Id });
     }
 }

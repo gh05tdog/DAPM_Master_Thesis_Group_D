@@ -2,16 +2,19 @@ pipeline {
     agent any
 
     environment {
-        ASPNETCORE_ENVIRONMENT = 'Jenkins'
         ENV_FILE = '.env.jenkins'
     }
 
     stages {
-        stage('Checkout') {
+        stage('Replace localhost in appsettings.json to se2-d.compute.dtu.dk') {
             steps {
-                git branch: 'main', url: 'https://github.com/gh05tdog/DAPM_Master_Thesis_Group_D.git'
+                script {
+                    sh '''
+                        find . -type f -name "appsettings.json" -exec sed -i 's/localhost/se2-d.compute.dtu.dk/g' {} +
+                    '''
+                }
             }
-        }
+        }        
 
         stage('Navigate to DAPM Directory and Stop Existing Containers') {
             steps {
@@ -49,6 +52,15 @@ pipeline {
                     script {
                         sh 'docker compose up --build -d'
                     }
+                }
+            }
+        }
+
+        stage('Wait') {
+            steps {
+                script {
+                    echo "Waiting for 1 minute before proceeding..."
+                    sleep(time: 1, unit: 'MINUTES')
                 }
             }
         }

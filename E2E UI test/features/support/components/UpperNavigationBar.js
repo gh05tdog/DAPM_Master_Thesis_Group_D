@@ -1,6 +1,9 @@
 const upperNavigationBar = {
     logoutCSS:'.navbar-nav.ml-auto [href="index.html"]',
-    title: '#root > header > div > h6'
+    headerCSS: '[data-qa="header"]',
+    logoutButtonCSS: '[data-qa="logoutButton"]', 
 };
+
+
 
 module.exports = upperNavigationBar;

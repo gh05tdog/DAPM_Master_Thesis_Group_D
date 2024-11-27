@@ -1,4 +1,9 @@
-$url = "http://localhost:8888/realms/test/protocol/openid-connect/token"
+# Disable SSL certificate validation
+[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+
+$url = "https://localhost:8888/realms/test/protocol/openid-connect/token"
 
 $body = @{grant_type='password'
       client_id='test-client'

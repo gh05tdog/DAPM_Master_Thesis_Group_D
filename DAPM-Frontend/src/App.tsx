@@ -7,9 +7,14 @@ import store from './state_management/store/stores.ts';
 
 import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
 import PipelineComposer from './views/old_PipeLineComposer.tsx';
+import PipelineManager from './views/ManagerViews/PipelineManager.tsx';
+import ResourceManager from './views/ManagerViews/ResourceManager.tsx';
 import LoginPage from './views/LoginPage.tsx';
 import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
+import RepositoryManager from "./views/ManagerViews/RepositoryManager.tsx";
+import OrganizationManager from "./views/ManagerViews/OrganizationManager.tsx";
+import LogoutPage from './views/LogoutPage.tsx';
 
 const darkTheme = createTheme({
     palette: {
@@ -44,30 +49,36 @@ const App: React.FC = () => {
         initialize();
     }, []);
 
-    if (!initialized) {
-        return <div>Loading...</div>;
-    }
-
-    return (
-        <ThemeProvider theme={lightTheme}>
-            <Provider store={store}>
-                <BrowserRouter>
-                    <Routes>
-                        {!authenticated ? (
-                            <Route path="/user" element={<LoginPage />} />
-                        ) : (
-                            <>
-                                {/* Automatically redirect to /user when authenticated */}
-                                <Route path="/" element={<Navigate to="/user" />} />
-                                <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
-                                <Route path="/pipeline" element={<PipelineComposer />} />
-                            </>
-                        )}
-                    </Routes>
-                </BrowserRouter>
-            </Provider>
-        </ThemeProvider>
-    );
+  if (!initialized) {
+    return <div>Loading...</div>;
+  }
+  
+  
+  return (
+    <ThemeProvider theme={lightTheme}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            {!authenticated ? (       
+              <Route path="/login" element={<LoginPage />} />        
+            ) : (
+              <>
+                {/* Automatically redirect to /user when authenticated */}
+                <Route path="/" element={<Navigate to="/user" />} />
+                <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
+                <Route path="/pipeline/:id" element={<PipelineComposer />} />
+                <Route path="/manage-pipeline" element = {<PipelineManager user = {user} />} />
+                <Route path="/manage-resource" element = {<ResourceManager user = {user} />} />
+                <Route path={"/manage-repository"} element = {<RepositoryManager user = {user} />} />
+                <Route path={"/manage-organization"} element = {<OrganizationManager user = {user} />} />
+                <Route path={"/logout"} element = {<LogoutPage user = {user} />} />
+              </>
+            )}
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </ThemeProvider>
+  );
 };
 
 export default App;

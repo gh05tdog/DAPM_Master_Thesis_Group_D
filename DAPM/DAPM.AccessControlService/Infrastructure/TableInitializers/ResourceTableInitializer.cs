@@ -6,15 +6,14 @@ namespace DAPM.AccessControlService.Infrastructure.TableInitializers;
 
 public class ResourceTableInitializer : ITableInitializer<UserResource>
 {
-    private readonly IDbConnection dbConnection;
+    private readonly IDbConnectionFactory dbConnectionFactory;
 
-    public ResourceTableInitializer(IDbConnection dbConnection)
+    public ResourceTableInitializer(IDbConnectionFactory dbConnectionFactory)
     {
-        this.dbConnection = dbConnection;
+        this.dbConnectionFactory = dbConnectionFactory;
     }
 
-
-    public async Task InitializeTable()
+    public void InitializeTable()
     {
         const string sql = @"
             IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='UserResources' AND xtype='U')
@@ -27,6 +26,9 @@ public class ResourceTableInitializer : ITableInitializer<UserResource>
             END
         ";
         
-        await dbConnection.ExecuteAsync(sql);
+        using var dbConnection = dbConnectionFactory.CreateConnection();
+        dbConnection.Open();
+        
+        dbConnection.Execute(sql);
     }
 }

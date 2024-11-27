@@ -2,7 +2,7 @@ import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection,
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EdgeData, NodeData, NodeState, PipelineData, PipelineState } from "../states/pipelineState.ts";
 import { Organization, Repository } from "../states/apiState.ts";
-import { fetchRepositoryPipelines } from "../../services/backendAPI.tsx";
+import {fetchPipeline, fetchRepositoryPipelines} from "../../services/backendAPI.tsx";
 
 export const initialState: PipelineState = {
   pipelines: [],
@@ -15,33 +15,68 @@ const takeSnapshot = (state: PipelineState) => {
   activePipeline?.history?.past?.push({nodes: activePipeline.pipeline.nodes, edges: activePipeline.pipeline.edges})
 }
 
-// Thunk to fetch pipelines
+
 export const pipelineThunk = createAsyncThunk<
-    PipelineData[],
-    { organizations: Organization[]; repositories: Repository[] }
->("pipelines/fetchPipelines", async ({ organizations, repositories }, thunkAPI) => {
-  try {
-    const pipelines: PipelineData[] = [];
-    for (const org of organizations) {
-      for (const repo of repositories) {
-        if (org.id === repo.organizationId) {
-          const pipes = await fetchRepositoryPipelines(org.id, repo.id);
-          const mappedPipelines = pipes.result.pipelines.map((pipeline) => ({
-            id: pipeline.id,
-            name: pipeline.name,
-            status: "unknown",
-            pipeline: pipeline.pipeline || { nodes: [], edges: [] },
-            history: { past: [], future: [] },
-          }));
-          pipelines.push(...mappedPipelines);
+  PipelineData[],
+  { organizations: Organization[]; repositories: Repository[] }
+>(
+  "pipelines/fetchPipelines",
+  async ({ organizations, repositories }, thunkAPI) => {
+    try {
+      const pipelinePromises: Promise<any>[] = [];
+
+      // Iterate through organizations and repositories to gather all the promises
+      for (const org of organizations) {
+        for (const repo of repositories) {
+          if (org.id === repo.organizationId) {
+            // Fetch pipelines concurrently for each repo
+            const pipelinePromise = fetchRepositoryPipelines(org.id, repo.id).then(
+              (pipes) => {
+                // Iterate over pipelines returned and fetch details concurrently
+                const pipelineDetailsPromises = pipes.result.pipelines.map(
+                  async (pipeline:PipelineData) => {
+                    const pipelineData = await fetchPipeline(
+                      org.id,
+                      repo.id,
+                      pipeline.id
+                    );
+
+                    // Map over pipeline details and return the pipeline data
+                    return pipelineData.result.pipelines.map((pipelineDetails:PipelineData) => ({
+                      id: pipelineDetails.id,
+                      name: pipelineDetails.name,
+                      orgId: org.id,
+                      repoId: repo.id,
+                      status: "unknown",
+                      pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
+                      history: { past: [], future: [] },
+                    }));
+                  }
+                );
+
+                // Wait for all pipeline detail promises to resolve
+                return Promise.all(pipelineDetailsPromises).then((pipelineDetailsArray) =>
+                  pipelineDetailsArray.flat() // Flatten the array of pipelines
+                );
+              }
+            );
+
+            pipelinePromises.push(pipelinePromise);
+          }
         }
       }
+
+      // Wait for all pipeline fetching promises to resolve
+      const pipelines = await Promise.all(pipelinePromises);
+
+      // Flatten the results of all pipeline fetches
+      return pipelines.flat();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
-    return pipelines;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
   }
-});
+);
+
 
 const pipelineSlice = createSlice({
   name: 'pipelines',
