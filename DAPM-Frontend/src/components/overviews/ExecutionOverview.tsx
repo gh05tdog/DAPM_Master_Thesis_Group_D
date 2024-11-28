@@ -43,10 +43,10 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
         // Transform the data to match Execution interface
         const executionIds = pipelineExecutions?.result?.executions?.[0]?.executionIds || [];
 
-        //var formattedExecutions: Execution[] = [];  
+        var formattedExecutions: Execution[] = [];  
 
         console.log("Execution IDs: ", executionIds);
-/*
+
         for (var executionId of executionIds) { 
             var status = await fetchStatus(executionId);
             console.log("Execution ID: ", executionId, "Status: ", status);
@@ -56,13 +56,13 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
                 executionTime: new Date().toISOString()
             }
             formattedExecutions.push(newExecution);
-        } */
+        } 
 
-        const formattedExecutions: Execution[] = executionIds.map((id : string) => ({
-            id: id,
-            status: "Not started", 
-            executionTime: new Date().toISOString() 
-        }));
+        // const formattedExecutions: Execution[] = executionIds.map((id : string) => ({
+        //     id: id,
+        //     status: "Not started", 
+        //     executionTime: new Date().toISOString() 
+        // }));
 
         
         console.log("Formatted Executions: ", formattedExecutions);
@@ -70,31 +70,6 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
         console.log("Executions: ", executions);
     };
 
-
-
-    const updateExecutions = async () => { 
-        console.log("Current Executions: ", executions);
-        /*
-        for (var execution of executions) { 
-            var status = await fetchStatus(execution.id);
-            execution.status = status;
-            console.log("Execution ID: ", execution.id, "Status: ", status);
-        }
-        */
-
-        const updatedExecutions = await Promise.all(executions.map(async (execution) => {
-            const status = await fetchStatus(execution.id);
-            return {
-                ...execution,
-                status: status
-            };
-        }));
-        
-        console.log("Updated Executions: ", updatedExecutions);
-        setExecutions(updatedExecutions);
-
-        //setExecutions(executions);
-    }
 
     useEffect(() => {
         fetchData();
@@ -110,11 +85,10 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
             clearInterval(interval);
         };
 
-    }, [pipelineOrgId, pipelineRepoId, parentPipelineId]);
+    }, []);
 
   return (
-    <>
-        <TableRow>
+    <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: '#f5f5f5' }} colSpan={4}>
             <Collapse in={isOpen} timeout="auto" unmountOnExit>
                 <Box margin={1} sx={{ backgroundColor: '#f5f5f5', borderRadius: '4px', padding: '8px' }}>
@@ -133,7 +107,6 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
                             {executions && executions.length > 0 ? (
                                 executions.map((exe) => (
                                     <TableRow key={exe.id}>
-                                 
                                         <ExecutionCard 
                                             status={exe.status} 
                                             id={exe.id} 
@@ -154,7 +127,6 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
             </Collapse>
         </TableCell>
     </TableRow>
-    </>
   )
 }
 

@@ -62,6 +62,7 @@ namespace DAPM.ClientApi.Controllers
         [SwaggerOperation(Description = "Gets the status of a running execution")]
         public async Task<ActionResult<Guid>> GetPipelineExecutionStatus(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId)
         {
+    
             Guid id = pipelineService.GetExecutionStatus(organizationId, repositoryId, pipelineId, executionId, this.UserId());
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
         }

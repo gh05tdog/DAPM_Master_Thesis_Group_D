@@ -73,16 +73,26 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         public PipelineExecutionStatus GetStatus()
         {
             var currentStepsStatus = new List<StepStatus>();
+            var timeElapsed = new TimeSpan(0);
             foreach (var stepId in _currentSteps)
             {
                 var step = _stepsDictionary[stepId];
+                if(step == null){
+                    continue;
+                }
                 currentStepsStatus.Add(step.GetStatus());
             }
+            
+            _logger.LogInformation($"Pipeline {_id} is in state {_state}");
+            _logger.LogInformation("Current steps status:" + currentStepsStatus.Count);
+            //_logger.LogInformation("Total steps:" + _stopwatch.Elapsed);
 
-
-            return new PipelineExecutionStatus()
+            if(_stopwatch != null) {
+                timeElapsed = _stopwatch.Elapsed;
+            }
+            return new PipelineExecutionStatus
             {
-                ExecutionTime = _stopwatch.Elapsed,
+                ExecutionTime = timeElapsed,
                 CurrentSteps = currentStepsStatus,
                 State = _state
             };

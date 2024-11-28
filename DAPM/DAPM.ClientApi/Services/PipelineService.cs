@@ -59,6 +59,7 @@ namespace DAPM.ClientApi.Services
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
             _ticketService.AddUserToTicket(ticketId, userId);
+            _logger.LogInformation("GetExecutionStatus: {ticketId}", ticketId);
             
             var message = new GetPipelineExecutionStatusRequest
             {
