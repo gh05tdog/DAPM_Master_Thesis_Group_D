@@ -10,21 +10,24 @@ import {
     DialogActions,
     Box,
 } from '@mui/material';
-import { addUserPipeline } from '../../../src/services/backendAPI.tsx';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { addUserPipeline, addUserRepository, addUserOrganization, addUserResource } from '../../../src/services/backendAPI.tsx';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 
 interface UserOption {
     label: string;
     id: string;
 }
 
+type AddUserFunction = (userId: string, id: string) => Promise<void>;
+
 interface ManagePipelinePopupProps {
     open: boolean;
     onClose: () => void;
-    selectedID: { ID: string } | null;
+    selectedID: string;
+    manageType: string;
 }
 
-function ManagePipelinePopup({ open, onClose, selectedID }: ManagePipelinePopupProps) {
+function ManagePopup({ open, onClose, selectedID, manageType }: ManagePipelinePopupProps) {
     const [users, setUsers] = useState<UserOption[]>([]);
     const [selectedUser, setSelectedUser] = useState<UserOption | null>(null);
 
@@ -48,23 +51,27 @@ function ManagePipelinePopup({ open, onClose, selectedID }: ManagePipelinePopupP
         if (selectedUser && selectedID) {
             try {
                 
-                
-                await addUserPipeline(selectedUser.id, selectedPipeline.pipelineId);
-                alert('User added successfully! Reload page to see results');
+                const addUserFunctions: Record<string, AddUserFunction> = {
+                    pipeline: addUserPipeline,
+                    resource: addUserResource,
+                    repository: addUserRepository,
+                    organization: addUserOrganization,
+                };
 
+                await addUserFunctions[manageType](selectedUser.id, selectedID);
+
+                alert(`User added successfully to ${manageType}! Reload page to see results.`);
                 onClose();
             } catch (error) {
-                console.error('Error adding user to pipeline:', error);
-                alert('Failed to add user to pipeline.');
+                alert(`Failed to add user to ${manageType}.`);
             }
         } else {
             if (!selectedUser) {
                 alert('Please select a user.');
-            } else if (!selectedPipeline) {
-                alert('Please select a pipeline.');
-                onClose();
+            } else if (!selectedID) {
+                alert(`Please select a ${manageType}.`);
             }
-
+            onClose();
         }
     }
     return (
@@ -99,4 +106,4 @@ function ManagePipelinePopup({ open, onClose, selectedID }: ManagePipelinePopupP
     );
 }
 
-export default ManagePipelinePopup;
+export default ManagePopup;

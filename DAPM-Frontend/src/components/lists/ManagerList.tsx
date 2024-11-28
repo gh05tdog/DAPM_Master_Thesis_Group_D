@@ -13,16 +13,9 @@ import { Box,
 
 import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 import { fetchPipelineUsers, 
-         removeUserPipeline,
-     
          fetchResourceUsers,
-         removeUserResource,
-         
          fetchRepositoryUsers,
-         removeUserRepository,
-      
          fetchOrganizationUsers, 
-         removeUserOrganization,
          } from '../../../src/services/backendAPI.tsx';
 import NextPageButton from '../buttons/NextPageButton.tsx';
 import PreviousPageButton from '../buttons/PreviousPageButton.tsx';
@@ -37,13 +30,8 @@ interface User {
     username: string;
 }
 
-interface IDInterface {
-    ID: string;
-    Name: string;
-}
-
 interface ManagerListProps {
-    selectedID: IDInterface | null;
+    selectedID: string | null;
     value: string;
 }
 
@@ -54,45 +42,58 @@ export default function ManagerList({ selectedID, value }: ManagerListProps) {
     useEffect(() => {
         const fetchUsersData = async () => {
             try {
-                if (selectedID)
-                    {
-                        const allUsers = await getUsersFromKeycloak();
-
-                        let listUsers: { userId: any; }[]; 
-
-                        if        (value === "pipeline") {
-                            listUsers = await fetchPipelineUsers();
-                        } else if (value === "resource") {
-                            listUsers = await fetchResourceUsers();
-                        } else if (value === "repository") {
-                            listUsers = await fetchRepositoryUsers();
-                        } else if (value === "organization") {
-                            listUsers = await fetchOrganizationUsers();
-                        } else {
-                            listUsers = [];
-                            console.log("Manager type not found");
-                        }
-                        
-                    const filteredUsers = listUsers.filter(
-                        (ru: { userId: string; }) => ru.userId === selectedID.ID
-                    );
-
-                    const usersForList = allUsers.filter((user: { id: any; }) =>
-                        filteredUsers.some((ru: { userId: any; }) => ru.userId === user.id)
-                    );
-
-                    setUsers(usersForList);
-                    setPage(1);
-                        
-                } else {
+                if (!selectedID) {
                     setUsers([]);
+                    return;
                 }
+
+                const allUsers = await getUsersFromKeycloak();
+                let fetchedUsers: { userId: string }[] = [];
+
+                switch (value) {
+                    case 'pipeline':
+                        fetchedUsers = await fetchPipelineUsers();
+                        break;
+                    case 'resource':
+                        fetchedUsers = await fetchResourceUsers();
+                        break;
+                    case 'repository':
+                        fetchedUsers = await fetchRepositoryUsers();
+                        break;
+                    case 'organization':
+                        fetchedUsers = await fetchOrganizationUsers();
+                        break;
+                    default:
+                        console.error(`Unsupported value type: ${value}`);
+                        setUsers([]);
+                        return;
+                }
+
+                const filteredUsers = fetchedUsers.filter((pu) => {
+                    const idField = {
+                        pipeline: 'pipelineId',
+                        resource: 'resourceId',
+                        repository: 'repositoryId',
+                        organization: 'organizationId'
+                    }[value];
+
+                    return pu[idField as keyof typeof pu] === selectedID;
+                });
+
+                const usersForList = allUsers.filter((user: { id: string }) =>
+                    filteredUsers.some((fu) => fu.userId === user.id)
+                );
+
+                setUsers(usersForList);
+                setPage(1);
             } catch (error) {
-                console.error('Failed to fetch users:', error);
+                console.error('Error fetching users:', error);
+                setUsers([]);
             }
         };
+
         fetchUsersData();
-    }, [selectedID]);
+    }, [selectedID, value]);
 
 
     const totalPages = Math.ceil(users.length / ITEMS_PER_PAGE);

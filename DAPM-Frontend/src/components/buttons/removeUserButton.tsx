@@ -18,7 +18,7 @@ interface RemoveUserButtonPageProps {
     user: User;
     users: User[];
     manageType: string;
-    selectedID: {ID: string} | null;
+    selectedID: string
     setUsers: (users: User[]) => void;
 }
 
@@ -29,16 +29,16 @@ export default function RemoveUserButton({user, users, manageType, selectedID, s
     function handleRemove(id: string): void {
         if (selectedID) {
             if (manageType === "pipeline") {
-                removeUserPipeline(id, selectedID.ID);
+                removeUserPipeline(id, selectedID);
             }
             else if (manageType === "resource") {
-                removeUserResource(id, selectedID.ID);
+                removeUserResource(id, selectedID);
             }
             else if (manageType === "repository") {
-                removeUserRepository(id, selectedID.ID);
+                removeUserRepository(id, selectedID);
             }
             else if (manageType === "organization") {
-                removeUserOrganization(id, selectedID.ID);
+                removeUserOrganization(id, selectedID);
             }
 
             const newUsers = users.filter((user) => user.id !== id);

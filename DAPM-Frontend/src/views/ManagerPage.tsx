@@ -8,27 +8,35 @@ import {createTheme} from "@mui/material/styles";
 import { useSearchParams } from 'react-router-dom';
 import {PipelineData} from "../state_management/states/pipelineState.js";
 import {Organization, Repository, Resource} from "../state_management/states/apiState.js";
+import ManagePopup from "../components/searchFields/ManagePopup.tsx";
 
-type SelectedItem =
-    | { repository: Repository }
-    | { pipeline: PipelineData }
-    | { resource: Resource }
-    | { organization: Organization }
-    | null;
+type ChosenItem = Repository | PipelineData | Resource | Organization;
 
-export default function ManagePage() {
+export default function ManagePage()  {
     
     const [searchParams] = useSearchParams();
     const manageType = searchParams.get('manageType');
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
-    
-    const [selectedItem, setSelectedItem] = useState<{ repository:Repository } | null>(null);
+
+    const [selectedItem, setSelectedItem] = useState<{ item: ChosenItem } | null>(null);
 
     const handleOpenPopup = () => {
         setOpenPopup(true);
     };
+    
+    const handleClosePopup = () => {
+        setOpenPopup(false);
+    };
 
+    const selectedID = (() => {
+        if (!selectedItem || !manageType) return null;
+
+        const item = selectedItem.item;
+
+        return item?.id || null; // Return only the `id` property or `null` if not available
+    })();
+    
     const theme = createTheme({
         palette: {
             mode: mode,
@@ -44,11 +52,9 @@ export default function ManagePage() {
                 data-qa = 'ManagerPage'    
                 sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <ManageSearch setSelectedItem={setSelectedItem} manageType={manageType} />
+                <ManagePopup open={openPopup} onClose={handleClosePopup} selectedID={selectedID} manageType={manageType}/>
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ width: '10%' }}
+                <Button variant="contained" color="primary" sx={{ width: '10%' }}
                     onClick={handleOpenPopup}
                 >
                     Add user
@@ -57,7 +63,7 @@ export default function ManagePage() {
             
             <Box data-qa = "pipeline-manager"
                  sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
-                <ManagerList selectedID={selectedItem?.repository} value={manageType} />
+                <ManagerList selectedID={selectedID} value={manageType} />
             </Box>
         </ThemeProvider>
     )
