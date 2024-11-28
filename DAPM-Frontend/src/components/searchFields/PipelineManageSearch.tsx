@@ -11,9 +11,10 @@ import { fetchPipelineUsers} from '../../../src/services/backendAPI.tsx';
 
 interface PipelineManageSearchProps {
     setSelectedPipeline: (pipeline: { pipelineId: string } | null) => void;
+    manageType: string;
 }
 
-export default function PipelineManageSearch({ setSelectedPipeline }: PipelineManageSearchProps) {
+export default function PipelineManageSearch({ setSelectedPipeline, manageType }: PipelineManageSearchProps) {
     const [pipelineOptions, setPipelineOptions] = useState<{ pipelineId: string }[]>([]);
 
 

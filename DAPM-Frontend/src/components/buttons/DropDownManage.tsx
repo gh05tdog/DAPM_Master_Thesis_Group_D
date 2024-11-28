@@ -44,7 +44,7 @@ export default function DropDownManage() {
     const navigate = useNavigate();
 
     const navigateToManagePage = (manageType: string) => {
-        navigate('/manage', { state: { manageType } });
+        navigate(`/manage?manageType=${manageType}`);
     };
 
     return (

@@ -1,27 +1,21 @@
 ﻿import React, {useState } from 'react';
 import {Button, ThemeProvider} from '@mui/material';
 import Header from '../components/headers/Header.tsx';
-import PipelineManageSearch from '../components/searchFields/PipelineManageSearch.tsx';
+import ManageSearch from '../components/searchFields/ManageSearch.tsx';
 import { Box } from "@mui/material";
 import ManagerList from '../components/lists/ManagerList.tsx';
 import {createTheme} from "@mui/material/styles";
 import { useSearchParams } from 'react-router-dom';
 
-interface ManagerPageProps {
-    manageType: string;
-}
 
 export default function ManagePage() {
+    
+    const [searchParams] = useSearchParams();
+    const manageType = searchParams.get('manageType');
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
     
     const [selectedID, setSelectedID] = useState<{ ID: string } | null>(null);
-    
-    const [searchParams] = useSearchParams();
-    const manageType = searchParams.get('manageType');
-    const handleClosePopup = () => {
-        setOpenPopup(false);
-    };
 
     const handleOpenPopup = () => {
         setOpenPopup(true);
@@ -41,7 +35,7 @@ export default function ManagePage() {
             <Box
                 data-qa = 'ManagerPage'    
                 sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <PipelineManageSearch setSelectedID={setSelectedID} />
+                <ManageSearch setSelectedID={setSelectedID} manageType={manageType} />
 
                 <Button
                     variant="contained"
