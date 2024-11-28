@@ -1,56 +1,56 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
 import {
-    Autocomplete,
-    TextField,
-    Box,
-    FormControl,
-} from '@mui/material';
-import { fetchPipelineUsers, fetchRepositoryUsers, fetchOrganizationUsers, fetchResourceUsers} from '../../../src/services/backendAPI.tsx';
+    getRepositories,
+    getPipelines,
+    getResources,
+    getOrganizations
+} from "../../state_management/selectors/apiSelector.ts";
+import { Repository, Pipeline, Resource, Organization } from '../../state_management/states/apiState.ts';
+import {Box, Autocomplete, FormControl, TextField} from "@mui/material";
 
-
+type ChosenItem = Repository | Pipeline | Resource | Organization;
 
 interface ManageSearchProps {
-    setSelectedItem: (item: { id: string } | null) => void;
-    manageType: string;
+    setSelectedItem: (item: { item: ChosenItem } | null) => void;
+    manageType: 'pipeline' | 'resource' | 'repository' | 'organization';
 }
 
-export default function ManageSearch({setSelectedItem, manageType }: ManageSearchProps) {
-    const [options, setOptions] = useState<{ id: string }[]>([]);
+export default function ManageSearch({ setSelectedItem, manageType }: ManageSearchProps) {
+    const [options, setOptions] = useState<{ item: ChosenItem }[]>([]);
+
+    // Fetch entities from Redux store
+    const repositories: Repository[] = useSelector(getRepositories);
+    const pipelines: Pipeline[] = useSelector(getPipelines);
+    const resources: Resource[] = useSelector(getResources);
+    const organizations: Organization[] = useSelector(getOrganizations);
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let data = [];
+                if (manageType === 'repository') {
+                    // Deduplicate repositories
+                    const uniqueRepositories = Array.from(
+                        new Set(repositories.map((item) => item.id)) // Using `id` as the unique key
+                    ).map((id) => {
+                        const repository = repositories.find((item) => item.id === id);
+                        return repository ? { item: repository } : null;
+                    }).filter((option): option is { item: Repository } => option !== null); // Remove null values
 
-                // Fetch data based on manageType
-                if (manageType === 'pipeline') {
-                    data = await fetchPipelineUsers();
-                } else if (manageType === 'resource') {
-                    data = await fetchResourceUsers();
-                } else if (manageType === 'repository') {
-                    data = await fetchRepositoryUsers();
-                } else if (manageType === 'organization') {
-                    data = await fetchOrganizationUsers();
-                } else {
-                    console.error('Unknown manage type:', manageType);
-                    return; // Exit early if manageType is invalid
+                    setOptions(uniqueRepositories); // Set deduplicated options
                 }
-
-                // Process data to get unique options
-                const uniqueItems = Array.from(
-                    new Set(data.map((item: { id: any }) => item.id)) // Assuming `id` is the key
-                ).map(id => ({ id: id as string }));
-
-                // Set options dynamically
-                setOptions(uniqueItems);
             } catch (error) {
-                console.error(`Error fetching data for ${manageType}:`, error);
+                console.error("Error processing repositories:", error);
+                setOptions([]);
             }
         };
-        fetchData();
-    }, [manageType]); 
 
+        fetchData();
+    }, [manageType, repositories]);
+    
+    
+    
     return (
         <Box
             data-qa = "pipeline-searchField"
@@ -64,7 +64,7 @@ export default function ManageSearch({setSelectedItem, manageType }: ManageSearc
                 <Autocomplete
                     disablePortal
                     options={options}
-                    getOptionLabel={(option) => `${manageType}Id: ${option.Id}`}
+                    getOptionLabel={(option) => `${manageType}Id: ${option.item?.id || 'Unnamed'}`}
                     onChange={(_event, newValue) => {
                         setSelectedItem(newValue);
                     }}

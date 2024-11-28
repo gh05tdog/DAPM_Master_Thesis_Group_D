@@ -11,7 +11,7 @@ import { Box,
          Typography 
        } from '@mui/material';
 
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 import { fetchPipelineUsers, 
          removeUserPipeline,
      
