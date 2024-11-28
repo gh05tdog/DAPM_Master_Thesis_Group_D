@@ -4,25 +4,25 @@ import {
     TextField,
     Box,
     FormControl,
+    
 } from '@mui/material';
-import { fetchPipelineUsers} from '../../../src/services/backendAPI.tsx';
+import { fetchPipelineUsers } from '../../../src/services/backendAPI.tsx';
 
 
 
 interface PipelineManageSearchProps {
     setSelectedPipeline: (pipeline: { pipelineId: string } | null) => void;
-    manageType: string;
 }
 
-export default function PipelineManageSearch({ setSelectedPipeline, manageType }: PipelineManageSearchProps) {
+export default function PipelineManageSearch({ setSelectedPipeline }: PipelineManageSearchProps) {
     const [pipelineOptions, setPipelineOptions] = useState<{ pipelineId: string }[]>([]);
 
-
+    // Fetch data using useEffect
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await fetchPipelineUsers();
-
+                // Extract unique pipelines from the data
                 const uniquePipelines = Array.from(new Set(data.map((item: { pipelineId: any; }) => item.pipelineId)))
                     .map(pipelineId => ({ pipelineId: pipelineId as string }));
                 setPipelineOptions(uniquePipelines);

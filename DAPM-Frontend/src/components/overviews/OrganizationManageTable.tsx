@@ -11,7 +11,7 @@ import {
     Button,
     Typography,
 } from '@mui/material';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 import { fetchOrganizationUsers, removeUserOrganization } from '../../../src/services/backendAPI.tsx';
 
 const ITEMS_PER_PAGE = 10;
@@ -85,8 +85,8 @@ export default function OrganizationManageTable({ selectedOrganization }: Organi
     }
 
     return (
-        <Box data-qa = "organizationManager-user-table"
-             sx={{ width: '100%', margin: 'auto', mt: 4 }}>
+        <Box data-qa="organizationManager-user-table"
+            sx={{ width: '100%', margin: 'auto', mt: 4 }}>
             {selectedOrganization ? (
                 <>
                     <TableContainer component={Paper}>
