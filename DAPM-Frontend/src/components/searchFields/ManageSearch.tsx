@@ -30,18 +30,19 @@ export default function ManageSearch({ setSelectedItem, manageType }: ManageSear
         const fetchData = async () => {
             try {
                 if (manageType === 'repository') {
-                    // Deduplicate repositories
-                    const uniqueRepositories = Array.from(
-                        new Set(repositories.map((item) => item.id)) // Using `id` as the unique key
-                    ).map((id) => {
-                        const repository = repositories.find((item) => item.id === id);
-                        return repository ? { item: repository } : null;
-                    }).filter((option): option is { item: Repository } => option !== null); // Remove null values
+                    try {
+                        const uniqueRepositories = Array.from(
+                            new Set(repositories.map((item) => item))
+                        ).map((repository) => ({ item: repository }));
 
-                    setOptions(uniqueRepositories); // Set deduplicated options
+                        setOptions(uniqueRepositories); 
+                    } catch (error) {
+                        console.error("Error processing repositories:", error);
+                        setOptions([]); 
+                    }
                 }
             } catch (error) {
-                console.error("Error processing repositories:", error);
+                console.error("Error processing request:", error);
                 setOptions([]);
             }
         };
@@ -64,7 +65,7 @@ export default function ManageSearch({ setSelectedItem, manageType }: ManageSear
                 <Autocomplete
                     disablePortal
                     options={options}
-                    getOptionLabel={(option) => `${manageType}Id: ${option.item?.id || 'Unnamed'}`}
+                    getOptionLabel={(option) => `${manageType}: ${option.item?.name || 'Unnamed'}`}
                     onChange={(_event, newValue) => {
                         setSelectedItem(newValue);
                     }}
