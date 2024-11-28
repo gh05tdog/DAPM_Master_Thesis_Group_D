@@ -47,9 +47,11 @@ export default function ManagePage()  {
         <
             ThemeProvider theme={theme}>
             <Header setMode={setMode} currentMode={mode} />
-
+            <Box data-qa = 'ManagerPage' 
+            sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding : '16px'}}
+            >
             <Box
-                data-qa = 'ManagerPage'    
+                   
                 sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <ManageSearch setSelectedItem={setSelectedItem} manageType={manageType} />
                 <ManagePopup open={openPopup} onClose={handleClosePopup} selectedID={selectedID} manageType={manageType}/>
@@ -62,8 +64,9 @@ export default function ManagePage()  {
             </Box>
             
             <Box data-qa = "pipeline-manager"
-                 sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
+                 sx={{ display: 'static', minHeight: '100dvh', padding: '0px' }}>
                 <ManagerList selectedID={selectedID} value={manageType} />
+            </Box>
             </Box>
         </ThemeProvider>
     )

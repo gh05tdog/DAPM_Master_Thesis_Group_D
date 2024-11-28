@@ -75,11 +75,11 @@ export default function ManageSearch({ setSelectedItem, manageType }: ManageSear
     
     return (
         <Box
-            data-qa = "pipeline-searchField"
+            data-qa = "manage-searchField"
             sx={{
                 width: '80%',
-                display: 'flex'
-
+                display: 'flex',
+                
             }}
         >
             <FormControl sx={{ flex: 1, bgcolor: 'white' }}>
