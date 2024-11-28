@@ -35,6 +35,7 @@ export default function DropDownManage() {
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
+
     };
 
     const handleClose = () => {
@@ -63,19 +64,19 @@ export default function DropDownManage() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Button sx={{ width: '100%' }} onClick={() => navigateToManagePage('pipeline')}>
+                <Button sx={{ width: '100%' }} onClick={() =>{ navigateToManagePage('pipeline'); handleClose()}}>
                     Pipeline
                 </Button>
                 <Divider />
-                <Button sx={{ width: '100%' }} onClick={() => navigateToManagePage('organization')}>
+                <Button sx={{ width: '100%' }} onClick={() => {navigateToManagePage('organization'); handleClose()}}>
                     Organization
                 </Button>
                 <Divider />
-                <Button sx={{ width: '100%' }} onClick={() => navigateToManagePage('repository')}>
+                <Button sx={{ width: '100%' }} onClick={() =>{ navigateToManagePage('repository'); handleClose()}}>
                     Repository
                 </Button>
                 <Divider />
-                <Button sx={{ width: '100%' }} onClick={() => navigateToManagePage('resource')}>
+                <Button sx={{ width: '100%' }} onClick={() => {navigateToManagePage('resource'); handleClose()} }>
                     Resource
                 </Button>
             </StyledMenu>
