@@ -52,8 +52,8 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
             console.log("Execution ID: ", executionId, "Status: ", status);
             const newExecution: Execution = {
                 id: executionId,
-                status: status,
-                executionTime: new Date().toISOString()
+                status: status.state,
+                executionTime: status.executionTime
             }
             formattedExecutions.push(newExecution);
         } 
@@ -113,13 +113,12 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
                                             executionTime={exe.executionTime} 
                                             isRunning={isRunning}
                                         />
-                               
                                     </TableRow>
                                 ))
                             ) : (
                                 <TableRow>
                                     No executions found
-                                </TableRow>
+                            </TableRow>
                             )}
                         </TableBody>
                     </Table>

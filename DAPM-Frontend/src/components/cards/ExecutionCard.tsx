@@ -11,13 +11,13 @@ interface ExecutionProps{
 
 const ExecutionCard: React.FC<ExecutionProps> = ({id, status, executionTime, isRunning}) => {
   return (
-    <TableRow>
+    <>
         <TableCell>{id}</TableCell>
         {isRunning ? <TableCell></TableCell> : <></>}
         <TableCell>{status}</TableCell>
         <TableCell>{executionTime}</TableCell>
         <Button variant="outlined" color="primary" onClick={() => console.log("Eww")}>Start Execution</Button>
-    </TableRow>
+    </>
   )
 }
 
