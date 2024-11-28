@@ -6,7 +6,15 @@ import { Box } from "@mui/material";
 import ManagerList from '../components/lists/ManagerList.tsx';
 import {createTheme} from "@mui/material/styles";
 import { useSearchParams } from 'react-router-dom';
+import {PipelineData} from "../state_management/states/pipelineState.js";
+import {Organization, Repository, Resource} from "../state_management/states/apiState.js";
 
+type SelectedItem =
+    | { repository: Repository }
+    | { pipeline: PipelineData }
+    | { resource: Resource }
+    | { organization: Organization }
+    | null;
 
 export default function ManagePage() {
     
@@ -15,7 +23,7 @@ export default function ManagePage() {
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
     
-    const [selectedID, setSelectedID] = useState<{ ID: string } | null>(null);
+    const [selectedItem, setSelectedItem] = useState<{ repository:Repository } | null>(null);
 
     const handleOpenPopup = () => {
         setOpenPopup(true);
@@ -35,7 +43,7 @@ export default function ManagePage() {
             <Box
                 data-qa = 'ManagerPage'    
                 sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <ManageSearch setSelectedID={setSelectedID} manageType={manageType} />
+                <ManageSearch setSelectedItem={setSelectedItem} manageType={manageType} />
 
                 <Button
                     variant="contained"
@@ -45,12 +53,11 @@ export default function ManagePage() {
                 >
                     Add user
                 </Button>
-                {/*  <PipelineMangePopup open={openPopup} onClose={handleClosePopup} selectedPipeline={selectedID} />  */}
             </Box>
             
             <Box data-qa = "pipeline-manager"
                  sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
-                <ManagerList selectedID={selectedID} value={manageType} />
+                <ManagerList selectedID={selectedItem?.repository} value={manageType} />
             </Box>
         </ThemeProvider>
     )

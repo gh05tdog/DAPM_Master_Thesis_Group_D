@@ -6,10 +6,11 @@ import {
     getResources,
     getOrganizations
 } from "../../state_management/selectors/apiSelector.ts";
-import { Repository, Pipeline, Resource, Organization } from '../../state_management/states/apiState.ts';
+import { Repository, Resource, Organization } from '../../state_management/states/apiState.ts';
+import { PipelineData } from '../../state_management/states/pipelineState.ts';
 import {Box, Autocomplete, FormControl, TextField} from "@mui/material";
 
-type ChosenItem = Repository | Pipeline | Resource | Organization;
+type ChosenItem = Repository | PipelineData | Resource | Organization;
 
 interface ManageSearchProps {
     setSelectedItem: (item: { item: ChosenItem } | null) => void;
@@ -19,9 +20,8 @@ interface ManageSearchProps {
 export default function ManageSearch({ setSelectedItem, manageType }: ManageSearchProps) {
     const [options, setOptions] = useState<{ item: ChosenItem }[]>([]);
 
-    // Fetch entities from Redux store
     const repositories: Repository[] = useSelector(getRepositories);
-    const pipelines: Pipeline[] = useSelector(getPipelines);
+    const pipelines: PipelineData[] = useSelector(getPipelines);
     const resources: Resource[] = useSelector(getResources);
     const organizations: Organization[] = useSelector(getOrganizations);
 
@@ -29,26 +29,47 @@ export default function ManageSearch({ setSelectedItem, manageType }: ManageSear
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (manageType === 'repository') {
-                    try {
-                        const uniqueRepositories = Array.from(
+                let uniqueOptions: { item: ChosenItem }[] = [];
+
+                switch (manageType) {
+                    case 'pipeline':
+                        uniqueOptions = Array.from(
+                            new Set(pipelines.map((item) => item))
+                        ).map((pipeline) => ({ item: pipeline }));
+                        break;
+
+                    case 'resource':
+                        uniqueOptions = Array.from(
+                            new Set(resources.map((item) => item))
+                        ).map((resource) => ({ item: resource }));
+                        break;
+
+                    case 'repository':
+                        uniqueOptions = Array.from(
                             new Set(repositories.map((item) => item))
                         ).map((repository) => ({ item: repository }));
+                        break;
 
-                        setOptions(uniqueRepositories); 
-                    } catch (error) {
-                        console.error("Error processing repositories:", error);
-                        setOptions([]); 
-                    }
+                    case 'organization':
+                        uniqueOptions = Array.from(
+                            new Set(organizations.map((item) => item))
+                        ).map((organization) => ({ item: organization }));
+                        break;
+
+                    default:
+                        console.error("Invalid manage type:", manageType);
+                        break;
                 }
+
+                setOptions(uniqueOptions);
             } catch (error) {
-                console.error("Error processing request:", error);
+                console.error(`Error processing ${manageType}:`, error);
                 setOptions([]);
             }
         };
 
         fetchData();
-    }, [manageType, repositories]);
+    }, [manageType, pipelines, resources, repositories, organizations]);
     
     
     

@@ -39,6 +39,7 @@ interface User {
 
 interface IDInterface {
     ID: string;
+    Name: string;
 }
 
 interface ManagerListProps {
@@ -151,7 +152,7 @@ export default function ManagerList({ selectedID, value }: ManagerListProps) {
                 </>
             ) : (
                 <Typography variant="h6" align="center">
-                    Please select an available {value || "item"} to view its users.
+                    Please select an available {value} to view its users.
                 </Typography>
             )}
         </Box>
