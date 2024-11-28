@@ -19,41 +19,43 @@ interface ManageSearchProps {
 
 export default function ManageSearch({ setSelectedItem, manageType }: ManageSearchProps) {
     const [options, setOptions] = useState<{ item: ChosenItem }[]>([]);
+    const [selectedOption, setSelectedOption] = useState<{ item: ChosenItem } | null>(null);
 
-    const repositories: Repository[] = useSelector(getRepositories);
-    const pipelines: PipelineData[] = useSelector(getPipelines);
-    const resources: Resource[] = useSelector(getResources);
-    const organizations: Organization[] = useSelector(getOrganizations);
-
+    const repositories: Repository[] = useSelector(getRepositories) || [];
+    const pipelines: PipelineData[] = useSelector(getPipelines) || [];
+    const resources: Resource[] = useSelector(getResources) || [];
+    const organizations: Organization[] = useSelector(getOrganizations) || [];
+    
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
                 let uniqueOptions: { item: ChosenItem }[] = [];
+
+                const removeDuplicates = <T extends { id?: string | number }>(items: T[]) => {
+                    const seen = new Map<string | number, T>();
+                    items.forEach((item) => {
+                        const key = item.id ?? JSON.stringify(item);
+                        if (!seen.has(key)) {
+                            seen.set(key, item);
+                        }
+                    });
+                    return Array.from(seen.values());
+                };
 
                 switch (manageType) {
                     case 'pipeline':
-                        uniqueOptions = Array.from(
-                            new Set(pipelines.map((item) => item))
-                        ).map((pipeline) => ({ item: pipeline }));
+                        uniqueOptions = removeDuplicates(pipelines).map((pipeline) => ({ item: pipeline }));
                         break;
 
                     case 'resource':
-                        uniqueOptions = Array.from(
-                            new Set(resources.map((item) => item))
-                        ).map((resource) => ({ item: resource }));
+                        uniqueOptions = removeDuplicates(resources).map((resource) => ({ item: resource }));
                         break;
 
                     case 'repository':
-                        uniqueOptions = Array.from(
-                            new Set(repositories.map((item) => item))
-                        ).map((repository) => ({ item: repository }));
+                        uniqueOptions = removeDuplicates(repositories).map((repository) => ({ item: repository }));
                         break;
 
                     case 'organization':
-                        uniqueOptions = Array.from(
-                            new Set(organizations.map((item) => item))
-                        ).map((organization) => ({ item: organization }));
+                        uniqueOptions = removeDuplicates(organizations).map((organization) => ({ item: organization }));
                         break;
 
                     default:
@@ -62,17 +64,21 @@ export default function ManageSearch({ setSelectedItem, manageType }: ManageSear
                 }
 
                 setOptions(uniqueOptions);
-            } catch (error) {
-                console.error(`Error processing ${manageType}:`, error);
-                setOptions([]);
-            }
-        };
-
-        fetchData();
+                setSelectedOption(null);
+                setSelectedItem(null);
+                console.log("Options:", uniqueOptions);
+                console.log("ManageType:", manageType);
+           
     }, [manageType, pipelines, resources, repositories, organizations]);
-    
-    
-    
+
+
+
+
+    const handleSelection = (_event: any, newValue: { item: ChosenItem } | null) => {
+        setSelectedOption(newValue);
+        setSelectedItem(newValue);
+    };
+
     return (
         <Box
             data-qa = "manage-searchField"
@@ -85,18 +91,15 @@ export default function ManageSearch({ setSelectedItem, manageType }: ManageSear
             <FormControl sx={{ flex: 1, bgcolor: 'white' }}>
                 <Autocomplete
                     disablePortal
+                    value={selectedOption}
                     options={options}
                     getOptionLabel={(option) => `${manageType}: ${option.item?.name || 'Unnamed'}`}
-                    onChange={(_event, newValue) => {
-                        setSelectedItem(newValue);
-                    }}
+                    onChange={handleSelection}
                     renderInput={(params) => (
                         <TextField {...params} label={`Select ${manageType}`} variant="outlined" />
                     )}
                 />
             </FormControl>
-
-
         </Box>
     );
 }
