@@ -1,13 +1,6 @@
 import { addEdge as addFlowEdge, applyEdgeChanges, applyNodeChanges, Connection, Edge, EdgeChange, Node, NodeChange } from "reactflow";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  BaseInstantiationData, DataSinkInstantiationData, DataSourceInstantiationData,
-  EdgeData,
-  NodeData,
-  NodeState, OperatorInstantiationData, OrganizationInstantiationData,
-  PipelineData,
-  PipelineState
-} from "../states/pipelineState.ts";
+import { EdgeData, NodeData, NodeState, PipelineData, PipelineState } from "../states/pipelineState.ts";
 import { Organization, Repository } from "../states/apiState.ts";
 import {fetchPipeline, fetchRepositoryPipelines} from "../../services/backendAPI.tsx";
 
@@ -25,7 +18,7 @@ const takeSnapshot = (state: PipelineState) => {
 
 export const pipelineThunk = createAsyncThunk<
     PipelineData[],
-    { organizations: Organization[]; repositories: Repository[] }
+    { organizations: any[]; repositories: any[] }
 >(
     "pipelines/fetchPipelines",
     async ({ organizations, repositories }, thunkAPI) => {
@@ -45,10 +38,11 @@ export const pipelineThunk = createAsyncThunk<
                               pipeline.id
                           );
 
-                          console.log("PipelineData: " + JSON.stringify(pipelineData))
-                          // Transform fetched pipeline details into the required structure
-                          return pipelineData.result.pipelines.map((pipelineDetails: any) => {
-                            const transformedPipeline: PipelineData = {
+                          // Log pipeline data before transformation
+                          console.log("Pipeline Data (before transformation):", pipelineData.result.pipelines);
+
+                          const transformedPipelines = pipelineData.result.pipelines.map((pipelineDetails: any) => {
+                            const transformedPipeline = {
                               id: pipelineDetails.id,
                               name: pipelineDetails.name,
                               status: "unknown",
@@ -57,16 +51,20 @@ export const pipelineThunk = createAsyncThunk<
                                 past: [],
                                 future: [],
                               },
-                            };  
-                            
-                            console.log("transformedPipeline: " + JSON.stringify( transformedPipeline))
+                            };
+
+                            // Log pipeline data after transformation
+                            console.log("Pipeline Data (after transformation):", transformedPipeline);
+
                             return transformedPipeline;
                           });
+
+                          return transformedPipelines;
                         }
                     );
 
-                    return Promise.all(pipelineDetailsPromises).then((pipelineDetailsArray) =>
-                        pipelineDetailsArray.flat()
+                    return Promise.all(pipelineDetailsPromises).then((detailsArray) =>
+                        detailsArray.flat()
                     );
                   }
               );
@@ -84,79 +82,40 @@ export const pipelineThunk = createAsyncThunk<
     }
 );
 
-// Helper function to transform pipeline data
-function transformPipelineData(pipeline: any): NodeState {
-  const nodes: Node<NodeData>[] = pipeline.nodes.map((node: any) => ({
+// Transform pipeline data to match the expected state structure
+const transformPipelineData = (pipeline: any) => ({
+  nodes: pipeline.nodes.map((node: any) => ({
     id: node.id,
     type: node.type,
-    position: {
-      x: node.position.x,
-      y: node.position.y,
+    position: node.position,
+    data: {
+      label: node.data.label,
+      templateData: {
+        sourceHandles: node.data.templateData.sourceHandles.map((handle: any) => ({
+          id: handle.id,
+          type: handle.type,
+        })),
+        targetHandles: node.data.templateData.targetHandles.map((handle: any) => ({
+          id: handle.id,
+          type: handle.type,
+        })),
+        hint: node.data.templateData.hint,
+      },
+      instantiationData: node.data.instantiationData,
     },
     width: node.width,
     height: node.height,
-    data: transformNodeData(node),
-  }));
-
-  const edges: Edge<EdgeData>[] = pipeline.edges.map((edge: any) => ({
+  })),
+  edges: pipeline.edges.map((edge: any) => ({
     id: `${edge.source}-${edge.sourceHandle}-${edge.target}-${edge.targetHandle}`,
     source: edge.source,
     target: edge.target,
     sourceHandle: edge.sourceHandle,
     targetHandle: edge.targetHandle,
-  }));
+  })),
+});
 
-  return { nodes, edges };
-}
 
-// Helper function to transform node data
-function transformNodeData(node: any): NodeData {
-  const baseData: NodeData = {
-    label: node.data.label,
-    templateData: {
-      sourceHandles: node.data.templateData.sourceHandles.map((handle: any) => ({
-        id: handle.id,
-        type: handle.type,
-      })),
-      targetHandles: node.data.templateData.targetHandles.map((handle: any) => ({
-        id: handle.id,
-        type: handle.type,
-      })),
-    },
-    instantiationData: transformInstantiationData(node.type, node.data.instantiationData),
-  };
-
-  return baseData;
-}
-
-// Helper function to transform instantiation data based on node type
-function transformInstantiationData(type: string, instantiationData: any): BaseInstantiationData {
-  switch (type) {
-    case "dataSource":
-      return {
-        resource: instantiationData.resource || {},
-      } as DataSourceInstantiationData;
-
-    case "dataSink":
-      return {
-        repository: {id: instantiationData.repository.repositoryId, name: instantiationData.repository.name, organizationId: instantiationData.repository.organizationId} || {},
-        name: instantiationData.repository.name || '',
-      } as DataSinkInstantiationData;
-
-    case "operator":
-      return {
-        algorithm: instantiationData.algorithm || {},
-      } as OperatorInstantiationData;
-
-    case "organization":
-      return {
-        organization: {name: instantiationData.organization.name, id: instantiationData.organization.organizationId, apiUrl: instantiationData.organization.domain} || {},
-      } as OrganizationInstantiationData;
-
-    default:
-      return {};
-  }
-}
 
 const pipelineSlice = createSlice({
   name: 'pipelines',
