@@ -45,6 +45,8 @@ export const pipelineThunk = createAsyncThunk<
                     return pipelineData.result.pipelines.map((pipelineDetails:PipelineData) => ({
                       id: pipelineDetails.id,
                       name: pipelineDetails.name,
+                      orgId: org.id,
+                      repoId: repo.id,
                       status: "unknown",
                       pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
                       history: { past: [], future: [] },
