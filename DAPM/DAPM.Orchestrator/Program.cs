@@ -69,6 +69,8 @@ builder.Services.AddQueueMessageConsumer<TransferDataActionRequestConsumer, Tran
 builder.Services.AddQueueMessageConsumer<ExecuteOperatorActionRequestConsumer, ExecuteOperatorActionRequest>();
 builder.Services.AddQueueMessageConsumer<PipelineStartCommandRequestConsumer, PipelineStartCommandRequest>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusRequestConsumer, GetPipelineExecutionStatusRequest>();
+builder.Services.AddQueueMessageConsumer<GetPipelineExecutionsRequestConsumer, GetPipelineExecutionsRequest>();
+
 
 
 
@@ -104,8 +106,10 @@ builder.Services.AddQueueMessageConsumer<GetEntriesFromOrgResultConsumer, GetEnt
 // Pipeline Execution
 builder.Services.AddQueueMessageConsumer<ActionResultReceivedConsumer, ActionResultReceivedMessage>();
 builder.Services.AddQueueMessageConsumer<CreatePipelineExecutionResultConsumer, CreatePipelineExecutionResultMessage>();
+builder.Services.AddQueueMessageConsumer<GetPipelineExecutionsResultConsumer, GetPipelineExecutionsResultMessage>();
 builder.Services.AddQueueMessageConsumer<CommandEnqueuedConsumer, CommandEnqueuedMessage>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusResultConsumer, GetPipelineExecutionStatusResultMessage>();
+
 
 builder.Services.AddSingleton<IOrchestratorEngine, OrchestratorEngine>();
 builder.Services.AddSingleton<IIdentityService, IdentityService>();

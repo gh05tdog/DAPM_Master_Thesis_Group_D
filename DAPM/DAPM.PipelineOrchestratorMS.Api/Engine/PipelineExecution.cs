@@ -32,6 +32,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         private Dictionary<Guid, Step> _stepsDictionary;
 
         private PipelineExecutionState _state;
+        private PipelineDTO _pipelineDTO;
 
 
 
@@ -39,7 +40,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         private Stopwatch _stopwatch;
         private List<Guid> _currentSteps;
 
-        public PipelineExecution(Guid id, Pipeline pipelineDto, IServiceProvider serviceProvider) 
+        public PipelineExecution(Guid id, PipelineDTO pipelineDto, IServiceProvider serviceProvider) 
         {
             _id = id;
             _nodes = new Dictionary<Guid, EngineNode>();
@@ -51,8 +52,9 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             _currentSteps = new List<Guid>();
             _serviceProvider = serviceProvider;
             _logger = _serviceProvider.GetService<ILogger<PipelineExecution>>();
+            _pipelineDTO = pipelineDto;
 
-            _pipeline = pipelineDto;
+            _pipeline = pipelineDto.Pipeline;
             _state = PipelineExecutionState.NotStarted;
 
             InitGraph();
@@ -71,20 +73,31 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         public PipelineExecutionStatus GetStatus()
         {
             var currentStepsStatus = new List<StepStatus>();
+            var timeElapsed = new TimeSpan(0);
             foreach (var stepId in _currentSteps)
             {
                 var step = _stepsDictionary[stepId];
+                if(step == null){
+                    continue;
+                }
                 currentStepsStatus.Add(step.GetStatus());
             }
+            
+            _logger.LogInformation($"Pipeline {_id} is in state {_state}");
+            _logger.LogInformation("Current steps status:" + currentStepsStatus.Count);
+            //_logger.LogInformation("Total steps:" + _stopwatch.Elapsed);
 
-
-            return new PipelineExecutionStatus()
+            if(_stopwatch != null) {
+                timeElapsed = _stopwatch.Elapsed;
+            }
+            return new PipelineExecutionStatus
             {
-                //ExecutionTime = _stopwatch.Elapsed,
-                //CurrentSteps = currentStepsStatus,
+                ExecutionTime = timeElapsed,
+                CurrentSteps = currentStepsStatus,
                 State = _state
             };
         }
+
 
         public void ProcessActionResult(ActionResultDTO actionResult)
         {
@@ -100,6 +113,11 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             {
                 _logger.LogInformation($"There was an error in step {actionResult.StepId}");
             }
+        }
+
+        public Guid GetPipelineId()
+        {
+            return _pipelineDTO.Id;
         }
 
         #endregion

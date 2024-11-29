@@ -1,4 +1,4 @@
-﻿using DAPM.ClientApi.Services.Interfaces;
+using DAPM.ClientApi.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -8,22 +8,22 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ClientApi.Consumers
 {
-    public class GetPipelineExecutionStatusProcessResultConsumer : IQueueConsumer<GetPipelineExecutionStatusRequestResult>
+    public class GetPipelineExecutionsProcessResultConsumer : IQueueConsumer<GetPipelineExecutionsRequestResult>
     {
-        private ILogger<GetPipelineExecutionStatusProcessResultConsumer> _logger;
+        private ILogger<GetPipelineExecutionsProcessResultConsumer> _logger;
         private readonly ITicketService _ticketService;
-        public GetPipelineExecutionStatusProcessResultConsumer(ILogger<GetPipelineExecutionStatusProcessResultConsumer> logger, ITicketService ticketService)
+        public GetPipelineExecutionsProcessResultConsumer(ILogger<GetPipelineExecutionsProcessResultConsumer> logger, ITicketService ticketService)
         {
             _logger = logger;
             _ticketService = ticketService;
         }
 
-        public Task ConsumeAsync(GetPipelineExecutionStatusRequestResult message)
+        public Task ConsumeAsync(GetPipelineExecutionsRequestResult message)
         {
-            _logger.LogInformation("GetPipelineExecutionStatusRequestResult received");
+            _logger.LogInformation("GetPipelineExecutionsRequestResult received");
 
 
-            var status = message.Status;
+            var executions = message.Executions;
 
             // Objects used for serialization
             JToken result = new JObject();
@@ -31,10 +31,10 @@ namespace DAPM.ClientApi.Consumers
 
 
             //Serialization
-            JToken statusJson = JToken.FromObject(status, serializer);
-            result["status"] = statusJson;
+            JToken executionsJson = JToken.FromObject(executions, serializer);
+            result["executions"] = executionsJson;
 
-            _logger.LogInformation($"Pipeline execution status: {message.Status.State}");
+            _logger.LogInformation($"Pipeline executions: {result}");
             // Update resolution
 
             _ticketService.UpdateTicketResolution(message.TicketId, result);

@@ -28,7 +28,8 @@ namespace DAPM.Orchestrator
         }
 
         public OrchestratorProcess GetProcess(Guid processId)
-        {
+        {   
+            _logger.LogInformation("ORCHESTRATOR ENGINE getting process with id " + processId.ToString());
             return _processes[processId];
         }
 
@@ -139,6 +140,16 @@ namespace DAPM.Orchestrator
             var getPipelineExecutionStatusProcess = new GetPipelineExecutionStatusProcess(this, _serviceProvider, ticketId, processId, executionId);
             _processes[processId] = getPipelineExecutionStatusProcess;
             getPipelineExecutionStatusProcess.StartProcess();
+        }
+
+        public void StartGetPipelineExecutionsProcess(Guid ticketId, Guid pipelineId)
+        {
+            _logger.LogInformation("ORCHESTRATOR ENGINE starting get pipeline executions process");
+            var processId = Guid.NewGuid();
+            var getPipelineExecutionsProcess = new GetPipelineExecutionsProcess(this, _logger, _serviceProvider, ticketId, processId, pipelineId);
+            _processes[processId] = getPipelineExecutionsProcess;
+            getPipelineExecutionsProcess.StartProcess();
+            _logger.LogInformation("ORCHESTRATOR ENGINE successfully started process with id " + processId.ToString()); 
         }
 
         #endregion

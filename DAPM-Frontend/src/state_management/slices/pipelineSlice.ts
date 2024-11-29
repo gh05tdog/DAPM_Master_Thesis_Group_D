@@ -45,7 +45,8 @@ export const pipelineThunk = createAsyncThunk<
                             const transformedPipeline = {
                               id: pipelineDetails.id,
                               name: pipelineDetails.name,
-                              status: "unknown",
+                              orgId: org.id,
+                      repoId: repo.id,status: "unknown",
                               pipeline: transformPipelineData(pipelineDetails.pipeline),
                               history: {
                                 past: [],
