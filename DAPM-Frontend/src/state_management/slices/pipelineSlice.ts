@@ -17,65 +17,105 @@ const takeSnapshot = (state: PipelineState) => {
 
 
 export const pipelineThunk = createAsyncThunk<
-  PipelineData[],
-  { organizations: Organization[]; repositories: Repository[] }
+    PipelineData[],
+    { organizations: any[]; repositories: any[] }
 >(
-  "pipelines/fetchPipelines",
-  async ({ organizations, repositories }, thunkAPI) => {
-    try {
-      const pipelinePromises: Promise<any>[] = [];
+    "pipelines/fetchPipelines",
+    async ({ organizations, repositories }, thunkAPI) => {
+      try {
+        const pipelinePromises: Promise<PipelineData[]>[] = [];
 
-      // Iterate through organizations and repositories to gather all the promises
-      for (const org of organizations) {
-        for (const repo of repositories) {
-          if (org.id === repo.organizationId) {
-            // Fetch pipelines concurrently for each repo
-            const pipelinePromise = fetchRepositoryPipelines(org.id, repo.id).then(
-              (pipes) => {
-                // Iterate over pipelines returned and fetch details concurrently
-                const pipelineDetailsPromises = pipes.result.pipelines.map(
-                  async (pipeline:PipelineData) => {
-                    const pipelineData = await fetchPipeline(
-                      org.id,
-                      repo.id,
-                      pipeline.id
+        for (const org of organizations) {
+          for (const repo of repositories) {
+            if (org.id === repo.organizationId) {
+              const pipelinePromise = fetchRepositoryPipelines(org.id, repo.id).then(
+                  (pipes) => {
+                    const pipelineDetailsPromises = pipes.result.pipelines.map(
+                        async (pipeline: PipelineData) => {
+                          const pipelineData = await fetchPipeline(
+                              org.id,
+                              repo.id,
+                              pipeline.id
+                          );
+
+                          // Log pipeline data before transformation
+                          console.log("Pipeline Data (before transformation):", pipelineData.result.pipelines);
+
+                          const transformedPipelines = pipelineData.result.pipelines.map((pipelineDetails: any) => {
+                            const transformedPipeline = {
+                              id: pipelineDetails.id,
+                              name: pipelineDetails.name,
+                              orgId: org.id,
+                      repoId: repo.id,status: "unknown",
+                              pipeline: transformPipelineData(pipelineDetails.pipeline),
+                              history: {
+                                past: [],
+                                future: [],
+                              },
+                            };
+
+                            // Log pipeline data after transformation
+                            console.log("Pipeline Data (after transformation):", transformedPipeline);
+
+                            return transformedPipeline;
+                          });
+
+                          return transformedPipelines;
+                        }
                     );
 
-                    // Map over pipeline details and return the pipeline data
-                    return pipelineData.result.pipelines.map((pipelineDetails:PipelineData) => ({
-                      id: pipelineDetails.id,
-                      name: pipelineDetails.name,
-                      orgId: org.id,
-                      repoId: repo.id,
-                      status: "unknown",
-                      pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
-                      history: { past: [], future: [] },
-                    }));
+                    return Promise.all(pipelineDetailsPromises).then((detailsArray) =>
+                        detailsArray.flat()
+                    );
                   }
-                );
+              );
 
-                // Wait for all pipeline detail promises to resolve
-                return Promise.all(pipelineDetailsPromises).then((pipelineDetailsArray) =>
-                  pipelineDetailsArray.flat() // Flatten the array of pipelines
-                );
-              }
-            );
-
-            pipelinePromises.push(pipelinePromise);
+              pipelinePromises.push(pipelinePromise);
+            }
           }
         }
+
+        const pipelines = await Promise.all(pipelinePromises);
+        return pipelines.flat();
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
       }
-
-      // Wait for all pipeline fetching promises to resolve
-      const pipelines = await Promise.all(pipelinePromises);
-
-      // Flatten the results of all pipeline fetches
-      return pipelines.flat();
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
     }
-  }
 );
+
+// Transform pipeline data to match the expected state structure
+const transformPipelineData = (pipeline: any) => ({
+  nodes: pipeline.nodes.map((node: any) => ({
+    id: node.id,
+    type: node.type,
+    position: node.position,
+    data: {
+      label: node.data.label,
+      templateData: {
+        sourceHandles: node.data.templateData.sourceHandles.map((handle: any) => ({
+          id: handle.id,
+          type: handle.type,
+        })),
+        targetHandles: node.data.templateData.targetHandles.map((handle: any) => ({
+          id: handle.id,
+          type: handle.type,
+        })),
+        hint: node.data.templateData.hint,
+      },
+      instantiationData: node.data.instantiationData,
+    },
+    width: node.width,
+    height: node.height,
+  })),
+  edges: pipeline.edges.map((edge: any) => ({
+    id: `${edge.source}-${edge.sourceHandle}-${edge.target}-${edge.targetHandle}`,
+    source: edge.source,
+    target: edge.target,
+    sourceHandle: edge.sourceHandle,
+    targetHandle: edge.targetHandle,
+  })),
+});
+
 
 
 const pipelineSlice = createSlice({

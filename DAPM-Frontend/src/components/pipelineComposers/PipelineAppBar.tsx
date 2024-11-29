@@ -85,53 +85,97 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
     const requestData = {
       name: pipelineName,
       pipeline: {
-        nodes: flowData?.nodes?.filter(node => node.type === 'dataSource').map(node => node as Node<DataSourceNodeData>).map(node => {
-          return {
+        nodes: flowData?.nodes?.map((node, index) => {
+          console.log(`Processing node #${index + 1} - ID: ${node.id}, Type: ${node.type}`);
+
+          // Ensure handles have a `type` field
+          const sourceHandles = (node.data?.templateData?.sourceHandles || []).map((handle) => ({
+            id: handle.id,
+            type: handle.type || "default",
+          }));
+
+          const targetHandles = (node.data?.templateData?.targetHandles || []).map((handle) => ({
+            id: handle.id,
+            type: handle.type || "default",
+          }));
+
+          const nodeData = {
+            id: node.id,
             type: node.type,
+            width: node.width || 100,
+            height: node.height || 100,
+            position: {
+              x: node.position?.x || 0,
+              y: node.position?.y || 0,
+            },
             data: {
-              ...node.data,
+              label: node.label || "",
               instantiationData: {
                 resource: {
-                  //...node?.data?.instantiationData.resource,
-                  organizationId: node?.data?.instantiationData.resource?.organizationId,
-                  repositoryId: node?.data?.instantiationData.resource?.repositoryId,
-                  resourceId: node?.data?.instantiationData.resource?.id,
+                  organizationId: node?.data?.instantiationData?.resource?.organizationId,
+                  repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
+                  resourceId: node?.data?.instantiationData?.resource?.id,
+                  name: node?.data?.instantiationData?.resource?.name,
                 },
-              }
-            },
-            width: 100, height: 100, position: { x: 100, y: 100 }, id: node.id, label: "",
-          } as any
-        }).concat(
-          flowData?.nodes?.filter(node => node.type === 'operator').map(node => node as Node<OperatorNodeData>).map(node => {
-            return {
-              type: node.type, data: {
-                ...node.data,
-                instantiationData: {
-                  resource: {
-                    //...node?.data?.instantiationData.algorithm,
-                    organizationId: node?.data?.instantiationData.algorithm?.organizationId,
-                    repositoryId: node?.data?.instantiationData.algorithm?.repositoryId,
-                    resourceId: node?.data?.instantiationData.algorithm?.id,
-                  }
-                }
+                repository: {
+                  repository: {id: node?.data?.instantiationData?.repository?.id,
+                    name: node?.data?.instantiationData?.repository?.name,
+                    organizationId: node?.data?.instantiationData?.repository?.organizationId
+                  },
+                  name: node?.data?.instantiationData?.repository?.name,
+                },
+                organization: {
+                  id: node?.data?.instantiationData?.organization?.id,
+                  name: node?.data?.instantiationData?.organization?.name,
+                  domain: node?.data?.instantiationData?.organization?.domain,
+                },
+                algorithm: {
+                  organizationId: node?.data?.instantiationData?.algorithm?.organizationId,
+                  repositoryId: node?.data?.instantiationData?.algorithm?.repositoryId,
+                  resourceId: node?.data?.instantiationData?.algorithm?.id,
+                  name: node?.data?.instantiationData?.algorithm?.name,
+                },
               },
-              width: 100, height: 100, position: { x: 100, y: 100 }, id: node.id, label: "",
-            } as any
-          })
-        ).concat(dataSinks),
-        edges: edges.map(edge => {
-          return { sourceHandle: edge.sourceHandle, targetHandle: edge.targetHandle }
-        })
-      }
-    }
+              templateData: {
+                sourceHandles,
+                targetHandles,
+                hint: node.data?.templateData?.hint || "",
+              },
+            },
+          };
 
-    console.log(JSON.stringify(requestData))
+          return nodeData;
+        }),
 
-    const selectedOrg = organizations[0]
-    const selectedRepo = repositories.filter(repo => repo.organizationId === selectedOrg.id)[0]
+        edges: flowData?.edges?.map((edge, index) => {
+          console.log(`Processing edge #${index + 1} - Source: ${edge.source}, Target: ${edge.target}`);
+          return {
+            source: edge.source,
+            target: edge.target,
+            sourceHandle: edge.sourceHandle,
+            targetHandle: edge.targetHandle,
+          };
+        }),
+      },
+    };
+    
+    const selectedOrg = organizations[0];
+
+    const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
+
+    const pipelineDTO = {
+      organizationId: selectedOrg.id,
+      repositoryId: selectedRepo?.id,
+      id: pipelineId || '',
+      ...requestData,
+    };
+
+    // Log the entire request payload before sending
+    console.log("Final Pipeline DTO:", JSON.stringify(pipelineDTO, null, 2));
     
     const executionId = await putExecution(selectedOrg.id, selectedRepo.id, pipelineId)
-    await putCommandStart(selectedOrg.id, selectedRepo.id, pipelineId, executionId)
+    console.log("executionId: ", executionId)
+    //await putCommandStart(selectedOrg.id, selectedRepo.id, pipelineId, executionId)
   }
 
   //Post pipeline to backend
@@ -171,6 +215,25 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
                   organizationId: node?.data?.instantiationData?.resource?.organizationId,
                   repositoryId: node?.data?.instantiationData?.resource?.repositoryId,
                   resourceId: node?.data?.instantiationData?.resource?.id,
+                  name: node?.data?.instantiationData?.resource?.name,
+                },
+                repository: {
+                  repository: {id: node?.data?.instantiationData?.repository?.id,
+                    name: node?.data?.instantiationData?.repository?.name,
+                    organizationId: node?.data?.instantiationData?.repository?.organizationId
+                  },
+                  name: node?.data?.instantiationData?.repository?.name,
+                },
+                organization: {
+                    id: node?.data?.instantiationData?.organization?.id,
+                    name: node?.data?.instantiationData?.organization?.name,
+                    domain: node?.data?.instantiationData?.organization?.domain,
+                },
+                algorithm: {
+                    organizationId: node?.data?.instantiationData?.algorithm?.organizationId,
+                    repositoryId: node?.data?.instantiationData?.algorithm?.repositoryId,
+                    resourceId: node?.data?.instantiationData?.algorithm?.id,
+                    name: node?.data?.instantiationData?.algorithm?.name,
                 },
               },
               templateData: {
@@ -228,10 +291,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
       console.error("Error saving pipeline:", error);
     }
   };
-
-
-
-
+  
   return (
     <AppBar position="fixed">
       <Toolbar sx={{ flexGrow: 1 }}>
@@ -255,7 +315,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
           )}
         </Box>
         <Button onClick={() => generateJson()}>
-          <Typography variant="body1" sx={{ color: "white" }}>Deploy pipeline</Typography>
+          <Typography variant="body1" sx={{ color: "white" }}>Create Execution</Typography>
         </Button>
         <Button onClick={savePipeline}>
         <Typography variant="body1" sx={{ color: "white" }}>Save pipeline</Typography>

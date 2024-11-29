@@ -22,7 +22,17 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
 
         public Guid CreatePipelineExecutionInstance(PipelineDTO pipelineDTO)
         {
+            //outout the pipeline
             Guid guid = Guid.NewGuid();
+            
+            foreach (var node in pipelineDTO.Pipeline.Nodes)
+            {
+                _logger.LogInformation($"Node: " + node?.Type);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Resource.Name);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Repository.name);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Organization.name);
+                _logger.LogInformation($"Node: " + node?.Data?.InstantiationData?.Algorithm.Name);
+            }
 
             var pipelineExecution = new PipelineExecution(guid, pipelineDTO, _serviceProvider);
             

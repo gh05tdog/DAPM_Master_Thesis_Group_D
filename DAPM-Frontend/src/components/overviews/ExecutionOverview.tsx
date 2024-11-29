@@ -36,10 +36,14 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
         
     };
 
-    const fetchData = async () => { 
-
-        var pipelineExecutions = await fetchPipelineExecutions(pipelineOrgId, pipelineRepoId, parentPipelineId);
-
+    const fetchData = async () => {
+        console.log("Fetching data for pipeline: ", pipelineOrgId, pipelineRepoId, parentPipelineId);
+        try {
+            var pipelineExecutions = await fetchPipelineExecutions(pipelineOrgId, pipelineRepoId, parentPipelineId);    
+        } catch (error) {
+            console.log("Error fetching pipeline executions: ", error);
+        }
+        
         // Transform the data to match Execution interface
         const executionIds = pipelineExecutions?.result?.executions?.[0]?.executionIds || [];
 

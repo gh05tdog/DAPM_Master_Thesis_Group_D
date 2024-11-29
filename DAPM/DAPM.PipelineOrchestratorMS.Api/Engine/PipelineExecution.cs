@@ -297,9 +297,9 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
                 {
                     OrganizationId = currentNode.OrganizationId,
                     RepositoryId = currentNode.RepositoryId,
-                    ResourceId = (Guid)currentNode.ResourceId,
+                    ResourceId = (currentNode.ResourceId ?? Guid.Empty)
                 };
-
+ 
                 executeOperatorStep.OperatorResource = operatorResource;
 
                 result.Add(executeOperatorStep);
@@ -316,14 +316,16 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         {
             var visitedNodes = new List<Guid>();
             var result = new List<Step>();  
-
+            
             foreach (Guid nodeId in _dataSinkNodes)
             {
+                _logger.LogInformation($"Generating steps for node {nodeId}");
                 var node = _nodes[nodeId];
                 result.AddRange(CreateStepListRecursive(node, visitedNodes));
                 visitedNodes.Add(node.Id);
             }
 
+            _logger.LogInformation($"Generated {result.Count} steps");
             return result;
         }
 
