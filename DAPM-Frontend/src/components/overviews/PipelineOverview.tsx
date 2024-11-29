@@ -5,7 +5,7 @@ import { getPipelines } from '../../state_management/selectors/index.ts';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../cards/SpinnerCard.tsx';
 
-import { addNewPipeline, setActivePipeline } from '../../state_management/slices/pipelineSlice';
+import { addNewPipeline, setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { pipelineThunk } from "../../state_management/slices/pipelineSlice.ts"
 import { Organization, Repository } from "../../state_management/states/apiState.ts";
@@ -13,7 +13,7 @@ import { PipelineData } from "../../state_management/states/pipelineState.ts";
 
 const MainContent: React.FC = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const organizations: Organization[] = useSelector(getOrganizations);
     const repositories: Repository[] = useSelector(getRepositories);
     const pipelines: PipelineData[] = useSelector(getPipelines);
@@ -42,7 +42,7 @@ const MainContent: React.FC = () => {
     if (loading) {
         return (
             <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <Spinner color="white" />
+                <Spinner />
             </Box>
         )
     }

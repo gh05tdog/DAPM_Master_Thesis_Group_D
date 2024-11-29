@@ -4,7 +4,6 @@ export interface ApiState {
     repositories: Repository[],
     loadingRepositories: boolean,
     resources: Resource[],
-    loadingResources: boolean,
 }
 
 export interface Organization {

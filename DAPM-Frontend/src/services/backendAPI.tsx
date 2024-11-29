@@ -17,7 +17,7 @@ export async function getAuthenticationHeader() {
 export async function fetchDataFromTicketService(ticketId: string, errorMesssage: string): Promise<any> {
     const maxRetries = getStatusRetries;
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
+    await delay(getStatusDelay/2); //initial delay to give backend a head start
     for (let retries = 0; retries < maxRetries; retries++) {
         try {
             const response = await fetchResponse(ticketId);

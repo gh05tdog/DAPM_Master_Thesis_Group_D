@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRepositories, getOrganizations, getResources, selectLoadingRepositories, selectLoadingResources } from "../../state_management/selectors/apiSelector.ts";
 import { resourceThunk } from "../../state_management/slices/apiSlice.ts";
 import Spinner from '../cards/SpinnerCard.tsx';
-import { Accordion, AccordionSummary, AccordionDetails, Typography, List } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, Typography, List, Box } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ResourceCard from "../cards/ResourceCard.tsx";
 
@@ -24,13 +24,16 @@ const ResourceList: React.FC = () => {
 
   if (loading) {
     return (
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <h2>Resources</h2>
-        </div>
-        <Spinner />
-
-      </div>
+      <Box>
+        <Accordion disabled sx={{ boxShadow: 3, borderRadius: 2 }}>
+          <AccordionSummary aria-controls="org-list-content" id="org-list-header" sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: '4px' }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Resources</Typography>
+          </AccordionSummary>
+        </Accordion>
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </Box>
+      </Box>
     )
   }
 
