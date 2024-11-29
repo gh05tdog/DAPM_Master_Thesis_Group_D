@@ -10,22 +10,24 @@ import {
     DialogActions,
     Box,
 } from '@mui/material';
-import { addUserRepository } from '../../../src/services/backendAPI.tsx';
+import { addUserPipeline, addUserRepository, addUserOrganization, addUserResource } from '../../../src/services/backendAPI.tsx';
 import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
-import { Repository } from '../../state_management/states/apiState.ts';
 
 interface UserOption {
     label: string;
     id: string;
 }
 
-interface ManageRepositoryPopupProps {
+type AddUserFunction = (userId: string, id: string) => Promise<void>;
+
+interface ManagePipelinePopupProps {
     open: boolean;
     onClose: () => void;
-    selectedRepository: { repository: Repository } | null;
+    selectedID: string;
+    manageType: string;
 }
 
-function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepositoryPopupProps) {
+function ManagePopup({ open, onClose, selectedID, manageType }: ManagePipelinePopupProps) {
     const [users, setUsers] = useState<UserOption[]>([]);
     const [selectedUser, setSelectedUser] = useState<UserOption | null>(null);
 
@@ -46,35 +48,41 @@ function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepo
     }, []);
 
     async function addUser() {
-        if (selectedUser && selectedRepository) {
+        if (selectedUser && selectedID) {
             try {
-                await addUserRepository(selectedUser.id, selectedRepository.repository.id);
-                alert('User added successfully! Reload page to see results');
+                
+                const addUserFunctions: Record<string, AddUserFunction> = {
+                    pipeline: addUserPipeline,
+                    resource: addUserResource,
+                    repository: addUserRepository,
+                    organization: addUserOrganization,
+                };
 
+                await addUserFunctions[manageType](selectedUser.id, selectedID);
+
+                alert(`User added successfully to ${manageType}! Reload page to see results.`);
                 onClose();
             } catch (error) {
-                console.error('Error adding user to repository:', error);
-                alert('Failed to add user to repository.');
+                alert(`Failed to add user to ${manageType}.`);
             }
         } else {
             if (!selectedUser) {
                 alert('Please select a user.');
-            } else if (!selectedRepository) {
-                alert('Please select a repository.');
-                onClose();
+            } else if (!selectedID) {
+                alert(`Please select a ${manageType}.`);
             }
-
+            onClose();
         }
     }
     return (
         <Dialog data-qa="add-user-popup"
-            open={open} onClose={onClose}>
-            <DialogTitle>Manage Repository</DialogTitle>
+                open={open} onClose={onClose}>
+            <DialogTitle>Manage Pipeline</DialogTitle>
             <DialogContent>
-                <p>Give user authority to this repository.</p>
+                <p>Give user authority to this pipeline.</p>
                 <FormControl sx={{ width: '100%', bgcolor: 'white' }}>
                     <Autocomplete
-                        disablePortal={false}
+                        disablePortal = {false}
                         options={users}
                         value={selectedUser}
                         onChange={(event, newValue) => {
@@ -98,4 +106,4 @@ function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepo
     );
 }
 
-export default ManageRepositoryPopup;
+export default ManagePopup;
