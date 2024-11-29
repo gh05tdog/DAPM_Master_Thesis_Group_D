@@ -28,11 +28,10 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
     };
 
     const createNewPipeline = () => {
-        dispatch(addNewPipeline({ id: `pipeline-${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
+        dispatch(addNewPipeline({ id: `${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
         navigate(`/pipeline/pipeline-${uuidv4()}`);
     };
-
-
+    
     return (
 
         <AppBar

@@ -291,10 +291,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
       console.error("Error saving pipeline:", error);
     }
   };
-
-
-
-
+  
   return (
     <AppBar position="fixed">
       <Toolbar sx={{ flexGrow: 1 }}>
