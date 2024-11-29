@@ -1,10 +1,16 @@
 import { Edge, Node } from 'reactflow';
 import { Organization, Repository, Resource } from './apiState.ts';
 
+//For testing purposes
+export interface PipelineeditorPipelineID{
+  pipelineId : string;
+}
+
 export interface PipelineState {
   pipelines: PipelineData[]
   activePipelineId: string
 }
+
 
 export interface HistoryData {
   past: HistoryItem[];
