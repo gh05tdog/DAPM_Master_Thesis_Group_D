@@ -8,6 +8,7 @@ import RepositoryManagePopup from "../../components/searchFields/RepositoryManag
 import { Box } from "@mui/material";
 import RepositoryManageTable from '../../components/overviews/RepositoryManageTable.tsx';
 import {createTheme} from "@mui/material/styles";
+import { Repository } from '../../state_management/states/apiState.ts';
 
 interface RepositoryOverviewPageProps {
     user: any;
@@ -15,7 +16,7 @@ interface RepositoryOverviewPageProps {
 
 const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
     const [info, setInfo] = useState<any>(null);
-    const [selectedRepository, setSelectedRepository] = useState<{ repositoryId: string } | null>(null);
+    const [selectedRepository, setSelectedRepository] = useState<{ repository: Repository} | null>(null);
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
 
@@ -62,7 +63,7 @@ const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
 
             <Box data-qa = "repository-manager"
                  sx={{ display: 'static', minHeight: '100dvh', padding: '10px' }}>
-                <RepositoryManageTable selectedRepository={selectedRepository} />
+                <RepositoryManageTable selectedRepository={selectedRepository?.repository} />
                 <RepositoryManagePopup open={openPopup} onClose={handleClosePopup} selectedRepository={selectedRepository} />
             </Box>
         </ThemeProvider>

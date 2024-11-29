@@ -1,6 +1,8 @@
 ﻿using DAPM.PipelineOrchestratorMS.Api.Engine.Interfaces;
 using DAPM.PipelineOrchestratorMS.Api.Models;
+using Microsoft.AspNetCore.Mvc;
 using RabbitMQLibrary.Models;
+using RabbitMQLibrary.Models.AccessControl;
 
 namespace DAPM.PipelineOrchestratorMS.Api.Engine
 {
@@ -18,11 +20,11 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             _serviceProvider = serviceProvider;
         }
 
-        public Guid CreatePipelineExecutionInstance(Pipeline pipeline)
+        public Guid CreatePipelineExecutionInstance(PipelineDTO pipelineDTO)
         {
             Guid guid = Guid.NewGuid();
 
-            var pipelineExecution = new PipelineExecution(guid, pipeline, _serviceProvider);
+            var pipelineExecution = new PipelineExecution(guid, pipelineDTO, _serviceProvider);
             
             _pipelineExecutions[guid] = pipelineExecution;
             _logger.LogInformation($"A new execution instance has been created");
@@ -46,6 +48,23 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
         private IPipelineExecution GetPipelineExecution(Guid executionId)
         {
             return _pipelineExecutions[executionId];
+        }
+
+        public List<Guid> GetPipelineExecutions(Guid pipelineId)
+        {
+            List<Guid>_executionsID = new List<Guid>();
+            _logger.LogInformation("GetPipelineExecutions called");
+            foreach (var execution in _pipelineExecutions)
+            {
+                _logger.LogInformation($"Execution: {execution.Key}");
+                if (execution.Value.GetPipelineId() == pipelineId)
+                {
+                    _logger.LogInformation($"Execution: {execution.Key} is for pipeline {pipelineId}");
+                    _executionsID.Add(execution.Key);
+                }
+            }
+
+            return _executionsID;
         }
 
         public PipelineExecutionStatus GetPipelineExecutionStatus(Guid executionId)

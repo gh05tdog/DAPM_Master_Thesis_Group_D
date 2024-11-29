@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 import { fetchRepositoryUsers, removeUserRepository } from '../../../src/services/backendAPI.tsx';
+import { Repository } from '../../state_management/states/apiState.ts';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -23,12 +24,10 @@ interface User {
     username: string;
 }
 
-interface Repository {
-    repositoryId: string;
-}
+
 
 interface RepositoryManageTableProps {
-    selectedRepository: Repository | null;
+    selectedRepository: Repository | undefined;
 }
 
 export default function RepositoryManageTable({ selectedRepository }: RepositoryManageTableProps) {
@@ -39,12 +38,14 @@ export default function RepositoryManageTable({ selectedRepository }: Repository
         const fetchUsersData = async () => {
             try {
                 if (selectedRepository) {
+                    console.log("Selected repo:")
+                    console.log(selectedRepository)
                     const allUsers = await getUsersFromKeycloak();
                     const repositoryUsers = await fetchRepositoryUsers();
 
 
                     const filteredRepositoryUsers = repositoryUsers.filter(
-                        (pu: { repositoryId: string; }) => pu.repositoryId === selectedRepository.repositoryId
+                        (pu: { repositoryId: string; }) => pu.repositoryId === selectedRepository.id
                     );
 
 
@@ -77,7 +78,7 @@ export default function RepositoryManageTable({ selectedRepository }: Repository
 
     function handleRemove(id: string): void {
         if (selectedRepository) {
-            removeUserRepository(id, selectedRepository.repositoryId);
+            removeUserRepository(id, selectedRepository.id);
 
             const newUsers = users.filter((user) => user.id !== id);
             setUsers(newUsers);

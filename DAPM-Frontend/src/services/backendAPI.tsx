@@ -615,3 +615,40 @@ export async function downloadResource(organizationId: string, repositoryId: str
         throw error; // Propagate error to the caller
     }
 }
+
+export async function fetchPipelineExecutions(orgId: string, repId: string, pipId: string) {
+    try {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/pipelines/${pipId}/executions`, await getAuthenticationHeader());
+        if (!response.ok) {
+            throw new Error('Fetching executions, Network response was not ok');
+        }
+
+        const jsonData = await response.json();
+
+        return await fetchDataFromTicketService(jsonData.ticketId, 'Failed to fetch executions data');
+
+    } catch(error) {
+        console.error('Fetching executions, Error fetching data:', error);
+        throw error; // Propagate error to the caller
+    }
+}
+
+export async function fetchExecutionStatus(orgId: string, repId: string, pipId: string, exeId: string) {
+    try {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/pipelines/${pipId}/executions/${exeId}/status`, await getAuthenticationHeader());
+        if (!response.ok) {
+            throw new Error('Fetching execution status, Network response was not ok');
+        }
+
+        const jsonData = await response.json();
+
+        return await fetchDataFromTicketService(jsonData.ticketId, 'Failed to fetch execution status data');
+
+    } catch(error) {
+        console.error('Fetching execution status, Error fetching data:', error);
+        throw error; // Propagate error to the caller
+    }
+
+
+
+}
