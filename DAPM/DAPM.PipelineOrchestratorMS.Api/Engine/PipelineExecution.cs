@@ -55,7 +55,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
             _pipeline = pipelineDto;
             _state = PipelineExecutionState.NotStarted;
 
-            //InitGraph();
+            InitGraph();
 
         }
 
@@ -80,8 +80,8 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
 
             return new PipelineExecutionStatus()
             {
-                ExecutionTime = _stopwatch.Elapsed,
-                CurrentSteps = currentStepsStatus,
+                //ExecutionTime = _stopwatch.Elapsed,
+                //CurrentSteps = currentStepsStatus,
                 State = _state
             };
         }
@@ -279,7 +279,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
                 {
                     OrganizationId = currentNode.OrganizationId,
                     RepositoryId = currentNode.RepositoryId,
-                    //ResourceId = (Guid)currentNode.ResourceId,
+                    ResourceId = (currentNode.ResourceId ?? Guid.Empty)
                 };
  
                 executeOperatorStep.OperatorResource = operatorResource;
@@ -307,6 +307,7 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
                 visitedNodes.Add(node.Id);
             }
 
+            _logger.LogInformation($"Generated {result.Count} steps");
             return result;
         }
 
