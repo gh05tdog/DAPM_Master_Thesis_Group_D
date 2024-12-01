@@ -307,7 +307,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
       pipelineId =await putPipeline(selectedOrg.id, selectedRepo.id, pipelineDTO);
       dispatch(setActivePipeline(pipelineId));
       console.log("Pipeline saved successfully!");
-      //reloadPipelines();
+      reloadPipelines();
     } catch (error) {
       console.error("Error saving pipeline:", error);
     }
