@@ -4,7 +4,7 @@ import { AppBar, Box, Button, TextField, Toolbar, Typography } from "@mui/materi
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getActiveFlowData, getActivePipeline } from "../../state_management/selectors/index.ts";
+import { getActiveFlowData, getActivePipeline } from "../../state_management/selectors/indexSelector.ts";
 import { updatePipelineName,setActivePipeline,pipelineThunk  } from "../../state_management/slices/pipelineSlice.ts";
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Node } from "reactflow";
@@ -49,7 +49,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
 
   const organizations = useSelector(getOrganizations)
   const repositories = useSelector(getRepositories)
-
+  const pipid= useSelector(getActivePipeline)?.id;
   const pipelineName = useSelector((state: any) => getActivePipeline(state)?.name)
 
   const setPipelineName = (name: string) => {
@@ -59,7 +59,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
   const flowData = useSelector(getActiveFlowData) as { edges: any[], nodes: any[] } | undefined
 
   const generateJson = async () => {
-
+    pipelineId = pipid;
     //console.log(flowData)
 
     var edges = flowData!.edges.map(edge => {
@@ -305,7 +305,7 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
       // Attempt to save the pipeline
       console.log("Sending save request...");
       pipelineId =await putPipeline(selectedOrg.id, selectedRepo.id, pipelineDTO);
-      setActivePipeline(pipelineId)
+      dispatch(setActivePipeline(pipelineId));
       console.log("Pipeline saved successfully!");
       //reloadPipelines();
     } catch (error) {

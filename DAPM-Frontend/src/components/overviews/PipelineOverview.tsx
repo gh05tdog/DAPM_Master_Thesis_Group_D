@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPipelines } from '../../state_management/selectors/index.ts';
+import { getPipelines } from '../../state_management/selectors/indexSelector.ts';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../cards/SpinnerCard.tsx';
 
-import { addNewPipeline, setActivePipeline } from '../../state_management/slices/pipelineSlice';
+import { addNewPipeline, setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { pipelineThunk } from "../../state_management/slices/pipelineSlice.ts"
 import { Organization, Repository } from "../../state_management/states/apiState.ts";
@@ -41,7 +41,7 @@ const MainContent: React.FC = () => {
     const navigateToPipeline = (id: string) => {
         console.log("pipeline-Id", id);
         dispatch(setActivePipeline(id));
-        navigate(`/pipeline/${id}`);
+        navigate(`/pipelineEditor`);
     };
 
     if (loading) {
@@ -90,7 +90,10 @@ const MainContent: React.FC = () => {
                                     <Button
                                         variant="outlined"
                                         color="primary"
-                                        onClick={() => navigateToPipeline(id)}
+                                        onClick={() => {
+                                            console.log(id)
+                                            navigateToPipeline(id)}
+                                        }
                                     >
                                         Edit
                                     </Button>

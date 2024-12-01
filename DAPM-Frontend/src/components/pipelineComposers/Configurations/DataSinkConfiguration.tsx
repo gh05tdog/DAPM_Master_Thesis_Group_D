@@ -5,7 +5,7 @@ import { Box, InputLabel, ListItemText, MenuItem, Select } from '@mui/material';
 import { DataSinkNodeData, NodeData, OrganizationNodeData } from '../../../state_management/states/pipelineState.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateNode } from '../../../state_management/slices/pipelineSlice.ts';
-import { getNodes } from '../../../state_management/selectors/index.ts';
+import { getNodes } from '../../../state_management/selectors/indexSelector.ts';
 import { getRepositories } from '../../../state_management/selectors/apiSelector.ts';
 
 

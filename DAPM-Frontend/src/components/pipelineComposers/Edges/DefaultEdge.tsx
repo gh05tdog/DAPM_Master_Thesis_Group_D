@@ -4,7 +4,7 @@ import {
 
 import { EdgeData } from '../../../state_management/states/pipelineState.ts';
 import { useSelector } from 'react-redux';
-import { getNodes } from '../../../state_management/selectors/index.ts';
+import { getNodes } from '../../../state_management/selectors/indexSelector.ts';
 
 
 export function DefaultEdge({id, data, style, selected, source, target, sourceHandleId, targetHandleId, ...delegated}: EdgeProps<EdgeData>) {
