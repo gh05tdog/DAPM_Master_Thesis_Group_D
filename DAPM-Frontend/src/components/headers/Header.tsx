@@ -28,8 +28,9 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
     };
 
     const createNewPipeline = () => {
-        dispatch(addNewPipeline({ id: `${uuidv4()}`, flowData: { nodes: [], edges: [] } }));
-        navigate(`/pipeline/pipeline-${uuidv4()}`);
+        const uuid = uuidv4();
+        dispatch(addNewPipeline({ id: `${uuid}`, flowData: { nodes: [], edges: [] } }));
+        navigate(`/pipelineEditor`);
     };
     
     return (
