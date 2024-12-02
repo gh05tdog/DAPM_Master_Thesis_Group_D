@@ -18,13 +18,11 @@ export default function PipelineAppBar() {
   const pipelineId = useSelector(getActivePipeline)?.id;
   const reloadPipelines = () => {
     if (repositories && repositories.length > 0) {
-      setLoading(true);
       try {
         dispatch(pipelineThunk({ organizations, repositories }));
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false);
       }
     }
 
