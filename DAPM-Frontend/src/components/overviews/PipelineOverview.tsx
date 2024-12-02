@@ -15,7 +15,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 const MainContent: React.FC = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const organizations: Organization[] = useSelector(getOrganizations);
     const repositories: Repository[] = useSelector(getRepositories);
     const pipelines: PipelineData[] = useSelector(getPipelines);

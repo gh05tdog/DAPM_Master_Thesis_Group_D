@@ -1,25 +1,21 @@
 import { useState } from 'react';
-
 import { AppBar, Box, Button, TextField, Toolbar, Typography } from "@mui/material";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getActiveFlowData, getActivePipeline } from "../../state_management/selectors/indexSelector.ts";
-import { updatePipelineName,setActivePipeline,pipelineThunk  } from "../../state_management/slices/pipelineSlice.ts";
+import { updatePipelineName, setActivePipeline, pipelineThunk } from "../../state_management/slices/pipelineSlice.ts";
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Node } from "reactflow";
-import { DataSinkNodeData, DataSourceNodeData, OperatorNodeData } from "../../state_management/states/pipelineState.ts";
-import { putCommandStart, putExecution, putPipeline } from "../../services/backendAPI.tsx";
+import { DataSinkNodeData, } from "../../state_management/states/pipelineState.ts";
+import { putExecution, putPipeline } from "../../services/backendAPI.tsx";
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { getHandleId, getNodeId } from "./Flow.tsx";
 
-interface PipelineAppBarProps {
-  pipelineId: string;
-}
 
-export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
-  const [loading, setLoading] = useState<boolean>(false);
 
+export default function PipelineAppBar() {
+  const pipelineId = useSelector(getActivePipeline)?.id;
   const reloadPipelines = () => {
     if (repositories && repositories.length > 0) {
       setLoading(true);
@@ -49,7 +45,6 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
 
   const organizations = useSelector(getOrganizations)
   const repositories = useSelector(getRepositories)
-  const pipid= useSelector(getActivePipeline)?.id;
   const pipelineName = useSelector((state: any) => getActivePipeline(state)?.name)
 
   const setPipelineName = (name: string) => {
@@ -59,7 +54,6 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
   const flowData = useSelector(getActiveFlowData) as { edges: any[], nodes: any[] } | undefined
 
   const generateJson = async () => {
-    pipelineId = pipid;
     //console.log(flowData)
 
     var edges = flowData!.edges.map(edge => {
@@ -304,14 +298,15 @@ export default function PipelineAppBar({ pipelineId }: PipelineAppBarProps) {
     try {
       // Attempt to save the pipeline
       console.log("Sending save request...");
-      pipelineId =await putPipeline(selectedOrg.id, selectedRepo.id, pipelineDTO);
-      dispatch(setActivePipeline(pipelineId));
+      const newPipelineId = await putPipeline(selectedOrg.id, selectedRepo.id, pipelineDTO);
+      dispatch(setActivePipeline(newPipelineId));
       console.log("Pipeline saved successfully!");
       reloadPipelines();
     } catch (error) {
       console.error("Error saving pipeline:", error);
     }
   };
+
 
   return (
     <AppBar position="fixed">
