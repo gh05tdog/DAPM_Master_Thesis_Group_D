@@ -11,11 +11,13 @@ import { DataSinkNodeData, } from "../../state_management/states/pipelineState.t
 import { putExecution, putPipeline } from "../../services/backendAPI.tsx";
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { getHandleId, getNodeId } from "./Flow.tsx";
+import { getActiveOrganisation } from '../../state_management/slices/indexSlice.ts';
 
 
 
 export default function PipelineAppBar() {
   const pipelineId = useSelector(getActivePipeline)?.id;
+  const organization = useSelector(getActiveOrganisation);
   const reloadPipelines = () => {
     if (repositories && repositories.length > 0) {
       try {
@@ -164,7 +166,7 @@ export default function PipelineAppBar() {
       },
     };
 
-    const selectedOrg = organizations[0];
+    const selectedOrg = organization;
 
     const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
 
@@ -182,7 +184,6 @@ export default function PipelineAppBar() {
 
   //Post pipeline to backend
   const savePipeline = async () => {
-
     const requestData = {
       name: pipelineName,
       pipeline: {
@@ -261,7 +262,8 @@ export default function PipelineAppBar() {
     };
 
 
-    const selectedOrg = organizations[0];
+    const selectedOrg = organization;
+    console.log(selectedOrg);
   
     const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
   

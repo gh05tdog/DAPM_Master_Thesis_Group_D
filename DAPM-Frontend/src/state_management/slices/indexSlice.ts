@@ -11,5 +11,7 @@ const rootReducer: Reducer<RootState> = combineReducers({
 
 export default rootReducer
 export const getActivePipeline = (state) =>   state.pipelineState.pipelines.find(pipeline => pipeline.id === state.pipelineState.activePipelineId);
+export const getActiveOrganisation = (state) =>    state.apiState.organizations.find(org => org.id === state.pipelineState.activeOrganisationId);
+export const getActiveRepository = (state) =>   state.apiState.repositories.find(rep => rep.id === state.pipelineState.activeRepositoryId);
 export const getActiveFlowData = (state) => state.pipelineState.pipelines.find(pipeline => pipeline.id === state.pipelineState.activePipelineId)?.pipeline
 

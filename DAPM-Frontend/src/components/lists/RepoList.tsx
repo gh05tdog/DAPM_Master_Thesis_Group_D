@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRepositories, getOrganizations, selectLoadingOrganisation, selectLoadingRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { repositoryThunk } from "../../state_management/slices/apiSlice.ts";
@@ -6,11 +6,14 @@ import Spinner from '../cards/SpinnerCard.tsx';
 import RepositoryCard from "../cards/RepositoryCard.tsx";
 import { Accordion, AccordionSummary, AccordionDetails, Checkbox, FormControlLabel, Typography, Box } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { setActiveRepository } from "../../state_management/slices/pipelineSlice.ts";
+import { getActiveRepository } from "../../state_management/slices/indexSlice.ts";
 const RepoList: React.FC = () => {
   const dispatch = useDispatch();
   // Get organizations and repositories from the store
   const organizations = useSelector(getOrganizations);
   const repositories = useSelector(getRepositories);
+  const selectedRepo = useSelector(getActiveRepository);
   const Orgsloading = useSelector(selectLoadingOrganisation); // Get loading state
   const loading = useSelector(selectLoadingRepositories); // Get loading state
   const [selectedRepos, setSelectedRepos] = useState<string[]>([]);
@@ -27,14 +30,15 @@ const RepoList: React.FC = () => {
 
 
 
-  const handleToggleRepo = (repoId: string) => {
+  const handleToggleRepo = useCallback((repoId: string) => {
     setSelectedRepos((prevSelectedRepos) =>
       prevSelectedRepos.includes(repoId)
         ? prevSelectedRepos.filter((id) => id !== repoId) // Deselect
         : [...prevSelectedRepos, repoId] // Select
     );
-  };
-
+    dispatch(setActiveRepository(repoId));
+  },[selectedRepo]);
+  
   if (loading) {
     return (
       <Box>

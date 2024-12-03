@@ -6,7 +6,9 @@ import {fetchPipeline, fetchRepositoryPipelines} from "../../services/backendAPI
 
 export const initialState: PipelineState = {
   pipelines: [],
-  activePipelineId: ""
+  activePipelineId: "",
+  activeOrganisationId: "",
+  activeRepositoryId: ""
 }
 
 const takeSnapshot = (state: PipelineState) => {
@@ -128,7 +130,12 @@ const pipelineSlice = createSlice({
     setActivePipeline: (state, { payload }: PayloadAction<string>) => {
       state.activePipelineId = payload
     },
-
+    setActiveOrganisation: (state, { payload }: PayloadAction<string>) => {
+      state.activeOrganisationId = payload
+    },
+    setActiveRepository: (state, { payload }: PayloadAction<string>) => {
+      state.activeRepositoryId = payload
+    },
     // actions for undo and redo
 
     undo(state){
@@ -300,6 +307,8 @@ export const {
   //actions for all pipelines
   addNewPipeline, 
   setActivePipeline, 
+  setActiveOrganisation,
+  setActiveRepository,
   
   // actions for undo and redo
   undo,
