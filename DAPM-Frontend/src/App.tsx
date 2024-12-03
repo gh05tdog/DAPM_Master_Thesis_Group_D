@@ -24,11 +24,6 @@ const lightTheme = createTheme({
     },
 });
 
-console.log('Client api url:', environment.clientapi_url);
-console.log('Keycloak url:', environment.keycloak_url);
-console.log('Peer api url:', environment.peerapi_url);
-console.log('Access control url:', environment.accesscontrol_url);
-
 const App: React.FC = () => {
     const [initialized, setInitialized] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);

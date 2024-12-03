@@ -32,6 +32,7 @@ export async function fetchDataFromTicketService(ticketId: string, errorMesssage
             }
         }
     }
+    console.log("Working on ticket: ", ticketId);
     throw new Error(errorMesssage);
 };
 export async function fetchResponse(ticket: string): Promise<any> {
