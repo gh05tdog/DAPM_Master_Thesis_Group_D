@@ -5,6 +5,8 @@ import ExecutionCard from '../cards/ExecutionCard.tsx';
 import { fetchPipelineExecutions, fetchExecutionStatus, putCommandStart } from '../../services/backendAPI.tsx';
 import { log } from 'console';
 import { exec } from 'child_process';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ExecutionOverviewProps {
     isOpen: boolean;
@@ -12,6 +14,8 @@ interface ExecutionOverviewProps {
     pipelineOrgId: string;
     pipelineRepoId: string;
 }
+
+
 
 interface Execution { //This interface should be edited to accompany the correct format of executions.
     id: string;
@@ -59,10 +63,12 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
     };
 
     const handleStartExecution = async (exeId: string) => {
+        toast.info("Starting execution...");
         try{
             const response = await putCommandStart(pipelineOrgId, pipelineRepoId, parentPipelineId, exeId);
         } catch (error) {
             console.log("Error starting execution: ", error);
+            toast.error("Error starting execution: " + error);
         }
     }
 
@@ -116,6 +122,7 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
                         </TableBody>
                     </Table>
                 </Box>
+                <ToastContainer />
             </Collapse>
         </TableCell>
     </TableRow>
