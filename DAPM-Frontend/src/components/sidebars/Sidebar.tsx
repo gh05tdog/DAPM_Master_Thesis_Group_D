@@ -51,9 +51,6 @@ const Sidebar: React.FC = () => {
       </Box>
 
       <Box sx={{ p: 2, textAlign: 'center', borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
-        <Typography variant="body2" color="text.secondary">
-          &copy; 2024 Group D
-        </Typography>
       </Box>
     </Box>
   )
