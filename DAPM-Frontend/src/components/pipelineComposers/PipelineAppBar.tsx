@@ -12,6 +12,7 @@ import { putExecution, putPipeline } from "../../services/backendAPI.tsx";
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { getHandleId, getNodeId } from "./Flow.tsx";
 import { getActiveOrganisation } from '../../state_management/slices/indexSlice.ts';
+import { toast } from 'react-toastify';
 
 
 
@@ -283,8 +284,10 @@ export default function PipelineAppBar() {
       dispatch(setActivePipeline(newPipelineId));
 
       reloadPipelines();
+      toast.success("Pipeline saved successfully!");
     } catch (error) {
       console.error("Error saving pipeline:", error);
+      toast.error("Error saving pipeline: " + error);
     }
   };
 

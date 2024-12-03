@@ -11,6 +11,8 @@ import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
 import ManagerPage from './views/ManagerPage.tsx';
 import LogoutPage from "./views/LogoutPage.tsx";
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const darkTheme = createTheme({
     palette: {
@@ -49,6 +51,7 @@ const App: React.FC = () => {
     <ThemeProvider theme={lightTheme}>
       <Provider store={store}>
         <BrowserRouter>
+          <ToastContainer />
           <Routes>
             {!authenticated ? (
               <Route path="/user" element={<LoginPage />} />
