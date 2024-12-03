@@ -81,7 +81,7 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
         const interval = setInterval(() => {
             fetchData();
             
-        }, 50000);
+        }, 60*1000);
 
         // Cleanup function
         return () => {

@@ -29,7 +29,7 @@ export const pipelineThunk = createAsyncThunk<
           for (const repo of repositories) {
             if (org.id === repo.organizationId) {
               const pipelinePromise = fetchRepositoryPipelines(org.id, repo.id).then(
-                  (pipes) => {
+                  async (pipes) => {
                     const pipelineDetailsPromises = pipes.result.pipelines.map(
                         async (pipeline: PipelineData) => {
                           const pipelineData = await fetchPipeline(
@@ -64,9 +64,8 @@ export const pipelineThunk = createAsyncThunk<
                         }
                     );
 
-                    return Promise.all(pipelineDetailsPromises).then((detailsArray) =>
-                        detailsArray.flat()
-                    );
+                    const detailsArray = await Promise.all(pipelineDetailsPromises);
+                  return detailsArray.flat();
                   }
               );
 
