@@ -25,12 +25,10 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
     const [executions, setExecutions] = useState<Execution[]>([]);
 
     const fetchStatus = async (executionId: string) => {  
-        console.log("Fetching status for execution ID: ", executionId);
         var executionStatusResponse = await fetchExecutionStatus(pipelineOrgId, pipelineRepoId, parentPipelineId, executionId);
 
         const executionStatus = executionStatusResponse.result.status;
 
-        console.log("Execution Status: ", executionStatus);
 
         return executionStatus;
         
@@ -50,7 +48,6 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
         var formattedExecutions: Execution[] = [];  
         for (var executionId of executionIds) { 
             var status = await fetchStatus(executionId);
-            console.log("Execution ID: ", executionId, "Status: ", status);
             const newExecution: Execution = {
                 id: executionId,
                 status: status.state,
@@ -58,17 +55,12 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
             }
             formattedExecutions.push(newExecution);
         } 
-
-        
-        console.log("Formatted Executions: ", formattedExecutions);
         setExecutions(formattedExecutions);
     };
 
     const handleStartExecution = async (exeId: string) => {
         try{
             const response = await putCommandStart(pipelineOrgId, pipelineRepoId, parentPipelineId, exeId);
-            console.log("Starting execution: ", exeId);
-            console.log("Response: ", response);
         } catch (error) {
             console.log("Error starting execution: ", error);
         }

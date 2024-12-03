@@ -52,13 +52,10 @@ export default function PipelineAppBar() {
   const flowData = useSelector(getActiveFlowData) as { edges: any[], nodes: any[] } | undefined
 
   const generateJson = async () => {
-    //console.log(flowData)
 
     var edges = flowData!.edges.map(edge => {
       return { sourceHandle: edge.sourceHandle, targetHandle: edge.targetHandle }
     })
-
-    console.log("copied", edges)
 
     const dataSinks = flowData?.edges.map((edge) => {
       if (edge.data?.filename) {
@@ -89,7 +86,6 @@ export default function PipelineAppBar() {
       }
     }).filter(node => node !== undefined) as any
 
-    console.log(JSON.stringify(dataSinks))
 
     const requestData = {
       name: pipelineName,
@@ -158,7 +154,6 @@ export default function PipelineAppBar() {
         }),
 
         edges: flowData?.edges?.map((edge, index) => {
-          console.log(`Processing edge #${index + 1} - Source: ${edge.source}, Target: ${edge.target}`);
           return {
             source: edge.source,
             target: edge.target,
@@ -180,9 +175,6 @@ export default function PipelineAppBar() {
       ...requestData,
     };
 
-    // Log the entire request payload before sending
-    console.log("Final Pipeline DTO:", JSON.stringify(pipelineDTO, null, 2));
-
     const executionId = await putExecution(selectedOrg.id, selectedRepo.id, pipelineId)
     console.log("executionId: ", executionId)
     //await putCommandStart(selectedOrg.id, selectedRepo.id, pipelineId, executionId)
@@ -190,13 +182,11 @@ export default function PipelineAppBar() {
 
   //Post pipeline to backend
   const savePipeline = async () => {
-    console.log("Starting savePipeline function...");
 
     const requestData = {
       name: pipelineName,
       pipeline: {
         nodes: flowData?.nodes?.map((node, index) => {
-          console.log(`Processing node #${index + 1} - ID: ${node.id}, Type: ${node.type}`);
 
           // Ensure handles have a `type` field
           const sourceHandles = (node.data?.templateData?.sourceHandles || []).map((handle) => ({
@@ -255,16 +245,11 @@ export default function PipelineAppBar() {
             },
           };
 
-          // Log the node data and its instantiation/template details
-          console.log(`Node Data for ID ${node.id}:`, JSON.stringify(nodeData, null, 2));
-          console.log(`Instantiation Data for ID ${node.id}:`, JSON.stringify(nodeData.data.instantiationData, null, 2));
-          console.log(`Template Data for ID ${node.id}:`, JSON.stringify(nodeData.data.templateData, null, 2));
-
+         
           return nodeData;
         }),
 
         edges: flowData?.edges?.map((edge, index) => {
-          console.log(`Processing edge #${index + 1} - Source: ${edge.source}, Target: ${edge.target}`);
           return {
             source: edge.source,
             target: edge.target,
@@ -275,13 +260,11 @@ export default function PipelineAppBar() {
       },
     };
 
-    // Debug the organization and repository selection
+
     const selectedOrg = organizations[0];
-    console.log("Selected Organization:", selectedOrg);
-
+  
     const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
-    console.log("Selected Repository:", selectedRepo);
-
+  
     // Include organizationId and repositoryId in the request
     const pipelineDTO = {
       organizationId: selectedOrg.id,
@@ -291,14 +274,12 @@ export default function PipelineAppBar() {
     };
 
     // Log the entire request payload before sending
-    console.log("Final Pipeline DTO:", JSON.stringify(pipelineDTO, null, 2));
 
     try {
-      // Attempt to save the pipeline
-      console.log("Sending save request...");
+
       const newPipelineId = await putPipeline(selectedOrg.id, selectedRepo.id, pipelineDTO);
       dispatch(setActivePipeline(newPipelineId));
-      console.log("Pipeline saved successfully!");
+
       reloadPipelines();
     } catch (error) {
       console.error("Error saving pipeline:", error);
@@ -338,4 +319,3 @@ export default function PipelineAppBar() {
     </AppBar>
   )
 }
-
