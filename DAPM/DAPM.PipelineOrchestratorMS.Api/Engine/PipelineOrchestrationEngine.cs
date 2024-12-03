@@ -50,8 +50,13 @@ namespace DAPM.PipelineOrchestratorMS.Api.Engine
 
         public void ExecutePipelineStartCommand(Guid executionId)
         {
-            var execution = GetPipelineExecution(executionId);
-            execution.StartExecution();
+            _logger.LogInformation($"ExecutePipelineStartCommand called for execution {executionId}");
+            try{
+                var execution = GetPipelineExecution(executionId);
+                execution.StartExecution();
+            } catch(Exception e){
+                _logger.LogError($"Error executing pipeline start command: {e.Message}");
+            }
         }
 
 
