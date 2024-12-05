@@ -5,6 +5,8 @@ import { Organization, Repository, Resource } from './apiState.ts';
 export interface PipelineState {
   pipelines: PipelineData[]
   activePipelineId: string
+  activeOrganisationId: string
+  activeRepositoryId: string
 }
 
 

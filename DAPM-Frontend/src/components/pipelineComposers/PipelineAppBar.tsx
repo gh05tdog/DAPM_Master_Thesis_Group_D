@@ -8,15 +8,18 @@ import { updatePipelineName, setActivePipeline, pipelineThunk } from "../../stat
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Node } from "reactflow";
 import { DataSinkNodeData, } from "../../state_management/states/pipelineState.ts";
-import { putExecution, putPipeline } from "../../services/backendAPI.tsx";
+import { fetchOrganisation, putExecution, putPipeline } from "../../services/backendAPI.tsx";
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { getHandleId, getNodeId } from "./Flow.tsx";
+import { getActiveOrganisation, getActiveRepository } from '../../state_management/slices/indexSlice.ts';
 import { toast } from 'react-toastify';
 
 
 
 export default function PipelineAppBar() {
   const pipelineId = useSelector(getActivePipeline)?.id;
+  const organization = useSelector(getActiveOrganisation);
+  const repository = useSelector(getActiveRepository);
   const reloadPipelines = () => {
     if (repositories && repositories.length > 0) {
       try {
@@ -165,7 +168,7 @@ export default function PipelineAppBar() {
       },
     };
 
-    const selectedOrg = organizations[0];
+    const selectedOrg = organization;
 
     const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
 
@@ -183,7 +186,6 @@ export default function PipelineAppBar() {
 
   //Post pipeline to backend
   const savePipeline = async () => {
-
     const requestData = {
       name: pipelineName,
       pipeline: {
@@ -246,7 +248,7 @@ export default function PipelineAppBar() {
             },
           };
 
-         
+
           return nodeData;
         }),
 
@@ -262,10 +264,11 @@ export default function PipelineAppBar() {
     };
 
 
-    const selectedOrg = organizations[0];
-  
+    const selectedOrg = organization;
+    console.log(selectedOrg);
+
     const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
-  
+
     // Include organizationId and repositoryId in the request
     const pipelineDTO = {
       organizationId: selectedOrg.id,
@@ -296,21 +299,25 @@ export default function PipelineAppBar() {
         <Button onClick={() => navigate('/')}>
           <ArrowBackIosNewIcon sx={{ color: "white" }} />
         </Button>
-        <Box sx={{ width: '100%', textAlign: 'center' }}>
-          {isEditing ? (
-            <TextField
-              value={pipelineName}
-              onChange={(event) => setPipelineName(event?.target.value as string)}
-              autoFocus
-              onBlur={handleFinishEditing}
-              inputProps={{ style: { textAlign: 'center', width: 'auto' } }}
-            />
-          ) : (
-            <Box onClick={handleStartEditing} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
-              <Typography>{pipelineName}</Typography>
-              <EditIcon sx={{ paddingLeft: '10px' }} />
-            </Box>
-          )}
+        <Box style={{ width: '100%', textAlign: 'center', display: 'flex', flexDirection: 'row', gap: '10px' }}>
+          <Box sx={{ width: '100%', textAlign: 'center' }}>  <Typography>Organization: {organization.name}</Typography></Box>
+          <Box sx={{ width: '100%', textAlign: 'center' }} >  <Typography>Repository: {repository.name}</Typography></Box>
+          <Box sx={{ width: '100%', textAlign: 'center' }}>
+            {isEditing ? (
+              <TextField
+                value={pipelineName}
+                onChange={(event) => setPipelineName(event?.target.value as string)}
+                autoFocus
+                onBlur={handleFinishEditing}
+                inputProps={{ style: { textAlign: 'center', width: 'auto' } }}
+              />
+            ) : (
+              <Box onClick={handleStartEditing} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+                <Typography>{pipelineName}</Typography>
+                <EditIcon sx={{ paddingLeft: '10px' }} />
+              </Box>
+            )}
+          </Box>
         </Box>
         <Button onClick={() => generateJson()}>
           <Typography variant="body1" sx={{ color: "white" }}>Create Execution</Typography>

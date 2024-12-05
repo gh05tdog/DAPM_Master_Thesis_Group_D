@@ -1,7 +1,7 @@
 import { Box, Button, Checkbox, FormControlLabel, Input, ListItemText, MenuItem, Modal, OutlinedInput, Select } from "@mui/material";
 import { FC } from "react";
 import useUserCreation from "./hooks/useUserCreation.tsx";
-import Spinner from "../cards/SpinnerCard.tsx";
+import Spinner from "../../cards/SpinnerCard.tsx";
 
 interface Props {
     isOpen: boolean;
