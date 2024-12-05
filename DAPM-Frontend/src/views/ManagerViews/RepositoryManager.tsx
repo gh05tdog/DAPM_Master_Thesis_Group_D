@@ -2,6 +2,7 @@
 import {
     Button, ThemeProvider,
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import Header from '../../components/headers/Header.tsx';
 import RepositoryManageSearch from '../../components/searchFields/RepositoryManageSearch.tsx';
 import RepositoryManagePopup from "../../components/searchFields/RepositoryManagePopup.tsx";
@@ -9,6 +10,8 @@ import { Box } from "@mui/material";
 import RepositoryManageTable from '../../components/overviews/RepositoryManageTable.tsx';
 import {createTheme} from "@mui/material/styles";
 import { Repository } from '../../state_management/states/apiState.ts';
+import DropDownManage from '../../components/buttons/DropDownManage.tsx';
+import CreateRepositoryModal from '../../components/Modals/Repositories/CreateRepositoryModal.tsx';
 
 interface RepositoryOverviewPageProps {
     user: any;
@@ -19,6 +22,8 @@ const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
     const [selectedRepository, setSelectedRepository] = useState<{ repository: Repository} | null>(null);
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
+    const [isOpen, setIsOpen] = useState(false);
+
 
     useEffect(() => {
         const getUserInfo = async () => {
@@ -45,7 +50,7 @@ const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
     return (
         <ThemeProvider theme={theme}>
             <Header setMode={setMode} currentMode={mode} />
-
+            
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <RepositoryManageSearch setSelectedRepository={setSelectedRepository} />
 
@@ -57,6 +62,7 @@ const RepositoryManager: React.FC<RepositoryOverviewPageProps> = ({ user }) => {
                 >
                     Add user
                 </Button>
+                
 
             </Box>
 

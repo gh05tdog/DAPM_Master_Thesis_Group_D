@@ -1,7 +1,7 @@
 import { SelectChangeEvent } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { createUser, getRolesFromKeycloak, getUser, updateUserRoles } from "../../../utils/keycloakAdminAPI.ts";
-import { RoleRepresentation, UserRepresentation } from "../../../utils/types/keycloakTypes.ts";
+import { createUser, getRolesFromKeycloak, getUser, updateUserRoles } from "../../../../utils/keycloakAdminAPI.ts";
+import { RoleRepresentation, UserRepresentation } from "../../../../utils/types/keycloakTypes.ts";
 
 interface UserCreationForm {
     user: UserRepresentation;

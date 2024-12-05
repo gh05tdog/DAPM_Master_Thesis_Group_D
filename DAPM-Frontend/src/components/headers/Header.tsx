@@ -8,9 +8,10 @@ import { useDispatch } from 'react-redux';
 import { addNewPipeline } from '../../state_management/slices/pipelineSlice.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
-import CreateUserModal from '../users/CreateUserModal.tsx';
+import CreateUserModal from '../Modals/users/CreateUserModal.tsx';
 import { flexbox } from '@mui/system';
 import LogoutButton from '../buttons/LogoutButton.tsx';
+import CreateRepositoryModal from '../Modals/Repositories/CreateRepositoryModal.tsx';
 
 
 interface HeaderProps {
@@ -23,6 +24,7 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
+    const [isRepositoryModalOpen, setRepositoryModalIsOpen] = useState(false);
     const returnToOverview = () => {
         navigate("/user");
     };
@@ -76,7 +78,18 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                         sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
                         Create User
                     </Button>
+                    <Box sx={{ display: "flex", gap: 2 }}>
                     <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+                    <Button
+                        onClick={() => setRepositoryModalIsOpen(true)}
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
+                        Create Repository
+                    </Button>
+                    <CreateRepositoryModal isOpen={isRepositoryModalOpen} onClose={() => setRepositoryModalIsOpen(false)} />
+                </Box>
                     <LogoutButton />
                     <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
                 </Box>
