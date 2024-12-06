@@ -5,7 +5,7 @@ import { getPipelines } from '../../state_management/selectors/indexSelector.ts'
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../cards/SpinnerCard.tsx';
 
-import { addNewPipeline, setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
+import { addNewPipeline, setActiveOrganisation, setActivePipeline, setActiveRepository } from '../../state_management/slices/pipelineSlice.ts';
 import { getOrganizations, getRepositories } from "../../state_management/selectors/apiSelector.ts";
 import { pipelineThunk } from "../../state_management/slices/pipelineSlice.ts"
 import { Organization, Repository } from "../../state_management/states/apiState.ts";
@@ -38,8 +38,11 @@ const MainContent: React.FC = () => {
 
     }, [dispatch, repositories]);
 
-    const navigateToPipeline = (id: string) => {
+    const navigateToPipeline = (id: string, orgId: string, repoId: string) => {
         console.log("pipeline-Id", id);
+        dispatch(setActiveOrganisation(orgId));
+        dispatch(setActiveRepository(repoId));
+        
         dispatch(setActivePipeline(id));
         navigate(`/pipelineEditor`);
     };
@@ -91,8 +94,9 @@ const MainContent: React.FC = () => {
                                         variant="outlined"
                                         color="primary"
                                         onClick={() => {
+
                                             console.log(id)
-                                            navigateToPipeline(id)}
+                                            navigateToPipeline(id, orgId, repoId)}
                                         }
                                     >
                                         Edit

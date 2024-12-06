@@ -4,7 +4,7 @@ import DropDownManage from '../buttons/DropDownManage.tsx';
 import ColorModeIconDropdown from '../../assets/theme/ColorModeIconDropdown.tsx';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addNewPipeline } from '../../state_management/slices/pipelineSlice.ts';
 import { v4 as uuidv4 } from 'uuid';
 import { setActivePipeline } from '../../state_management/slices/pipelineSlice.ts';
@@ -12,6 +12,7 @@ import CreateUserModal from '../Modals/users/CreateUserModal.tsx';
 import { flexbox } from '@mui/system';
 import LogoutButton from '../buttons/LogoutButton.tsx';
 import CreateRepositoryModal from '../Modals/Repositories/CreateRepositoryModal.tsx';
+import { getActiveOrganisation, getActiveRepository } from '../../state_management/slices/indexSlice.ts';
 
 
 interface HeaderProps {
@@ -20,6 +21,8 @@ interface HeaderProps {
 }
 
 export default function Header({ setMode, currentMode }: HeaderProps) {
+    const getSelectedorganizationId = useSelector(getActiveOrganisation);
+    const getSelectedRepoId = useSelector(getActiveRepository);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -30,11 +33,14 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
     };
 
     const createNewPipeline = () => {
+        if (!getSelectedorganizationId?.id) return alert("Please select an Organization");
+        if (!getSelectedRepoId?.id) return alert("Please select a Repository");
+
         const uuid = uuidv4();
         dispatch(addNewPipeline({ id: `${uuid}`, flowData: { nodes: [], edges: [] } }));
         navigate(`/pipelineEditor`);
     };
-    
+
     return (
 
         <AppBar
@@ -79,17 +85,17 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                         Create User
                     </Button>
                     <Box sx={{ display: "flex", gap: 2 }}>
-                    <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-                    <Button
-                        onClick={() => setRepositoryModalIsOpen(true)}
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
-                        Create Repository
-                    </Button>
-                    <CreateRepositoryModal isOpen={isRepositoryModalOpen} onClose={() => setRepositoryModalIsOpen(false)} />
-                </Box>
+                        <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+                        <Button
+                            onClick={() => setRepositoryModalIsOpen(true)}
+                            variant="contained"
+                            color="primary"
+                            startIcon={<AddIcon />}
+                            sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
+                            Create Repository
+                        </Button>
+                        <CreateRepositoryModal isOpen={isRepositoryModalOpen} onClose={() => setRepositoryModalIsOpen(false)} />
+                    </Box>
                     <LogoutButton />
                     <ColorModeIconDropdown setMode={setMode} currentMode={currentMode} />
                 </Box>

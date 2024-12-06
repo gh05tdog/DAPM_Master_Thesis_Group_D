@@ -178,8 +178,16 @@ export default function PipelineAppBar() {
       id: pipelineId || '',
       ...requestData,
     };
+    var executionId ="";
+    try {
 
-    const executionId = await putExecution(selectedOrg.id, selectedRepo.id, pipelineId)
+      executionId = await putExecution(selectedOrg.id, selectedRepo.id, pipelineId)
+      toast.success("Execution saved successfully!");
+    } catch (error) {
+      console.error("Error saving execution:", error);
+      toast.error("Error saving execution: " + error);
+    }
+   
     console.log("executionId: ", executionId)
     //await putCommandStart(selectedOrg.id, selectedRepo.id, pipelineId, executionId)
   }
