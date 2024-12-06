@@ -11,7 +11,7 @@ import {
     Box,
 } from '@mui/material';
 import { addUserPipeline } from '../../../src/services/backendAPI.tsx';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 
 interface UserOption {
     label: string;
@@ -49,7 +49,7 @@ function ManagePipelinePopup({ open, onClose, selectedPipeline }: ManagePipeline
             try {
                 await addUserPipeline(selectedUser.id, selectedPipeline.pipelineId);
                 alert('User added successfully! Reload page to see results');
-            
+
                 onClose();
             } catch (error) {
                 console.error('Error adding user to pipeline:', error);
@@ -62,7 +62,7 @@ function ManagePipelinePopup({ open, onClose, selectedPipeline }: ManagePipeline
                 alert('Please select a pipeline.');
                 onClose();
             }
-            
+
         }
     }
     return (
@@ -73,7 +73,7 @@ function ManagePipelinePopup({ open, onClose, selectedPipeline }: ManagePipeline
                 <p>Give user authority to this pipeline.</p>
                 <FormControl sx={{ width: '100%', bgcolor: 'white' }}>
                     <Autocomplete
-                        disablePortal = {false}
+                        disablePortal={false}
                         options={users}
                         value={selectedUser}
                         onChange={(event, newValue) => {

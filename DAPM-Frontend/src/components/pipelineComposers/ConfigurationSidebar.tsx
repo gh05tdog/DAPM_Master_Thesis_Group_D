@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography/Typography';
 import Divider from '@mui/material/Divider/Divider';
 import { Edge, Node } from "reactflow";
 import { NodeData } from '../../state_management/states/pipelineState.ts';
-import { getEdges, getNodes } from '../../state_management/selectors/index.ts';
+import { getEdges, getNodes } from '../../state_management/selectors/indexSelector.ts';
 import { useSelector } from 'react-redux';
 import AlgorithmConfiguration from './Configurations/AlgorithmConfiguration.tsx';
 import DataSourceConfiguration from './Configurations/DataSourceConfiguration.tsx';

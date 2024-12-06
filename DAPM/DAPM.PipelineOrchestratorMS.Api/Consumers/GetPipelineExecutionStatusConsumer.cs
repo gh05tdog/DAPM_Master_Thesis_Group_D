@@ -10,18 +10,22 @@ namespace DAPM.PipelineOrchestratorMS.Api.Consumers
     {
         private IPipelineOrchestrationEngine _pipelineOrchestrationEngine;
         private IQueueProducer<GetPipelineExecutionStatusResultMessage> _getPipelineExecutionStatusResultProducer;
+        public ILogger<GetPipelineExecutionStatusConsumer> _logger;
 
         public GetPipelineExecutionStatusConsumer(IPipelineOrchestrationEngine pipelineOrchestrationEngine,
-            IQueueProducer<GetPipelineExecutionStatusResultMessage> getPipelineExecutionStatusResultProducer)
+            IQueueProducer<GetPipelineExecutionStatusResultMessage> getPipelineExecutionStatusResultProducer,
+            ILogger<GetPipelineExecutionStatusConsumer> logger)
         {
             _pipelineOrchestrationEngine = pipelineOrchestrationEngine;
             _getPipelineExecutionStatusResultProducer = getPipelineExecutionStatusResultProducer;
+            _logger = logger;
         }
 
         public Task ConsumeAsync(GetPipelineExecutionStatusMessage message)
         {
             var status = _pipelineOrchestrationEngine.GetPipelineExecutionStatus(message.ExecutionId);
-
+            _logger.LogInformation($"Pipeline execution status retrieved for execution id {message.ExecutionId}");
+            _logger.LogInformation($"Pipeline execution status: {status.State}");
 
             var currentStepsDtos = new List<StepStatusDTO>();
             foreach(var step in status.CurrentSteps)
@@ -52,7 +56,6 @@ namespace DAPM.PipelineOrchestratorMS.Api.Consumers
             };
 
             _getPipelineExecutionStatusResultProducer.PublishMessage(getPipelineExecutionStatusResultMessage);
-
             return Task.CompletedTask;
         }
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Resource } from "../../state_management/states/apiState.ts"
+import { ListItem, Typography } from "@mui/material";
 
 interface ResourceCardProps {
     resource: Resource;
@@ -7,7 +8,9 @@ interface ResourceCardProps {
 
 const ResourceCard: React.FC<ResourceCardProps> = ({ resource }) => {
     return (
-        <li key={resource.id}>Repository: {resource.repositoryId} Resource: {resource.name} Type: {resource.type} </li>
+        <ListItem sx={{ borderBottom: '1px solid lightgray', padding: 1 }}>
+            <Typography variant="body1" color="text.primary">{resource.name}</Typography>
+        </ListItem>
     )
 }
 

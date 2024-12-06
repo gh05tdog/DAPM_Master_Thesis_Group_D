@@ -4,16 +4,15 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './state_management/store/stores.ts';
-
 import PipelineOverviewPage from './views/PipelineOverviewPage.tsx';
 import PipelineComposer from './views/old_PipeLineComposer.tsx';
-import PipelineManager from './views/ManagerViews/PipelineManager.tsx';
-import ResourceManager from './views/ManagerViews/ResourceManager.tsx';
 import LoginPage from './views/LoginPage.tsx';
 import keycloak, { initKeycloak } from '../src/utils/keycloak.ts';
 import { environment } from './configs/environments.ts';
-import RepositoryManager from "./views/ManagerViews/RepositoryManager.tsx";
-import OrganizationManager from "./views/ManagerViews/OrganizationManager.tsx";
+import ManagerPage from './views/ManagerPage.tsx';
+import LogoutPage from "./views/LogoutPage.tsx";
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const darkTheme = createTheme({
     palette: {
@@ -26,11 +25,6 @@ const lightTheme = createTheme({
         mode: 'light',
     },
 });
-
-console.log('Client api url:', environment.clientapi_url);
-console.log('Keycloak url:', environment.keycloak_url);
-console.log('Peer api url:', environment.peerapi_url);
-console.log('Access control url:', environment.accesscontrol_url);
 
 const App: React.FC = () => {
     const [initialized, setInitialized] = useState(false);
@@ -57,6 +51,7 @@ const App: React.FC = () => {
     <ThemeProvider theme={lightTheme}>
       <Provider store={store}>
         <BrowserRouter>
+          <ToastContainer />
           <Routes>
             {!authenticated ? (
               <Route path="/user" element={<LoginPage />} />
@@ -65,11 +60,9 @@ const App: React.FC = () => {
                 {/* Automatically redirect to /user when authenticated */}
                 <Route path="/" element={<Navigate to="/user" />} />
                 <Route path="/user" element={<PipelineOverviewPage user={user}/>} />
-                <Route path="/pipeline/:id" element={<PipelineComposer />} />
-                <Route path="/manage-pipeline" element = {<PipelineManager user = {user} />} />
-                <Route path="/manage-resource" element = {<ResourceManager user = {user} />} />
-                <Route path={"/manage-repository"} element = {<RepositoryManager user = {user} />} />
-                <Route path={"/manage-organization"} element = {<OrganizationManager user = {user} />} />
+                <Route path="/pipelineEditor" element={<PipelineComposer />} />
+                <Route path="/manage" element = {<ManagerPage />} />
+                <Route path={"/logout"} element = {<LogoutPage user = {user} />} />
               </>
             )}
           </Routes>

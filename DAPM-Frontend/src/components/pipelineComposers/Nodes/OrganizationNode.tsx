@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   NodeProps,
   NodeResizer} from 'reactflow';
-import { getNodes } from '../../../state_management/selectors/index.ts';
+import { getNodes } from '../../../state_management/selectors/indexSelector.ts';
 import { getRelativeNodesBounds } from '../utils.ts';
 import { OrganizationNodeData } from '../../../state_management/states/pipelineState.ts';
 

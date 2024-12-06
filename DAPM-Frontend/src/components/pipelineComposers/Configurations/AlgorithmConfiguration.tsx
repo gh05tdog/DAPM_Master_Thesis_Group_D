@@ -7,7 +7,7 @@ import { Node, useUpdateNodeInternals } from "reactflow";
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Algorithm, NodeData, OperatorNodeData, OperatorTemplateData, OrganizationNodeData } from '../../../state_management/states/pipelineState.ts';
-import { getNodes } from '../../../state_management/selectors/index.ts';
+import { getNodes } from '../../../state_management/selectors/indexSelector.ts';
 import { addHandle, updateNode, updateSourceHandle, updateTargetHandle } from '../../../state_management/slices/pipelineSlice.ts';
 import { getResources } from '../../../state_management/selectors/apiSelector.ts';
 
