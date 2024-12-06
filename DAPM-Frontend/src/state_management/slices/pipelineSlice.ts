@@ -6,7 +6,9 @@ import {fetchPipeline, fetchRepositoryPipelines} from "../../services/backendAPI
 
 export const initialState: PipelineState = {
   pipelines: [],
-  activePipelineId: ""
+  activePipelineId: "",
+  activeOrganisationId: "",
+  activeRepositoryId: ""
 }
 
 const takeSnapshot = (state: PipelineState) => {
@@ -16,44 +18,105 @@ const takeSnapshot = (state: PipelineState) => {
 }
 
 
-
-// Thunk to fetch pipelines
 export const pipelineThunk = createAsyncThunk<
     PipelineData[],
-    { organizations: Organization[]; repositories: Repository[] }
->("pipelines/fetchPipelines", async ({ organizations, repositories }, thunkAPI) => {
-  try {
-    const pipelines: PipelineData[] = [];
+    { organizations: any[]; repositories: any[] }
+>(
+    "pipelines/fetchPipelines",
+    async ({ organizations, repositories }, thunkAPI) => {
+      try {
+        const pipelinePromises: Promise<PipelineData[]>[] = [];
 
-    for (const org of organizations) {
-      for (const repo of repositories) {
-        if (org.id === repo.organizationId) {
-          const pipes = await fetchRepositoryPipelines(org.id, repo.id);
+        for (const org of organizations) {
+          for (const repo of repositories) {
+            if (org.id === repo.organizationId) {
+              const pipelinePromise = fetchRepositoryPipelines(org.id, repo.id).then(
+                  async (pipes) => {
+                    const pipelineDetailsPromises = pipes.result.pipelines.map(
+                        async (pipeline: PipelineData) => {
+                          const pipelineData = await fetchPipeline(
+                              org.id,
+                              repo.id,
+                              pipeline.id
+                          );
 
-          // Iterate over each pipeline returned from `fetchRepositoryPipelines`
-          for (const pipeline of pipes.result.pipelines) {
-            const pipelineData = await fetchPipeline(org.id, repo.id, pipeline.id);
-            // Iterate over all pipeline details returned in the response
-            for (const pipelineDetails of pipelineData.result.pipelines) {
-              console.log("pipelineDetails", JSON.stringify(pipelineDetails, null, 2));
-              pipelines.push({
-                id: pipelineDetails.id,
-                name: pipelineDetails.name,
-                status: 'unknown',
-                pipeline: pipelineDetails.pipeline || { nodes: [], edges: [] },
-                history: { past: [], future: [] },
-              });
+                          // Log pipeline data before transformation
+                          console.log("Pipeline Data (before transformation):", pipelineData.result.pipelines);
+
+                          const transformedPipelines = pipelineData.result.pipelines.map((pipelineDetails: any) => {
+                            const transformedPipeline = {
+                              id: pipelineDetails.id,
+                              name: pipelineDetails.name,
+                              orgId: org.id,
+                      repoId: repo.id,status: "unknown",
+                              pipeline: transformPipelineData(pipelineDetails.pipeline),
+                              history: {
+                                past: [],
+                                future: [],
+                              },
+                            };
+
+                            // Log pipeline data after transformation
+                            console.log("Pipeline Data (after transformation):", transformedPipeline);
+
+                            return transformedPipeline;
+                          });
+
+                          return transformedPipelines;
+                        }
+                    );
+
+                    const detailsArray = await Promise.all(pipelineDetailsPromises);
+                  return detailsArray.flat();
+                  }
+              );
+
+              pipelinePromises.push(pipelinePromise);
             }
           }
         }
+
+        const pipelines = await Promise.all(pipelinePromises);
+        return pipelines.flat();
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
       }
     }
+);
 
-    return pipelines;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
+// Transform pipeline data to match the expected state structure
+const transformPipelineData = (pipeline: any) => ({
+  nodes: pipeline.nodes.map((node: any) => ({
+    id: node.id,
+    type: node.type,
+    position: node.position,
+    data: {
+      label: node.data.label,
+      templateData: {
+        sourceHandles: node.data.templateData.sourceHandles.map((handle: any) => ({
+          id: handle.id,
+          type: handle.type,
+        })),
+        targetHandles: node.data.templateData.targetHandles.map((handle: any) => ({
+          id: handle.id,
+          type: handle.type,
+        })),
+        hint: node.data.templateData.hint,
+      },
+      instantiationData: node.data.instantiationData,
+    },
+    width: node.width,
+    height: node.height,
+  })),
+  edges: pipeline.edges.map((edge: any) => ({
+    id: `${edge.source}-${edge.sourceHandle}-${edge.target}-${edge.targetHandle}`,
+    source: edge.source,
+    target: edge.target,
+    sourceHandle: edge.sourceHandle,
+    targetHandle: edge.targetHandle,
+  })),
 });
+
 
 
 const pipelineSlice = createSlice({
@@ -67,7 +130,12 @@ const pipelineSlice = createSlice({
     setActivePipeline: (state, { payload }: PayloadAction<string>) => {
       state.activePipelineId = payload
     },
-
+    setActiveOrganisation: (state, { payload }: PayloadAction<string>) => {
+      state.activeOrganisationId = payload
+    },
+    setActiveRepository: (state, { payload }: PayloadAction<string>) => {
+      state.activeRepositoryId = payload
+    },
     // actions for undo and redo
 
     undo(state){
@@ -239,6 +307,8 @@ export const {
   //actions for all pipelines
   addNewPipeline, 
   setActivePipeline, 
+  setActiveOrganisation,
+  setActiveRepository,
   
   // actions for undo and redo
   undo,

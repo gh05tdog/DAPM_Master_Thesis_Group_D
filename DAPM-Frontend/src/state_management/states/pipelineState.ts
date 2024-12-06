@@ -1,10 +1,14 @@
 import { Edge, Node } from 'reactflow';
 import { Organization, Repository, Resource } from './apiState.ts';
 
+
 export interface PipelineState {
   pipelines: PipelineData[]
   activePipelineId: string
+  activeOrganisationId: string
+  activeRepositoryId: string
 }
+
 
 export interface HistoryData {
   past: HistoryItem[];
@@ -19,6 +23,8 @@ export interface HistoryItem {
 export interface PipelineData {
     id: string;
     name: string;
+    orgId: string;
+    repoId: string;
     status : string;
     pipeline: NodeState;
     history: HistoryData;

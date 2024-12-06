@@ -34,8 +34,9 @@ namespace DAPM.ClientApi.Consumers
             JToken statusJson = JToken.FromObject(status, serializer);
             result["status"] = statusJson;
 
-
+            _logger.LogInformation($"Pipeline execution status: {message.Status.State}");
             // Update resolution
+
             _ticketService.UpdateTicketResolution(message.TicketId, result);
 
             return Task.CompletedTask;

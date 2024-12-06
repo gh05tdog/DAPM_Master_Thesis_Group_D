@@ -27,7 +27,7 @@ import '@reactflow/node-resizer/dist/style.css';
 import { getNodePositionInsideParent, sortNodes } from "./utils.ts";
 import { BaseTemplateData, NodeData, OperatorNodeData, OperatorTemplateData } from "../../state_management/states/pipelineState.ts";
 import DataSourceNode from "./Nodes/DataSourceNode.tsx";
-import { getEdges, getNodes } from "../../state_management/selectors/index.ts";
+import { getEdges, getNodes } from "../../state_management/selectors/indexSelector.ts";
 import { DefaultEdge } from "./Edges/DefaultEdge.tsx";
 import { v4 as uuidv4 } from "uuid";
 

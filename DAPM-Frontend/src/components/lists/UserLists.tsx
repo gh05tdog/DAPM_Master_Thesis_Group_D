@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { List, ListItem, ListItemText, Typography, Accordion, AccordionSummary, AccordionDetails, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 
 interface User {
   id: string;
@@ -36,7 +36,7 @@ const UserList: React.FC = () => {
   if (error) return null;
 
   return (
-    <Accordion defaultExpanded sx={{ boxShadow: 3, borderRadius: 2 }}>
+    <Accordion sx={{ boxShadow: 3, borderRadius: 2 }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="user-list-content"

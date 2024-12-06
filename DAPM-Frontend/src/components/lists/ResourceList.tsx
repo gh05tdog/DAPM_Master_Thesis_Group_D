@@ -1,54 +1,41 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRepositories, getOrganizations, getResources,selectLoadingResources } from "../../state_management/selectors/apiSelector.ts";
-import { repositoryThunk, organizationThunk, resourceThunk } from "../../state_management/slices/apiSlice.ts";
+import { getRepositories, getOrganizations, getResources, selectLoadingRepositories, selectLoadingResources } from "../../state_management/selectors/apiSelector.ts";
+import { resourceThunk } from "../../state_management/slices/apiSlice.ts";
 import Spinner from '../cards/SpinnerCard.tsx';
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, List, ListItem } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, Typography, List } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ResourceCard from "../cards/ResourceCard.tsx";
 
 const ResourceList: React.FC = () => {
   const dispatch = useDispatch();
-  
+
   const organizations = useSelector(getOrganizations);
   const repositories = useSelector(getRepositories);
   const resources = useSelector(getResources);
+  const repoLoading = useSelector(selectLoadingRepositories); // Get loading state
   const loading = useSelector(selectLoadingResources); // Get loading state
 
-
   useEffect(() => {
-    dispatch(organizationThunk());
-  }, [dispatch]);
-
-  useEffect(() => {
-    //if (organizations.length > 0) {
-     // try {
-        dispatch(repositoryThunk(organizations));
-     // } catch (error) {
-     //   console.error(error);
-     // }
-    //}
-  }, [dispatch, organizations]);
-
-  useEffect(() => {
-    //if (repositories.length > 0) {
+    if ((!repoLoading) && repositories.length > 0) {
       dispatch(resourceThunk({ organizations, repositories }));
-    //}
+    }
   }, [dispatch, organizations, repositories]);
 
   if (loading) {
-    return(
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <h2>Resources</h2>
-          </div>  
-          <Spinner />
-            
+    return (
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h2>Resources</h2>
         </div>
+        <Spinner />
+
+      </div>
     )
-}
+  }
 
   return (
-    <Accordion defaultExpanded sx={{ boxShadow: 3, borderRadius: 2 }}>
+    <Accordion sx={{ boxShadow: 3, borderRadius: 2 }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="resource-list-content"
@@ -60,9 +47,7 @@ const ResourceList: React.FC = () => {
       <AccordionDetails>
         <List sx={{ width: '100%' }}>
           {resources?.map((resource) => (
-            <ListItem key={resource.id} sx={{ borderBottom: '1px solid lightgray', padding: 1 }}>
-              <Typography variant="body1" color="text.primary">{resource.name}</Typography>
-            </ListItem>
+            <ResourceCard  key={resource.id} resource={resource} />
           ))}
         </List>
       </AccordionDetails>

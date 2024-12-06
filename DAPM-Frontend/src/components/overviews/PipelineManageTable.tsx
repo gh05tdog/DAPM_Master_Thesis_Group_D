@@ -11,7 +11,7 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
 import { fetchPipelineUsers, removeUserPipeline } from '../../../src/services/backendAPI.tsx';
 
 const ITEMS_PER_PAGE = 10;
@@ -39,14 +39,14 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
     const fetchUsersData = async () => {
       try {
         if (selectedPipeline) {
-          const allUsers = await getUsersFromKeycloak(); 
-          const pipelineUsers = await fetchPipelineUsers(); 
-          
+          const allUsers = await getUsersFromKeycloak();
+          const pipelineUsers = await fetchPipelineUsers();
+
 
           const filteredPipelineUsers = pipelineUsers.filter(
             (pu: { pipelineId: string; }) => pu.pipelineId === selectedPipeline.pipelineId
           );
-          
+
 
           const usersForPipeline = allUsers.filter((user: { id: any; }) =>
             filteredPipelineUsers.some((pu: { userId: any; }) => pu.userId === user.id)
@@ -71,7 +71,7 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
   const handlePrevPage = () => {
     setPage((prevPage) => Math.max(prevPage - 1, 1));
   };
-  
+
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const currentUsers = users.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
@@ -85,8 +85,8 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
   }
 
   return (
-    <Box data-qa = "pipelineManager-user-table" 
-        sx={{ width: '100%', margin: 'auto', mt: 4 }}>
+    <Box data-qa="pipelineManager-user-table"
+      sx={{ width: '100%', margin: 'auto', mt: 4 }}>
       {selectedPipeline ? (
         <>
           <TableContainer component={Paper}>
@@ -128,7 +128,7 @@ export default function PipelineManageTable({ selectedPipeline }: PipelineManage
               </TableBody>
             </Table>
           </TableContainer>
-          
+
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
             <Button
               variant="contained"

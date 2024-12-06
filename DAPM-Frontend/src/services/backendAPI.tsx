@@ -32,6 +32,7 @@ export async function fetchDataFromTicketService(ticketId: string, errorMesssage
             }
         }
     }
+    console.log("Working on ticket: ", ticketId);
     throw new Error(errorMesssage);
 };
 export async function fetchResponse(ticket: string): Promise<any> {
@@ -485,6 +486,7 @@ export async function putPipeline(orgId: string, repId: string, pipelineData:any
     }
 }
 export async function putExecution(orgId: string, repId: string, pipeId: string) {
+    console.log (`${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions`);
     try {
         const response = await fetch(`${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions`, {
             method: "POST",
@@ -614,4 +616,41 @@ export async function downloadResource(organizationId: string, repositoryId: str
         console.error('Fetching orgs, Error fetching data:', error);
         throw error; // Propagate error to the caller
     }
+}
+
+export async function fetchPipelineExecutions(orgId: string, repId: string, pipId: string) {
+    try {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/pipelines/${pipId}/executions`, await getAuthenticationHeader());
+        if (!response.ok) {
+            throw new Error('Fetching executions, Network response was not ok');
+        }
+
+        const jsonData = await response.json();
+
+        return await fetchDataFromTicketService(jsonData.ticketId, 'Failed to fetch executions data');
+
+    } catch(error) {
+        console.error('Fetching executions, Error fetching data:', error);
+        throw error; // Propagate error to the caller
+    }
+}
+
+export async function fetchExecutionStatus(orgId: string, repId: string, pipId: string, exeId: string) {
+    try {
+        const response = await fetch(path + `/Organizations/${orgId}/repositories/${repId}/pipelines/${pipId}/executions/${exeId}/status`, await getAuthenticationHeader());
+        if (!response.ok) {
+            throw new Error('Fetching execution status, Network response was not ok');
+        }
+
+        const jsonData = await response.json();
+
+        return await fetchDataFromTicketService(jsonData.ticketId, 'Failed to fetch execution status data');
+
+    } catch(error) {
+        console.error('Fetching execution status, Error fetching data:', error);
+        throw error; // Propagate error to the caller
+    }
+
+
+
 }

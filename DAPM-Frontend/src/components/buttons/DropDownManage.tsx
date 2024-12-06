@@ -35,6 +35,7 @@ export default function DropDownManage() {
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
+
     };
 
     const handleClose = () => {
@@ -43,28 +44,14 @@ export default function DropDownManage() {
 
     const navigate = useNavigate();
 
-    const navigateToManagePipeline = () => {
-        navigate('/manage-pipeline')
+    const navigateToManagePage = (manageType: string) => {
+        navigate(`/manage?manageType=${manageType}`);
     };
-    
-    const navigateToManageResource = () => {
-        navigate('/manage-resource')
-    };
-    
-    const navigateToManageRepository = () => {
-        navigate('/manage-repository')
-    };
-    
-    const navigateToManageOrganization = () => {
-        navigate('/manage-organization')
-    };
-
 
     return (
         <div>
             <Button
-                
-                sx = {{display: 'flex', height: '100%', borderRadius: 50}}
+                sx={{ display: 'flex', height: '100%', borderRadius: 50 }}
                 data-qa={"manage-button"}
                 variant={"contained"}
                 aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
@@ -73,28 +60,25 @@ export default function DropDownManage() {
                 Manage
             </Button>
             <StyledMenu
-                id="basic-menu"
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Button sx={{width: '100%'}} 
-                        onClick={navigateToManagePipeline}>
+                <Button sx={{ width: '100%' }} onClick={() =>{ navigateToManagePage('pipeline'); handleClose()}}>
                     Pipeline
                 </Button>
                 <Divider />
-                <Button sx={{width: '100%'}} 
-                        onClick={navigateToManageOrganization}>
-                    Organization</Button>
+                <Button sx={{ width: '100%' }} onClick={() => {navigateToManagePage('organization'); handleClose()}}>
+                    Organization
+                </Button>
                 <Divider />
-                <Button sx={{width: '100%'}} 
-                        onClick={navigateToManageRepository}>
-                    Repository</Button>
+                <Button sx={{ width: '100%' }} onClick={() =>{ navigateToManagePage('repository'); handleClose()}}>
+                    Repository
+                </Button>
                 <Divider />
-                <Button sx={{width: '100%'}} 
-                        onClick={navigateToManageResource}>
-                    Resource</Button>
-                
+                <Button sx={{ width: '100%' }} onClick={() => {navigateToManagePage('resource'); handleClose()} }>
+                    Resource
+                </Button>
             </StyledMenu>
         </div>
     );
