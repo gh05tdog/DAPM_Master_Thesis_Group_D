@@ -63,7 +63,9 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                     >
                         Overview
                     </Button>
-
+                    <DropDownManage />
+                </Box>
+                <Box sx={{ display: "flex", gap: 2 }}>
                     <Button
                         variant="contained"
                         color="primary"
@@ -73,9 +75,6 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                     >
                         Create New Pipeline
                     </Button>
-                </Box>
-                <Box sx={{ display: "flex", gap: 2 }}>
-                    <DropDownManage />
                     <Button
                         onClick={() => setIsOpen(true)}
                         variant="contained"
