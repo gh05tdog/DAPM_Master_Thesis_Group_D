@@ -63,7 +63,7 @@ export default function ManagePage()  {
                         variant="contained"
                         color="primary"
                         startIcon={<AddIcon />}
-                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
+                        sx={{ backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
                         Create User
                     </Button>
 

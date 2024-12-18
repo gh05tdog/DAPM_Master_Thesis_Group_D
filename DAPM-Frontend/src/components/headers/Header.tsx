@@ -75,14 +75,6 @@ export default function Header({ setMode, currentMode }: HeaderProps) {
                     >
                         Create New Pipeline
                     </Button>
-                    <Button
-                        onClick={() => setIsOpen(true)}
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        sx={{ borderRadius: 50, backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
-                        Create User
-                    </Button>
                     <Box sx={{ display: "flex", gap: 2 }}>
                         <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
                         <Button
