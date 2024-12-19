@@ -26,14 +26,58 @@ All these layers are abstracted using interfaces, so their implementations can b
 
 Due to time and resource limitations during the project, these principles are not always applied. Despite this, this principles have allowed us to implement an easily extensible software for future developers.
 
-## Deployment
-The different services are containerized. To execute the project, you need to use Docker Compose and execute the following command within the DAPM folder:
-```
-docker compose up --build
-```
-If you do not want to block the command line, you can add the option `-d`.
+### Prerequisites
 
-Once the containers are up and running, you can interact with the platform by using the Client API. The Client API is deployed in port 5000. You can interact with the Client API visiting the following link:
+- **Git**: Ensure Git is installed to clone the repository.
+- **Docker**: Install Docker. Refer to the [Docker installation guide](https://docs.docker.com/engine/install/) for details.
 
-http://localhost:5000/swagger/v1/swagger.json
+### Steps
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/gh05tdog/DAPM_Master_Thesis_Group_D
+   ```
+
+2. Navigate to the `DAPM-Frontend` directory and build the containers:
+   ```
+   cd DAPM-Frontend
+   docker compose build
+   ```
+
+3. Navigate to the `DAPM` directory and build the containers:
+   ```
+   cd DAPM
+   docker compose build
+   ```
+
+## Running the Application
+
+After the installation, execute the following steps to start the application:
+
+1. Start the frontend:
+   ```
+   cd DAPM-Frontend
+   docker compose up -d
+   ```
+
+2. Start the backend services:
+   ```
+   cd DAPM
+   docker compose up -d
+   ```
+
+Once the commands are executed successfully, the application will be running.
+
+### Access the Application
+
+- **Front-end Application**: Open [http://localhost:3000](http://localhost:3000) in your web browser.
+- **Keycloak Front-end Service**: Open [http://localhost:8888](http://localhost:8888) in your web browser.
+
+### API Interaction
+
+- The Client API is available at [http://localhost:5000/swagger/v1/swagger.json](http://localhost:5000/swagger/v1/swagger.json).
+
+## Licensing
+
+This project is licensed under the Apache License, Version 2.0. For details, see the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
 
