@@ -31,7 +31,12 @@ const login = () => {
 
 const logout = async () => {
   if (keycloakInitialized) {
-    keycloak.logout({redirectUri: environment.keycloak_url?.replace("8888", "3000").replace("https","http") });
+    if (environment.keycloak_url?.includes("se2-d.compute.dtu.dk")){
+         keycloak.logout({redirectUri: environment.keycloak_url?.replace(":8888", "") });
+    } else {
+      keycloak.logout({redirectUri: environment.keycloak_url?.replace(":8888", ":3000").replace("https", "http") });
+    }
+
   } else {
     console.error('Keycloak is not initialized');
   }
