@@ -128,12 +128,12 @@ The application contains several predefined user logins with different roles:
 | test               | test      |                                                                      |
 
 ## Keycloak Admin Login
-**Username:** admin
-**Password:** admin
+- **Username:** admin
+- **Password:** admin
 
 ## Jenkins Admin Login
-**Username:** admin
-**Password:** ffe149e7f8794de9aeeb8c76011cac07
+- **Username:** admin
+- **Password:** ffe149e7f8794de9aeeb8c76011cac07
 
 ## Github Authors to Student Numbers
 
