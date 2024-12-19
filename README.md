@@ -89,8 +89,8 @@ Before running the application on the virtual machine, ensure the following:
 - **Access to the VM**: Verify that you have access to the VM at se2-d.compute.dtu.dk either by accessing https://se2-d.compute.dtu.dk or using ssh to connect to it.
 - **Jenkins Setup**: Jenkins must be installed and configured on the VM with the appropriate build jobs set up, which is configured here in the Jenkinsfile. Refer to the [Jenkins installation guide](https://www.jenkins.io/doc/book/installing/) for more details.
 
-### Deploying the Application Using Jenkins (DTU VPN Required)
-- Log in to Jenkins on the VM by navigating to http://se2-d.compute.dtu.dk:8080/.
+### Deploying the Application on the VM Using Jenkins (DTU VPN Required)
+- Log in to Jenkins on the VM by navigating to http://se2-d.compute.dtu.dk:8080.
 - Locate the 'deploy' job and click 'Build Now' which will checkout 'main' and deploy the front-end and back-end.
 - Once the builds are complete, the application will be deployed and running on the VM.
 
@@ -137,7 +137,6 @@ The application contains several predefined user logins with different roles:
 
 ## Github Authors to Student Numbers
 
-Github Author, Student Number
 | GitHub Author     | Student Number |
 |--------------------|----------------|
 | gh05tdog          | s224754        |
