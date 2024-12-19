@@ -17,5 +17,6 @@ Given('I open the pipelineOverview page', async function () {
 });
 Then('the pipelineOverview containst {string}',async function (string) {
 	const currentPage = new PipelinePage(this.page);
+
 	await currentPage.contains(string)
 });

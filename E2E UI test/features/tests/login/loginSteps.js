@@ -33,6 +33,7 @@ Then('I validate that navigation bar contains message {string}', async function 
 	await utils.delay(100);
 })
 Then('I validate redirection to the KeycloakLoginPage', async function () {
+	await utils.delay(1500);
 	let mainUrl = await this.page.url();
 	expect(mainUrl).to.contain("/realms/test/protocol/openid-connect/auth?client_id")
 });
@@ -58,6 +59,7 @@ Given('A manager is logged in', async function () {
 });
 
 When('the {string} is pressed on the header', async function (element) {
+	await utils.delay(100);
 	await utils.click(this.page, upperNavigationBar[element+"CSS"]);
 	await utils.delay(100);
 })

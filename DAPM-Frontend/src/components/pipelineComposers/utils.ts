@@ -60,7 +60,7 @@ import {
     nodes: Node[],
     nodeOrigin: NodeOrigin = [0, 0]
   ): Rect => {
-    if (nodes.length === 0) {
+    if (!nodes || nodes.length === 0) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
   
