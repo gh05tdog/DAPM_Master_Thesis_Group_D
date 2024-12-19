@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { AppBar, Box, Button, TextField, Toolbar, Typography } from "@mui/material";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from "react-router-dom";
@@ -16,12 +16,15 @@ import { toast } from 'react-toastify';
 
 
 
-export default function PipelineAppBar() {
+const PipelineAppBar: FC = () =>  {
   const pipelineId = useSelector(getActivePipeline)?.id;
   const organization = useSelector(getActiveOrganisation);
   const repository = useSelector(getActiveRepository);
-  const reloadPipelines = () => {
-    if (repositories && repositories.length > 0) {
+  const organizations = useSelector(getOrganizations)
+  const repositories = useSelector(getRepositories)
+  const pipelineName = useSelector((state: any) => getActivePipeline(state)?.name)
+  const reloadPipelines = useCallback(() => {
+    if (repositories) {
       try {
         dispatch(pipelineThunk({ organizations, repositories }));
       } catch (error) {
@@ -30,7 +33,7 @@ export default function PipelineAppBar() {
       }
     }
 
-  };
+  }, [repositories, organizations]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,9 +48,6 @@ export default function PipelineAppBar() {
     setIsEditing(false);
   };
 
-  const organizations = useSelector(getOrganizations)
-  const repositories = useSelector(getRepositories)
-  const pipelineName = useSelector((state: any) => getActivePipeline(state)?.name)
 
   const setPipelineName = (name: string) => {
     dispatch(updatePipelineName(name))
@@ -337,3 +337,4 @@ export default function PipelineAppBar() {
     </AppBar>
   )
 }
+export default PipelineAppBar;
