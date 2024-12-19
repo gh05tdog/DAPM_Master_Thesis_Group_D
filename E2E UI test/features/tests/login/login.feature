@@ -1,3 +1,4 @@
+@focus
 Feature: Login Feature 
 
     Feature Description
