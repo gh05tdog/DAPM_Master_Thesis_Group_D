@@ -127,6 +127,13 @@ The application contains several predefined user logins with different roles:
 | RepositoryManager  | password  | RepositoryManager                                                   |
 | test               | test      |                                                                      |
 
+## Keycloak Admin Login
+**Username:** admin
+**Password:** admin
+
+## Jenkins Admin Login
+**Username:** admin
+**Password:** ffe149e7f8794de9aeeb8c76011cac07
 
 ## Github Authors to Student Numbers
 
