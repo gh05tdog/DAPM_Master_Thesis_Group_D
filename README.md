@@ -102,7 +102,7 @@ Before running the application on the virtual machine, ensure the following:
 ### API Interaction on the VM (DTU VPN Required)
 
 - The Client API swagger is available at https://se2-d.compute.dtu.dk/api/clientapi/swagger.
-- The Peer API swagger is available at https://se2-d.compute.dtu.dk/api/peerapi/swaggern.
+- The Peer API swagger is available at https://se2-d.compute.dtu.dk/api/peerapi/swagger.
 - The Access Control API swagger is available at https://se2-d.compute.dtu.dk/api/accesscontrol/swagger.
 
 ### Alternative: Running the Application Manually on the VM (DTU VPN Required)
