@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewPipeline, setImageData } from '../../state_management/slices/pipelineSlice.ts';
-import { getPipelines } from '../../state_management/selectors/index.ts';
+import { getPipelines } from '../../state_management/selectors/indexSelector.ts';
 import FlowDiagram from '../imageGeneration/FlowDiagram.tsx';
 import ReactDOM from 'react-dom';
 import { toPng } from 'html-to-image';

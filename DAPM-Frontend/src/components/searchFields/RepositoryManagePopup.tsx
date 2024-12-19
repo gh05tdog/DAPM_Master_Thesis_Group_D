@@ -11,7 +11,8 @@ import {
     Box,
 } from '@mui/material';
 import { addUserRepository } from '../../../src/services/backendAPI.tsx';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
+import { Repository } from '../../state_management/states/apiState.ts';
 
 interface UserOption {
     label: string;
@@ -21,7 +22,7 @@ interface UserOption {
 interface ManageRepositoryPopupProps {
     open: boolean;
     onClose: () => void;
-    selectedRepository: { repositoryId: string } | null;
+    selectedRepository: { repository: Repository } | null;
 }
 
 function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepositoryPopupProps) {
@@ -47,7 +48,7 @@ function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepo
     async function addUser() {
         if (selectedUser && selectedRepository) {
             try {
-                await addUserRepository(selectedUser.id, selectedRepository.repositoryId);
+                await addUserRepository(selectedUser.id, selectedRepository.repository.id);
                 alert('User added successfully! Reload page to see results');
 
                 onClose();
@@ -67,13 +68,13 @@ function ManageRepositoryPopup({ open, onClose, selectedRepository }: ManageRepo
     }
     return (
         <Dialog data-qa="add-user-popup"
-                open={open} onClose={onClose}>
+            open={open} onClose={onClose}>
             <DialogTitle>Manage Repository</DialogTitle>
             <DialogContent>
                 <p>Give user authority to this repository.</p>
                 <FormControl sx={{ width: '100%', bgcolor: 'white' }}>
                     <Autocomplete
-                        disablePortal = {false}
+                        disablePortal={false}
                         options={users}
                         value={selectedUser}
                         onChange={(event, newValue) => {

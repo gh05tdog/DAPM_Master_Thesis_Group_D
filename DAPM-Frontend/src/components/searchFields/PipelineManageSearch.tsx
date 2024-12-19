@@ -4,16 +4,9 @@ import {
     TextField,
     Box,
     FormControl,
-    Button,
-    MenuItem,
-    Select,
-    InputLabel,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
+    
 } from '@mui/material';
-import { fetchPipelineUsers, addUserPipeline } from '../../../src/services/backendAPI.tsx';
+import { fetchPipelineUsers } from '../../../src/services/backendAPI.tsx';
 
 
 

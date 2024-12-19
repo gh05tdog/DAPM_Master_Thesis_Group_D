@@ -31,26 +31,29 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
       variant="outlined"
       color="neutral"
       {...other}
-      onClick={(event) => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-        onClick?.(event);
-      }}
-      sx={[
-        mode === 'dark'
-          ? { '& > *:first-child': { display: 'none' } }
-          : { '& > *:first-child': { display: 'initial' } },
-        mode === 'light'
-          ? { '& > *:last-child': { display: 'none' } }
-          : { '& > *:last-child': { display: 'initial' } },
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
+      onClick={
+        setMode(mode === "light" ? "dark" : "light")
+        // if (mode === 'light') {
+        //   setMode('dark');
+        // } else {
+        //   setMode('light');
+        // }
+        // onClick?.(event);
+      }
+      sx={
+        [
+          mode === 'dark'
+            ? { '& > *:first-child': { display: 'none' } }
+            : { '& > *:first-child': { display: 'initial' } },
+          mode === 'light'
+            ? { '& > *:last-child': { display: 'none' } }
+            : { '& > *:last-child': { display: 'initial' } },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]
+      }
     >
       <DarkModeRoundedIcon />
       <LightModeIcon />
-    </IconButton>
+    </IconButton >
   );
 }

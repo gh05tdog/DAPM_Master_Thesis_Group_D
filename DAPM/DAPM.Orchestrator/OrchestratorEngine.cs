@@ -28,8 +28,13 @@ namespace DAPM.Orchestrator
         }
 
         public OrchestratorProcess GetProcess(Guid processId)
-        {
-            return _processes[processId];
+        {   try{
+                _logger.LogInformation("ORCHESTRATOR ENGINE getting process with id " + processId.ToString());
+                return _processes[processId];
+            } catch (KeyNotFoundException e){
+                _logger.LogError("ORCHESTRATOR ENGINE process with id " + processId.ToString() + " not found");
+                return null;
+            }
         }
 
 
@@ -102,6 +107,7 @@ namespace DAPM.Orchestrator
         public void StartPipelineStartCommandProcess(Guid apiTicketId, Guid executionId)
         {
             var processId = Guid.NewGuid();
+            _logger.LogInformation("Command Start created with process id " + processId.ToString());
             var pipelineStartCommandProcess = new PipelineStartCommandProcess(this, _serviceProvider, apiTicketId, processId, executionId);
             _processes[processId] = pipelineStartCommandProcess;
             pipelineStartCommandProcess.StartProcess();
@@ -139,6 +145,16 @@ namespace DAPM.Orchestrator
             var getPipelineExecutionStatusProcess = new GetPipelineExecutionStatusProcess(this, _serviceProvider, ticketId, processId, executionId);
             _processes[processId] = getPipelineExecutionStatusProcess;
             getPipelineExecutionStatusProcess.StartProcess();
+        }
+
+        public void StartGetPipelineExecutionsProcess(Guid ticketId, Guid pipelineId)
+        {
+            _logger.LogInformation("ORCHESTRATOR ENGINE starting get pipeline executions process");
+            var processId = Guid.NewGuid();
+            var getPipelineExecutionsProcess = new GetPipelineExecutionsProcess(this, _logger, _serviceProvider, ticketId, processId, pipelineId);
+            _processes[processId] = getPipelineExecutionsProcess;
+            getPipelineExecutionsProcess.StartProcess();
+            _logger.LogInformation("ORCHESTRATOR ENGINE successfully started process with id " + processId.ToString()); 
         }
 
         #endregion

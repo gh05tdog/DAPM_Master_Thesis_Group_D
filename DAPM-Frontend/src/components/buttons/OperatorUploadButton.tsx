@@ -32,7 +32,6 @@ const OperatorUploadButton = ({ orgId, repId }: UploadButtonProps) => {
         formData.append("ResourceType", "operator");
         const formEntries = Object.fromEntries(formData.entries());
 
-        console.log('Form Data:', formEntries);
 
         if (formData.get('SourceCodeFile')) {
             try {

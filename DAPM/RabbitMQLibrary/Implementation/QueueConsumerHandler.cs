@@ -48,6 +48,7 @@ namespace RabbitMQLibrary.Implementation
             try
             {
                 _consumerTag = _consumerRegistrationChannel.BasicConsume(_queueName, false, consumer);
+                _logger.LogInformation($"Succesfully registered {_consumerName} as a Consumer for Queue {_queueName}");
             }
             catch (Exception ex)
             {
@@ -103,9 +104,10 @@ namespace RabbitMQLibrary.Implementation
 
                 // Request an instance of the consumer from the Service Provider
                 var consumerInstance = consumerScope.ServiceProvider.GetRequiredService<TMessageConsumer>();
-
+                _logger.LogInformation($"Consumer instance created" + consumerInstance);
                 // Trigger the consumer to start processing the message
                 await consumerInstance.ConsumeAsync(message);
+                _logger.LogInformation($"Consumer instance consumed message");
 
                 // Ensure both channels are open before committing
                 if (producingChannel.IsClosed || consumingChannel.IsClosed)

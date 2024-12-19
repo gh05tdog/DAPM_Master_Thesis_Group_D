@@ -11,8 +11,8 @@ import {
     Button,
     Typography,
 } from '@mui/material';
-import getUsersFromKeycloak from '../../utils/keycloakUsers.ts';
-import {fetchResourceUsers, removeUserResource} from '../../../src/services/backendAPI.tsx';
+import { getUsersFromKeycloak } from '../../utils/keycloakAdminAPI.ts';
+import { fetchResourceUsers, removeUserResource } from '../../../src/services/backendAPI.tsx';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -39,8 +39,8 @@ export default function ResourceManageTable({ selectedResource }: ResourceManage
         const fetchUsersData = async () => {
             try {
                 if (selectedResource) {
-                    const allUsers = await getUsersFromKeycloak(); 
-                    const resourceUsers = await fetchResourceUsers(); 
+                    const allUsers = await getUsersFromKeycloak();
+                    const resourceUsers = await fetchResourceUsers();
 
                     const filteredResourceUsers = resourceUsers.filter(
                         (pu: { resourceId: string; }) => pu.resourceId === selectedResource.resourceId
@@ -50,7 +50,7 @@ export default function ResourceManageTable({ selectedResource }: ResourceManage
                         filteredResourceUsers.some((pu: { userId: any; }) => pu.userId === user.id)
                     );
                     setUsers(usersForResource);
-                    setPage(1); 
+                    setPage(1);
                 } else {
                     setUsers([]);
                 }
@@ -83,8 +83,8 @@ export default function ResourceManageTable({ selectedResource }: ResourceManage
     }
 
     return (
-        <Box data-qa = "resourceManager-user-table"
-             sx={{ width: '100%', margin: 'auto', mt: 4 }}>
+        <Box data-qa="resourceManager-user-table"
+            sx={{ width: '100%', margin: 'auto', mt: 4 }}>
             {selectedResource ? (
                 <>
                     <TableContainer component={Paper}>
