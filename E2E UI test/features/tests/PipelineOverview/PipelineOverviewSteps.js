@@ -9,7 +9,7 @@ const expect = require('chai').expect;
 
 Given('I open the pipelineOverview page', async function () {
 	const currentPage = (new PipelinePage(this.page));
-	await currentPage.page.goto(environments.local.url);
+	await currentPage.page.goto(environments[environments.selected].url);
 	await currentPage.contains("mainWindow");
 	await utils.delay(1000);
 	let mainUrl = await currentPage.page.url();

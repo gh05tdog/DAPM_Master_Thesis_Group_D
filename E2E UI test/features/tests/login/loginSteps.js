@@ -44,7 +44,7 @@ Then('I validate that alert message {string} is shown', async function (expected
 });
 Given('A manager is logged in', async function () {
 	const currentPage = new LoginPage(this.page);
-	await currentPage.openBasepage(environments.local.url);
+	await currentPage.openBasepage(environments[environments.selected].url);
 	await utils.clickAndTypeText(currentPage.page, currentPage.usernameCSS, "manager");
 	await utils.clickAndTypeText(currentPage.page, currentPage.passwordCSS, "password");
 	await Promise.all([

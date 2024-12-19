@@ -77,9 +77,9 @@ function ManagePopup({ open, onClose, selectedID, manageType }: ManagePipelinePo
     return (
         <Dialog data-qa="add-user-popup"
                 open={open} onClose={onClose}>
-            <DialogTitle>Manage Pipeline</DialogTitle>
+            <DialogTitle>Manage {manageType}</DialogTitle>
             <DialogContent>
-                <p>Give user authority to this pipeline.</p>
+                <p>Give user authority to this {manageType}.</p>
                 <FormControl sx={{ width: '100%', bgcolor: 'white' }}>
                     <Autocomplete
                         disablePortal = {false}

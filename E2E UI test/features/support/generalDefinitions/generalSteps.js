@@ -9,7 +9,7 @@ let alertMessage = '';
 
 Given('I open a main page',async function () {
 	const currentPage = new LoginPage(this.page);
-	await currentPage.openBasepage(environments.local.url);
+	await currentPage.openBasepage(environments[environments.selected].url);
 });
 
 Then("I validate redirection to the main page", async function(){
