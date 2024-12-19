@@ -77,9 +77,9 @@ Once the commands are executed successfully, the application will be running.
 
 ### API Interaction
 
-- The Client API swagger is available at https://localhost/api/clientapi/swagger/v1/swagger.json.
-- The Peer API swagger is available at https://localhost/api/peerapi/swagger/v1/swagger.json.
-- The Access Control API swagger is available at https://localhost/api/accesscontrol/swagger/v1/swagger.json.
+- The Client API swagger is available at https://localhost/api/clientapi/swagger.
+- The Peer API swagger is available at https://localhost/api/peerapi/swagger.
+- The Access Control API swagger is available at https://localhost/api/accesscontrol/swagger.
 
 ## Running the Application on the VM
 
@@ -101,9 +101,9 @@ Before running the application on the virtual machine, ensure the following:
 
 ### API Interaction on the VM (DTU VPN Required)
 
-- The Client API swagger is available at https://se2-d.compute.dtu.dk/api/clientapi/swagger/v1/swagger.json.
-- The Peer API swagger is available at https://se2-d.compute.dtu.dk/api/peerapi/swagger/v1/swagger.json.
-- The Access Control API swagger is available at https://se2-d.compute.dtu.dk/api/accesscontrol/swagger/v1/swagger.json.
+- The Client API swagger is available at https://se2-d.compute.dtu.dk/api/clientapi/swagger.
+- The Peer API swagger is available at https://se2-d.compute.dtu.dk/api/peerapi/swaggern.
+- The Access Control API swagger is available at https://se2-d.compute.dtu.dk/api/accesscontrol/swagger.
 
 ### Alternative: Running the Application Manually on the VM (DTU VPN Required)
 If you prefer to deploy the application manually instead of using Jenkins, you can follow the same steps as for local deployment:
