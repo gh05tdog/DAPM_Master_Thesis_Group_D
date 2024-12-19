@@ -9,9 +9,9 @@ exports.BasePage = class BasePage {
         this.typeDelay = 30;
     }
     async openBasepage(url) {    
-        await utils.delay(500); 
+        await utils.delay(1000); 
         await this.page.goto(url);
-        await utils.delay(500);
+        await utils.delay(1000);
     }
 
     async logout() {
