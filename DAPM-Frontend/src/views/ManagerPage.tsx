@@ -9,6 +9,8 @@ import { useSearchParams } from 'react-router-dom';
 import {PipelineData} from "../state_management/states/pipelineState.js";
 import {Organization, Repository, Resource} from "../state_management/states/apiState.js";
 import ManagePopup from "../components/searchFields/ManagePopup.tsx";
+import CreateUserModal from '../components/Modals/users/CreateUserModal.tsx';
+import AddIcon from '@mui/icons-material/Add';
 
 type ChosenItem = Repository | PipelineData | Resource | Organization;
 
@@ -18,6 +20,7 @@ export default function ManagePage()  {
     const manageType = searchParams.get('manageType');
     const [openPopup, setOpenPopup] = useState(false);
     const [mode, setMode] = useState<'light' | 'dark'>('light');
+    const [isOpen, setIsOpen] = useState(false);
 
     const [selectedItem, setSelectedItem] = useState<{ item: ChosenItem } | null>(null);
 
@@ -55,6 +58,14 @@ export default function ManagePage()  {
                 sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <ManageSearch setSelectedItem={setSelectedItem} manageType={manageType} />
                 <ManagePopup open={openPopup} onClose={handleClosePopup} selectedID={selectedID} manageType={manageType}/>
+                <Button
+                        onClick={() => setIsOpen(true)}
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        sx={{ backgroundColor: 'primary', "&:hover": { backgroundColor: 'primary' } }}>
+                        Create User
+                    </Button>
 
                 <Button variant="contained" color="primary" sx={{ width: '10%' }}
                     onClick={handleOpenPopup}
@@ -68,6 +79,7 @@ export default function ManagePage()  {
                 <ManagerList selectedID={selectedID} value={manageType} />
             </Box>
             </Box>
+            <CreateUserModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
         </ThemeProvider>
     )
 };
