@@ -30,7 +30,7 @@ const MainContent: React.FC = () => {
             try {
                 dispatch(pipelineThunk({ organizations, repositories }));
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -39,7 +39,6 @@ const MainContent: React.FC = () => {
     }, [dispatch, repositories]);
 
     const navigateToPipeline = (id: string, orgId: string, repoId: string) => {
-        console.log("pipeline-Id", id);
         dispatch(setActiveOrganisation(orgId));
         dispatch(setActiveRepository(repoId));
         
@@ -95,7 +94,6 @@ const MainContent: React.FC = () => {
                                         color="primary"
                                         onClick={() => {
 
-                                            console.log(id)
                                             navigateToPipeline(id, orgId, repoId)}
                                         }
                                     >

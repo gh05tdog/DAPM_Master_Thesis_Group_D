@@ -31,7 +31,6 @@ const apiSlice = createSlice({
       })
       .addCase(organizationThunk.rejected, (state, action) => {
         state.loadingOrganizations = false;
-        console.log("org thunk failed")
       })
       .addCase(repositoryThunk.pending, (state, action) => {
         state.loadingRepositories = true;
@@ -44,7 +43,6 @@ const apiSlice = createSlice({
       .addCase(repositoryThunk.rejected, (state, action) => {
         state.loadingRepositories = false;
 
-        console.log("repo thunk failed")
       })
       .addCase(resourceThunk.pending, (state, action) => {
         state.loadingResources = true;
@@ -56,7 +54,6 @@ const apiSlice = createSlice({
       })
       .addCase(resourceThunk.rejected, (state, action) => {
         state.loadingResources = false;
-        console.log("resorce thunk failed")
       })
   }
 

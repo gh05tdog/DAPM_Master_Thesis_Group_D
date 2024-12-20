@@ -32,7 +32,6 @@ export async function fetchDataFromTicketService(ticketId: string, errorMesssage
             }
         }
     }
-    console.log("Working on ticket: ", ticketId);
     throw new Error(errorMesssage);
 };
 export async function fetchResponse(ticket: string): Promise<any> {
@@ -41,7 +40,6 @@ export async function fetchResponse(ticket: string): Promise<any> {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        //console.log(jsonData)
         return response;
     } catch (error) {
         console.error('Error fetching status:', error);
@@ -218,7 +216,6 @@ export async function fetchPipelineUsers() {
           throw new Error('Network response was not ok');
       }
       const jsonData = await response.json();
-      //console.log(jsonData)
       return jsonData;
     } catch (error) {
           console.error('Error fetching status:', error);
@@ -281,7 +278,6 @@ export async function fetchResourceUsers() {
             throw new Error('Network response was not ok');
         }
         const jsonData = await response.json();
-        //console.log(jsonData)
         return jsonData;
     } catch (error) {
         console.error('Error fetching status:', error);
@@ -344,7 +340,6 @@ export async function fetchRepositoryUsers() {
             throw new Error('Network response was not ok');
         }
         const jsonData = await response.json();
-        //console.log(jsonData)
         return jsonData;
     } catch (error) {
         console.error('Error fetching status:', error);
@@ -407,7 +402,6 @@ export async function fetchOrganizationUsers() {
             throw new Error('Network response was not ok');
         }
         const jsonData = await response.json();
-        //console.log(jsonData)
         return jsonData;
     } catch (error) {
         console.error('Error fetching status:', error);
@@ -461,7 +455,6 @@ export async function addUserOrganization(userId: string, organizationId: string
 
 
 export async function putPipeline(orgId: string, repId: string, pipelineData:any){
-    console.log(pipelineData)
     try {
         const response = await fetch(`${path}/Organizations/${orgId}/repositories/${repId}/pipelines`, {
             method: "POST",
@@ -486,7 +479,6 @@ export async function putPipeline(orgId: string, repId: string, pipelineData:any
     }
 }
 export async function putExecution(orgId: string, repId: string, pipeId: string) {
-    console.log (`${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions`);
     try {
         const response = await fetch(`${path}/Organizations/${orgId}/repositories/${repId}/pipelines/${pipeId}/executions`, {
             method: "POST",
@@ -595,7 +587,6 @@ export async function downloadResource(organizationId: string, repositoryId: str
             for (let retries = 0; retries < maxRetries; retries++) {
                 try {
                     const response = await fetchResponse(ticketId) as any;
-                    console.log(response)
                     if (response.ok) {
                         await delay(getStatusDelay);
                         return response;
