@@ -33,12 +33,10 @@ const ResourceUploadButton = ({ orgId, repId }: UploadButtonProps) => {
         const formData = new FormData(event.currentTarget);
         const formEntries = Object.fromEntries(formData.entries());
 
-        console.log('Form Data:', formEntries);
 
         if (formData.get('ResourceFile')) {
             try {
                 const result = await putResource(orgId, repId, formData);
-                console.log('Resource successfully uploaded:', result);
             } catch (error) {
                 console.error('Error uploading resource:', error);
             }

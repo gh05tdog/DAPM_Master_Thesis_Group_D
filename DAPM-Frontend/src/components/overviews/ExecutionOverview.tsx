@@ -39,11 +39,9 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
     };
 
     const fetchData = async () => {
-        console.log("Fetching data for pipeline: ", pipelineOrgId, pipelineRepoId, parentPipelineId);
         try {
             var pipelineExecutions = await fetchPipelineExecutions(pipelineOrgId, pipelineRepoId, parentPipelineId);    
         } catch (error) {
-            console.log("Error fetching pipeline executions: ", error);
         }
         
         // Transform the data to match Execution interface
@@ -67,7 +65,6 @@ const ExecutionOverview: React.FC<ExecutionOverviewProps> = ({ isOpen, parentPip
         try{
             const response = await putCommandStart(pipelineOrgId, pipelineRepoId, parentPipelineId, exeId);
         } catch (error) {
-            console.log("Error starting execution: ", error);
             toast.error("Error starting execution: " + error);
         }
     }

@@ -28,7 +28,7 @@ const PipelineAppBar: FC = () =>  {
       try {
         dispatch(pipelineThunk({ organizations, repositories }));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
       }
     }
@@ -95,7 +95,6 @@ const PipelineAppBar: FC = () =>  {
       name: pipelineName,
       pipeline: {
         nodes: flowData?.nodes?.map((node, index) => {
-          console.log(`Processing node #${index + 1} - ID: ${node.id}, Type: ${node.type}`);
 
           // Ensure handles have a `type` field
           const sourceHandles = (node.data?.templateData?.sourceHandles || []).map((handle) => ({
@@ -188,7 +187,6 @@ const PipelineAppBar: FC = () =>  {
       toast.error("Error saving execution: " + error);
     }
    
-    console.log("executionId: ", executionId)
     //await putCommandStart(selectedOrg.id, selectedRepo.id, pipelineId, executionId)
   }
 
@@ -273,7 +271,6 @@ const PipelineAppBar: FC = () =>  {
 
 
     const selectedOrg = organization;
-    console.log(selectedOrg);
 
     const selectedRepo = repositories.find((repo) => repo.organizationId === selectedOrg.id);
 
