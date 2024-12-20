@@ -66,9 +66,7 @@ export default function ManageSearch({ setSelectedItem, manageType }: ManageSear
                 setOptions(uniqueOptions);
                 setSelectedOption(null);
                 setSelectedItem(null);
-                console.log("Options:", uniqueOptions);
-                console.log("ManageType:", manageType);
-           
+         
     }, [manageType, pipelines, resources, repositories, organizations]);
 
 

@@ -34,7 +34,6 @@ const CreateRepositoryButton = ({ orgId }: CreateRepositoryButtonProps) => {
         if (repositoryName) {
             try {
                 const result = await putRepository(orgId, repositoryName);
-                console.log('repository successfully created:', result);
             } catch (error) {
                 console.error('Error creating repository:', error);
             }

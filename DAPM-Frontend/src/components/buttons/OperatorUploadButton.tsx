@@ -36,7 +36,6 @@ const OperatorUploadButton = ({ orgId, repId }: UploadButtonProps) => {
         if (formData.get('SourceCodeFile')) {
             try {
                 const result = await putOperator(orgId, repId, formData);
-                console.log('Resource successfully uploaded:', result);
             } catch (error) {
                 console.error('Error uploading resource:', error);
             }
