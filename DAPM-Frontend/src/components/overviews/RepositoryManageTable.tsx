@@ -38,8 +38,6 @@ export default function RepositoryManageTable({ selectedRepository }: Repository
         const fetchUsersData = async () => {
             try {
                 if (selectedRepository) {
-                    console.log("Selected repo:")
-                    console.log(selectedRepository)
                     const allUsers = await getUsersFromKeycloak();
                     const repositoryUsers = await fetchRepositoryUsers();
 

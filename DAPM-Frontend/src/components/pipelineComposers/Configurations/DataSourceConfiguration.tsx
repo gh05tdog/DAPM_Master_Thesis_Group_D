@@ -26,7 +26,6 @@ export default function DataSourceConfiguration({ nodeprop }: AlgorithmConfugura
   const dataTypes = ["eventlog", "bpmnmodel", "petrinet"]
 
   const setLogData = (resource: string) => {
-    console.log(resource)
     dispatch(updateNode(
       {
         ...node!,

@@ -12,18 +12,15 @@ interface PipelineOverviewPageProps {
 const PipelineOverviewPage: React.FC<PipelineOverviewPageProps> = ({ user }) => {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
   const [info, setInfo] = useState<any>(null);
-  console.log(user);
   useEffect(() => {
     const getUserInfo = async () => {
       const response = await user;
-      console.log(response);
       setInfo(response);
     };
 
     getUserInfo();
   }, [user]);
 
-  console.log(info);
 
   const theme = createTheme({
     palette: {

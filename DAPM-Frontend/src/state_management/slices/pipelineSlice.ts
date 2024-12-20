@@ -40,9 +40,6 @@ export const pipelineThunk = createAsyncThunk<
                               pipeline.id
                           );
 
-                          // Log pipeline data before transformation
-                          console.log("Pipeline Data (before transformation):", pipelineData.result.pipelines);
-
                           const transformedPipelines = pipelineData.result.pipelines.map((pipelineDetails: any) => {
                             const transformedPipeline = {
                               id: pipelineDetails.id,
@@ -56,9 +53,7 @@ export const pipelineThunk = createAsyncThunk<
                               },
                             };
 
-                            // Log pipeline data after transformation
-                            console.log("Pipeline Data (after transformation):", transformedPipeline);
-
+ 
                             return transformedPipeline;
                           });
 
