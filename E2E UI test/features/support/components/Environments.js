@@ -3,8 +3,9 @@ const Environments = {
           url : "http://localhost:3000"
         },
      prod:{
-          url:"http://se2-d.compute.dtu.dk/"
+          url:"https://se2-d.compute.dtu.dk/"
      },
+     selected: "prod"
     
 }
 module.exports = Environments;
