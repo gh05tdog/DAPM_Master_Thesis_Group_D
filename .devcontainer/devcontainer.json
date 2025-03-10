@@ -8,7 +8,7 @@
 		"ghcr.io/devcontainers/features/common-utils:2": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
 		"ghcr.io/devcontainers/features/github-cli:1": {},
-		"ghcr.io/meaningful-ooo/devcontainer-features/fish:1": {},
+		"ghcr.io/meaningful-ooo/devcontainer-features/fish:2": {},
 		"ghcr.io/gvatsal60/dev-container-features/sonarlint:1": {}
 	},
 	// Features to add to the dev container. More info: https://containers.dev/features.
